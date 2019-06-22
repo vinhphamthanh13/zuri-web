@@ -13,13 +13,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(value = Include.NON_EMPTY)
-public class AbstractResponseBean<ID, T> {
+public class AbstractResponse<ID, T> {
     Boolean success = Boolean.FALSE;
     ID objectId;
     T object;
     List<T> objects;
     Long totalResultCount;
-    Long currentPageIndex;
-    Long resultPerPage;
     String message;
 }
