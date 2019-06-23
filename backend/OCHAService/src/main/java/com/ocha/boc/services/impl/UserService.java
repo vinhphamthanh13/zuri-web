@@ -22,7 +22,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserLoginResponse checkLogin(UserLoginRequest request) {
+    public UserLoginResponse checkLogin(UserLoginRequest request) throws Exception {
         UserLoginResponse response = new UserLoginResponse();
         if (!StringUtils.isNotEmpty(request.getPhone())) {
             response.setSuccess(Boolean.FALSE);
@@ -31,15 +31,22 @@ public class UserService {
         } else {
             User user = userRepository.findUserByPhone(request.getPhone());
             if (user == null) {
-                response.setSuccess(Boolean.FALSE);
-                response.setMessage(CommonConstants.STR_FAIL_STATUS);
-                response.setObjectId(request.getPhone());
-            } else {
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObjectId(request.getPhone());
-                response.setObject(user);
+                user = new User();
+                user.setPhone(request.getPhone());
+                user.setActive(Boolean.TRUE);
+                String currentDate = getCurrentDate();
+                if (StringUtils.isNotEmpty(currentDate)) {
+                    long openDate = DateUtils.stringDateToLong(currentDate, null, CURRENT_DATE_FORMAT);
+                    user.setOpenDate(openDate);
+                } else {
+                    log.error("Cannot get current date");
+                }
+                userRepository.save(user);
             }
+            response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setObjectId(request.getPhone());
+            response.setObject(user);
         }
         return response;
     }
@@ -55,16 +62,12 @@ public class UserService {
                 } else {
                     user = new User();
                     user.setPhone(phone);
-                    String currentDate = DateUtils.getCurrentDate();
+                    String currentDate = getCurrentDate();
                     if (StringUtils.isNotEmpty(currentDate)) {
                         long openDate = DateUtils.stringDateToLong(currentDate, null, CURRENT_DATE_FORMAT);
-                        if (openDate != 0) {
-                            user.setOpenDate(openDate);
-                        } else {
-                            log.error("Error when convert string current date to long date number");
-                        }
+                        user.setOpenDate(openDate);
                     } else {
-                        log.error("Cannot set openDate");
+                        log.error("Cannot get current date");
                     }
                     user.setActive(Boolean.TRUE);
                     userRepository.save(user);
@@ -122,6 +125,16 @@ public class UserService {
             log.error("Error when checkUserExisted: ", e);
         }
         return user;
+    }
+
+    private String getCurrentDate() {
+        String currentDate = null;
+        try {
+            currentDate = DateUtils.getCurrentDate();
+        } catch (Exception e) {
+            log.error("Error when getCurrentDate: ", e);
+        }
+        return currentDate;
     }
 
 }
