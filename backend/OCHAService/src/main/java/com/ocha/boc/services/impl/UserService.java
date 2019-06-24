@@ -1,86 +1,55 @@
 package com.ocha.boc.services.impl;
 
+import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.entity.User;
 import com.ocha.boc.repository.UserRepository;
 import com.ocha.boc.request.UserLoginRequest;
 import com.ocha.boc.request.UserUpdateRequest;
-import com.ocha.boc.response.UserLoginResponse;
-import com.ocha.boc.response.UserUpdateResponse;
+import com.ocha.boc.response.UserResponse;
 import com.ocha.boc.util.CommonConstants;
-import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class UserService {
 
-    private static final String CURRENT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS+07:00";
-
     @Autowired
     private UserRepository userRepository;
 
-    public UserLoginResponse checkLogin(UserLoginRequest request) throws Exception {
-        UserLoginResponse response = new UserLoginResponse();
+    public UserResponse newUser(UserLoginRequest request)  {
+        UserResponse response = new UserResponse();
         if (!StringUtils.isNotEmpty(request.getPhone())) {
             response.setSuccess(Boolean.FALSE);
             response.setMessage(CommonConstants.STR_FAIL_STATUS);
-            response.setObjectId(request.getPhone());
         } else {
             User user = userRepository.findUserByPhone(request.getPhone());
             if (user == null) {
                 user = new User();
                 user.setPhone(request.getPhone());
                 user.setActive(Boolean.TRUE);
-                String currentDate = getCurrentDate();
-                if (StringUtils.isNotEmpty(currentDate)) {
-                    long openDate = DateUtils.stringDateToLong(currentDate, null, CURRENT_DATE_FORMAT);
-                    user.setOpenDate(openDate);
-                } else {
-                    log.error("Cannot get current date");
-                }
+                user.setCreatedDate(Instant.now().toString());
+                user.setLastModifiedDate(Instant.now().toString());
                 userRepository.save(user);
             }
             response.setSuccess(Boolean.TRUE);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setObjectId(request.getPhone());
-            response.setObject(user);
+            response.setObjectId(user.getId());
+            UserDTO userDTO = new UserDTO(user);
+            response.setObject(userDTO);
         }
         return response;
     }
 
-
-    public User regiser(String phone) {
-        User user = null;
-        try {
-            if (StringUtils.isNotEmpty(phone)) {
-                user = userRepository.findUserByPhone(phone);
-                if (user != null) {
-                    log.error("Phone number is existed. Cannot register new account");
-                } else {
-                    user = new User();
-                    user.setPhone(phone);
-                    String currentDate = getCurrentDate();
-                    if (StringUtils.isNotEmpty(currentDate)) {
-                        long openDate = DateUtils.stringDateToLong(currentDate, null, CURRENT_DATE_FORMAT);
-                        user.setOpenDate(openDate);
-                    } else {
-                        log.error("Cannot get current date");
-                    }
-                    user.setActive(Boolean.TRUE);
-                    userRepository.save(user);
-                }
-            }
-        } catch (Exception e) {
-            log.error("Cannot register new user with phone number " + phone + ". Error: " + e);
-        }
-        return user;
-    }
-
-    public UserUpdateResponse updateUserInformation(UserUpdateRequest request) {
-        UserUpdateResponse response = new UserUpdateResponse();
+    public UserResponse updateUserInformation(UserUpdateRequest request) {
+        UserResponse response = new UserResponse();
         try {
             User user = checkUserExisted(request.getUserId());
             if (user == null) {
@@ -92,16 +61,42 @@ public class UserService {
             user.setFirstName(request.getFirstName());
             user.setLastName(request.getLastName());
             user.setPhoto(request.getPhoto());
+            user.setLastModifiedDate(Instant.now().toString());
             userRepository.save(user);
             response.setSuccess(Boolean.TRUE);
             response.setMessage("Update user successful");
-            response.setObjectId(request.getUserId());
-            response.setObject(user);
+            response.setObjectId(user.getId());
+            UserDTO userDTO = new UserDTO(user);
+            response.setObject(userDTO);
         } catch (Exception e) {
+            response.setSuccess(Boolean.FALSE);
             log.error("Error when updateUserInformation: ", e);
+            response.setMessage("updateUserInformation is FAILED");
         }
         return response;
     }
+    public void deleteUserById(String userId) {
+        userRepository.deleteById(userId);
+    }
+
+    public List<UserDTO> getAllUser() {
+        List<User> users = userRepository.findAll();
+        List<UserDTO> dtoList = new ArrayList<>();
+        for (User user: users) {
+            UserDTO userDTO = new UserDTO(user);
+            dtoList.add(userDTO);
+        }
+        return dtoList;
+    }
+
+    public User getUserById(String userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if(userOptional.isPresent()) {
+           return userOptional.get();
+        }
+        return null;
+    }
+
 
     public boolean deActiveUser(String userId) {
         boolean isDeActive = false;
@@ -126,15 +121,4 @@ public class UserService {
         }
         return user;
     }
-
-    private String getCurrentDate() {
-        String currentDate = null;
-        try {
-            currentDate = DateUtils.getCurrentDate();
-        } catch (Exception e) {
-            log.error("Error when getCurrentDate: ", e);
-        }
-        return currentDate;
-    }
-
 }
