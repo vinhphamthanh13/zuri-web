@@ -12,8 +12,6 @@ import javax.validation.constraints.Email;
 @Setter
 public class UserDTO extends AbstractEntity {
 
-    private String userId;
-
     private String phone;
     @Email
     private String email;
@@ -31,12 +29,12 @@ public class UserDTO extends AbstractEntity {
     public UserDTO(User user) {
         this.phone = user.getPhone();
         this.email = user.getEmail();
-        this.phone = user.getPhoto();
+        this.phone = user.getPhone();
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
         this.isActive = user.isActive();
         this.role = user.getRole();
-        this.userId = user.getId();
+        this.id = user.getId();
         this.createdDate = user.getCreatedDate();
     }
 

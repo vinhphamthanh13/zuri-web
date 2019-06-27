@@ -9,8 +9,8 @@ import org.springframework.data.annotation.Id;
 @Setter
 public class AbstractEntity {
     @Id
-    protected  String id;
-    protected  String createdDate;
+    protected String id;
+    protected String createdDate;
     @JsonIgnore
-    protected  String lastModifiedDate;
+    protected String lastModifiedDate;
 }

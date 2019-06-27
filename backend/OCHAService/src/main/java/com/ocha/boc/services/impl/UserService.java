@@ -24,7 +24,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserResponse newUser(UserLoginRequest request)  {
+    public UserResponse newUser(UserLoginRequest request) {
         UserResponse response = new UserResponse();
         if (!StringUtils.isNotEmpty(request.getPhone())) {
             response.setSuccess(Boolean.FALSE);
@@ -75,6 +75,7 @@ public class UserService {
         }
         return response;
     }
+
     public void deleteUserById(String userId) {
         userRepository.deleteById(userId);
     }
@@ -82,7 +83,7 @@ public class UserService {
     public List<UserDTO> getAllUser() {
         List<User> users = userRepository.findAll();
         List<UserDTO> dtoList = new ArrayList<>();
-        for (User user: users) {
+        for (User user : users) {
             UserDTO userDTO = new UserDTO(user);
             dtoList.add(userDTO);
         }
@@ -91,8 +92,8 @@ public class UserService {
 
     public User getUserById(String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if(userOptional.isPresent()) {
-           return userOptional.get();
+        if (userOptional.isPresent()) {
+            return userOptional.get();
         }
         return null;
     }

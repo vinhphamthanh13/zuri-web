@@ -33,9 +33,11 @@ public class User extends AbstractEntity {
     private boolean isActive;
 
     private UserType role;
+
     public User() {
 
     }
+
     public User(UserDTO userDTO) {
         this.phone = userDTO.getPhone();
         this.email = userDTO.getEmail();
@@ -44,6 +46,6 @@ public class User extends AbstractEntity {
         this.firstName = userDTO.getFirstName();
         this.isActive = userDTO.isActive();
         this.role = userDTO.getRole();
-        this.id = userDTO.getUserId();
+        this.id = userDTO.getId();
     }
 }
