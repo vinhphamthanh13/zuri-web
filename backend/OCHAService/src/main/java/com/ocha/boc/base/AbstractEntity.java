@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 public class AbstractEntity {
     @Id
     protected  String id;
-    @JsonIgnore
     protected  String createdDate;
     @JsonIgnore
     protected  String lastModifiedDate;
