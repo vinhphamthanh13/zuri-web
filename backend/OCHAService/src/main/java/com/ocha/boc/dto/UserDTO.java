@@ -1,5 +1,6 @@
 package com.ocha.boc.dto;
 
+import com.ocha.boc.base.AbstractEntity;
 import com.ocha.boc.entity.User;
 import com.ocha.boc.enums.UserType;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import javax.validation.constraints.Email;
 
 @Getter
 @Setter
-public class UserDTO {
+public class UserDTO extends AbstractEntity {
 
     private String userId;
 
@@ -36,6 +37,7 @@ public class UserDTO {
         this.isActive = user.isActive();
         this.role = user.getRole();
         this.userId = user.getId();
+        this.createdDate = user.getCreatedDate();
     }
 
 }
