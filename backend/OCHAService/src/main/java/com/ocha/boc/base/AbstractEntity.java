@@ -11,6 +11,5 @@ public class AbstractEntity {
     @Id
     protected String id;
     protected String createdDate;
-    @JsonIgnore
     protected String lastModifiedDate;
 }
