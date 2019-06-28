@@ -69,6 +69,7 @@ public class NguyenLieuService {
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setObject(new NguyenLieuDTO(nguyenLieu));
+                nguyenLieuRepository.save(nguyenLieu);
             } else {
                 response.setSuccess(Boolean.FALSE);
                 response.setMessage(CommonConstants.STR_FAIL_STATUS);
