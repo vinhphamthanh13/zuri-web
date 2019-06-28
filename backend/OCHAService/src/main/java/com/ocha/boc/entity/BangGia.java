@@ -21,5 +21,4 @@ public class BangGia extends AbstractEntity {
      */
     private int numberOfPrice;
 
-    private String bangGiaId;
 }
