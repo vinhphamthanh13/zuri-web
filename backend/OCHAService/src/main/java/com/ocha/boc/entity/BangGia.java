@@ -20,4 +20,6 @@ public class BangGia extends AbstractEntity {
      * Tổng số lượng giá
      */
     private int numberOfPrice;
+
+    private String bangGiaId;
 }
