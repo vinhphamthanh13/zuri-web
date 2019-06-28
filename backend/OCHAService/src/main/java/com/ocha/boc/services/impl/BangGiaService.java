@@ -2,6 +2,8 @@ package com.ocha.boc.services.impl;
 
 import com.ocha.boc.dto.BangGiaDTO;
 import com.ocha.boc.entity.BangGia;
+import com.ocha.boc.entity.BangGiaDetail;
+import com.ocha.boc.repository.BangGiaDetailRepository;
 import com.ocha.boc.repository.BangGiaRepository;
 import com.ocha.boc.request.BangGiaRequest;
 import com.ocha.boc.request.BangGiaUpdateRequest;
@@ -12,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +25,23 @@ public class BangGiaService {
     @Autowired
     private BangGiaRepository bangGiaRepository;
 
+    @Autowired
+    private BangGiaDetailRepository bangGiaDetailRepository;
+
     public BangGiaResponse createNewBangGia(BangGiaRequest request) {
         BangGiaResponse response = new BangGiaResponse();
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
         try {
-            BangGia bangGia = new BangGia();
-            bangGia.setNumberOfPrice(request.getNumberOfPrice());
-            response.setSuccess(Boolean.TRUE);
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setObject(new BangGiaDTO(bangGia));
+            if (request.getNumberOfPrice() > 0) {
+                BangGia bangGia = new BangGia();
+                bangGia.setNumberOfPrice(request.getNumberOfPrice());
+                bangGia.setCreatedDate(Instant.now().toString());
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                bangGiaRepository.save(bangGia);
+                response.setObject(new BangGiaDTO(bangGia));
+            }
         } catch (Exception e) {
             log.error("Error when createNewBangGia: {}", e);
         }
@@ -46,10 +56,14 @@ public class BangGiaService {
             if (StringUtils.isNotEmpty(request.getId())) {
                 BangGia bangGia = bangGiaRepository.findBangGiaById(request.getId());
                 if (bangGia != null) {
-                    bangGia.setNumberOfPrice(request.getNumberOfPrice());
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setObject(new BangGiaDTO(bangGia));
+                    if (request.getNumberOfPrice() > 0) {
+                        bangGia.setNumberOfPrice(request.getNumberOfPrice());
+                        bangGia.setLastModifiedDate(Instant.now().toString());
+                        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                        response.setSuccess(Boolean.TRUE);
+                        response.setObject(new BangGiaDTO(bangGia));
+                        bangGiaRepository.save(bangGia);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -63,9 +77,9 @@ public class BangGiaService {
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
         try {
-            if(StringUtils.isNotEmpty(id)){
+            if (StringUtils.isNotEmpty(id)) {
                 BangGia bangGia = bangGiaRepository.findBangGiaById(id);
-                if(bangGia != null){
+                if (bangGia != null) {
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
                     response.setObject(new BangGiaDTO(bangGia));
@@ -81,11 +95,11 @@ public class BangGiaService {
         BangGiaResponse response = new BangGiaResponse();
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
-        try{
+        try {
             List<BangGia> listBangGia = bangGiaRepository.findAll();
-            if(listBangGia.size() > 0){
+            if (listBangGia.size() > 0) {
                 List<BangGiaDTO> bangGiaDTOList = new ArrayList<>();
-                for(BangGia bangGia: listBangGia){
+                for (BangGia bangGia : listBangGia) {
                     BangGiaDTO bangGiaDTO = new BangGiaDTO(bangGia);
                     bangGiaDTOList.add(bangGiaDTO);
                 }
@@ -94,7 +108,7 @@ public class BangGiaService {
                 response.setObjects(bangGiaDTOList);
                 response.setTotalResultCount((long) bangGiaDTOList.size());
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("Error when getAllBangGia: {}", e);
         }
         return response;
@@ -105,14 +119,18 @@ public class BangGiaService {
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
         try {
-            if(StringUtils.isNotEmpty(id)){
+            if (StringUtils.isNotEmpty(id)) {
                 BangGia bangGia = bangGiaRepository.findBangGiaById(id);
-                if(bangGia != null){
+                if (bangGia != null) {
                     bangGiaRepository.delete(bangGia);
-                    //TODO delete data on table "BangGiaDetail", reference key bangGiaId
+                    //Remove all data in Bang Gia Detail based on the Bang Gia Id
+                    List<BangGiaDetail> bangGiaDetailList = bangGiaDetailRepository.findBangGiaDetailByBangGiaId(id);
+                    for (BangGiaDetail bangGiaDetail : bangGiaDetailList) {
+                        bangGiaDetailRepository.delete(bangGiaDetail);
+                    }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("Error when deleteBangGiaById: {}", e);
         }
         return response;
