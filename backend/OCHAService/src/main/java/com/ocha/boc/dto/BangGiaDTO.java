@@ -14,6 +14,9 @@ public class BangGiaDTO extends AbstractEntity {
     private int numberOfPrice;
 
     public BangGiaDTO(BangGia bangGia) {
+        this.createdDate = bangGia.getCreatedDate();
+        this.lastModifiedDate = bangGia.getLastModifiedDate();
         this.numberOfPrice = bangGia.getNumberOfPrice();
+        this.id = bangGia.getId();
     }
 }
