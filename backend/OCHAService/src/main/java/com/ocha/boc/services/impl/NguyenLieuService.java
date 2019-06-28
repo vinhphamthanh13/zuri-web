@@ -80,18 +80,18 @@ public class NguyenLieuService {
 
     public NguyenLieuResponse findNguyenLieuById(String id) {
         NguyenLieuResponse response = new NguyenLieuResponse();
-        if(StringUtils.isNotEmpty(id)){
+        if (StringUtils.isNotEmpty(id)) {
             NguyenLieu nguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
-            if(nguyenLieu != null){
+            if (nguyenLieu != null) {
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setObject(new NguyenLieuDTO(nguyenLieu));
-            }else{
+            } else {
                 response.setMessage(CommonConstants.STR_FAIL_STATUS);
                 response.setSuccess(Boolean.FALSE);
                 log.error("Error While findNguyenLieuById - Cannot find Nguyen Lieu with id: " + id);
             }
-        }else{
+        } else {
             response.setMessage(CommonConstants.STR_FAIL_STATUS);
             response.setSuccess(Boolean.FALSE);
             log.error("Error While findNguyenLieuById: id is empty or null");
@@ -104,14 +104,14 @@ public class NguyenLieuService {
         List<NguyenLieu> nguyenLieuList = nguyenLieuRepository.findAll();
         if (nguyenLieuList.size() > 0) {
             List<NguyenLieuDTO> nguyenLieuDTOList = new ArrayList<>();
-            for(NguyenLieu nguyenLieu: nguyenLieuList){
+            for (NguyenLieu nguyenLieu : nguyenLieuList) {
                 NguyenLieuDTO nguyenLieuDTO = new NguyenLieuDTO(nguyenLieu);
                 nguyenLieuDTOList.add(nguyenLieuDTO);
             }
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             response.setSuccess(Boolean.TRUE);
             response.setObjects(nguyenLieuDTOList);
-        }else{
+        } else {
             response.setSuccess(Boolean.FALSE);
             response.setMessage(CommonConstants.STR_FAIL_STATUS);
             log.error("Error while getAllNguyenLieu");
@@ -122,11 +122,11 @@ public class NguyenLieuService {
     public AbstractResponse deleteNguyenLieuById(String id) {
         AbstractResponse response = new AbstractResponse();
         NguyenLieu nguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
-        if(nguyenLieu != null){
+        if (nguyenLieu != null) {
             nguyenLieuRepository.delete(nguyenLieu);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             response.setSuccess(Boolean.TRUE);
-        }else{
+        } else {
             response.setSuccess(Boolean.FALSE);
             response.setMessage(CommonConstants.STR_FAIL_STATUS);
             log.error("Error when deleteNguyenLieuById: This Nguyen Lieu is not existed in the system");
