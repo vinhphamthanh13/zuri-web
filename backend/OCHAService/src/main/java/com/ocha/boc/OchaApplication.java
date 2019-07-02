@@ -5,10 +5,20 @@ package com.ocha.boc;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.ocha.boc.cors.CorsFilter;
 import com.ocha.boc.entity.BangGiaDetail;
+import com.ocha.boc.entity.MatHang;
+import com.ocha.boc.entity.NguyenLieu;
+import com.ocha.boc.entity.User;
 import com.ocha.boc.repository.BangGiaDetailRepository;
+import com.ocha.boc.repository.MatHangRepository;
+import com.ocha.boc.repository.NguyenLieuRepository;
+import com.ocha.boc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -32,6 +42,40 @@ public class OchaApplication extends SpringBootServletInitializer {
     @Autowired
     private BangGiaDetailRepository bangGiaDetailRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MatHangRepository matHangRepository;
+
+    @Autowired
+    private NguyenLieuRepository nguyenLieuRepository;
+
+    @Value(value = "${boc.table.banggia}")
+    private String bangGiaTableName;
+
+    @Value(value = "${boc.table.mathang}")
+    private String matHangTableName;
+
+    @Value(value = "${boc.table.user}")
+    private String userTableName;
+
+    @Value(value = "${boc.table.nguyenlieu}")
+    private String nguyenLieuTableName;
+
+    @Value(value = "${boc.table.banggiaDetail}")
+    private String bangGiaDetailTableName;
+
+    @Value(value = "${spring.data.mongodb.host}")
+    private String mongoDBHostName;
+
+    @Value(value = "${spring.data.mongodb.port}")
+    private int mongoDBPortNumber;
+
+
+    @Value(value = "${spring.data.mongodb.database}")
+    private String databaseName;
+
     /**
      * @param args
      */
@@ -53,26 +97,102 @@ public class OchaApplication extends SpringBootServletInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void migrateMasterAddress() {
-        initBangGiaDetail();
+        MongoClient mongo = connectMongoDB();
+        MongoDatabase db = mongo.getDatabase(databaseName);
+        initBangGiaDetail(db);
+        initUserTable(db);
+        initMatHangTable(db);
+        initNguyenLieuTable(db);
     }
 
-    private void initBangGiaDetail() {
-        List<BangGiaDetail> bangGiaDetails = new ArrayList<>();
-        try {
-            InputStream stream = OchaApplication.class.getResourceAsStream("/banggia_detail.json");
-            ObjectMapper mapper = new ObjectMapper();
-            bangGiaDetails = mapper.readValue(stream, new TypeReference<List<BangGiaDetail>>() {
-            });
+    public MongoClient connectMongoDB() {
+        MongoClient mongo = new MongoClient(mongoDBHostName, mongoDBPortNumber);
+        return mongo;
+    }
 
-            //store to db
-            if (bangGiaDetails != null && !bangGiaDetails.isEmpty()) {
-                //try to delete all already record first
+    public void initBangGiaDetail(MongoDatabase db) {
+        boolean isExisted = checkExistsCollectionName(db, bangGiaDetailTableName);
+        if (!isExisted) {
+            db.createCollection(bangGiaDetailTableName);
+            List<BangGiaDetail> bangGiaDetails = new ArrayList<>();
+            try {
+                InputStream stream = OchaApplication.class.getResourceAsStream("/banggia_detail.json");
+                ObjectMapper mapper = new ObjectMapper();
+                bangGiaDetails = mapper.readValue(stream, new TypeReference<List<BangGiaDetail>>() {
+                });
+                //store to db
                 bangGiaDetailRepository.deleteAll();
-                //stored the new records
                 bangGiaDetailRepository.saveAll(bangGiaDetails);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
+
+    public void initUserTable(MongoDatabase db) {
+        boolean isExisted = checkExistsCollectionName(db, userTableName);
+        if (!isExisted) {
+            db.createCollection(userTableName);
+            List<User> users = new ArrayList<User>();
+            try {
+                InputStream stream = OchaApplication.class.getResourceAsStream("/user.json");
+                ObjectMapper mapper = new ObjectMapper();
+                users = mapper.readValue(stream, new TypeReference<List<User>>() {
+                });
+                //store to db
+                userRepository.deleteAll();
+                userRepository.saveAll(users);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void initMatHangTable(MongoDatabase db) {
+        boolean isExisted = checkExistsCollectionName(db, matHangTableName);
+        if (!isExisted) {
+            db.createCollection(matHangTableName);
+            List<MatHang> listMatHang = new ArrayList<MatHang>();
+            try {
+                InputStream stream = OchaApplication.class.getResourceAsStream("/mathang.json");
+                ObjectMapper mapper = new ObjectMapper();
+                listMatHang = mapper.readValue(stream, new TypeReference<List<MatHang>>() {
+                });
+                //store to db
+                matHangRepository.deleteAll();
+                matHangRepository.saveAll(listMatHang);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void initNguyenLieuTable(MongoDatabase db) {
+        boolean isExisted = checkExistsCollectionName(db, nguyenLieuTableName);
+        if (!isExisted) {
+            db.createCollection(nguyenLieuTableName);
+            List<NguyenLieu> listNguyenLieu = new ArrayList<NguyenLieu>();
+            try {
+                InputStream stream = OchaApplication.class.getResourceAsStream("/nguyenlieu.json");
+                ObjectMapper mapper = new ObjectMapper();
+                listNguyenLieu = mapper.readValue(stream, new TypeReference<List<NguyenLieu>>() {
+                });
+                //store to db
+                nguyenLieuRepository.deleteAll();
+                nguyenLieuRepository.saveAll(listNguyenLieu);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean checkExistsCollectionName(MongoDatabase db, String collectionName) {
+        MongoCollection dbCollection = db.getCollection(collectionName);
+        if (dbCollection.count() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+
 }
