@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DateUtils {
@@ -256,6 +258,13 @@ public class DateUtils {
         }
         return false;
     }
+
+    public static String getCurrentDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now).toString();
+    }
+
     public static void main(String args[]) throws Exception {
 
     }
