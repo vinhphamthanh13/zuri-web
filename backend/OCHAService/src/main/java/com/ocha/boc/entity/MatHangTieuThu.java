@@ -15,7 +15,7 @@ public class MatHangTieuThu {
     /**
      * Price: Đơn giá của mặt hàng được tiêu thụ
      */
-    private BigDecimal price;
+    private BigDecimal unitPrice;
 
     private int amountOfConsumption;
 
