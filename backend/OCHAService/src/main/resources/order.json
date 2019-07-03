@@ -5,21 +5,21 @@
         "matHang": {
           "name": "Lẩu hải sản chua cay"
         },
-        "price": 300.000,
+        "unitPrice": 300.000,
         "amountOfConsumption": 1
       },
       {
         "matHang": {
           "name": "Mỳ xào hải sản"
         },
-        "price": 60.000,
+        "unitPrice": 60.000,
         "amountOfConsumption": 2
       },
       {
         "matHang": {
           "name": "Cơm chiên dương châu"
         },
-        "price": 80.000,
+        "unitPrice": 80.000,
         "amountOfConsumption": 2
       }
     ],
@@ -33,14 +33,14 @@
         "matHang": {
           "name": "Lẩu hải sản chua cay"
         },
-        "price": 300.000,
+        "unitPrice": 300.000,
         "amountOfConsumption": 2
       },
       {
         "matHang": {
           "name": "Cơm cháy + Râu Luột Kho Quẹt"
         },
-        "price": 75.000,
+        "unitPrice": 75.000,
         "amountOfConsumption": 2
       }
     ],
@@ -53,21 +53,21 @@
         "matHang": {
           "name": "Cơm chiên dương châu"
         },
-        "price": 90.000,
+        "unitPrice": 90.000,
         "amountOfConsumption": 2
       },
       {
         "matHang": {
           "name": "Mỳ xào hải sản"
         },
-        "price": 60.000,
+        "unitPrice": 60.000,
         "amountOfConsumption": 2
       },
       {
         "matHang": {
           "name": "Dồi"
         },
-        "price": 100.000,
+        "unitPrice": 100.000,
         "amountOfConsumption": 1
       }
     ],
