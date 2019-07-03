@@ -26,21 +26,38 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public MatHangBanChayResponse getListMatHangBanChay() {
+        MatHangBanChayResponse response = null;
+        try {
+            String currentDate = DateUtils.getCurrentDate();
+            response = buildMatHangBanChayResponse(currentDate);
+        } catch (Exception e) {
+            log.error("Error when getListMatHangBanChay: {}", e);
+        }
+        return response;
+    }
+
+    public MatHangBanChayResponse getListMatHangBanChayByDate(String date) {
+        MatHangBanChayResponse response = null;
+        try {
+            response = buildMatHangBanChayResponse(date);
+        } catch (Exception e) {
+            log.error("Error when getListMatHangBanChay: {}", e);
+        }
+        return response;
+    }
+
+
+    private MatHangBanChayResponse buildMatHangBanChayResponse(String date) {
         MatHangBanChayResponse response = new MatHangBanChayResponse();
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
-        try {
-            String currentDate = DateUtils.getCurrentDate();
-            List<Order> orders = orderRepository.findListOrderByCreateDate(currentDate);
-            List<MatHangBanChay> matHangBanChayList = buildListMatHangBanChay(orders);
-            if (CollectionUtils.isNotEmpty(matHangBanChayList)) {
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObjects(matHangBanChayList);
-                response.setTotalResultCount((long) matHangBanChayList.size());
-            }
-        } catch (Exception e) {
-            log.error("Error when getListMatHangBanChay: {}", e);
+        List<Order> orders = orderRepository.findListOrderByCreateDate(date);
+        List<MatHangBanChay> matHangBanChayList = buildListMatHangBanChay(orders);
+        if (CollectionUtils.isNotEmpty(matHangBanChayList)) {
+            response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setObjects(matHangBanChayList);
+            response.setTotalResultCount((long) matHangBanChayList.size());
         }
         return response;
     }
@@ -95,18 +112,18 @@ public class OrderService {
         return isExisted;
     }
 
-    private void sortingBanChayList(List<MatHangBanChay> banChayList){
+    private void sortingBanChayList(List<MatHangBanChay> banChayList) {
         Collections.sort(banChayList, new Comparator<MatHangBanChay>() {
             @Override
             public int compare(final MatHangBanChay object1, final MatHangBanChay object2) {
-                return object1.getAmountOfConsumption() > object2.getAmountOfConsumption() ? -1 :(object1.getAmountOfConsumption() < object2.getAmountOfConsumption() ? 1 : 0);
+                return object1.getAmountOfConsumption() > object2.getAmountOfConsumption() ? -1 : (object1.getAmountOfConsumption() < object2.getAmountOfConsumption() ? 1 : 0);
             }
         });
     }
 
-    private void calcualteCostPriceMatHangBanChay(List<MatHangBanChay> banChayList){
-        for (MatHangBanChay temp: banChayList){
-            temp.setCostPrice(temp.getUnitPrice().multiply(BigDecimal.valueOf((long)temp.getAmountOfConsumption())));
+    private void calcualteCostPriceMatHangBanChay(List<MatHangBanChay> banChayList) {
+        for (MatHangBanChay temp : banChayList) {
+            temp.setCostPrice(temp.getUnitPrice().multiply(BigDecimal.valueOf((long) temp.getAmountOfConsumption())));
         }
     }
 }
