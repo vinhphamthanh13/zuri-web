@@ -1,0 +1,76 @@
+[
+  {
+    "listMatHangTieuThu": [
+      {
+        "matHang": {
+          "name": "Lẩu hải sản chua cay"
+        },
+        "price": 300.000,
+        "amountOfConsumption": 1
+      },
+      {
+        "matHang": {
+          "name": "Mỳ xào hải sản"
+        },
+        "price": 60.000,
+        "amountOfConsumption": 2
+      },
+      {
+        "matHang": {
+          "name": "Cơm chiên dương châu"
+        },
+        "price": 80.000,
+        "amountOfConsumption": 2
+      }
+    ],
+    "createDate": "2019-07-03",
+    "total": 580.000
+  },
+  {
+    "createDate": "2019-07-03",
+    "listMatHangTieuThu": [
+      {
+        "matHang": {
+          "name": "Lẩu hải sản chua cay"
+        },
+        "price": 300.000,
+        "amountOfConsumption": 2
+      },
+      {
+        "matHang": {
+          "name": "Cơm cháy + Râu Luột Kho Quẹt"
+        },
+        "price": 75.000,
+        "amountOfConsumption": 2
+      }
+    ],
+    "total": 750.000
+  },
+  {
+    "createDate": "2019-07-03",
+    "listMatHangTieuThu": [
+      {
+        "matHang": {
+          "name": "Cơm chiên dương châu"
+        },
+        "price": 90.000,
+        "amountOfConsumption": 2
+      },
+      {
+        "matHang": {
+          "name": "Mỳ xào hải sản"
+        },
+        "price": 60.000,
+        "amountOfConsumption": 2
+      },
+      {
+        "matHang": {
+          "name": "Dồi"
+        },
+        "price": 100.000,
+        "amountOfConsumption": 1
+      }
+    ],
+    "total": 400.000
+  }
+]
