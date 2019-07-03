@@ -18,6 +18,7 @@ public class NguyenLieuDTO extends AbstractEntity {
     private String bangGiaId;
 
     public NguyenLieuDTO(NguyenLieu nguyenLieu) {
+        this.id = nguyenLieu.getId();
         this.abbreviations = nguyenLieu.getAbbreviations();
         this.name = nguyenLieu.getName();
         this.bangGiaId = nguyenLieu.getBangGiaId();

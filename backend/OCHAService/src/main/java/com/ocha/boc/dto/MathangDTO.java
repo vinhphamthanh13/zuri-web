@@ -14,6 +14,7 @@ public class MathangDTO extends AbstractEntity {
     private String name;
 
     public MathangDTO(MatHang matHang) {
+        this.id = matHang.getId();
         this.name = matHang.getName();
         this.createdDate = matHang.getCreatedDate();
         this.lastModifiedDate = matHang.getLastModifiedDate();
