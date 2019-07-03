@@ -9,14 +9,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.ocha.boc.cors.CorsFilter;
-import com.ocha.boc.entity.BangGiaDetail;
-import com.ocha.boc.entity.MatHang;
-import com.ocha.boc.entity.NguyenLieu;
-import com.ocha.boc.entity.User;
-import com.ocha.boc.repository.BangGiaDetailRepository;
-import com.ocha.boc.repository.MatHangRepository;
-import com.ocha.boc.repository.NguyenLieuRepository;
-import com.ocha.boc.repository.UserRepository;
+import com.ocha.boc.entity.*;
+import com.ocha.boc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -51,6 +45,9 @@ public class OchaApplication extends SpringBootServletInitializer {
     @Autowired
     private NguyenLieuRepository nguyenLieuRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Value(value = "${boc.table.banggia}")
     private String bangGiaTableName;
 
@@ -65,6 +62,9 @@ public class OchaApplication extends SpringBootServletInitializer {
 
     @Value(value = "${boc.table.banggiaDetail}")
     private String bangGiaDetailTableName;
+
+    @Value(value = "${boc.table.order}")
+    private String orderTableName;
 
     @Value(value = "${spring.data.mongodb.host}")
     private String mongoDBHostName;
@@ -103,6 +103,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         initUserTable(db);
         initMatHangTable(db);
         initNguyenLieuTable(db);
+        initOrder(db);
     }
 
     public MongoClient connectMongoDB() {
@@ -113,7 +114,6 @@ public class OchaApplication extends SpringBootServletInitializer {
     public void initBangGiaDetail(MongoDatabase db) {
         boolean isExisted = checkExistsCollectionName(db, bangGiaDetailTableName);
         if (!isExisted) {
-            db.createCollection(bangGiaDetailTableName);
             List<BangGiaDetail> bangGiaDetails = new ArrayList<>();
             try {
                 InputStream stream = OchaApplication.class.getResourceAsStream("/banggia_detail.json");
@@ -132,7 +132,6 @@ public class OchaApplication extends SpringBootServletInitializer {
     public void initUserTable(MongoDatabase db) {
         boolean isExisted = checkExistsCollectionName(db, userTableName);
         if (!isExisted) {
-            db.createCollection(userTableName);
             List<User> users = new ArrayList<User>();
             try {
                 InputStream stream = OchaApplication.class.getResourceAsStream("/user.json");
@@ -151,7 +150,6 @@ public class OchaApplication extends SpringBootServletInitializer {
     public void initMatHangTable(MongoDatabase db) {
         boolean isExisted = checkExistsCollectionName(db, matHangTableName);
         if (!isExisted) {
-            db.createCollection(matHangTableName);
             List<MatHang> listMatHang = new ArrayList<MatHang>();
             try {
                 InputStream stream = OchaApplication.class.getResourceAsStream("/mathang.json");
@@ -170,7 +168,6 @@ public class OchaApplication extends SpringBootServletInitializer {
     public void initNguyenLieuTable(MongoDatabase db) {
         boolean isExisted = checkExistsCollectionName(db, nguyenLieuTableName);
         if (!isExisted) {
-            db.createCollection(nguyenLieuTableName);
             List<NguyenLieu> listNguyenLieu = new ArrayList<NguyenLieu>();
             try {
                 InputStream stream = OchaApplication.class.getResourceAsStream("/nguyenlieu.json");
@@ -180,6 +177,24 @@ public class OchaApplication extends SpringBootServletInitializer {
                 //store to db
                 nguyenLieuRepository.deleteAll();
                 nguyenLieuRepository.saveAll(listNguyenLieu);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void initOrder(MongoDatabase db) {
+        boolean isExisted = checkExistsCollectionName(db, orderTableName);
+        if (!isExisted) {
+            List<Order> orders = new ArrayList<Order>();
+            try {
+                InputStream stream = OchaApplication.class.getResourceAsStream("/order.json");
+                ObjectMapper mapper = new ObjectMapper();
+                orders = mapper.readValue(stream, new TypeReference<List<Order>>() {
+                });
+                //store to db
+                orderRepository.deleteAll();
+                orderRepository.saveAll(orders);
             } catch (Exception e) {
                 e.printStackTrace();
             }
