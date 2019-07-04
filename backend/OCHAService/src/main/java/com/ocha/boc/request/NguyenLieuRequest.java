@@ -15,5 +15,4 @@ public class NguyenLieuRequest implements Serializable {
 
     private String name;
 
-    private String bangGiaId;
 }

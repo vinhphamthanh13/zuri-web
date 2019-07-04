@@ -21,7 +21,6 @@ public class NguyenLieu extends AbstractEntity {
 
     private String name;
 
-    private String bangGiaId;
 
 
 }

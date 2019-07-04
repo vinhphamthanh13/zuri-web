@@ -38,7 +38,6 @@ public class NguyenLieuService {
                 nguyenLieu = new NguyenLieu();
                 nguyenLieu.setAbbreviations(request.getAbbreviations());
                 nguyenLieu.setName(request.getName());
-                nguyenLieu.setBangGiaId(request.getBangGiaId());
                 nguyenLieuRepository.save(nguyenLieu);
             }
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -62,9 +61,6 @@ public class NguyenLieuService {
                 }
                 if (StringUtils.isNotEmpty(request.getName())) {
                     nguyenLieu.setName(request.getName());
-                }
-                if (StringUtils.isNotEmpty(request.getBangGiaId())) {
-                    nguyenLieu.setBangGiaId(request.getBangGiaId());
                 }
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
