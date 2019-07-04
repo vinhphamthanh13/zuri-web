@@ -1,0 +1,13 @@
+@import '../../components/variables.css';
+
+:root {
+  --btn-height: 30px;
+  --btn-radius: 0;
+  --btn-shadow: none;
+}
+
+.btnAppointment {
+  height: var(--btn-height);
+  border-radius: var(--btn-radius);
+  box-shadow: var(--btn-shadow);
+}

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Call Button should render call button with default props 1`] = `
+Array [
+  <a
+    className="welcomeXs"
+    href="tel:*6868"
+    onClick={[Function]}
+  >
+    <div
+      className="phone"
+    >
+      <img
+        alt="call button"
+        src="call.svg"
+      />
+    </div>
+  </a>,
+  <div
+    className="welcome"
+    onClick={[Function]}
+  >
+    <div
+      className="phone"
+    >
+      <img
+        alt="call button"
+        src="call.svg"
+      />
+    </div>
+  </div>,
+]
+`;

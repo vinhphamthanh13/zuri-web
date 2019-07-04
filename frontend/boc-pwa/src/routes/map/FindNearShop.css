@@ -1,0 +1,67 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+@import '../../components/variables.css';
+
+:root {
+  --width-btn-full-map: 50px; /* Button full screen of google map */
+  --filter-wrapper-padding: 10px;
+  --btnLocationSize: 40px;
+  --iconWidth: 18px;
+  --wrapper-message-mt: 140px;
+}
+
+.filterWrapper {
+  width: calc(100% - var(--width-btn-full-map));
+  padding: var(--filter-wrapper-padding);
+}
+
+.filterWrapperFull {
+  width: 100%;
+  padding: var(--filter-wrapper-padding);
+}
+
+.wrapperFindNear {
+  position: relative;
+}
+
+.currentLocation {
+  margin-right: var(--filter-wrapper-padding);
+}
+
+.btnCurrentLocation {
+  width: var(--btnLocationSize);
+  height: var(--btnLocationSize);
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
+  border: none;
+}
+
+.btnCurrentLocationIcon {
+  display: inline-block;
+  background-image: url('./images/mylocation-sprite-cookieless-v2-1x.png');
+  width: var(--iconWidth);
+  height: var(--iconWidth);
+  background-size: calc(var(--iconWidth) * 10) var(--iconWidth);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+.messageWrapper {
+  margin-top: var(--wrapper-message-mt);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (--xxs) {
+  :root {
+    --wrapper-message-mt: 60px;
+  }
+}

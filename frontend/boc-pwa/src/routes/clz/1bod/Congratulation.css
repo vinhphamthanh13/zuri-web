@@ -1,0 +1,181 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+@import '../../../components/variables.css';
+
+:root {
+  --slogan-height: 36px;
+  --verify-tick-width: 4px;
+  --verify-bg-color: #79c268;
+  --wrapper-top: 0;
+  --container-background-size: 200px;
+  --header-footer-height: 134px;
+  --max-width-summary: 500px;
+  --title-size: 20px;
+  --logo-width: 230px;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 0 var(--b-space-2xl);
+  z-index: var(--z-index-higher);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper {
+  max-width: var(--max-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--wrapper-top);
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  margin-top: var(--b-space-2xl);
+  width: var(--logo-width);
+}
+
+.slogan {
+  margin-top: var(--b-space-sm);
+  margin-bottom: var(--b-space-lg);
+  height: var(--slogan-height);
+}
+
+.summary {
+  margin-top: var(--b-space-md);
+  margin-bottom: var(--b-space-lg);
+  line-height: var(--b-space-lg);
+  text-align: center;
+  max-width: var(--max-width-summary);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--b-space-md);
+}
+
+.title {
+  font-weight: bold;
+  font-size: var(--title-size);
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.wrapperGirl {
+  text-align: center;
+}
+
+.girl {
+  height: var(--container-background-size);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.verifyIcon {
+  flex: 0 0 var(--b-space-3xl);
+  height: var(--b-space-3xl);
+  width: var(--b-space-3xl);
+  border-radius: 50%;
+  background-color: var(--verify-bg-color);
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: var(--b-space-md);
+  position: relative;
+
+  &::before {
+    content: '';
+    width: var(--b-space-xl);
+    height: var(--b-space-md);
+    border-left: var(--verify-tick-width) solid var(--c-ui-lighter);
+    border-bottom: var(--verify-tick-width) solid var(--c-ui-lighter);
+    transform: translate(-50%, -50%) rotate(-45deg);
+    position: absolute;
+    top: 45%;
+    left: 50%;
+  }
+}
+
+@media (--xl) {
+  :root {
+    --container-background-size: 170px;
+  }
+}
+
+@media (--lg) {
+  :root {
+    --logo-width: 200px;
+  }
+}
+
+@media (--xs) {
+  :root {
+    --container-background-size: 180px;
+    --logo-width: 180px;
+    --title-size: var(--b-space-md);
+  }
+
+  .container {
+    padding: 0;
+    max-width: unset;
+    text-align: center;
+    position: fixed;
+  }
+
+  .wrapper {
+    height: calc(100% - var(--container-background-size));
+  }
+
+  .logo {
+    width: var(--logo-width);
+  }
+
+  .slogan {
+    margin-bottom: var(--b-space-md);
+    margin-top: 0;
+  }
+
+  .summary {
+    margin-top: var(--b-space-md);
+  }
+}
+
+@media (--xxs) {
+  :root {
+    --container-background-size: 150px;
+  }
+
+  .container {
+    height: 100%;
+    font-size: var(--font-size-small);
+  }
+}
+
+.logoWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (--xxs) {
+  .girl {
+    height: calc(var(--b-space-6xl) * 1.8);
+  }
+}
+
+@media (--xxs-min) {
+  .girl {
+    height: calc(var(--b-space-6xl) * 3);
+  }
+}

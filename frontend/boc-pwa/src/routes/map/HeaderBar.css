@@ -1,0 +1,19 @@
+@import '../../components/variables.css';
+
+:root {
+  --icon-width: 34px;
+  --header-height: 50px;
+}
+
+.headerBar {
+  background-color: var(--c-accent-color);
+  text-align: center;
+  height: var(--header-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconLogo {
+  width: var(--icon-width);
+}

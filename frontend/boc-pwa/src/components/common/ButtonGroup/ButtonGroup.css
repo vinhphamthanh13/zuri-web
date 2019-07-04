@@ -1,0 +1,45 @@
+@import '../../variables.css';
+
+.button {
+  background-color: var(--c-ui-lighter);
+  color: var(--c-brand);
+  border: 1px solid var(--c-brand);
+  cursor: pointer;
+  padding: var(--b-space-xs) var(--b-space-xs);
+  position: relative;
+  margin: 0;
+  border-left: 0;
+}
+
+.button:first-child {
+  border-left: 1px solid var(--c-brand);
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.button:last-child {
+  border-right: 1px solid var(--c-brand);
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.button:focus {
+  z-index: 2;
+}
+
+.selected {
+  background-color: var(--c-brand);
+  color: var(--c-ui-lighter);
+  border: 1px solid var(--c-brand);
+}
+
+.outerStyle {
+  display: inline-block;
+}
+
+.disabled {
+  border: 1px solid var(--c-ui-dark);
+  background-color: var(--c-ui-lighter);
+  color: var(--c-ui-dark);
+  pointer-events: none;
+}

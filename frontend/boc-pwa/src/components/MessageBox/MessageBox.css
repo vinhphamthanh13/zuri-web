@@ -1,0 +1,26 @@
+@import '../variables.css';
+
+:root {
+  --box-message-height: 400px;
+  --box-radius: 6px;
+}
+
+.notSupportMessage {
+  background-color: var(--c-text-inverse);
+  padding: var(--b-space-md);
+  display: flex;
+  height: var(--box-message-height);
+  width: var(--max-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--b-space-xl);
+  border-radius: var(--box-radius);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 -1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.notSupportImg {
+  margin-bottom: var(--b-space-md);
+}

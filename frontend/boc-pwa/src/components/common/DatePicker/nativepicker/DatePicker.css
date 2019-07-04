@@ -1,0 +1,128 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+.datepicker {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: var(--b-space-4xl);
+}
+
+.calendar {
+  border-bottom: var(--b-space-3xs) solid var(--c-ui-normal);
+  padding-left: var(--b-space-xs);
+}
+
+.calendarError {
+  transition: border 0.5s ease-out;
+  border-bottom: var(--b-space-3xs) solid var(--c-brand);
+}
+
+.dateLabel {
+  padding: var(--b-space-2xs) 0 0 var(--b-space-xl);
+  font-size: calc(var(--font-size-tiny) * 1.2);
+  color: var(--c-label);
+  transition: all 0.2s ease;
+}
+
+.dateLabelInActive {
+  transform: translate3d(var(--b-space-xl), calc(var(--b-space-md) * 1.5), 0);
+  font-size: var(--font-size-small);
+  color: var(--c-label);
+  transition: transform 0.2s ease;
+}
+
+.dateCalendar {
+  color: var(--c-label);
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.errorMessage {
+  padding-top: var(--b-space-2xs);
+  font-size: calc(var(--font-size-tiny) * 1.2);
+  color: var(--c-brand);
+}
+
+.formControl {
+  margin: var(--b-space-2xs) var(--b-space-xs);
+  color: var(--c-label);
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.formValue {
+  position: absolute;
+  font-size: var(--font-size-small);
+  z-index: 0;
+}
+
+input[type='date'] {
+  position: absolute;
+  background: transparent;
+  color: transparent;
+  display: -webkit-inline-flex;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  user-select: none;
+  height: calc(var(--b-space-xl) * 0.78);
+  width: 75%;
+  z-index: 1;
+}
+
+input[type='date']::-webkit-clear-button {
+  display: none;
+}
+
+input[type='date']::-ms-clear {
+  display: none;
+}
+
+input[type='date']::-webkit-inner-spin-button {
+  display: none;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+input[type='date']:focus {
+  user-select: none;
+  opacity: 0;
+}
+
+input[type='date']:hover {
+  cursor: pointer;
+}
+
+.icon {
+  color: var(--c-brand);
+  margin-top: var(--b-space-2xs);
+}
+
+.statusIconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.statusIcon {
+  font-size: var(--font-size-big);
+  color: var(--c-success);
+}

@@ -1,0 +1,123 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LayoutMobile renders children correctly 1`] = `
+<div
+  className="layout"
+>
+  <div
+    className="root hiddenXs"
+  >
+    <div
+      className="logo"
+    >
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        <img
+          alt="Homecredit"
+          height="40"
+          src="logo-inverse.png"
+        />
+      </a>
+    </div>
+  </div>
+  <div
+    className="mobile"
+  >
+    <div
+      className="child"
+    />
+  </div>
+  <div
+    className="desktop"
+  >
+    <div
+      className="notSupportMessage"
+    >
+      <img
+        alt="sad-ico.svg"
+        className="notSupportImg"
+        src="sad-ico.svg"
+      />
+      <p>
+        Hiện nay đường dẫn chỉ hỗ trợ các thiết bị điện thoại di động. Xin lỗi Quý khách vì sự bất tiện này.
+      </p>
+    </div>
+  </div>
+  <div
+    className="root hiddenXs"
+  >
+    <div
+      className="container"
+    >
+      <span
+        className="text"
+      >
+        © 2018 Bản quyền thuộc về Home Credit
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LayoutMobile renders mobile layout with fullHeight and fullWidth 1`] = `
+<div
+  className="layout fullHeight fullWidth"
+>
+  <div
+    className="root hiddenXs"
+  >
+    <div
+      className="logo"
+    >
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        <img
+          alt="Homecredit"
+          height="40"
+          src="logo-inverse.png"
+        />
+      </a>
+    </div>
+  </div>
+  <div
+    className="mobile"
+  >
+    <div
+      className="child"
+    />
+  </div>
+  <div
+    className="desktop"
+  >
+    <div
+      className="notSupportMessage"
+    >
+      <img
+        alt="sad-ico.svg"
+        className="notSupportImg"
+        src="sad-ico.svg"
+      />
+      <p>
+        Hiện nay đường dẫn chỉ hỗ trợ các thiết bị điện thoại di động. Xin lỗi Quý khách vì sự bất tiện này.
+      </p>
+    </div>
+  </div>
+  <div
+    className="root hiddenXs"
+  >
+    <div
+      className="container"
+    >
+      <span
+        className="text"
+      >
+        © 2018 Bản quyền thuộc về Home Credit
+      </span>
+    </div>
+  </div>
+</div>
+`;

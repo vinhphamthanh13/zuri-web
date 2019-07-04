@@ -1,0 +1,23 @@
+:root {
+  --login-width: 35rem;
+  --container-max-w: 600px;
+}
+
+.container {
+  max-width: var(--container-max-w);
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--b-space-xl);
+  padding-top: var(--b-space-md);
+}
+
+.welcome {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--title-size);
+  color: var(--c-text);
+  font-style: italic;
+}
+
+.numberOfRetry {
+  color: var(--c-brand);
+}

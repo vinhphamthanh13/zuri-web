@@ -1,0 +1,74 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+@import '../../../components/variables.css';
+
+:root {
+  --max-modal-height: 380px;
+  --title-font-size: var(--f-sm-text);
+  --input-field-height: var(--b-space-4xl);
+  --btn-help-height: var(--b-space-2xl);
+}
+
+.title {
+  text-align: center;
+  color: var(--c-text);
+  font-size: var(--title-font-size);
+  margin-top: 0;
+  padding-top: var(--b-space-lg);
+  padding-bottom: var(--b-space-xs);
+  margin-bottom: 0;
+  font-style: italic;
+  font-weight: var(--font-weight-bold);
+}
+
+.modalFooter {
+  padding: var(--b-space-3xs) var(--b-space-md);
+  background-color: var(--c-brand);
+  color: white;
+  text-align: center;
+}
+
+.modalBody {
+  max-height: var(--max-modal-height);
+  text-align: center;
+  color: var(--c-text);
+  font-size: var(--f-text);
+  font-style: italic;
+  padding-bottom: var(--b-space-md);
+  overflow-y: auto;
+
+  & h3 {
+    font-style: normal;
+  }
+
+  & p {
+    text-align: left;
+  }
+}
+
+.inputField {
+  margin-bottom: 0;
+}
+
+.inputField button {
+  height: var(--btn-help-height);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputField button span {
+  color: var(--c-label);
+}
+
+@media (--sm) {
+  .wrapperInputField:last-of-type {
+    padding-top: var(--b-space-sm);
+  }
+}
