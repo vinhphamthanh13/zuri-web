@@ -10,4 +10,6 @@ import java.io.Serializable;
 public class MatHangRequest implements Serializable {
 
     private String name;
+
+    private String bangGiaId;
 }

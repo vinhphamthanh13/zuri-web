@@ -18,4 +18,6 @@ public class MatHang extends AbstractEntity {
     public static final String COLLECTION_NAME = "mathang";
 
     private String name;
+
+    private String bangGiaId;
 }

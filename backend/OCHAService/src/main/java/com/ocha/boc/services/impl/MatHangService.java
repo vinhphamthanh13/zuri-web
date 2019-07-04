@@ -36,6 +36,7 @@ public class MatHangService {
                     if (!isExisted) {
                         MatHang matHang = new MatHang();
                         matHang.setName(request.getName());
+                        matHang.setBangGiaId(request.getBangGiaId());
                         matHang.setCreatedDate(Instant.now().toString());
                         response.setSuccess(Boolean.TRUE);
                         response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -59,6 +60,9 @@ public class MatHangService {
                 MatHang matHang = matHangRepository.findMatHangById(request.getId());
                 if (matHang != null) {
                     matHang.setName(request.getName());
+                    if(StringUtils.isNotEmpty(request.getBangGiaId())){
+                        matHang.setBangGiaId(request.getBangGiaId());
+                    }
                     matHang.setLastModifiedDate(Instant.now().toString());
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
