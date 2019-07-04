@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class NguyenLieuService {
                 nguyenLieu = new NguyenLieu();
                 nguyenLieu.setAbbreviations(request.getAbbreviations());
                 nguyenLieu.setName(request.getName());
+                nguyenLieu.setCreatedDate(Instant.now().toString());
                 nguyenLieuRepository.save(nguyenLieu);
             }
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -62,6 +64,7 @@ public class NguyenLieuService {
                 if (StringUtils.isNotEmpty(request.getName())) {
                     nguyenLieu.setName(request.getName());
                 }
+                nguyenLieu.setLastModifiedDate(Instant.now().toString());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setObject(new NguyenLieuDTO(nguyenLieu));
