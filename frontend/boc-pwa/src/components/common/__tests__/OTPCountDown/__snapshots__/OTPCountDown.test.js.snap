@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OTP Count Down should render OTP Count Down with default props 1`] = `
+<div
+  className="OTPCountDown"
+>
+  <div
+    className="timerLabel"
+  >
+    Mã xác thực sẽ hết hạn trong vòng
+  </div>
+  <div
+    className="timer"
+  >
+    <span>
+      NaN:NaN
+    </span>
+  </div>
+</div>
+`;

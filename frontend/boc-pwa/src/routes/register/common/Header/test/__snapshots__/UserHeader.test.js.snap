@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderBar snapshot 1`] = `
+Array [
+  <span
+    className="welcomeText"
+  >
+    <span />
+    <span
+      className="welcome"
+    >
+      Xin chào
+    </span>
+     
+    
+     !
+  </span>,
+  <button
+    className="Button_buttonReset__3cQTl Button_button__2pQRN btnLogout"
+    disabled={false}
+    onClick={[Function]}
+    title=""
+    type="button"
+  >
+    <span
+      className="btnLogoutText"
+    >
+      Đăng xuất
+    </span>
+  </button>,
+]
+`;

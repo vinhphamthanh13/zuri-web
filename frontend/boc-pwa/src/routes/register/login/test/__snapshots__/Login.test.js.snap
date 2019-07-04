@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login snapshot 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="login"
+  >
+    <form
+      onSubmit={[Function]}
+    >
+      <h2
+        className="title"
+      >
+        Thông tin đăng nhập
+      </h2>
+      <div
+        className="Input_wrapper__WALTg"
+      >
+        <i
+          className="material-icons Input_icon__1jjsS"
+        >
+          
+        </i>
+        <input
+          accept=""
+          autoComplete=""
+          className="Input_input__1IXXH"
+          disabled={false}
+          id="saUsername"
+          maxLength={20}
+          name="saUsername"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onMouseDown={[Function]}
+          placeholder=""
+          readOnly={false}
+          type="text"
+          value=""
+        />
+        <label
+          className="Input_label__2ZxWx"
+          htmlFor="saUsername"
+        >
+          Tên đăng nhập
+        </label>
+        <div
+          className="Input_underline__Xwqb3"
+        />
+      </div>
+      <div
+        className="Input_wrapper__WALTg"
+      >
+        <i
+          className="material-icons Input_icon__1jjsS"
+        >
+          
+        </i>
+        <input
+          accept=""
+          autoComplete=""
+          className="Input_input__1IXXH"
+          disabled={false}
+          id="saPassword"
+          maxLength={null}
+          name="saPassword"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onMouseDown={[Function]}
+          placeholder=""
+          readOnly={false}
+          type="password"
+          value=""
+        />
+        <label
+          className="Input_label__2ZxWx"
+          htmlFor="saPassword"
+        >
+          Mật khẩu
+        </label>
+        <div
+          className="Input_underline__Xwqb3"
+        />
+      </div>
+    </form>
+    <div
+      className="groupBtn"
+    >
+      <button
+        className="Button_buttonReset__3cQTl Button_button__2pQRN"
+        disabled={false}
+        onClick={[Function]}
+        title=""
+        type="button"
+      >
+        Đăng nhập
+      </button>
+    </div>
+  </div>
+</div>
+`;

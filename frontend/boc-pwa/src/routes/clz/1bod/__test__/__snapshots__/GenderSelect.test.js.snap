@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenderSelect renders children correctly 1`] = `
+<div
+  className="itemInfo"
+>
+  <span>
+    
+  </span>
+  <div
+    className="genderGroup"
+  >
+    <label
+      className="Radio_field__uVamM"
+    >
+      <input
+        checked={false}
+        className="Radio_input__2Px7t"
+        disabled={false}
+        label="Nam"
+        name=""
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        readOnly={true}
+        type="radio"
+        value="MALE"
+      />
+      <div
+        className="Radio_radio__2IEpG"
+        onMouseDown={[Function]}
+        role="button"
+        tabIndex="0"
+      />
+      <span
+        className="Radio_text__1xEZE"
+      >
+        Nam
+      </span>
+    </label>
+    <label
+      className="Radio_field__uVamM"
+    >
+      <input
+        checked={false}
+        className="Radio_input__2Px7t"
+        disabled={false}
+        label="Nữ"
+        name=""
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        readOnly={true}
+        type="radio"
+        value="FEMALE"
+      />
+      <div
+        className="Radio_radio__2IEpG"
+        onMouseDown={[Function]}
+        role="button"
+        tabIndex="0"
+      />
+      <span
+        className="Radio_text__1xEZE"
+      >
+        Nữ
+      </span>
+    </label>
+  </div>
+</div>
+`;

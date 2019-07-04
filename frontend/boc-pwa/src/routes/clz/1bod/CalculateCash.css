@@ -1,0 +1,108 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+@import '../../../components/variables.css';
+
+:root {
+  --center-width-md: 190px;
+  --center-width-sm: 160px;
+  --total-width: 240px;
+  --total-width-sm: 180px;
+  --total-height: 60px;
+  --help-text-width: 300px;
+}
+
+.range {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--c-text);
+  font-style: italic;
+  font-size: var(--font-size-small);
+  padding-top: var(--b-space-lg);
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--c-brand);
+  border-radius: var(--b-space-md);
+  text-align: center;
+  width: var(--center-width-md);
+  height: var(--b-space-xl);
+}
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--c-brand);
+  border-radius: calc(var(--total-height) / 2);
+  text-align: center;
+  flex-direction: column;
+  margin: 0 auto;
+  width: var(--total-width);
+  height: var(--total-height);
+}
+
+.amount {
+  font-weight: var(--font-weight-bold);
+  color: var(--c-brand);
+}
+
+.totalContainer {
+  text-align: center;
+  color: var(--c-text);
+  font-style: italic;
+}
+
+.helpText {
+  margin: var(--b-space-lg) auto 0;
+}
+
+.tenorGroup {
+  padding-top: var(--b-space-sm);
+  padding-bottom: var(--b-space-lg);
+  display: flex;
+  justify-content: center;
+  font-size: var(--f-sm-text);
+}
+
+.tenorButton {
+  flex: 1;
+  padding: var(--b-space-sm);
+}
+
+@media (--sm) {
+  .helpText {
+    width: var(--help-text-width);
+  }
+}
+
+@media (--xxs) {
+  .range {
+    font-size: var(--f-sm-text);
+  }
+
+  .center {
+    width: var(--center-width-sm);
+  }
+
+  .totalContainer {
+    font-size: var(--f-sm-text);
+  }
+
+  .total {
+    width: var(--total-width-sm);
+  }
+
+  .helpText {
+    width: calc(var(--help-text-width) - 50px);
+  }
+}

@@ -1,0 +1,103 @@
+@import '../../components/variables.css';
+
+:root {
+  --radio-item-width: 33.33%;
+  --modal-footer-color: white;
+  --btn-height: 30px;
+  --btn-color-disable: rgba(255, 255, 255, 0.5);
+  --select-date-mr-b: 5px;
+  --select-label-size: 0.9rem;
+  --btn-hour-width: 48%;
+}
+
+.modalTitle {
+  text-align: center;
+  color: var(--c-text);
+}
+
+.modalBody {
+  font-size: var(--f-text);
+}
+
+.summaryMessage {
+  font-style: italic;
+}
+
+.modalFooter {
+  display: flex;
+}
+
+.modalBtn {
+  flex: 1;
+  background-color: var(--c-brand);
+  padding: var(--b-space-sm) var(--b-space-md);
+  color: var(--modal-footer-bg);
+  text-align: center;
+  display: inline-block;
+  border: none;
+
+  &:not(:last-of-type) {
+    border-right: 1px solid white;
+  }
+}
+
+.modalBtnDisable {
+  color: var(--btn-color-disable);
+  pointer-events: none;
+}
+
+.homecreditHightlight {
+  color: var(--c-brand);
+  font-weight: bold;
+}
+
+.orderDate {
+  font-weight: bold;
+  color: var(--c-text);
+}
+
+.error {
+  color: var(--c-brand);
+  text-align: center;
+}
+
+.selectDate {
+  margin-bottom: var(--select-date-mr-b);
+}
+
+.selectDate label {
+  font-size: var(--select-label-size);
+}
+
+.btnGroup {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.btnGroupItem {
+  flex: 0 0 var(--btn-hour-width);
+  max-width: var(--btn-hour-width);
+  margin-bottom: 5px;
+  border-left: 1px solid;
+}
+
+.btnGroupItem:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btnGroupItem:last-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.selectWapperOptions {
+  --max-height-options: 150px;
+}
+
+@media (--xs) {
+  :root {
+    --radio-item-width: 50%;
+  }
+}

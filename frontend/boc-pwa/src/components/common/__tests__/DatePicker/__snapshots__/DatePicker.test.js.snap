@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatePicker should render DatePicker with default props 1`] = `
+<div
+  className="datepicker"
+>
+  <div
+    onClick={[Function]}
+  >
+    <div
+      className="Input_wrapper__WALTg Input_hasValue__-61ZX"
+    >
+      <i
+        className="material-icons Input_icon__1jjsS"
+      >
+        date_range
+      </i>
+      <input
+        accept=""
+        autoComplete=""
+        className="Input_input__1IXXH Input_inputIcon__1np_m"
+        disabled={false}
+        id=""
+        maxLength={null}
+        name=""
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onMouseDown={[Function]}
+        placeholder=""
+        readOnly={true}
+        type="text"
+        value="2019-06-18T12:37:36+07:00"
+      />
+      <label
+        className="Input_label__2ZxWx Input_inputIcon__1np_m"
+        htmlFor=""
+      >
+        
+      </label>
+      <div
+        className="Input_underline__Xwqb3"
+      />
+    </div>
+  </div>
+</div>
+`;
