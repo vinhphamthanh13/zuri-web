@@ -75,13 +75,13 @@ public class DanhMucService {
         return response;
     }
 
-    public DanhMucResponse findDanhMucById(String id) {
+    public DanhMucResponse findDanhMucByDanhMucId(String id) {
         DanhMucResponse response = new DanhMucResponse();
         try {
             response.setMessage(CommonConstants.STR_FAIL_STATUS);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucById(id);
+                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(id);
                 if (danhMuc != null) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -117,13 +117,13 @@ public class DanhMucService {
         return response;
     }
 
-    public AbstractResponse deleteDanhMucById(String id) {
+    public AbstractResponse deleteDanhMucByDanhMucId(String id) {
         AbstractResponse response = new AbstractResponse();
         try {
             response.setMessage(CommonConstants.STR_FAIL_STATUS);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucById(id);
+                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(id);
                 if (danhMuc != null) {
                     danhMucRepository.delete(danhMuc);
                     response.setSuccess(Boolean.TRUE);

@@ -30,10 +30,10 @@ public class DanhMucController {
     }
 
 
-    @ApiOperation(value = "Find Danh muc By Id")
+    @ApiOperation(value = "Find Danh muc By DanhMucId")
     @GetMapping("/danh-muc/{id}")
     public ResponseEntity<DanhMucResponse> findDanhMucById(@PathVariable String id){
-        DanhMucResponse response = danhMucService.findDanhMucById(id);
+        DanhMucResponse response = danhMucService.findDanhMucByDanhMucId(id);
         return ResponseEntity.ok(response);
     }
 
@@ -44,10 +44,10 @@ public class DanhMucController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Delete Danh Muc By Id")
+    @ApiOperation(value = "Delete Danh Muc By DanhMucId")
     @DeleteMapping("/danh-muc/{id}")
     public ResponseEntity<AbstractResponse> deleteDanhMucById(@PathVariable String  id){
-        AbstractResponse response = danhMucService.deleteDanhMucById(id);
+        AbstractResponse response = danhMucService.deleteDanhMucByDanhMucId(id);
         return ResponseEntity.ok(response);
     }
 }

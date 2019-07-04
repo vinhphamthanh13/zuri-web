@@ -16,10 +16,13 @@ public class DanhMucDTO extends AbstractEntity {
 
     private String name;
 
+    private String danhMucId;
+
     public DanhMucDTO(DanhMuc danhMuc) {
         this.abbreviations = danhMuc.getAbbreviations();
         this.name = danhMuc.getName();
         this.id = danhMuc.getId();
+        this.danhMucId = danhMuc.getDanhMucId();
         this.createdDate = danhMuc.getCreatedDate();
         this.lastModifiedDate = danhMuc.getLastModifiedDate();
     }
