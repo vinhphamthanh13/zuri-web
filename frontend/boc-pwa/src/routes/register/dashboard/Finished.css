@@ -1,0 +1,18 @@
+.finished {
+  text-align: center;
+  font-weight: var(--title-weight);
+  font-size: var(--title-size);
+  color: var(--c-text);
+  font-style: italic;
+}
+
+.btnUnRegister {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--b-space-2xl);
+}
+
+.phrase {
+  font-weight: var(--font-weight-bold);
+}

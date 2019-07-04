@@ -1,0 +1,78 @@
+@import '../../variables.css';
+
+:root {
+  --select-min-width: 200px;
+  --input-line-height: 1em;
+  --max-height-options: 250px;
+  --select-wrapper-radius: 5px;
+  --select-wrapper-border: 2px solid #dcdcdc;
+  --message-alert-p: 0.8em;
+  --message-font-size: 14px;
+  --drop-down-top: 50%;
+}
+
+.select {
+  max-width: 100%;
+  min-width: var(--select-min-width);
+  position: relative;
+}
+
+.selectInputWrapper {
+  position: relative;
+}
+
+.selectInput {
+  width: 100%;
+  cursor: pointer;
+  line-height: var(--input-line-height);
+  margin-bottom: 0 !important;
+}
+
+.options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.optionsWrapper {
+  max-height: var(--max-height-options);
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  z-index: 3;
+  border-bottom-left-radius: var(--select-wrapper-radius);
+  border-bottom-right-radius: var(--select-wrapper-radius);
+  border: var(--select-wrapper-border);
+  border-top-width: 0;
+}
+
+.optionsWrapperHidden {
+  display: none;
+}
+
+.optionMessage {
+  padding: var(--message-alert-p);
+  display: block;
+  background-color: var(--c-text-inverse);
+  font-size: var(--message-font-size);
+  margin: 0;
+}
+
+.optionDisplayNone {
+  display: none;
+}
+
+.selectIconDropdown {
+  position: absolute;
+  top: var(--drop-down-top);
+  right: 0;
+  transform: translateY(calc(-1 * var(--drop-down-top)));
+  font-size: var(--f-headline);
+}
+
+@media (--xs) {
+  :root {
+    --max-height-options: 200px;
+  }
+}

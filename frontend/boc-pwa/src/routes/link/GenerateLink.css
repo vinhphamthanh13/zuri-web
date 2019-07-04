@@ -1,0 +1,168 @@
+@import '../../components/variables.css';
+
+:root {
+  --title-size: 14px;
+  --title-weight: 700;
+  --container-p: 16px;
+  --btn-transition-duration: 200ms, 200ms, 200ms, 0.3s;
+  --unit-qr-responsive: 1em;
+  --qr-background-max-width: 288px;
+}
+
+.container {
+  padding: var(--container-p);
+  background: var(--c-ui-lighter);
+}
+
+.title {
+  font-weight: var(--title-weight);
+  font-size: var(--title-size);
+  color: var(--c-text);
+  font-style: italic;
+  text-align: center;
+}
+
+.groupBtn {
+  text-align: center;
+  padding-top: var(--b-space-md);
+}
+
+.btnRest {
+  transition-duration: var(--btn-transition-duration);
+}
+
+.btnLeft {
+  margin-right: var(--b-space-md);
+}
+
+.shortLink {
+  word-break: break-all;
+  display: block;
+  padding: var(--b-space-md) 0;
+}
+
+.inputSa::after {
+  background: transparent;
+}
+
+/* QR bg */
+
+.qrCode {
+  margin: calc(var(--unit-qr-responsive) * 0.5) auto calc(var(--unit-qr-responsive) * 0.2);
+  width: var(--qr-background-max-width);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.qrImage {
+  width: 100%;
+}
+
+.qrButtons {
+  margin: var(--unit-qr-responsive) auto;
+  max-width: var(--qr-background-max-width);
+  display: flex;
+  justify-content: space-between;
+}
+
+.qrButton {
+  min-width: calc(var(--b-space-4xl) * 2);
+}
+
+.qrPrintButton {
+  display: block;
+}
+
+.qrInfo {
+  margin: auto;
+  top: calc(var(--unit-qr-responsive) * -8.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--c-brand);
+  position: relative;
+  height: 0;
+}
+
+.saQrCode {
+  margin: calc(var(--unit-qr-responsive) * 0.1) calc(var(--unit-qr-responsive) * 0.3) 0;
+  padding: var(--b-space-2xs);
+  color: var(--c-brand);
+  background: var(--c-ui-lighter);
+}
+
+.saInfo {
+  border: 1px solid var(--c-label);
+  border-radius: var(--b-space-xs);
+  width: 85%;
+  color: var(--c-text-dark);
+  background: var(--c-ui-lighter);
+}
+
+.saDetail {
+  padding: calc(var(--unit-qr-responsive) * 0.6) calc(var(--unit-qr-responsive) * 1.5);
+  font-size: calc(var(--font-size-small) * 0.8);
+}
+
+.saName {
+  border-bottom: 1px dashed var(--c-label);
+}
+
+.helpText1 {
+  text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+  font-size: calc(var(--font-size-small) * 0.9);
+  margin: 0 auto calc(var(--unit-qr-responsive) * 0.8);
+}
+
+.helpText2 {
+  font-size: var(--font-size-tiny);
+  margin: calc(var(--unit-qr-responsive) * 1.5) auto;
+  text-align: center;
+  width: 70%;
+  color: var(--c-text-dark);
+}
+
+.helpText3 {
+  font-size: calc(var(--font-size-tiny) * 0.9);
+  margin: var(--unit-qr-responsive) auto;
+  font-weight: var(--font-weight-bold);
+
+  &::before,
+  &::after {
+    content: '';
+    width: var(--b-space-2xs);
+    height: var(--b-space-2xs);
+    background: var(--c-brand);
+    border-radius: 50%;
+    display: inline-block;
+    top: var(--b-space-3xs);
+    left: calc(var(--b-space-2xs) * 0.25);
+  }
+}
+
+@media print {
+  .shortLink,
+  .title,
+  .groupBtn,
+  .inputSa,
+  .qrButtons {
+    display: none;
+  }
+
+  .qrCode {
+    margin: auto;
+  }
+}
+
+@media (--xs) {
+  .qrPrintButton {
+    display: none;
+  }
+
+  .qrButtons {
+    justify-content: center;
+  }
+}

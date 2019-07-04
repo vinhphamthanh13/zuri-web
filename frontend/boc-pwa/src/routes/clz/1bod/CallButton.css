@@ -1,0 +1,87 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+@import '../../../components/variables.css';
+
+:root {
+  --max-modal-height: 380px;
+  --max-modal-img-w: 300px;
+}
+
+.welcomeXs {
+  display: none;
+}
+
+.welcome {
+  z-index: calc(var(--z-index-high) - 1);
+}
+
+.phone {
+  border: var(--b-space-3xs) solid var(--c-brand);
+  height: calc(var(--unit) * 3);
+  width: calc(var(--unit) * 3);
+  border-radius: 50%;
+  margin: 0 var(--b-space-2xs) var(--b-space-2xs) 0;
+  background: linear-gradient(to bottom, var(--c-brand-light), var(--c-brand-dark));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: -9px 8px 15px 0 rgba(240, 14, 47, 0.2), -4px 5px 17px 0 rgba(0, 0, 0, 0.2);
+
+  & span {
+    margin: 0;
+  }
+
+  & img {
+    width: calc(var(--unit) * 1.4);
+  }
+}
+
+.backdrop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: var(--z-index-highest);
+}
+
+.modalContent {
+  max-width: var(--max-modal-height);
+  max-height: var(--max-modal-height);
+  text-align: center;
+  background: var(--c-ui-lighter);
+}
+
+.hotNumber {
+  font-size: var(--font-size-big);
+  font-weight: var(--font-weight-bold);
+  color: var(--c-brand);
+}
+
+.closeModalButton {
+  border-radius: 0;
+}
+
+@media (--xs) {
+  .welcomeXs {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .welcome {
+    display: none;
+  }
+}

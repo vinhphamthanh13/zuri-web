@@ -1,0 +1,82 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+@import '../../../components/variables.css';
+
+:root {
+  --title-font-size: 14px;
+}
+
+.title {
+  text-align: center;
+  color: var(--c-text);
+  font-size: var(--title-font-size);
+  font-style: italic;
+  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--b-space-xs);
+  padding-top: var(--b-space-lg);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.modalFooter {
+  padding: var(--b-space-3xs) var(--b-space-md);
+  background-color: var(--c-brand);
+  color: white;
+  text-align: center;
+}
+
+.modalBody {
+  text-align: center;
+  color: var(--c-text);
+  font-size: var(--f-text);
+  font-style: italic;
+  padding-bottom: var(--b-space-md);
+}
+
+.modalTitle {
+  color: var(--c-text);
+  font-style: normal;
+}
+
+.radioGroup {
+  display: flex;
+  align-items: center;
+}
+
+.familyInput {
+  margin-top: var(--b-space-xs);
+}
+
+.familyBookRadio {
+  align-items: center;
+  display: inline-flex;
+  margin-top: var(--b-space-md);
+}
+
+@media (--sm) {
+  :root {
+    --title-font-size: var(--f-sm-text);
+  }
+
+  .title {
+    text-align: left;
+  }
+
+  .radioGroup {
+    display: block;
+  }
+
+  .familyBookRadio {
+    display: block;
+  }
+
+  .familyInputWrapper {
+    margin-left: initial;
+  }
+}

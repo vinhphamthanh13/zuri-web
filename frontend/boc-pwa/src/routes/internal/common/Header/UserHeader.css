@@ -1,0 +1,28 @@
+
+@import '../../../../components/variables.css';
+
+.welcomeText {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  background-color: var(--c-accent-color);
+  font-weight: var(--title-font-weight);
+  font-size: var(--f-label);
+  padding: var(--b-space-md) 0;
+  color: var(--c-ui-lighter);
+  font-style: italic;
+  padding-right: var(--b-space-xs);
+}
+
+.btnLogoutText {
+  padding-right: var(--b-space-2xs);
+}
+
+.btnLogout {
+  box-shadow: none;
+  padding-right: var(--b-space-xs);
+}
+
+.btnLogout:active {
+  background-color: transparent;
+}

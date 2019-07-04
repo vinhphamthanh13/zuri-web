@@ -1,0 +1,46 @@
+/**
+ * Home Credit (https://www.homecredit.vn/)
+ *
+ * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+@import '../../components/variables.css';
+
+:root {
+  --filter-box-p-x: 20px;
+  --filter-box-p-y: 10px;
+  --box-shadow-blur: 10px;
+  --box-shadow-color: rgba(0, 0, 0, 0.3);
+  --filter-control-m-bottom: 10px;
+  --select-location-height: 1.9em;
+  --filter-box-p: 1px 10px 10px 10px;
+  --filter-width: 100%;
+  --filter-font-s: 14px;
+}
+
+.filterBox {
+  background-color: var(--c-text-inverse);
+  padding: var(--filter-box-p);
+  width: var(--filter-width);
+  box-shadow: 0 0 var(--box-shadow-blur) var(--box-shadow-color);
+  font-size: var(--filter-font-s);
+}
+
+.locationSelect {
+  margin-top: var(--b-space-sm);
+}
+
+.locationSelect input {
+  line-height: var(--select-location-height);
+  min-height: var(--select-location-height);
+}
+
+@media (--xxs) {
+  :root {
+    --filter-box-p-x: 13px;
+    --filter-box-p-y: 10px;
+  }
+}

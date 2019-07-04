@@ -1,0 +1,35 @@
+:root {
+  --unit: 1rem;
+  --item-info-color: #767676;
+  --item-info-height: calc(2.5 * var(--unit));
+  --item-info-border-bottom: calc(0.125 * var(--unit));
+  --color-border-input: #dcdcdc;
+}
+
+.itemInfo {
+  display: flex;
+  height: var(--item-info-height);
+  align-items: center;
+  margin-top: var(--unit);
+  border-bottom: var(--item-info-border-bottom) solid var(--color-border-input);
+  color: var(--item-info-color);
+  font-size: var(--f-text);
+  font-weight: var(--font-weight-normal);
+}
+
+.genderGroup {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+
+  & label {
+    margin-bottom: 0;
+    margin-left: var(--unit);
+  }
+}
+
+.icon {
+  color: var(--c-brand);
+  width: var(--b-space-2xl);
+  padding-left: var(--b-space-xs);
+}
