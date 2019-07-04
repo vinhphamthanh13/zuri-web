@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface BangGiaRepository extends MongoRepository<BangGia, String> {
 
-    BangGia findBangGiaById(String id);
+    BangGia findBangGiaByBangGiaId(String id);
 
 }

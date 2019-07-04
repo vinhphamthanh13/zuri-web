@@ -54,7 +54,7 @@ public class BangGiaService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(request.getId())) {
-                BangGia bangGia = bangGiaRepository.findBangGiaById(request.getId());
+                BangGia bangGia = bangGiaRepository.findBangGiaByBangGiaId(request.getId());
                 if (bangGia != null) {
                     if (request.getNumberOfPrice() > 0) {
                         bangGia.setNumberOfPrice(request.getNumberOfPrice());
@@ -72,13 +72,13 @@ public class BangGiaService {
         return response;
     }
 
-    public BangGiaResponse findBangGiaById(String id) {
+    public BangGiaResponse findBangGiaByBangGiaId(String id) {
         BangGiaResponse response = new BangGiaResponse();
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                BangGia bangGia = bangGiaRepository.findBangGiaById(id);
+                BangGia bangGia = bangGiaRepository.findBangGiaByBangGiaId(id);
                 if (bangGia != null) {
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
@@ -114,13 +114,13 @@ public class BangGiaService {
         return response;
     }
 
-    public BangGiaResponse deleteBangGiaById(String id) {
+    public BangGiaResponse deleteBangGiaByBangGiaId(String id) {
         BangGiaResponse response = new BangGiaResponse();
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                BangGia bangGia = bangGiaRepository.findBangGiaById(id);
+                BangGia bangGia = bangGiaRepository.findBangGiaByBangGiaId(id);
                 if (bangGia != null) {
                     bangGiaRepository.delete(bangGia);
                     //Remove all data in Bang Gia Detail based on the Bang Gia Id

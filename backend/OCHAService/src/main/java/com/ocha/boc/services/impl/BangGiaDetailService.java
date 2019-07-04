@@ -38,7 +38,7 @@ public class BangGiaDetailService {
             if (request != null) {
                 String bangGiaId = request.getBangGiaId();
                 if (StringUtils.isNotEmpty(bangGiaId)) {
-                    BangGia bangGia = bangGiaRepository.findBangGiaById(bangGiaId);
+                    BangGia bangGia = bangGiaRepository.findBangGiaByBangGiaId(bangGiaId);
                     if (bangGia != null) {
                         int numberOfPriceInBangGia = bangGia.getNumberOfPrice();
                         Integer sumOfPriceInBangGiaDetail = bangGiaDetailRepository.countBangGiaDetailByBangGiaId(request.getBangGiaId());
