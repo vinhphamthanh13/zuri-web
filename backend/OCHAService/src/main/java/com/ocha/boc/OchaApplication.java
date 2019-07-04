@@ -48,6 +48,12 @@ public class OchaApplication extends SpringBootServletInitializer {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private BangGiaRepository bangGiaRepository;
+
+    @Autowired
+    private DanhMucRepository danhMucRepository;
+
     @Value(value = "${boc.table.banggia}")
     private String bangGiaTableName;
 
@@ -65,6 +71,9 @@ public class OchaApplication extends SpringBootServletInitializer {
 
     @Value(value = "${boc.table.order}")
     private String orderTableName;
+
+    @Value(value = "${boc.table.danhmuc}")
+    private String danhMucTableName;
 
     @Value(value = "${spring.data.mongodb.host}")
     private String mongoDBHostName;
@@ -104,6 +113,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         initMatHangTable(db);
         initNguyenLieuTable(db);
         initOrder(db);
+        initBangGia(db);
     }
 
     public MongoClient connectMongoDB() {
@@ -195,6 +205,42 @@ public class OchaApplication extends SpringBootServletInitializer {
                 //store to db
                 orderRepository.deleteAll();
                 orderRepository.saveAll(orders);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void initBangGia(MongoDatabase db) {
+        boolean isExisted = checkExistsCollectionName(db, bangGiaTableName);
+        if (!isExisted) {
+            List<BangGia> bangGias = new ArrayList<BangGia>();
+            try {
+                InputStream stream = OchaApplication.class.getResourceAsStream("/banggia.json");
+                ObjectMapper mapper = new ObjectMapper();
+                bangGias = mapper.readValue(stream, new TypeReference<List<BangGia>>() {
+                });
+                //store to db
+                bangGiaRepository.deleteAll();
+                bangGiaRepository.saveAll(bangGias);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void initDanhMuc(MongoDatabase db) {
+        boolean isExisted = checkExistsCollectionName(db, danhMucTableName);
+        if (!isExisted) {
+            List<DanhMuc> danhMucList = new ArrayList<DanhMuc>();
+            try {
+                InputStream stream = OchaApplication.class.getResourceAsStream("/danhmuc.json");
+                ObjectMapper mapper = new ObjectMapper();
+                danhMucList = mapper.readValue(stream, new TypeReference<List<DanhMuc>>() {
+                });
+                //store to db
+                danhMucRepository.deleteAll();
+                danhMucRepository.saveAll(danhMucList);
             } catch (Exception e) {
                 e.printStackTrace();
             }
