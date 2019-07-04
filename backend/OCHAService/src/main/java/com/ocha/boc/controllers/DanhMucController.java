@@ -3,6 +3,7 @@ package com.ocha.boc.controllers;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.request.DanhMucRequest;
 import com.ocha.boc.response.DanhMucResponse;
+import com.ocha.boc.response.DoanhThuDanhMucResponse;
 import com.ocha.boc.services.impl.DanhMucService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +33,29 @@ public class DanhMucController {
 
     @ApiOperation(value = "Find Danh muc By DanhMucId")
     @GetMapping("/danh-muc/{id}")
-    public ResponseEntity<DanhMucResponse> findDanhMucById(@PathVariable String id){
+    public ResponseEntity<DanhMucResponse> findDanhMucById(@PathVariable String id) {
         DanhMucResponse response = danhMucService.findDanhMucByDanhMucId(id);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get all Danh Muc")
     @GetMapping("/danh-muc")
-    public ResponseEntity<DanhMucResponse> getAllDanhMuc(){
+    public ResponseEntity<DanhMucResponse> getAllDanhMuc() {
         DanhMucResponse response = danhMucService.getAllDanhMuc();
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Delete Danh Muc By DanhMucId")
     @DeleteMapping("/danh-muc/{id}")
-    public ResponseEntity<AbstractResponse> deleteDanhMucById(@PathVariable String  id){
+    public ResponseEntity<AbstractResponse> deleteDanhMucById(@PathVariable String id) {
         AbstractResponse response = danhMucService.deleteDanhMucByDanhMucId(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "Get Doanh Thu Theo Danh Muc By Date")
+    @GetMapping("/danh-muc/doanh-thu/{date}")
+    public ResponseEntity<DoanhThuDanhMucResponse> getDoanhThuTheoDanhMucByDate(@PathVariable String date) {
+        DoanhThuDanhMucResponse response = danhMucService.getDoanhThuTheoDanhMucByDate(date);
         return ResponseEntity.ok(response);
     }
 }
