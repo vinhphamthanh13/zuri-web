@@ -114,6 +114,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         initNguyenLieuTable(db);
         initOrder(db);
         initBangGia(db);
+        initDanhMuc(db);
     }
 
     public MongoClient connectMongoDB() {
