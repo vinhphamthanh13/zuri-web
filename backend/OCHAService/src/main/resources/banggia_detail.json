@@ -1,3 +1,107 @@
 [
-
+  {
+    "bangGiaId": "1",
+    "price": 15000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "2",
+    "price": 70000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "2",
+    "price": 80000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "3",
+    "price": 90000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "3",
+    "price": 100000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "3",
+    "price": 110000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "4",
+    "price": 120000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "4",
+    "price": 130000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "4",
+    "price": 140000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "4",
+    "price": 150000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "5",
+    "price": 160000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "5",
+    "price": 170000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "5",
+    "price": 180000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "5",
+    "price": 190000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "5",
+    "price": 200000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "6",
+    "price": 210000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "6",
+    "price": 220000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "6",
+    "price": 230000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "6",
+    "price": 240000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "6",
+    "price": 250000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  },
+  {
+    "bangGiaId": "6",
+    "price": 260000,
+    "createdDate": "2019-07-04T06:53:37.059Z"
+  }
 ]
