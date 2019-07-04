@@ -12,4 +12,6 @@ public class MatHangRequest implements Serializable {
     private String name;
 
     private String bangGiaId;
+
+    private String danhMucId;
 }
