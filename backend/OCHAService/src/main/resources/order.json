@@ -59,7 +59,7 @@
         "amountOfConsumption": 2
       }
     ],
-    "total": 380.000
+    "total": 380000
   },
   {
     "createDate": "2019-07-03",
@@ -71,7 +71,7 @@
           "name": "Cơm Chiên Dương Châu",
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
-        "unitPrice": 100.000,
+        "unitPrice": 100000,
         "amountOfConsumption": 2
       },
       {
@@ -81,10 +81,10 @@
           "name": "Mỳ Xào Hải Sản",
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
-        "unitPrice": 90.000,
+        "unitPrice": 90000,
         "amountOfConsumption": 2
       }
     ],
-    "total": 380.000
+    "total": 380000
   }
 ]
