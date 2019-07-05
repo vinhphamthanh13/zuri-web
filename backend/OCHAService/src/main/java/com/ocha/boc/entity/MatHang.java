@@ -22,4 +22,6 @@ public class MatHang extends AbstractEntity {
     private String bangGiaId;
 
     private String danhMucId;
+
+    private String khuyenMaiId;
 }
