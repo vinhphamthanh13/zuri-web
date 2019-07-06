@@ -19,4 +19,6 @@ public class MatHangTieuThu {
 
     private int amountOfConsumption;
 
+    private BigDecimal discountPrice = BigDecimal.ZERO;
+
 }
