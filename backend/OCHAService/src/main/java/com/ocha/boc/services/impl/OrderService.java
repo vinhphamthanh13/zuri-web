@@ -1,14 +1,17 @@
 package com.ocha.boc.services.impl;
 
+import com.ocha.boc.entity.KhuyenMai;
 import com.ocha.boc.entity.MatHangBanChay;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
+import com.ocha.boc.repository.KhuyenMaiRepository;
 import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.response.MatHangBanChayResponse;
 import com.ocha.boc.util.CommonConstants;
 import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,9 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private KhuyenMaiRepository khuyenMaiRepository;
 
     public MatHangBanChayResponse getListMatHangBanChay() {
         MatHangBanChayResponse response = null;
@@ -71,7 +77,7 @@ public class OrderService {
                     MatHangBanChay matHangBanChay = createMatHangBanChay(matHangTieuThu);
                     boolean isExisted = checkMatHangBanChayExisted(matHangBanChay, matHangBanChayList);
                     if (isExisted) {
-                        matHangBanChayList = updateAmountOfConsumption(matHangBanChay, matHangBanChayList);
+                        matHangBanChayList = updateAmountOfConsumptionAndDiscountPrice(matHangBanChay, matHangBanChayList);
                     } else {
                         matHangBanChayList.add(matHangBanChay);
                     }
@@ -88,13 +94,25 @@ public class OrderService {
         matHangBanChay.setMatHang(matHangTieuThu.getMatHang());
         matHangBanChay.setAmountOfConsumption(matHangTieuThu.getAmountOfConsumption());
         matHangBanChay.setUnitPrice(matHangTieuThu.getUnitPrice());
+        if (StringUtils.isNotEmpty(matHangTieuThu.getMatHang().getKhuyenMaiId())) {
+            KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByKhuyenMaiId(matHangTieuThu.getMatHang().getKhuyenMaiId());
+            if (khuyenMai != null) {
+                double rate = khuyenMai.getRate() / 100;
+                double discountPrice = matHangBanChay.getUnitPrice().doubleValue() * matHangBanChay.getAmountOfConsumption() * rate;
+                matHangBanChay.setDiscountPrice(BigDecimal.valueOf(discountPrice));
+            }
+        }
+        matHangBanChay.setDiscountPrice(matHangTieuThu.getDiscountPrice());
         return matHangBanChay;
     }
 
-    private List<MatHangBanChay> updateAmountOfConsumption(MatHangBanChay matHangBanChay, List<MatHangBanChay> banChayList) {
+    private List<MatHangBanChay> updateAmountOfConsumptionAndDiscountPrice(MatHangBanChay matHangBanChay, List<MatHangBanChay> banChayList) {
         for (MatHangBanChay temp : banChayList) {
             if (temp.getMatHang().getName().equalsIgnoreCase(matHangBanChay.getMatHang().getName())) {
                 temp.setAmountOfConsumption(matHangBanChay.getAmountOfConsumption() + temp.getAmountOfConsumption());
+                double discountPriceTemp = temp.getDiscountPrice().doubleValue();
+                double discountPriceMatHangBanChay = matHangBanChay.getDiscountPrice().doubleValue();
+                temp.setDiscountPrice(BigDecimal.valueOf(discountPriceTemp + discountPriceMatHangBanChay));
                 break;
             }
         }
