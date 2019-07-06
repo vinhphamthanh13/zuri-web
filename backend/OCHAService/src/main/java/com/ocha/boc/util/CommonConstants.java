@@ -20,4 +20,6 @@ public class CommonConstants {
     public static final String DELETE_KHUYEN_MAI_BY_KHUYEN_MAI_ID_FAIL  = "Không thể xóa mã khuyến mãi này. Lỗi hệ thống";
 
     public static final String UPDATE_KHUYEN_MAI_FAIL                   = "Không thể cập nhật cho mã khuyến mãi này. Lỗi hệ thống";
+
+    public static final String GET_LIST_ORDER_BY_DATE_FAIL              = "Không có dữ liệu hóa đơn. Lỗi hệ thống!";
 }
