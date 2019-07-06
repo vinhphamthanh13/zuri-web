@@ -59,8 +59,44 @@ class Html extends React.Component {
           {scripts.map(script => (
             <link key={script} rel="preload" href={script} as="script" />
           ))}
-          <link rel="manifest" href="/site.webmanifest" />
-          <link rel="apple-touch-icon" href="/icon.png" />
+          <link rel="manifest" href="/site.manifest" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+          <meta name="apple-mobile-web-app-title" content="BOCVN" />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_48.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_96.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_144.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_192.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_256.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_384.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_512.png"
+          />
+          <meta
+            name="msapplication-TileImage"
+            content="../../public/images/boc_logo_48.png"
+          />
+          <meta name="msapplication-TileColor" content="#fff" />
+          <meta name="theme-color" content="#00AEEF" />
           <link
             href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
             rel="stylesheet"
@@ -82,9 +118,7 @@ class Html extends React.Component {
           <script
             dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }}
           />
-          {scripts.map(script => (
-            <script key={script} src={script} />
-          ))}
+          {scripts.map(script => <script key={script} src={script} />)}
           {config.analytics.googleTrackingId && (
             <script
               dangerouslySetInnerHTML={{

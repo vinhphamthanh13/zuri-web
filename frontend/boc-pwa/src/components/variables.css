@@ -41,20 +41,13 @@
   /*
    * Colors
    * ======================================================================== */
-  --c-brand-1: #2E4698;
-  --c-brand-2: #1C75BC;
-  --c-brand-3: #00AEEF;
-
+  --c-brand-1: #2e4698;
+  --c-brand-2: #1c75bc;
+  --c-brand-3: #00aeef;
   --c-bg-light: #fff;
-  --c-bg-brand-1: #2E4698;
-  --c-bg-brand-2: #1C75BC;
-  --c-bg-brand-3: #00AEEF;
-
-  --c-text-light: #fff;
-  --c-text-brand-1: #2E4698;
-  --c-text-brand-2: #1C75BC;
-  --c-text-brand-3: #00AEEF;
-
+  --c-bg-brand-1: #2e4698;
+  --c-bg-brand-2: #1c75bc;
+  --c-bg-brand-3: #00aeef;
   --c-text-dark: #321d1d;
   --c-text-lighter: #d2c3c3;
   --c-text-inverse: #fff;
