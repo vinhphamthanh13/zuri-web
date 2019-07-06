@@ -1,5 +1,8 @@
 [
   {
+    "createDate": "2019-07-03",
+    "total": 480000,
+    "sumOfKhuyenMaiPrice": 0,
     "listMatHangTieuThu": [
       {
         "matHang": {
@@ -9,7 +12,8 @@
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
         "unitPrice": 80000,
-        "amountOfConsumption": 1
+        "amountOfConsumption": 1,
+        "discountPrice": 0
       },
       {
         "matHang": {
@@ -19,7 +23,8 @@
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
         "unitPrice": 100000,
-        "amountOfConsumption": 2
+        "amountOfConsumption": 2,
+        "discountPrice": 0
       },
       {
         "matHang": {
@@ -29,14 +34,15 @@
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
         "unitPrice": 100000,
-        "amountOfConsumption": 2
+        "amountOfConsumption": 2,
+        "discountPrice": 0
       }
-    ],
-    "createDate": "2019-07-03",
-    "total": 480000
+    ]
   },
   {
     "createDate": "2019-07-03",
+    "total": 380000,
+    "sumOfKhuyenMaiPrice": 0,
     "listMatHangTieuThu": [
       {
         "matHang": {
@@ -46,7 +52,8 @@
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
         "unitPrice": 110000,
-        "amountOfConsumption": 2
+        "amountOfConsumption": 2,
+        "discountPrice": 0
       },
       {
         "matHang": {
@@ -56,13 +63,15 @@
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
         "unitPrice": 80000,
-        "amountOfConsumption": 2
+        "amountOfConsumption": 2,
+        "discountPrice": 0
       }
-    ],
-    "total": 380000
+    ]
   },
   {
     "createDate": "2019-07-03",
+    "total": 380000,
+    "sumOfKhuyenMaiPrice": 0,
     "listMatHangTieuThu": [
       {
         "matHang": {
@@ -72,7 +81,8 @@
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
         "unitPrice": 100000,
-        "amountOfConsumption": 2
+        "amountOfConsumption": 2,
+        "discountPrice": 0
       },
       {
         "matHang": {
@@ -82,9 +92,71 @@
           "createdDate": "2019-07-04T06:53:37.059Z"
         },
         "unitPrice": 90000,
-        "amountOfConsumption": 2
+        "amountOfConsumption": 2,
+        "discountPrice": 0
       }
-    ],
-    "total": 380000
+    ]
+  },
+  {
+    "createDate": "2019-07-06",
+    "total": 323000,
+    "sumOfKhuyenMaiPrice": 57000,
+    "listMatHangTieuThu": [
+      {
+        "matHang": {
+          "bangGiaId": "3",
+          "danhMucId": "4",
+          "khuyenMaiId": "1",
+          "name": "Cơm Chiên Dương Châu",
+          "createdDate": "2019-07-04T06:53:37.059Z"
+        },
+        "unitPrice": 100000,
+        "amountOfConsumption": 2,
+        "discountPrice": 30000
+      },
+      {
+        "matHang": {
+          "bangGiaId": "3",
+          "danhMucId": "4",
+          "khuyenMaiId": "2",
+          "name": "Mỳ Xào Hải Sản",
+          "createdDate": "2019-07-04T06:53:37.059Z"
+        },
+        "unitPrice": 90000,
+        "amountOfConsumption": 2,
+        "discountPrice": 27000
+      }
+    ]
+  },
+  {
+    "createDate": "2019-07-06",
+    "total": 289000,
+    "sumOfKhuyenMaiPrice": 51000,
+    "listMatHangTieuThu": [
+      {
+        "matHang": {
+          "bangGiaId": "2",
+          "danhMucId": "3",
+          "khuyenMaiId": "2",
+          "name": "Cá Lóc Nướng Giấy Bạc",
+          "createdDate": "2019-07-04T06:53:37.059Z"
+        },
+        "unitPrice": 80000,
+        "amountOfConsumption": 2,
+        "discountPrice": 24000
+      },
+      {
+        "matHang": {
+          "bangGiaId": "3",
+          "danhMucId": "4",
+          "khuyenMaiId": "2",
+          "name": "Mỳ Xào Hải Sản",
+          "createdDate": "2019-07-04T06:53:37.059Z"
+        },
+        "unitPrice": 90000,
+        "amountOfConsumption": 2,
+        "discountPrice": 27000
+      }
+    ]
   }
 ]
