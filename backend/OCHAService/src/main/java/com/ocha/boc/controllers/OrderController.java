@@ -1,6 +1,7 @@
 package com.ocha.boc.controllers;
 
 import com.ocha.boc.response.MatHangBanChayResponse;
+import com.ocha.boc.response.OrderResponse;
 import com.ocha.boc.services.impl.OrderService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,15 @@ public class OrderController {
         log.info("START: getListMatHangBanChayByDate " + date);
         MatHangBanChayResponse response = orderService.getListMatHangBanChayByDate(date);
         log.info("END: getListMatHangBanChayByDate");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "Get List Order By Date")
+    @GetMapping("/order/{date}")
+    public ResponseEntity<OrderResponse> findListOrderByDate(@PathVariable String date){
+        log.info("START: findListOrderByDate " + date);
+        OrderResponse response = orderService.findListOrderByDate(date);
+        log.info("END: findListOrderByDate");
         return ResponseEntity.ok(response);
     }
 }

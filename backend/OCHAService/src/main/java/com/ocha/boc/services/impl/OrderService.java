@@ -1,5 +1,6 @@
 package com.ocha.boc.services.impl;
 
+import com.ocha.boc.dto.OrderDTO;
 import com.ocha.boc.entity.KhuyenMai;
 import com.ocha.boc.entity.MatHangBanChay;
 import com.ocha.boc.entity.MatHangTieuThu;
@@ -7,6 +8,7 @@ import com.ocha.boc.entity.Order;
 import com.ocha.boc.repository.KhuyenMaiRepository;
 import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.response.MatHangBanChayResponse;
+import com.ocha.boc.response.OrderResponse;
 import com.ocha.boc.util.CommonConstants;
 import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -143,5 +145,28 @@ public class OrderService {
         for (MatHangBanChay temp : banChayList) {
             temp.setCostPrice(temp.getUnitPrice().multiply(BigDecimal.valueOf((long) temp.getAmountOfConsumption())));
         }
+    }
+
+    public OrderResponse findListOrderByDate(String date) {
+        OrderResponse response = new OrderResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_LIST_ORDER_BY_DATE_FAIL);
+        try {
+            List<Order> orders = orderRepository.findListOrderByCreateDate(date);
+            if (CollectionUtils.isNotEmpty(orders)) {
+                List<OrderDTO> orderDTOS = new ArrayList<OrderDTO>();
+                for (Order order : orders) {
+                    OrderDTO temp = new OrderDTO(order);
+                    orderDTOS.add(temp);
+                }
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+                response.setObjects(orderDTOS);
+                response.setTotalResultCount((long) orderDTOS.size());
+            }
+        } catch (Exception e) {
+            log.error("Error when findListOrderByDate: ", e);
+        }
+        return response;
     }
 }
