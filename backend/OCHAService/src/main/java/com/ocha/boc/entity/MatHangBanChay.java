@@ -17,7 +17,7 @@ public class MatHangBanChay {
 
     private BigDecimal costPrice;
 
-    private BigDecimal discountPrice;
+    private BigDecimal discountPrice = BigDecimal.ZERO;
 
     private MatHang matHang;
 }
