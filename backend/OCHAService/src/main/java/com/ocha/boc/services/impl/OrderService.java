@@ -104,7 +104,6 @@ public class OrderService {
                 matHangBanChay.setDiscountPrice(BigDecimal.valueOf(discountPrice));
             }
         }
-        matHangBanChay.setDiscountPrice(matHangTieuThu.getDiscountPrice());
         return matHangBanChay;
     }
 
