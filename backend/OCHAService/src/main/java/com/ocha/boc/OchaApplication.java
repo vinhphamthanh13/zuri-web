@@ -54,6 +54,9 @@ public class OchaApplication extends SpringBootServletInitializer {
     @Autowired
     private DanhMucRepository danhMucRepository;
 
+    @Autowired
+    private KhuyenMaiRepository khuyenMaiRepository;
+
     @Value(value = "${boc.table.banggia}")
     private String bangGiaTableName;
 
@@ -74,6 +77,9 @@ public class OchaApplication extends SpringBootServletInitializer {
 
     @Value(value = "${boc.table.danhmuc}")
     private String danhMucTableName;
+
+    @Value(value = "${boc.table.khuyenmai}")
+    private String khuyenMaiTableName;
 
     @Value(value = "${spring.data.mongodb.host}")
     private String mongoDBHostName;
@@ -115,6 +121,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         initOrder(db);
         initBangGia(db);
         initDanhMuc(db);
+        initKhuyenMai(db);
     }
 
     public MongoClient connectMongoDB() {
@@ -249,6 +256,25 @@ public class OchaApplication extends SpringBootServletInitializer {
             } else {
                 danhMucRepository.deleteAll();
                 danhMucRepository.saveAll(danhMucList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initKhuyenMai(MongoDatabase db) {
+        try {
+            boolean isExisted = checkExistsCollectionName(db, khuyenMaiTableName);
+            List<KhuyenMai> khuyenMaiList = new ArrayList<KhuyenMai>();
+            InputStream stream = OchaApplication.class.getResourceAsStream("/khuyenmai.json");
+            ObjectMapper mapper = new ObjectMapper();
+            khuyenMaiList = mapper.readValue(stream, new TypeReference<List<KhuyenMai>>() {
+            });
+            if (!isExisted) {
+                khuyenMaiRepository.saveAll(khuyenMaiList);
+            } else {
+                khuyenMaiRepository.deleteAll();
+                khuyenMaiRepository.saveAll(khuyenMaiList);
             }
         } catch (Exception e) {
             e.printStackTrace();
