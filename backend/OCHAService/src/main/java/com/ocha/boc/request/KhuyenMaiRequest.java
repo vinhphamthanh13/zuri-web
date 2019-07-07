@@ -18,6 +18,4 @@ public class KhuyenMaiRequest implements Serializable {
 
     private String toDate;
 
-    private String khuyenMaiId;
-
 }
