@@ -8,4 +8,6 @@ public interface DanhMucRepository extends MongoRepository<DanhMuc, String> {
     DanhMuc findDanhMucByName(String name);
 
     DanhMuc findDanhMucByDanhMucId(String danhMucId);
+
+    DanhMuc findTopByOrderByDanhMucIdDesc();
 }

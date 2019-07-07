@@ -27,6 +27,8 @@ import java.util.List;
 @Slf4j
 public class DanhMucService {
 
+    private static final String NUMBER_ONE = "1";
+
     @Autowired
     private DanhMucRepository danhMucRepository;
 
@@ -43,6 +45,15 @@ public class DanhMucService {
                 DanhMuc danhMuc = danhMucRepository.findDanhMucByName(request.getName());
                 if (danhMuc == null) {
                     danhMuc = new DanhMuc();
+                    //Find max DanhMucId Value
+                    DanhMuc temp = danhMucRepository.findTopByOrderByDanhMucIdDesc();
+                    if (temp != null) {
+                        int danhMucIdMaxValue = Integer.parseInt(temp.getDanhMucId());
+                        danhMuc.setDanhMucId(Integer.toString(danhMucIdMaxValue + 1));
+                    } else {
+                        //init first record in DB
+                        danhMuc.setDanhMucId(NUMBER_ONE);
+                    }
                     danhMuc.setAbbreviations(request.getAbbreviations());
                     danhMuc.setName(request.getName());
                     danhMuc.setCreatedDate(Instant.now().toString());
