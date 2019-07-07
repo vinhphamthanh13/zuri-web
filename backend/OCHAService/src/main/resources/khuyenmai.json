@@ -1,0 +1,20 @@
+[
+  {
+    "khuyenMaiId": 1,
+    "rate": 15,
+    "fromDate": "2019-07-04",
+    "toDate": "2019-07-05"
+  },
+  {
+    "khuyenMaiId": 2,
+    "rate": 20,
+    "fromDate": "2019-07-04",
+    "toDate": "2019-07-06"
+  },
+  {
+    "khuyenMaiId": 3,
+    "rate": 10,
+    "fromDate": "2019-07-05",
+    "toDate": "2019-07-08"
+  }
+]
