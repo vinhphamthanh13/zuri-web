@@ -7,4 +7,6 @@ public interface BangGiaRepository extends MongoRepository<BangGia, String> {
 
     BangGia findBangGiaByBangGiaId(String id);
 
+    BangGia findTopByOrderByBangGiaIdDesc();
+
 }

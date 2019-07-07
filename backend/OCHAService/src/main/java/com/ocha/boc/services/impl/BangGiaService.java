@@ -22,6 +22,8 @@ import java.util.List;
 @Slf4j
 public class BangGiaService {
 
+    private static final String NUMBER_ONE = "1";
+
     @Autowired
     private BangGiaRepository bangGiaRepository;
 
@@ -35,6 +37,13 @@ public class BangGiaService {
         try {
             if (request.getNumberOfPrice() > 0) {
                 BangGia bangGia = new BangGia();
+                BangGia temp = bangGiaRepository.findTopByOrderByBangGiaIdDesc();
+                if (temp != null) {
+                    int bangGiaMaxId = Integer.parseInt(temp.getBangGiaId());
+                    bangGia.setBangGiaId(Integer.toString(bangGiaMaxId + 1));
+                } else {
+                    bangGia.setBangGiaId(NUMBER_ONE);
+                }
                 bangGia.setNumberOfPrice(request.getNumberOfPrice());
                 bangGia.setCreatedDate(Instant.now().toString());
                 response.setSuccess(Boolean.TRUE);
