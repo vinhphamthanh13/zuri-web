@@ -123,128 +123,135 @@ public class OchaApplication extends SpringBootServletInitializer {
     }
 
     public void initBangGiaDetail(MongoDatabase db) {
-        boolean isExisted = checkExistsCollectionName(db, bangGiaDetailTableName);
-        if (!isExisted) {
-            List<BangGiaDetail> bangGiaDetails = new ArrayList<>();
-            try {
-                InputStream stream = OchaApplication.class.getResourceAsStream("/banggia_detail.json");
-                ObjectMapper mapper = new ObjectMapper();
-                bangGiaDetails = mapper.readValue(stream, new TypeReference<List<BangGiaDetail>>() {
-                });
-                //store to db
+        try {
+            boolean isExisted = checkExistsCollectionName(db, bangGiaDetailTableName);
+            List<BangGiaDetail> bangGiaDetails = new ArrayList<BangGiaDetail>();
+            InputStream stream = OchaApplication.class.getResourceAsStream("/banggia_detail.json");
+            ObjectMapper mapper = new ObjectMapper();
+            bangGiaDetails = mapper.readValue(stream, new TypeReference<List<BangGiaDetail>>() {
+            });
+            if (!isExisted) {
+                bangGiaDetailRepository.saveAll(bangGiaDetails);
+            } else {
                 bangGiaDetailRepository.deleteAll();
                 bangGiaDetailRepository.saveAll(bangGiaDetails);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void initUserTable(MongoDatabase db) {
-        boolean isExisted = checkExistsCollectionName(db, userTableName);
-        if (!isExisted) {
+        try {
+            boolean isExisted = checkExistsCollectionName(db, userTableName);
             List<User> users = new ArrayList<User>();
-            try {
-                InputStream stream = OchaApplication.class.getResourceAsStream("/user.json");
-                ObjectMapper mapper = new ObjectMapper();
-                users = mapper.readValue(stream, new TypeReference<List<User>>() {
-                });
-                //store to db
+            InputStream stream = OchaApplication.class.getResourceAsStream("/user.json");
+            ObjectMapper mapper = new ObjectMapper();
+            users = mapper.readValue(stream, new TypeReference<List<User>>() {
+            });
+            if (!isExisted) {
+                userRepository.saveAll(users);
+            } else {
                 userRepository.deleteAll();
                 userRepository.saveAll(users);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void initMatHangTable(MongoDatabase db) {
-        boolean isExisted = checkExistsCollectionName(db, matHangTableName);
-        if (!isExisted) {
+        try {
+            boolean isExisted = checkExistsCollectionName(db, matHangTableName);
             List<MatHang> listMatHang = new ArrayList<MatHang>();
-            try {
-                InputStream stream = OchaApplication.class.getResourceAsStream("/mathang.json");
-                ObjectMapper mapper = new ObjectMapper();
-                listMatHang = mapper.readValue(stream, new TypeReference<List<MatHang>>() {
-                });
-                //store to db
+            InputStream stream = OchaApplication.class.getResourceAsStream("/mathang.json");
+            ObjectMapper mapper = new ObjectMapper();
+            listMatHang = mapper.readValue(stream, new TypeReference<List<MatHang>>() {
+            });
+            if (!isExisted) {
+                matHangRepository.saveAll(listMatHang);
+            } else {
                 matHangRepository.deleteAll();
                 matHangRepository.saveAll(listMatHang);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void initNguyenLieuTable(MongoDatabase db) {
-        boolean isExisted = checkExistsCollectionName(db, nguyenLieuTableName);
-        if (!isExisted) {
+        try {
+            boolean isExisted = checkExistsCollectionName(db, nguyenLieuTableName);
             List<NguyenLieu> listNguyenLieu = new ArrayList<NguyenLieu>();
-            try {
-                InputStream stream = OchaApplication.class.getResourceAsStream("/nguyenlieu.json");
-                ObjectMapper mapper = new ObjectMapper();
-                listNguyenLieu = mapper.readValue(stream, new TypeReference<List<NguyenLieu>>() {
-                });
-                //store to db
+            InputStream stream = OchaApplication.class.getResourceAsStream("/nguyenlieu.json");
+            ObjectMapper mapper = new ObjectMapper();
+            listNguyenLieu = mapper.readValue(stream, new TypeReference<List<NguyenLieu>>() {
+            });
+            if (!isExisted) {
+                nguyenLieuRepository.saveAll(listNguyenLieu);
+            } else {
                 nguyenLieuRepository.deleteAll();
                 nguyenLieuRepository.saveAll(listNguyenLieu);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void initOrder(MongoDatabase db) {
-        boolean isExisted = checkExistsCollectionName(db, orderTableName);
-        if (!isExisted) {
+        try {
+            boolean isExisted = checkExistsCollectionName(db, orderTableName);
             List<Order> orders = new ArrayList<Order>();
-            try {
-                InputStream stream = OchaApplication.class.getResourceAsStream("/order.json");
-                ObjectMapper mapper = new ObjectMapper();
-                orders = mapper.readValue(stream, new TypeReference<List<Order>>() {
-                });
-                //store to db
+            InputStream stream = OchaApplication.class.getResourceAsStream("/order.json");
+            ObjectMapper mapper = new ObjectMapper();
+            orders = mapper.readValue(stream, new TypeReference<List<Order>>() {
+            });
+            if (!isExisted) {
+                orderRepository.saveAll(orders);
+            } else {
                 orderRepository.deleteAll();
                 orderRepository.saveAll(orders);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void initBangGia(MongoDatabase db) {
-        boolean isExisted = checkExistsCollectionName(db, bangGiaTableName);
-        if (!isExisted) {
+        try {
+            boolean isExisted = checkExistsCollectionName(db, bangGiaTableName);
             List<BangGia> bangGias = new ArrayList<BangGia>();
-            try {
-                InputStream stream = OchaApplication.class.getResourceAsStream("/banggia.json");
-                ObjectMapper mapper = new ObjectMapper();
-                bangGias = mapper.readValue(stream, new TypeReference<List<BangGia>>() {
-                });
-                //store to db
+            InputStream stream = OchaApplication.class.getResourceAsStream("/banggia.json");
+            ObjectMapper mapper = new ObjectMapper();
+            bangGias = mapper.readValue(stream, new TypeReference<List<BangGia>>() {
+            });
+            if (!isExisted) {
+                bangGiaRepository.saveAll(bangGias);
+            } else {
                 bangGiaRepository.deleteAll();
                 bangGiaRepository.saveAll(bangGias);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void initDanhMuc(MongoDatabase db) {
-        boolean isExisted = checkExistsCollectionName(db, danhMucTableName);
-        if (!isExisted) {
+        try {
+            boolean isExisted = checkExistsCollectionName(db, danhMucTableName);
             List<DanhMuc> danhMucList = new ArrayList<DanhMuc>();
-            try {
-                InputStream stream = OchaApplication.class.getResourceAsStream("/danhmuc.json");
-                ObjectMapper mapper = new ObjectMapper();
-                danhMucList = mapper.readValue(stream, new TypeReference<List<DanhMuc>>() {
-                });
-                //store to db
+            InputStream stream = OchaApplication.class.getResourceAsStream("/danhmuc.json");
+            ObjectMapper mapper = new ObjectMapper();
+            danhMucList = mapper.readValue(stream, new TypeReference<List<DanhMuc>>() {
+            });
+            if (!isExisted) {
+                danhMucRepository.saveAll(danhMucList);
+            } else {
                 danhMucRepository.deleteAll();
                 danhMucRepository.saveAll(danhMucList);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
