@@ -8,7 +8,6 @@ import com.ocha.boc.request.UserUpdateRequest;
 import com.ocha.boc.response.UserResponse;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +25,9 @@ public class UserService {
 
     public UserResponse newUser(UserLoginRequest request) {
         UserResponse response = new UserResponse();
-        if (!StringUtils.isNotEmpty(request.getPhone())) {
-            response.setSuccess(Boolean.FALSE);
-            response.setMessage(CommonConstants.STR_FAIL_STATUS);
-        } else {
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.CREATE_NEW_USER_FAIL);
+        try {
             User user = userRepository.findUserByPhone(request.getPhone());
             if (user == null) {
                 user = new User();
@@ -38,23 +36,26 @@ public class UserService {
                 user.setCreatedDate(Instant.now().toString());
                 user.setLastModifiedDate(Instant.now().toString());
                 userRepository.save(user);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObjectId(user.getId());
+                UserDTO userDTO = new UserDTO(user);
+                response.setObject(userDTO);
             }
-            response.setSuccess(Boolean.TRUE);
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setObjectId(user.getId());
-            UserDTO userDTO = new UserDTO(user);
-            response.setObject(userDTO);
+        } catch (Exception e) {
+            log.error("Error when newUser: ", e);
         }
         return response;
     }
 
     public UserResponse updateUserInformation(UserUpdateRequest request) {
         UserResponse response = new UserResponse();
+        response.setMessage(CommonConstants.UPDATE_USER_FAIL);
+        response.setSuccess(Boolean.FALSE);
         try {
             User user = checkUserExisted(request.getUserId());
             if (user == null) {
-                response.setSuccess(Boolean.FALSE);
-                response.setMessage("User is not existed. Cannot update user information");
+                response.setMessage(CommonConstants.USER_IS_NULL);
                 return response;
             }
             user.setEmail(request.getEmail());
@@ -64,14 +65,12 @@ public class UserService {
             user.setLastModifiedDate(Instant.now().toString());
             userRepository.save(user);
             response.setSuccess(Boolean.TRUE);
-            response.setMessage("Update user successful");
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             response.setObjectId(user.getId());
             UserDTO userDTO = new UserDTO(user);
             response.setObject(userDTO);
         } catch (Exception e) {
-            response.setSuccess(Boolean.FALSE);
             log.error("Error when updateUserInformation: ", e);
-            response.setMessage("updateUserInformation is FAILED");
         }
         return response;
     }

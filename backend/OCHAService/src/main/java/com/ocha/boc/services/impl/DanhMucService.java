@@ -39,7 +39,7 @@ public class DanhMucService {
     public DanhMucResponse createNewDanhMuc(DanhMucRequest request) {
         DanhMucResponse response = new DanhMucResponse();
         try {
-            response.setMessage(CommonConstants.STR_FAIL_STATUS);
+            response.setMessage(CommonConstants.CREATE_NEW_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (request != null) {
                 DanhMuc danhMuc = danhMucRepository.findDanhMucByName(request.getName());
@@ -72,7 +72,7 @@ public class DanhMucService {
     public DanhMucResponse updateDanhMuc(DanhMucRequest request) {
         DanhMucResponse response = new DanhMucResponse();
         try {
-            response.setMessage(CommonConstants.STR_FAIL_STATUS);
+            response.setMessage(CommonConstants.UPDATE_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (request != null) {
                 DanhMuc danhMuc = danhMucRepository.findDanhMucByName(request.getName());
@@ -87,6 +87,8 @@ public class DanhMucService {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new DanhMucDTO(danhMuc));
+                }else{
+                    response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
                 }
             }
         } catch (Exception e) {
@@ -98,7 +100,7 @@ public class DanhMucService {
     public DanhMucResponse findDanhMucByDanhMucId(String id) {
         DanhMucResponse response = new DanhMucResponse();
         try {
-            response.setMessage(CommonConstants.STR_FAIL_STATUS);
+            response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
                 DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(id);
@@ -117,7 +119,7 @@ public class DanhMucService {
     public DanhMucResponse getAllDanhMuc() {
         DanhMucResponse response = new DanhMucResponse();
         try {
-            response.setMessage(CommonConstants.STR_FAIL_STATUS);
+            response.setMessage(CommonConstants.GET_ALL_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             List<DanhMuc> listDanhMuc = danhMucRepository.findAll();
             if (CollectionUtils.isNotEmpty(listDanhMuc)) {
@@ -140,7 +142,7 @@ public class DanhMucService {
     public AbstractResponse deleteDanhMucByDanhMucId(String id) {
         AbstractResponse response = new AbstractResponse();
         try {
-            response.setMessage(CommonConstants.STR_FAIL_STATUS);
+            response.setMessage(CommonConstants.DELETE_DANH_MUC_BY_DANH_MUC_ID_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
                 DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(id);
@@ -148,6 +150,8 @@ public class DanhMucService {
                     danhMucRepository.delete(danhMuc);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                }else{
+                    response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
                 }
             }
         } catch (Exception e) {
@@ -168,7 +172,7 @@ public class DanhMucService {
 
     private DoanhThuDanhMucResponse buildDoanhThuDanhMucResponse(String date) {
         DoanhThuDanhMucResponse response = new DoanhThuDanhMucResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.GET_DOANH_THU_THEO_DANH_MUC_FAIL);
         response.setSuccess(Boolean.FALSE);
         List<Order> orders = orderRepository.findListOrderByCreateDate(date);
         List<DoanhThuDanhMuc> doanhThuDanhMucList = buildListDoanhThuTheoDanhMuc(orders);

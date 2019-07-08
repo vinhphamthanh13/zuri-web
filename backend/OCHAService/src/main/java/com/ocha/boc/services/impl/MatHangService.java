@@ -26,11 +26,10 @@ public class MatHangService {
 
     public MatHangResponse createNewMatHang(MatHangRequest request) {
         MatHangResponse response = new MatHangResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.CREATE_NEW_MAT_HANG_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (request != null) {
-
                 if (StringUtils.isNotEmpty(request.getName())) {
                     boolean isExisted = checkMatHangExisted(request.getName());
                     if (!isExisted) {
@@ -38,7 +37,7 @@ public class MatHangService {
                         matHang.setName(request.getName());
                         matHang.setBangGiaId(request.getBangGiaId());
                         matHang.setDanhMucId(request.getDanhMucId());
-                        if(StringUtils.isNotEmpty(request.getKhuyenMaiId())){
+                        if (StringUtils.isNotEmpty(request.getKhuyenMaiId())) {
                             matHang.setKhuyenMaiId(request.getKhuyenMaiId());
                         }
                         matHang.setCreatedDate(Instant.now().toString());
@@ -57,20 +56,20 @@ public class MatHangService {
 
     public MatHangResponse updateMatHangInfor(MatHangUpdateRequest request) {
         MatHangResponse response = new MatHangResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.UPDATE_MAT_HANG_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(request.getId())) {
                 MatHang matHang = matHangRepository.findMatHangById(request.getId());
                 if (matHang != null) {
                     matHang.setName(request.getName());
-                    if(StringUtils.isNotEmpty(request.getBangGiaId())){
+                    if (StringUtils.isNotEmpty(request.getBangGiaId())) {
                         matHang.setBangGiaId(request.getBangGiaId());
                     }
-                    if(StringUtils.isNotEmpty(request.getDanhMucId())){
+                    if (StringUtils.isNotEmpty(request.getDanhMucId())) {
                         matHang.setDanhMucId(request.getDanhMucId());
                     }
-                    if(StringUtils.isNotEmpty(request.getKhuyenMaiId())){
+                    if (StringUtils.isNotEmpty(request.getKhuyenMaiId())) {
                         matHang.setKhuyenMaiId(request.getKhuyenMaiId());
                     }
                     matHang.setLastModifiedDate(Instant.now().toString());
@@ -78,6 +77,8 @@ public class MatHangService {
                     response.setSuccess(Boolean.TRUE);
                     response.setObject(new MathangDTO(matHang));
                     matHangRepository.save(matHang);
+                } else {
+                    response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
                 }
             }
         } catch (Exception e) {
@@ -88,7 +89,7 @@ public class MatHangService {
 
     public MatHangResponse findMatHangById(String id) {
         MatHangResponse response = new MatHangResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
@@ -107,7 +108,7 @@ public class MatHangService {
 
     public MatHangResponse getAllMatHang() {
         MatHangResponse response = new MatHangResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.GET_ALL_MAT_HANG_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             List<MatHang> matHangList = matHangRepository.findAll();
@@ -130,7 +131,7 @@ public class MatHangService {
 
     public MatHangResponse deleteMatHangById(String id) {
         MatHangResponse response = new MatHangResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.DELETE_MAT_HANG_BY_MAT_HANG_ID_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
@@ -139,6 +140,8 @@ public class MatHangService {
                     matHangRepository.delete(matHang);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                }else{
+                    response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
                 }
             }
         } catch (Exception e) {

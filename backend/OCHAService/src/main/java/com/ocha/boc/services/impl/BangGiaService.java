@@ -32,7 +32,7 @@ public class BangGiaService {
 
     public BangGiaResponse createNewBangGia(BangGiaRequest request) {
         BangGiaResponse response = new BangGiaResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.CREATE_NEW_BANG_GIA_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (request.getNumberOfPrice() > 0) {
@@ -59,7 +59,7 @@ public class BangGiaService {
 
     public BangGiaResponse updateBangGiaInformation(BangGiaUpdateRequest request) {
         BangGiaResponse response = new BangGiaResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.UPDATE_BANG_GIA_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(request.getId())) {
@@ -73,6 +73,8 @@ public class BangGiaService {
                         response.setObject(new BangGiaDTO(bangGia));
                         bangGiaRepository.save(bangGia);
                     }
+                } else {
+                    response.setMessage(CommonConstants.BANG_GIA_IS_NULL);
                 }
             }
         } catch (Exception e) {
@@ -83,7 +85,7 @@ public class BangGiaService {
 
     public BangGiaResponse findBangGiaByBangGiaId(String id) {
         BangGiaResponse response = new BangGiaResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.BANG_GIA_IS_NULL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
@@ -102,7 +104,7 @@ public class BangGiaService {
 
     public BangGiaResponse getAllBangGia() {
         BangGiaResponse response = new BangGiaResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.GET_ALL_BANG_GIA_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             List<BangGia> listBangGia = bangGiaRepository.findAll();
@@ -125,7 +127,7 @@ public class BangGiaService {
 
     public BangGiaResponse deleteBangGiaByBangGiaId(String id) {
         BangGiaResponse response = new BangGiaResponse();
-        response.setMessage(CommonConstants.STR_FAIL_STATUS);
+        response.setMessage(CommonConstants.DELETE_BANG_GIA_BY_BANG_GIA_ID_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
