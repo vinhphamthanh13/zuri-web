@@ -1,7 +1,7 @@
 /**
  * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -87,7 +87,8 @@ module.exports = {
     jwt: { secret: process.env.JWT_SECRET || 'http://www.bocvietnam.com' },
     userAuth: {
       jwtSecret:
-        process.env.CUSTOMER_JWT_SECRET || 'http://www.bocvietnam.com ACL@2019 for customer',
+        process.env.CUSTOMER_JWT_SECRET ||
+        'http://www.bocvietnam.com ACL@2019 for customer',
       tokenExpiresHours: 720,
       jwtOptions: {
         expiresIn: '30d',
@@ -100,7 +101,8 @@ module.exports = {
         'bf841dabe78bf2986a6291c02fb69123',
       hashSalt: process.env.INTERNAL_HASH_SALT || 'sHDbwWfL5gzJ5Cyk',
       jwtSecret:
-        process.env.INTERNAL_JWT_SECRET || 'http://www.bocvietnam.com Online ACL@2019',
+        process.env.INTERNAL_JWT_SECRET ||
+        'http://www.bocvietnam.com Online ACL@2019',
       tokenExpiresHours: 24,
       jwtOptions: {
         expiresIn: '24h',

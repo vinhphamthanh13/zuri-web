@@ -1,7 +1,7 @@
 /**
  * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -98,7 +98,7 @@ class Html extends React.Component {
           <meta name="msapplication-TileColor" content="#fff" />
           <meta name="theme-color" content="#00AEEF" />
           <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+            href="https://fonts.googleapis.com/css?family=Roboto:400,500,500i&display=swap&subset=vietnamese"
             rel="stylesheet"
           />
           <link
