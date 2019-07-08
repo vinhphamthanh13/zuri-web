@@ -19,6 +19,7 @@ export default new UniversalRouter(routes, {
           if (typeof action.default === 'function') {
             return action.default(context, params);
           }
+          return null;
         })
         .catch(error => console.error('Loading Error::', error));
     }
