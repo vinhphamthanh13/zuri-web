@@ -142,7 +142,11 @@ public class OrderService {
 
     private void calcualteCostPriceMatHangBanChay(List<MatHangBanChay> banChayList) {
         for (MatHangBanChay temp : banChayList) {
-            temp.setCostPrice(temp.getUnitPrice().multiply(BigDecimal.valueOf((long) temp.getAmountOfConsumption())));
+            BigDecimal costPriceBeforeApplyingDiscount = temp.getUnitPrice().multiply(BigDecimal.valueOf((long) temp.getAmountOfConsumption()));
+            double dCostPriceBeforeApplyingDiscount = costPriceBeforeApplyingDiscount.doubleValue();
+            double dDiscountPrice = temp.getDiscountPrice().doubleValue();
+            double costPrice = dCostPriceBeforeApplyingDiscount - dDiscountPrice;
+            temp.setCostPrice(BigDecimal.valueOf(costPrice));
         }
     }
 
