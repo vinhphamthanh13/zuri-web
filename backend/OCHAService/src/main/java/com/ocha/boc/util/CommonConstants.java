@@ -93,4 +93,8 @@ public class CommonConstants {
 
     public static final String USER_IS_NULL                             ="Người dùng không tồn tại.";
 
+    public static final String USER_EXISTED                             = "Người dùng đã tồn tại trong hệ thống. Không thể tạo mới!";
+
+    public static final String GET_ALL_USER_FAIL                        = "Hệ thống không tồn tại người dùng nào !";
+
 }
