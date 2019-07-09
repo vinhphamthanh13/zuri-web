@@ -1,20 +1,23 @@
 package com.ocha.boc.services.impl;
 
+import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.entity.User;
+import com.ocha.boc.enums.UserType;
 import com.ocha.boc.repository.UserRepository;
 import com.ocha.boc.request.UserLoginRequest;
 import com.ocha.boc.request.UserUpdateRequest;
 import com.ocha.boc.response.UserResponse;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -34,13 +37,15 @@ public class UserService {
                 user.setPhone(request.getPhone());
                 user.setActive(Boolean.TRUE);
                 user.setCreatedDate(Instant.now().toString());
-                user.setLastModifiedDate(Instant.now().toString());
+                user.setRole(UserType.USER);
                 userRepository.save(user);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setObjectId(user.getId());
                 UserDTO userDTO = new UserDTO(user);
                 response.setObject(userDTO);
+            } else {
+                response.setMessage(CommonConstants.USER_EXISTED);
             }
         } catch (Exception e) {
             log.error("Error when newUser: ", e);
@@ -54,62 +59,96 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         try {
             User user = checkUserExisted(request.getUserId());
-            if (user == null) {
+            if (user != null) {
+                if (StringUtils.isNotEmpty(request.getEmail())) {
+                    user.setEmail(request.getEmail());
+                }
+                if (StringUtils.isNotEmpty(request.getFirstName())) {
+                    user.setFirstName(request.getFirstName());
+                }
+                if (StringUtils.isNotEmpty(request.getLastName())) {
+                    user.setLastName(request.getLastName());
+                }
+                if (StringUtils.isNotEmpty(request.getPhoto())) {
+                    user.setPhoto(request.getPhoto());
+                }
+                if (StringUtils.isNotEmpty(request.getRole().toString())) {
+                    user.setRole(request.getRole());
+                }
+                user.setLastModifiedDate(Instant.now().toString());
+                userRepository.save(user);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObject(new UserDTO(user));
+            } else {
                 response.setMessage(CommonConstants.USER_IS_NULL);
-                return response;
             }
-            user.setEmail(request.getEmail());
-            user.setFirstName(request.getFirstName());
-            user.setLastName(request.getLastName());
-            user.setPhoto(request.getPhoto());
-            user.setLastModifiedDate(Instant.now().toString());
-            userRepository.save(user);
-            response.setSuccess(Boolean.TRUE);
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setObjectId(user.getId());
-            UserDTO userDTO = new UserDTO(user);
-            response.setObject(userDTO);
         } catch (Exception e) {
             log.error("Error when updateUserInformation: ", e);
         }
         return response;
     }
 
-    public void deleteUserById(String userId) {
-        userRepository.deleteById(userId);
-    }
-
-    public List<UserDTO> getAllUser() {
-        List<User> users = userRepository.findAll();
-        List<UserDTO> dtoList = new ArrayList<>();
-        for (User user : users) {
-            UserDTO userDTO = new UserDTO(user);
-            dtoList.add(userDTO);
-        }
-        return dtoList;
-    }
-
-    public User getUserById(String userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        }
-        return null;
-    }
-
-
-    public boolean deActiveUser(String userId) {
-        boolean isDeActive = false;
+    public UserResponse getAllUser() {
+        UserResponse response = new UserResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_ALL_USER_FAIL);
         try {
-            User user = userRepository.findUserById(userId);
-            if (user != null) {
-                user.setActive(Boolean.FALSE);
-                isDeActive = true;
+            List<User> users = userRepository.getListUserActiveIsTrue();
+            if (CollectionUtils.isNotEmpty(users)) {
+                List<UserDTO> listUserDTO = new ArrayList<UserDTO>();
+                for (User user : users) {
+                    listUserDTO.add(new UserDTO(user));
+                }
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObjects(listUserDTO);
+                response.setTotalResultCount((long) listUserDTO.size());
+            }
+        } catch (Exception e) {
+            log.error("Error when getAllUser: ", e);
+        }
+        return response;
+    }
+
+    public UserResponse getUserById(String userId) {
+        UserResponse response = new UserResponse();
+        response.setMessage(CommonConstants.USER_IS_NULL);
+        response.setSuccess(Boolean.FALSE);
+        try {
+            if (StringUtils.isNotEmpty(userId)) {
+                User user = userRepository.findUserById(userId);
+                if (user != null) {
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObject(new UserDTO(user));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error when getUserById: ", e);
+        }
+        return response;
+    }
+
+    public AbstractResponse deActiveUser(String userId) {
+        AbstractResponse response = new AbstractResponse();
+        response.setMessage(CommonConstants.USER_IS_NULL);
+        response.setSuccess(Boolean.FALSE);
+        try {
+            if (StringUtils.isNotEmpty(userId)) {
+                User user = userRepository.findUserById(userId);
+                if (user != null) {
+                    user.setLastModifiedDate(Instant.now().toString());
+                    user.setActive(Boolean.FALSE);
+                    userRepository.save(user);
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                }
             }
         } catch (Exception e) {
             log.error("Error when deActiveUser: ", e);
         }
-        return isDeActive;
+        return response;
     }
 
     private User checkUserExisted(String id) {
@@ -120,5 +159,25 @@ public class UserService {
             log.error("Error when checkUserExisted: ", e);
         }
         return user;
+    }
+
+    public UserResponse activeUser(String userId) {
+        UserResponse response = new UserResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.USER_IS_NULL);
+        try {
+            User user = userRepository.findUserById(userId);
+            if (user != null) {
+                user.setLastModifiedDate(Instant.now().toString());
+                user.setActive(Boolean.TRUE);
+                userRepository.save(user);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObject(new UserDTO(user));
+            }
+        } catch (Exception e) {
+            log.error("Error when activeUser: ", e);
+        }
+        return response;
     }
 }

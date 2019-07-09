@@ -36,6 +36,7 @@ public class UserDTO extends AbstractEntity {
         this.role = user.getRole();
         this.id = user.getId();
         this.createdDate = user.getCreatedDate();
+        this.lastModifiedDate = user.getLastModifiedDate();
     }
 
 }
