@@ -115,13 +115,12 @@ public class OchaApplication extends SpringBootServletInitializer {
         MongoClient mongo = connectMongoDB();
         MongoDatabase db = mongo.getDatabase(databaseName);
         initBangGiaDetail(db);
-        initUserTable(db);
-        initMatHangTable(db);
-        initNguyenLieuTable(db);
-        initOrder(db);
         initBangGia(db);
         initDanhMuc(db);
+        initMatHangTable(db);
         initKhuyenMai(db);
+        initNguyenLieuTable(db);
+        initOrder(db);
     }
 
     public MongoClient connectMongoDB() {
@@ -142,25 +141,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             } else {
                 bangGiaDetailRepository.deleteAll();
                 bangGiaDetailRepository.saveAll(bangGiaDetails);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void initUserTable(MongoDatabase db) {
-        try {
-            boolean isExisted = checkExistsCollectionName(db, userTableName);
-            List<User> users = new ArrayList<User>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/user.json");
-            ObjectMapper mapper = new ObjectMapper();
-            users = mapper.readValue(stream, new TypeReference<List<User>>() {
-            });
-            if (!isExisted) {
-                userRepository.saveAll(users);
-            } else {
-                userRepository.deleteAll();
-                userRepository.saveAll(users);
             }
         } catch (Exception e) {
             e.printStackTrace();
