@@ -31,7 +31,6 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("com.sendgrid:sendgrid-java:+")
-    compileOnly('org.projectlombok:lombok:1.18.4')
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile "org.springframework.security:spring-security-data"
