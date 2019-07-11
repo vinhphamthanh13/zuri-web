@@ -42,6 +42,8 @@ public class CommonConstants {
 
     public static final String GET_DOANH_THU_THEO_DANH_MUC_FAIL         = "Có lỗi trong quá trình xử lý doanh thu theo danh mục";
 
+    public static final String DANH_MUC_IS_EXISTED                      = "Danh mục này đã có trong hệ thống.";
+
     /**
      * Bảng giá Error:
      */

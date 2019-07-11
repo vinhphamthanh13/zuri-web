@@ -62,6 +62,8 @@ public class DanhMucService {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new DanhMucDTO(danhMuc));
+                }else{
+                    response.setMessage(CommonConstants.DANH_MUC_IS_EXISTED);
                 }
             }
         } catch (Exception e) {
