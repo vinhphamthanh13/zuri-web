@@ -27,6 +27,8 @@ public class CommonConstants {
 
     public static final String GET_LIST_ORDER_BY_DATE_FAIL              = "Không có dữ liệu hóa đơn. Lỗi hệ thống!";
 
+    public static final String KHUYEN_MAI_IS_EXISTED                    = "Khuyến mãi này đã có trong hệ thống.";
+
     /**
      * Danh Mục Error:
      */

@@ -45,8 +45,7 @@ public class KhuyenMaiService {
                     String toDate = request.getToDate();
                     KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByRateAndFromDateAndToDate(rate, fromDate, toDate);
                     if (khuyenMai != null) {
-                        response.setMessage("Khuyến Mãi đã tồn tại trong hệ thống !");
-                        response.setSuccess(Boolean.FALSE);
+                        response.setMessage(CommonConstants.KHUYEN_MAI_IS_EXISTED);
                     } else {
                         KhuyenMai result = new KhuyenMai();
                         //Find max KhuyenMaiId value
