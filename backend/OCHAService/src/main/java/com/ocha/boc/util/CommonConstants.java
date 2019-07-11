@@ -72,7 +72,7 @@ public class CommonConstants {
 
     public static final String DELETE_MAT_HANG_BY_MAT_HANG_ID_FAIL      = "Không thể xóa thông tin mặt hàng này. Lỗi hệ thống!";
 
-
+    public static final String MAT_HANG_IS_EXISTED                      = "Mặt hàng này đã có trong hệ thống.";
     /**
      * Nguyên liệu Error:
      */

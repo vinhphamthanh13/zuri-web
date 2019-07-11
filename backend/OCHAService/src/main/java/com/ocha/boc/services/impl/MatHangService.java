@@ -45,6 +45,8 @@ public class MatHangService {
                         response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                         response.setObject(new MathangDTO(matHang));
                         matHangRepository.save(matHang);
+                    }else{
+                        response.setMessage(CommonConstants.MAT_HANG_IS_EXISTED);
                     }
                 }
             }
