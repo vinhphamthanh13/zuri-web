@@ -2,6 +2,7 @@ package com.ocha.boc.controllers;
 
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.request.DanhMucRequest;
+import com.ocha.boc.request.DanhMucUpdateRequest;
 import com.ocha.boc.response.DanhMucResponse;
 import com.ocha.boc.response.DoanhThuDanhMucResponse;
 import com.ocha.boc.services.impl.DanhMucService;
@@ -25,7 +26,7 @@ public class DanhMucController {
 
     @ApiOperation(value = "Update Danh Muc")
     @PutMapping("/danh-muc")
-    public ResponseEntity<DanhMucResponse> updateDanhMuc(@RequestBody DanhMucRequest request) {
+    public ResponseEntity<DanhMucResponse> updateDanhMuc(@RequestBody DanhMucUpdateRequest request) {
         DanhMucResponse response = danhMucService.updateDanhMuc(request);
         return ResponseEntity.ok(response);
     }

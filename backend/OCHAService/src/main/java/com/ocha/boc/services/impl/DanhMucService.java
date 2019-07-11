@@ -9,6 +9,7 @@ import com.ocha.boc.entity.Order;
 import com.ocha.boc.repository.DanhMucRepository;
 import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.request.DanhMucRequest;
+import com.ocha.boc.request.DanhMucUpdateRequest;
 import com.ocha.boc.response.DanhMucResponse;
 import com.ocha.boc.response.DoanhThuDanhMucResponse;
 import com.ocha.boc.util.CommonConstants;
@@ -69,13 +70,13 @@ public class DanhMucService {
         return response;
     }
 
-    public DanhMucResponse updateDanhMuc(DanhMucRequest request) {
+    public DanhMucResponse updateDanhMuc(DanhMucUpdateRequest request) {
         DanhMucResponse response = new DanhMucResponse();
         try {
             response.setMessage(CommonConstants.UPDATE_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (request != null) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByName(request.getName());
+                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(request.getDanhMucId());
                 if (danhMuc != null) {
                     if (StringUtils.isNotEmpty(request.getAbbreviations())) {
                         danhMuc.setAbbreviations(request.getAbbreviations());
@@ -87,7 +88,7 @@ public class DanhMucService {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new DanhMucDTO(danhMuc));
-                }else{
+                } else {
                     response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
                 }
             }
@@ -150,7 +151,7 @@ public class DanhMucService {
                     danhMucRepository.delete(danhMuc);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                }else{
+                } else {
                     response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
                 }
             }
