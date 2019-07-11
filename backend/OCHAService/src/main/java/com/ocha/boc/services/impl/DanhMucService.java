@@ -87,6 +87,7 @@ public class DanhMucService {
                         danhMuc.setName(request.getName());
                     }
                     danhMuc.setLastModifiedDate(Instant.now().toString());
+                    danhMucRepository.save(danhMuc);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new DanhMucDTO(danhMuc));
