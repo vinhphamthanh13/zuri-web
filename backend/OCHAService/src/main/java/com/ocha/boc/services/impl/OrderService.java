@@ -132,12 +132,7 @@ public class OrderService {
     }
 
     private void sortingBanChayList(List<MatHangBanChay> banChayList) {
-        Collections.sort(banChayList, new Comparator<MatHangBanChay>() {
-            @Override
-            public int compare(final MatHangBanChay object1, final MatHangBanChay object2) {
-                return object1.getAmountOfConsumption() > object2.getAmountOfConsumption() ? -1 : (object1.getAmountOfConsumption() < object2.getAmountOfConsumption() ? 1 : 0);
-            }
-        });
+        Collections.sort(banChayList, (object1, object2) -> Integer.compare(object2.getAmountOfConsumption(), object1.getAmountOfConsumption()));
     }
 
     private void calcualteCostPriceMatHangBanChay(List<MatHangBanChay> banChayList) {
