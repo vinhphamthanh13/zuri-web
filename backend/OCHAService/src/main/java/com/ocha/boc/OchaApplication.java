@@ -138,9 +138,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             });
             if (!isExisted) {
                 bangGiaDetailRepository.saveAll(bangGiaDetails);
-            } else {
-                bangGiaDetailRepository.deleteAll();
-                bangGiaDetailRepository.saveAll(bangGiaDetails);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,9 +153,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             listMatHang = mapper.readValue(stream, new TypeReference<List<MatHang>>() {
             });
             if (!isExisted) {
-                matHangRepository.saveAll(listMatHang);
-            } else {
-                matHangRepository.deleteAll();
                 matHangRepository.saveAll(listMatHang);
             }
         } catch (Exception e) {
@@ -176,9 +170,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             });
             if (!isExisted) {
                 nguyenLieuRepository.saveAll(listNguyenLieu);
-            } else {
-                nguyenLieuRepository.deleteAll();
-                nguyenLieuRepository.saveAll(listNguyenLieu);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,9 +185,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             orders = mapper.readValue(stream, new TypeReference<List<Order>>() {
             });
             if (!isExisted) {
-                orderRepository.saveAll(orders);
-            } else {
-                orderRepository.deleteAll();
                 orderRepository.saveAll(orders);
             }
         } catch (Exception e) {
@@ -214,9 +202,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             });
             if (!isExisted) {
                 bangGiaRepository.saveAll(bangGias);
-            } else {
-                bangGiaRepository.deleteAll();
-                bangGiaRepository.saveAll(bangGias);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -233,9 +218,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             });
             if (!isExisted) {
                 danhMucRepository.saveAll(danhMucList);
-            } else {
-                danhMucRepository.deleteAll();
-                danhMucRepository.saveAll(danhMucList);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,9 +233,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             khuyenMaiList = mapper.readValue(stream, new TypeReference<List<KhuyenMai>>() {
             });
             if (!isExisted) {
-                khuyenMaiRepository.saveAll(khuyenMaiList);
-            } else {
-                khuyenMaiRepository.deleteAll();
                 khuyenMaiRepository.saveAll(khuyenMaiList);
             }
         } catch (Exception e) {
