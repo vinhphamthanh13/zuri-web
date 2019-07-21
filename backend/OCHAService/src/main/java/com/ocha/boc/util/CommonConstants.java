@@ -101,4 +101,11 @@ public class CommonConstants {
 
     public static final String GET_ALL_USER_FAIL                        = "Hệ thống không tồn tại người dùng nào !";
 
+    /**
+     * Cửa Hàng Error:
+     */
+    public static final String  CREATE_NEW_CUA_HANG_FAIL                = "Không thể tạo mới thông tin cửa hàng này. Lỗi hệ thống!";
+
+    public static final String  UPDATE_CUA_HANG_ID_ON_USER_FAIL         = "Không thể cập nhật thông tin cửa hàng cho tài khoản. Lỗi hệ thống !";
+
 }
