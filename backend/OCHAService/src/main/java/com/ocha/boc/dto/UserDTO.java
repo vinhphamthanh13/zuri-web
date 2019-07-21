@@ -26,6 +26,8 @@ public class UserDTO extends AbstractEntity {
 
     private UserType role;
 
+    private String cuaHangId;
+
     public UserDTO(User user) {
         this.phone = user.getPhone();
         this.email = user.getEmail();
@@ -37,6 +39,7 @@ public class UserDTO extends AbstractEntity {
         this.id = user.getId();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.cuaHangId = user.getCuaHangId();
     }
 
 }

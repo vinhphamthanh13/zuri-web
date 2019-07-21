@@ -34,6 +34,8 @@ public class User extends AbstractEntity {
 
     private UserType role;
 
+    private String cuaHangId;
+
     public User() {
 
     }
@@ -47,5 +49,6 @@ public class User extends AbstractEntity {
         this.isActive = userDTO.isActive();
         this.role = userDTO.getRole();
         this.id = userDTO.getId();
+        this.cuaHangId = userDTO.getCuaHangId();
     }
 }
