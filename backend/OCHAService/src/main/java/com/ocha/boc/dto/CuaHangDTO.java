@@ -26,6 +26,10 @@ public class CuaHangDTO {
 
     private String managerEmail;
 
+    private String createdDate;
+
+    private String lastModifiedDate;
+
     public CuaHangDTO(CuaHang cuaHang) {
         this.id = cuaHang.getId();
         this.moHinhKinhDoanhType = cuaHang.getMoHinhKinhDoanhType();
@@ -35,5 +39,7 @@ public class CuaHangDTO {
         this.managerName = cuaHang.getManagerName();
         this.managerPhone = cuaHang.getManagerPhone();
         this.managerEmail = cuaHang.getManagerEmail();
+        this.createdDate = cuaHang.getCreatedDate();
+        this.lastModifiedDate = cuaHang.getLastModifiedDate();
     }
 }

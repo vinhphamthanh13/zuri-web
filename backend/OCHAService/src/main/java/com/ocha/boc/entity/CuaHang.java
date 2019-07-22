@@ -31,6 +31,10 @@ public class CuaHang {
 
     private String managerEmail;
 
+    private String createdDate;
+
+    private String lastModifiedDate;
+
 
 
 }
