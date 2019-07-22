@@ -31,9 +31,10 @@ public class MatHangService {
         try {
             if (request != null) {
                 if (StringUtils.isNotEmpty(request.getName())) {
-                    boolean isExisted = checkMatHangExisted(request.getName());
+                    boolean isExisted = checkMatHangExisted(request.getName(), request.getCuaHangId());
                     if (!isExisted) {
                         MatHang matHang = new MatHang();
+                        matHang.setCuaHangId(request.getCuaHangId());
                         matHang.setName(request.getName());
                         matHang.setBangGiaId(request.getBangGiaId());
                         matHang.setDanhMucId(request.getDanhMucId());
@@ -62,7 +63,7 @@ public class MatHangService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(request.getId())) {
-                MatHang matHang = matHangRepository.findMatHangById(request.getId());
+                MatHang matHang = matHangRepository.findMatHangByIdAndCuaHangId(request.getId(), request.getCuaHangId());
                 if (matHang != null) {
                     matHang.setName(request.getName());
                     if (StringUtils.isNotEmpty(request.getBangGiaId())) {
@@ -89,13 +90,13 @@ public class MatHangService {
         return response;
     }
 
-    public MatHangResponse findMatHangById(String id) {
+    public MatHangResponse findMatHangById(String cuaHangId,String id) {
         MatHangResponse response = new MatHangResponse();
         response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                MatHang matHang = matHangRepository.findMatHangById(id);
+                MatHang matHang = matHangRepository.findMatHangByIdAndCuaHangId(id,cuaHangId);
                 if (matHang != null) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -108,12 +109,12 @@ public class MatHangService {
         return response;
     }
 
-    public MatHangResponse getAllMatHang() {
+    public MatHangResponse getAllMatHang(String cuaHangId) {
         MatHangResponse response = new MatHangResponse();
         response.setMessage(CommonConstants.GET_ALL_MAT_HANG_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            List<MatHang> matHangList = matHangRepository.findAll();
+            List<MatHang> matHangList = matHangRepository.findAllByCuaHangId(cuaHangId);
             if (CollectionUtils.isNotEmpty(matHangList)) {
                 List<MathangDTO> mathangDTOList = new ArrayList<>();
                 for (MatHang matHang : matHangList) {
@@ -131,13 +132,13 @@ public class MatHangService {
         return response;
     }
 
-    public MatHangResponse deleteMatHangById(String id) {
+    public MatHangResponse deleteMatHangById(String cuaHangId,String id) {
         MatHangResponse response = new MatHangResponse();
         response.setMessage(CommonConstants.DELETE_MAT_HANG_BY_MAT_HANG_ID_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                MatHang matHang = matHangRepository.findMatHangById(id);
+                MatHang matHang = matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId);
                 if (matHang != null) {
                     matHangRepository.delete(matHang);
                     response.setSuccess(Boolean.TRUE);
@@ -152,10 +153,10 @@ public class MatHangService {
         return response;
     }
 
-    private boolean checkMatHangExisted(String name) {
+    private boolean checkMatHangExisted(String name, String cuaHangId) {
         boolean isExisted = false;
         try {
-            MatHang matHang = matHangRepository.findMatHangByName(name);
+            MatHang matHang = matHangRepository.findMatHangByNameAndCuaHangId(name, cuaHangId);
             if (matHang != null) {
                 isExisted = true;
             }

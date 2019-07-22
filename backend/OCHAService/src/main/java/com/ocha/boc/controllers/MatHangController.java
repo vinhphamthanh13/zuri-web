@@ -32,23 +32,23 @@ public class MatHangController {
     }
 
     @ApiOperation(value = "Find Mat Hang By Id")
-    @GetMapping("/mat-hang/{id}")
-    public ResponseEntity<MatHangResponse> findMatHangById(@PathVariable String id) {
-        MatHangResponse response = matHangService.findMatHangById(id);
+    @GetMapping("/mat-hang/{cuaHangId}/{id}")
+    public ResponseEntity<MatHangResponse> findMatHangById(@PathVariable String cuaHangId, @PathVariable String id) {
+        MatHangResponse response = matHangService.findMatHangById(cuaHangId,id);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get All Mat Hang")
     @GetMapping("/mat-hang")
-    public ResponseEntity<MatHangResponse> getAllMatHang() {
-        MatHangResponse response = matHangService.getAllMatHang();
+    public ResponseEntity<MatHangResponse> getAllMatHang(@RequestParam String cuaHangId) {
+        MatHangResponse response = matHangService.getAllMatHang(cuaHangId);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Delete Mat Hang By Id")
-    @DeleteMapping("/mat-hang/{id}")
-    public ResponseEntity<AbstractResponse> deleteMatHangById(@PathVariable String id) {
-        MatHangResponse response = matHangService.deleteMatHangById(id);
+    @DeleteMapping("/mat-hang/{cuaHangId}/{id}")
+    public ResponseEntity<AbstractResponse> deleteMatHangById(@PathVariable String cuaHangId,@PathVariable String id) {
+        MatHangResponse response = matHangService.deleteMatHangById(cuaHangId,id);
         return ResponseEntity.ok(response);
     }
 }

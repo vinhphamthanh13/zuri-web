@@ -19,6 +19,8 @@ public class MathangDTO extends AbstractEntity {
 
     private String khuyenMaiId;
 
+    private String cuaHangId;
+
     public MathangDTO(MatHang matHang) {
         this.id = matHang.getId();
         this.name = matHang.getName();
@@ -27,5 +29,6 @@ public class MathangDTO extends AbstractEntity {
         this.danhMucId = matHang.getDanhMucId();
         this.khuyenMaiId = matHang.getKhuyenMaiId();
         this.lastModifiedDate = matHang.getLastModifiedDate();
+        this.cuaHangId = matHang.getCuaHangId();
     }
 }
