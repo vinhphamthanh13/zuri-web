@@ -24,22 +24,22 @@ public class KhuyenMaiController {
 
     @ApiOperation(value = "Get all Khuyen Mai")
     @GetMapping("/khuyen-mai")
-    public ResponseEntity<KhuyenMaiResponse> getAllKhuyenMai() {
-        KhuyenMaiResponse response = khuyenMaiService.getAllKhuyenMai();
+    public ResponseEntity<KhuyenMaiResponse> getAllKhuyenMai(@RequestParam String cuaHangId) {
+        KhuyenMaiResponse response = khuyenMaiService.getAllKhuyenMai(cuaHangId);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get Khuyen Mai By KhuyenMaiId")
-    @GetMapping("/khuyen-mai/{id}")
-    public ResponseEntity<KhuyenMaiResponse> getKhuyenMaiByKhuyenMaiId(@PathVariable String id) {
-        KhuyenMaiResponse response = khuyenMaiService.getKhuyenMaiByKhuyenMaiId(id);
+    @GetMapping("/khuyen-mai/{cuaHangId}/{id}")
+    public ResponseEntity<KhuyenMaiResponse> getKhuyenMaiByKhuyenMaiId(@PathVariable String cuaHangId,@PathVariable String id) {
+        KhuyenMaiResponse response = khuyenMaiService.getKhuyenMaiByKhuyenMaiId(cuaHangId, id);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Delete Khuyen Mai By KhuyenMaiId")
-    @DeleteMapping("/khuyen-mai/{id}")
-    public ResponseEntity<KhuyenMaiResponse> deleteKhuyenMaiByKhuyenMaiId(@PathVariable String id) {
-        KhuyenMaiResponse response = khuyenMaiService.deleteKhuyenMaiByKhuyenMaiId(id);
+    @DeleteMapping("/khuyen-mai/{cuaHangId}/{id}")
+    public ResponseEntity<KhuyenMaiResponse> deleteKhuyenMaiByKhuyenMaiId(@PathVariable String cuaHangId, @PathVariable String id) {
+        KhuyenMaiResponse response = khuyenMaiService.deleteKhuyenMaiByKhuyenMaiId(cuaHangId , id);
         return ResponseEntity.ok(response);
     }
 

@@ -43,7 +43,7 @@ public class KhuyenMaiService {
                     double rate = request.getRate();
                     String fromDate = request.getFromDate();
                     String toDate = request.getToDate();
-                    KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByRateAndFromDateAndToDate(rate, fromDate, toDate);
+                    KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByRateAndFromDateAndToDateAndCuaHangId(rate, fromDate, toDate, request.getCuaHangId());
                     if (khuyenMai != null) {
                         response.setMessage(CommonConstants.KHUYEN_MAI_IS_EXISTED);
                     } else {
@@ -60,6 +60,7 @@ public class KhuyenMaiService {
                         result.setFromDate(fromDate);
                         result.setToDate(toDate);
                         result.setRate(rate);
+                        result.setCuaHangId(request.getCuaHangId());
                         result.setCreatedDate(Instant.now().toString());
                         khuyenMaiRepository.save(result);
                         response.setSuccess(Boolean.TRUE);
@@ -74,12 +75,12 @@ public class KhuyenMaiService {
         return response;
     }
 
-    public KhuyenMaiResponse getAllKhuyenMai() {
+    public KhuyenMaiResponse getAllKhuyenMai(String cuaHangId) {
         KhuyenMaiResponse response = new KhuyenMaiResponse();
         response.setMessage(CommonConstants.GET_ALL_KHUYEN_MAI_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            List<KhuyenMai> listKhuyenMai = khuyenMaiRepository.findAll();
+            List<KhuyenMai> listKhuyenMai = khuyenMaiRepository.findAllByCuaHangId(cuaHangId);
             if (CollectionUtils.isNotEmpty(listKhuyenMai)) {
                 List<KhuyenMaiDTO> khuyenMaiDTOList = new ArrayList<KhuyenMaiDTO>();
                 for (KhuyenMai temp : listKhuyenMai) {
@@ -96,13 +97,13 @@ public class KhuyenMaiService {
         return response;
     }
 
-    public KhuyenMaiResponse getKhuyenMaiByKhuyenMaiId(String id) {
+    public KhuyenMaiResponse getKhuyenMaiByKhuyenMaiId(String cuaHangId,String id) {
         KhuyenMaiResponse response = new KhuyenMaiResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_KHUYEN_MAI_BY_KHUYEN_MAI_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByKhuyenMaiId(id);
+                KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByKhuyenMaiIdAndCuaHangId(id,cuaHangId);
                 if (khuyenMai != null) {
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
@@ -115,13 +116,13 @@ public class KhuyenMaiService {
         return response;
     }
 
-    public KhuyenMaiResponse deleteKhuyenMaiByKhuyenMaiId(String id) {
+    public KhuyenMaiResponse deleteKhuyenMaiByKhuyenMaiId(String cuaHangId,String id) {
         KhuyenMaiResponse response = new KhuyenMaiResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.DELETE_KHUYEN_MAI_BY_KHUYEN_MAI_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByKhuyenMaiId(id);
+                KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByKhuyenMaiIdAndCuaHangId(id, cuaHangId);
                 if (khuyenMai != null) {
                     khuyenMaiRepository.delete(khuyenMai);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -140,7 +141,7 @@ public class KhuyenMaiService {
         response.setMessage(CommonConstants.UPDATE_KHUYEN_MAI_FAIL);
         try {
             if (StringUtils.isNotEmpty(request.getKhuyenMaiId())) {
-                KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByKhuyenMaiId(request.getKhuyenMaiId());
+                KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByKhuyenMaiIdAndCuaHangId(request.getKhuyenMaiId(), request.getCuaHangId());
                 if (khuyenMai == null) {
                     response.setMessage(CommonConstants.GET_KHUYEN_MAI_BY_KHUYEN_MAI_ID_FAIL);
                 } else {

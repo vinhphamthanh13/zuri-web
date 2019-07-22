@@ -19,6 +19,8 @@ public class KhuyenMaiDTO extends AbstractEntity {
 
     private String toDate;
 
+    private String cuaHangId;
+
     public KhuyenMaiDTO(KhuyenMai khuyenMai) {
         this.khuyenMaiId = khuyenMai.getKhuyenMaiId();
         this.rate = khuyenMai.getRate();
@@ -27,5 +29,6 @@ public class KhuyenMaiDTO extends AbstractEntity {
         this.id = khuyenMai.getId();
         this.createdDate = khuyenMai.getCreatedDate();
         this.lastModifiedDate = khuyenMai.getLastModifiedDate();
+        this.cuaHangId = khuyenMai.getCuaHangId();
     }
 }

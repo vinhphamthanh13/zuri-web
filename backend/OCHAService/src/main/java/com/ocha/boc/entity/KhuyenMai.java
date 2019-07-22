@@ -22,5 +22,7 @@ public class KhuyenMai extends AbstractEntity {
 
     private String toDate;
 
+    private String cuaHangId;
+
 
 }

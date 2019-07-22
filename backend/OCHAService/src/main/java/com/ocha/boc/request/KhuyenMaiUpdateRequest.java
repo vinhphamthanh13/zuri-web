@@ -18,4 +18,6 @@ public class KhuyenMaiUpdateRequest implements Serializable {
     private String fromDate;
 
     private String toDate;
+
+    private String cuaHangId;
 }
