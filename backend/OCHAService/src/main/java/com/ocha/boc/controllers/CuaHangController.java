@@ -1,6 +1,7 @@
 package com.ocha.boc.controllers;
 
 import com.ocha.boc.request.CuaHangRequest;
+import com.ocha.boc.request.CuaHangUpdateRequest;
 import com.ocha.boc.response.CuaHangResponse;
 import com.ocha.boc.services.impl.CuaHangService;
 import io.swagger.annotations.ApiOperation;
@@ -25,11 +26,11 @@ public class CuaHangController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Update Email Cua Hang")
+    @ApiOperation("Update Cua Hang Information")
     @PutMapping("/cua-hang/email")
-    public ResponseEntity<CuaHangResponse> updateEmailCuaHang(@RequestParam String email, @RequestParam String cuaHangId){
+    public ResponseEntity<CuaHangResponse> updateEmailCuaHang(@RequestBody CuaHangUpdateRequest request){
         log.info("START: update email cua hang");
-        CuaHangResponse response = cuaHangService.updateEmailCuaHang(email, cuaHangId);
+        CuaHangResponse response = cuaHangService.updateEmailCuaHang(request);
         log.info("END: update email cua hang");
         return ResponseEntity.ok(response);
     }

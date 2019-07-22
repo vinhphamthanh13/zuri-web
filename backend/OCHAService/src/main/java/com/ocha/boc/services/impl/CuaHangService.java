@@ -5,12 +5,15 @@ import com.ocha.boc.entity.User;
 import com.ocha.boc.repository.CuaHangRepository;
 import com.ocha.boc.repository.UserRepository;
 import com.ocha.boc.request.CuaHangRequest;
+import com.ocha.boc.request.CuaHangUpdateRequest;
 import com.ocha.boc.response.CuaHangResponse;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 @Service
 @Slf4j
@@ -36,6 +39,7 @@ public class CuaHangService {
                     cuaHang.setManagerName(request.getManagerName());
                     cuaHang.setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
                     cuaHang.setManagerPhone(request.getManagerPhone());
+                    cuaHang.setCreatedDate(Instant.now().toString());
                     if(StringUtils.isNotEmpty(request.getAddress())){
                         cuaHang.setAddress(request.getAddress());
                     }
@@ -64,18 +68,25 @@ public class CuaHangService {
         return response;
     }
 
-    public CuaHangResponse updateEmailCuaHang(String email, String cuaHangId){
+    public CuaHangResponse updateEmailCuaHang(CuaHangUpdateRequest request){
         CuaHangResponse response = new CuaHangResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.UPDATE_EMAIL_CUA_HANG_FAIL);
         try{
-            if(StringUtils.isNotEmpty(cuaHangId)){
-                CuaHang cuaHang = cuaHangRepository.findCuaHangById(cuaHangId);
-                if(cuaHang == null){
-                    response.setMessage(CommonConstants.CUA_HANG_IS_NOT_EXISTED);
-                }else{
-                    if(StringUtils.isNotEmpty(email)){
-                        cuaHang.setManagerEmail(email);
+            if(request!=null){
+                if(StringUtils.isNotEmpty(request.getId())){
+                    CuaHang cuaHang = cuaHangRepository.findCuaHangById(request.getId());
+                    if(cuaHang != null){
+                        if(StringUtils.isNotEmpty(request.getAddress())){
+                            cuaHang.setAddress(request.getAddress());
+                        }
+                        if(StringUtils.isNotEmpty(request.getManagerEmail())){
+                            cuaHang.setManagerEmail(request.getManagerEmail());
+                        }
+                        if(StringUtils.isNotEmpty(request.getMoHinhKinhDoanhType().label)){
+                            cuaHang.setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
+                        }
+                        cuaHang.setLastModifiedDate(Instant.now().toString());
                         cuaHangRepository.save(cuaHang);
                     }
                 }
