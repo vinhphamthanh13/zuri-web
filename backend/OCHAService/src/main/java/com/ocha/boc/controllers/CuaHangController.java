@@ -7,9 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -26,4 +24,14 @@ public class CuaHangController {
         log.info("END: create new cua hang");
         return ResponseEntity.ok(response);
     }
+
+    @ApiOperation("Update Email Cua Hang")
+    @PutMapping("/cua-hang/email")
+    public ResponseEntity<CuaHangResponse> updateEmailCuaHang(@RequestParam String email, @RequestParam String cuaHangId){
+        log.info("START: update email cua hang");
+        CuaHangResponse response = cuaHangService.updateEmailCuaHang(email, cuaHangId);
+        log.info("END: update email cua hang");
+        return ResponseEntity.ok(response);
+    }
+
 }

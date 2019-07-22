@@ -64,6 +64,28 @@ public class CuaHangService {
         return response;
     }
 
+    public CuaHangResponse updateEmailCuaHang(String email, String cuaHangId){
+        CuaHangResponse response = new CuaHangResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.UPDATE_EMAIL_CUA_HANG_FAIL);
+        try{
+            if(StringUtils.isNotEmpty(cuaHangId)){
+                CuaHang cuaHang = cuaHangRepository.findCuaHangById(cuaHangId);
+                if(cuaHang == null){
+                    response.setMessage(CommonConstants.CUA_HANG_IS_NOT_EXISTED);
+                }else{
+                    if(StringUtils.isNotEmpty(email)){
+                        cuaHang.setManagerEmail(email);
+                        cuaHangRepository.save(cuaHang);
+                    }
+                }
+            }
+        }catch (Exception e){
+            log.error("Error while updateEmailCuaHang: {}", e);
+        }
+        return response;
+    }
+
 
     private boolean checkInforCuaHangIsExisted(String phone){
         boolean isExisted =false;
