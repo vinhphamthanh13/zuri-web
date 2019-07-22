@@ -55,6 +55,7 @@ public class DanhMucService {
                         //init first record in DB
                         danhMuc.setDanhMucId(NUMBER_ONE);
                     }
+                    danhMuc.setCuaHangId(request.getCuaHangId());
                     danhMuc.setAbbreviations(request.getAbbreviations());
                     danhMuc.setName(request.getName());
                     danhMuc.setCreatedDate(Instant.now().toString());
@@ -78,8 +79,11 @@ public class DanhMucService {
             response.setMessage(CommonConstants.UPDATE_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (request != null) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(request.getDanhMucId());
+                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(), request.getCuaHangId());
                 if (danhMuc != null) {
+                    if(StringUtils.isNotEmpty(request.getCuaHangId())){
+                        danhMuc.setCuaHangId(request.getCuaHangId());
+                    }
                     if (StringUtils.isNotEmpty(request.getAbbreviations())) {
                         danhMuc.setAbbreviations(request.getAbbreviations());
                     }
@@ -101,13 +105,13 @@ public class DanhMucService {
         return response;
     }
 
-    public DanhMucResponse findDanhMucByDanhMucId(String id) {
+    public DanhMucResponse findDanhMucByDanhMucId(String id, String cuaHangId) {
         DanhMucResponse response = new DanhMucResponse();
         try {
             response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(id);
+                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
                 if (danhMuc != null) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -120,12 +124,12 @@ public class DanhMucService {
         return response;
     }
 
-    public DanhMucResponse getAllDanhMuc() {
+    public DanhMucResponse getAllDanhMuc(String cuaHangId) {
         DanhMucResponse response = new DanhMucResponse();
         try {
             response.setMessage(CommonConstants.GET_ALL_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
-            List<DanhMuc> listDanhMuc = danhMucRepository.findAll();
+            List<DanhMuc> listDanhMuc = danhMucRepository.findAllByCuaHangId(cuaHangId);
             if (CollectionUtils.isNotEmpty(listDanhMuc)) {
                 List<DanhMucDTO> danhMucDTOList = new ArrayList<>();
                 for (DanhMuc danhMuc : listDanhMuc) {
@@ -143,13 +147,13 @@ public class DanhMucService {
         return response;
     }
 
-    public AbstractResponse deleteDanhMucByDanhMucId(String id) {
+    public AbstractResponse deleteDanhMucByDanhMucId(String id, String cuaHangId) {
         AbstractResponse response = new AbstractResponse();
         try {
             response.setMessage(CommonConstants.DELETE_DANH_MUC_BY_DANH_MUC_ID_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucId(id);
+                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
                 if (danhMuc != null) {
                     danhMucRepository.delete(danhMuc);
                     response.setSuccess(Boolean.TRUE);
@@ -164,22 +168,22 @@ public class DanhMucService {
         return response;
     }
 
-    public DoanhThuDanhMucResponse getDoanhThuTheoDanhMucByDate(String date) {
+    public DoanhThuDanhMucResponse getDoanhThuTheoDanhMucByDate(String date, String cuaHangId) {
         DoanhThuDanhMucResponse response = null;
         try {
-            response = buildDoanhThuDanhMucResponse(date);
+            response = buildDoanhThuDanhMucResponse(date, cuaHangId);
         } catch (Exception e) {
             log.error("Error when getDoanhThuTheoDanhMucByDate: {}", e);
         }
         return response;
     }
 
-    private DoanhThuDanhMucResponse buildDoanhThuDanhMucResponse(String date) {
+    private DoanhThuDanhMucResponse buildDoanhThuDanhMucResponse(String date, String cuaHangId) {
         DoanhThuDanhMucResponse response = new DoanhThuDanhMucResponse();
         response.setMessage(CommonConstants.GET_DOANH_THU_THEO_DANH_MUC_FAIL);
         response.setSuccess(Boolean.FALSE);
         List<Order> orders = orderRepository.findListOrderByCreateDate(date);
-        List<DoanhThuDanhMuc> doanhThuDanhMucList = buildListDoanhThuTheoDanhMuc(orders);
+        List<DoanhThuDanhMuc> doanhThuDanhMucList = buildListDoanhThuTheoDanhMuc(orders , cuaHangId);
         if (CollectionUtils.isNotEmpty(doanhThuDanhMucList)) {
             response.setSuccess(Boolean.TRUE);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -189,13 +193,13 @@ public class DanhMucService {
         return response;
     }
 
-    private List<DoanhThuDanhMuc> buildListDoanhThuTheoDanhMuc(List<Order> orders) {
+    private List<DoanhThuDanhMuc> buildListDoanhThuTheoDanhMuc(List<Order> orders, String cuaHangId) {
         List<DoanhThuDanhMuc> listDoanhThu = new ArrayList<DoanhThuDanhMuc>();
         if (CollectionUtils.isNotEmpty(orders)) {
             for (Order orderTemp : orders) {
                 List<MatHangTieuThu> matHangTieuThuList = orderTemp.getListMatHangTieuThu();
                 for (MatHangTieuThu matHangTieuThu : matHangTieuThuList) {
-                    DoanhThuDanhMuc doanhThu = createDoanhThuDanhMuc(matHangTieuThu);
+                    DoanhThuDanhMuc doanhThu = createDoanhThuDanhMuc(matHangTieuThu, cuaHangId);
                     boolean isExist = checkDoanhThuDanhMucExist(doanhThu, listDoanhThu);
                     if (isExist) {
                         listDoanhThu = updateAmountOfConsumptionAndCalculateCostPrice(doanhThu, listDoanhThu);
@@ -210,18 +214,18 @@ public class DanhMucService {
         return listDoanhThu;
     }
 
-    private DoanhThuDanhMuc createDoanhThuDanhMuc(MatHangTieuThu matHangTieuThu) {
+    private DoanhThuDanhMuc createDoanhThuDanhMuc(MatHangTieuThu matHangTieuThu, String cuaHangId) {
         DoanhThuDanhMuc doanhThu = new DoanhThuDanhMuc();
         doanhThu.setAmountOfConsumption(matHangTieuThu.getAmountOfConsumption());
         doanhThu.setUnitPrice(matHangTieuThu.getUnitPrice());
-        DanhMuc danhMuc = getDanhMucByDanhMucId(matHangTieuThu.getMatHang().getDanhMucId());
+        DanhMuc danhMuc = getDanhMucByDanhMucId(matHangTieuThu.getMatHang().getDanhMucId(), cuaHangId);
         doanhThu.setDanhMuc(danhMuc);
         return doanhThu;
     }
 
-    private DanhMuc getDanhMucByDanhMucId(String danhMucId) {
+    private DanhMuc getDanhMucByDanhMucId(String danhMucId, String cuaHangId) {
         DanhMuc danhMuc = new DanhMuc();
-        danhMuc = danhMucRepository.findDanhMucByDanhMucId(danhMucId);
+        danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(danhMucId, cuaHangId);
         return danhMuc;
     }
 

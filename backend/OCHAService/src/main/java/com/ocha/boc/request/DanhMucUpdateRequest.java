@@ -16,4 +16,6 @@ public class DanhMucUpdateRequest implements Serializable {
     private String name;
 
     private String danhMucId;
+
+    private String cuaHangId;
 }

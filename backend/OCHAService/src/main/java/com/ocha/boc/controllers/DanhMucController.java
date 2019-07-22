@@ -33,30 +33,30 @@ public class DanhMucController {
 
 
     @ApiOperation(value = "Find Danh muc By DanhMucId")
-    @GetMapping("/danh-muc/{id}")
-    public ResponseEntity<DanhMucResponse> findDanhMucById(@PathVariable String id) {
-        DanhMucResponse response = danhMucService.findDanhMucByDanhMucId(id);
+    @GetMapping("/danh-muc/{cuaHangId}/{id}")
+    public ResponseEntity<DanhMucResponse> findDanhMucById( @PathVariable String cuaHangId,@PathVariable String id) {
+        DanhMucResponse response = danhMucService.findDanhMucByDanhMucId(id, cuaHangId);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get all Danh Muc")
     @GetMapping("/danh-muc")
-    public ResponseEntity<DanhMucResponse> getAllDanhMuc() {
-        DanhMucResponse response = danhMucService.getAllDanhMuc();
+    public ResponseEntity<DanhMucResponse> getAllDanhMuc(@RequestParam String cuaHangId) {
+        DanhMucResponse response = danhMucService.getAllDanhMuc(cuaHangId);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Delete Danh Muc By DanhMucId")
-    @DeleteMapping("/danh-muc/{id}")
-    public ResponseEntity<AbstractResponse> deleteDanhMucById(@PathVariable String id) {
-        AbstractResponse response = danhMucService.deleteDanhMucByDanhMucId(id);
+    @DeleteMapping("/danh-muc/{cuaHangId}/{id}")
+    public ResponseEntity<AbstractResponse> deleteDanhMucById(@PathVariable String cuaHangId,@PathVariable String id) {
+        AbstractResponse response = danhMucService.deleteDanhMucByDanhMucId(id, cuaHangId);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get Doanh Thu Theo Danh Muc By Date")
-    @GetMapping("/danh-muc/doanh-thu/{date}")
-    public ResponseEntity<DoanhThuDanhMucResponse> getDoanhThuTheoDanhMucByDate(@PathVariable String date) {
-        DoanhThuDanhMucResponse response = danhMucService.getDoanhThuTheoDanhMucByDate(date);
+    @GetMapping("/danh-muc/doanh-thu/{cuaHangId}/{date}")
+    public ResponseEntity<DoanhThuDanhMucResponse> getDoanhThuTheoDanhMucByDate(@PathVariable String cuaHangId, @PathVariable String date) {
+        DoanhThuDanhMucResponse response = danhMucService.getDoanhThuTheoDanhMucByDate(date, cuaHangId);
         return ResponseEntity.ok(response);
     }
 }

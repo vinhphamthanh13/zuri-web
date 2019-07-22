@@ -19,4 +19,6 @@ public class DanhMuc extends AbstractEntity {
     private String name;
 
     private String danhMucId;
+
+    private String cuaHangId;
 }

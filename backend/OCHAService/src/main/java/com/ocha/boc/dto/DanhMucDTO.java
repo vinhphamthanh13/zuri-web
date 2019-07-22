@@ -18,6 +18,8 @@ public class DanhMucDTO extends AbstractEntity {
 
     private String danhMucId;
 
+    private String cuaHangId;
+
     public DanhMucDTO(DanhMuc danhMuc) {
         this.abbreviations = danhMuc.getAbbreviations();
         this.name = danhMuc.getName();
@@ -25,5 +27,6 @@ public class DanhMucDTO extends AbstractEntity {
         this.danhMucId = danhMuc.getDanhMucId();
         this.createdDate = danhMuc.getCreatedDate();
         this.lastModifiedDate = danhMuc.getLastModifiedDate();
+        this.cuaHangId = danhMuc.getCuaHangId();
     }
 }

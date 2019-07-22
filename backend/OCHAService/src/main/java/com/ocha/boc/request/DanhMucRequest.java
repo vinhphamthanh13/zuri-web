@@ -14,4 +14,6 @@ public class DanhMucRequest implements Serializable {
     private String abbreviations;
 
     private String name;
+
+    private String cuaHangId;
 }
