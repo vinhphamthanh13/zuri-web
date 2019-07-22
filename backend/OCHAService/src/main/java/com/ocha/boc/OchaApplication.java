@@ -123,12 +123,12 @@ public class OchaApplication extends SpringBootServletInitializer {
         initOrder(db);
     }
 
-    public MongoClient connectMongoDB() {
+    private MongoClient connectMongoDB() {
         MongoClient mongo = new MongoClient(mongoDBHostName, mongoDBPortNumber);
         return mongo;
     }
 
-    public void initBangGiaDetail(MongoDatabase db) {
+    private void initBangGiaDetail(MongoDatabase db) {
         try {
             boolean isExisted = checkExistsCollectionName(db, bangGiaDetailTableName);
             List<BangGiaDetail> bangGiaDetails = new ArrayList<BangGiaDetail>();
@@ -144,7 +144,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         }
     }
 
-    public void initMatHangTable(MongoDatabase db) {
+    private void initMatHangTable(MongoDatabase db) {
         try {
             boolean isExisted = checkExistsCollectionName(db, matHangTableName);
             List<MatHang> listMatHang = new ArrayList<MatHang>();
@@ -160,7 +160,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         }
     }
 
-    public void initNguyenLieuTable(MongoDatabase db) {
+    private void initNguyenLieuTable(MongoDatabase db) {
         try {
             boolean isExisted = checkExistsCollectionName(db, nguyenLieuTableName);
             List<NguyenLieu> listNguyenLieu = new ArrayList<NguyenLieu>();
@@ -176,7 +176,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         }
     }
 
-    public void initOrder(MongoDatabase db) {
+    private void initOrder(MongoDatabase db) {
         try {
             boolean isExisted = checkExistsCollectionName(db, orderTableName);
             List<Order> orders = new ArrayList<Order>();
@@ -192,7 +192,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         }
     }
 
-    public void initBangGia(MongoDatabase db) {
+    private void initBangGia(MongoDatabase db) {
         try {
             boolean isExisted = checkExistsCollectionName(db, bangGiaTableName);
             List<BangGia> bangGias = new ArrayList<BangGia>();
@@ -208,7 +208,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         }
     }
 
-    public void initDanhMuc(MongoDatabase db) {
+    private void initDanhMuc(MongoDatabase db) {
         try {
             boolean isExisted = checkExistsCollectionName(db, danhMucTableName);
             List<DanhMuc> danhMucList = new ArrayList<DanhMuc>();
@@ -224,7 +224,7 @@ public class OchaApplication extends SpringBootServletInitializer {
         }
     }
 
-    public void initKhuyenMai(MongoDatabase db) {
+    private void initKhuyenMai(MongoDatabase db) {
         try {
             boolean isExisted = checkExistsCollectionName(db, khuyenMaiTableName);
             List<KhuyenMai> khuyenMaiList = new ArrayList<KhuyenMai>();
