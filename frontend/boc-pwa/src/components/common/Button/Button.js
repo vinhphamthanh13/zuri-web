@@ -23,8 +23,10 @@ class Button extends Component {
   render() {
     const { label, className, onClick, disabled } = this.props;
     const props = {
-      className: `${s.button} ${className}`,
-      onClick: !disabled ? onClick : noop,
+      className: disabled
+        ? `${s.button} ${className} ${s.disabled}`
+        : `${s.button} ${className}`,
+      onClick: disabled ? noop : onClick,
     };
 
     return (

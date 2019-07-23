@@ -1,6 +1,0 @@
-{
-  "name": "Overlay",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./Overlay.js"
-}

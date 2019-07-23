@@ -125,13 +125,29 @@
   --size-72: calc(var(--unit) * 4.5);     /* 72px */
   --size-78: calc(var(--unit) * 4.875);   /* 78px */
   --size-86: calc(var(--unit) * 5.375);   /* 86px */
+
+  /* Standards */
+
+  /* Size */
+
+  --size-header-bar: var(--size-44);
+  --size-padding: var(--size-18);
+  --size-input-height: var(--font-size-36);
+
+  /* Font */
+
+  --font-size-caption: var(--size-10);
+  --font-size-small: var(--size-12);
+  --font-size-input: var(--size-16);
+  --font-size-label: var(--size-18);
+  --font-size-header: var(--size-20);
 }
 
 @custom-media --smartphones only screen and (min-device-width: 320px) and (max-device-width: 480px);
 
-/* @custom-media --smartphones-landscape only screen and (min-device-width: 321px) and (orientation: landscape); */
+/* @custom-media --smart phones-landscape only screen and (min-device-width: 321px) and (orientation: landscape); */
 
-/* @custom-media --smartphones-portrait only screen and (max-width: 320px); */
+/* @custom-media --smart phones-portrait only screen and (max-width: 320px); */
 
 @custom-media --ipads-landscape only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape);
 @custom-media --ipads-portrait only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait);

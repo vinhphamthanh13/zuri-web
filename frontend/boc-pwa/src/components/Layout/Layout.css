@@ -39,7 +39,6 @@ body {
 
 .layout {
   position: relative;
-  min-height: 100vh;
   background-color: var(--c-bright);
 }
 
@@ -200,81 +199,94 @@ textarea {
   }
 }
 
-@media (--smartphones) {
-  :root {
-    --displayMessageSupport: none;
-    --displayMainContent: block;
-  }
+/* Layout selection */
+
+.w360H640 {
+  width: 360px;
+  height: 640px;
 }
 
-@media (--ipads-landscape) {
-  .layout {
-    min-height: var(--max-height-ipad);
-  }
+.w640H360 {
+  width: 640px;
+  height: 360px;
 }
 
-@media (--ipad3-landscape) {
-  .layout {
-    min-height: var(--max-height-ipad);
-  }
+.w414H896 {
+  width: 414px;
+  height: 896px;
 }
 
-@media (--ipadPro-landscape) {
-  .layout {
-    min-height: var(--max-height-ipad-pro);
-  }
+.w896H414 {
+  width: 896px;
+  height: 414px;
 }
 
-@media (--iphone4-landscape) {
-  .layout {
-    min-height: var(--max-height-iphone4);
-  }
+.w812H375 {
+  width: 812px;
+  height: 375px;
 }
 
-@media (--iphone5-landscape) {
-  .layout {
-    min-height: var(--max-height-iphone5);
-  }
+.w375H812 {
+  width: 375px;
+  height: 812px;
 }
 
-@media (--iphone678-landscape) {
-  .layout {
-    min-height: var(--max-height-iphone6);
-  }
+.w414H736 {
+  width: 414px;
+  height: 736px;
 }
 
-@media (--iphone678-p-landscape) {
-  .layout {
-    min-height: var(--max-height-iphone6p);
-  }
+.w736H414 {
+  width: 736px;
+  height: 414px;
 }
 
-@media (--iphoneX-landscape) {
-  .layout {
-    min-height: var(--max-height-iphoneX);
-  }
+.w375H667 {
+  width: 375px;
+  height: 667px;
 }
 
-@media (--iphoneXMR-landscape) {
-  .layout {
-    min-height: var(--max-height-iphoneXMR);
-  }
+.w667H375 {
+  width: 667px;
+  height: 667px;
 }
 
-@media (--galaxyS3-landscape) {
-  .layout {
-    min-height: var(--max-height-android);
-  }
+.w320H568 {
+  width: 320px;
+  height: 568px;
 }
 
-@media (--galaxyS4-landscape) {
-  .layout {
-    min-height: var(--max-height-android);
-  }
+.w568H320 {
+  width: 568px;
+  height: 320px;
 }
 
-@media (--galaxyS5-landscape) {
-  .layout {
-    min-height: var(--max-height-android);
-  }
+.w320H480 {
+  width: 320px;
+  height: 480px;
+}
+
+.w480H320 {
+  width: 480px;
+  height: 320px;
+}
+
+.w1024H1366 {
+  width: 1024px;
+  height: 1366px;
+}
+
+.w1366H1024 {
+  width: 1366px;
+  height: 1024px;
+}
+
+.w768H1024 {
+  width: 768px;
+  height: 1024px;
+}
+
+.w1024H768 {
+  width: 1024px;
+  height: 768px;
 }
