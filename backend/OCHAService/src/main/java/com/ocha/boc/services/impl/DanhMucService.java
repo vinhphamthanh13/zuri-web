@@ -182,7 +182,7 @@ public class DanhMucService {
         DoanhThuDanhMucResponse response = new DoanhThuDanhMucResponse();
         response.setMessage(CommonConstants.GET_DOANH_THU_THEO_DANH_MUC_FAIL);
         response.setSuccess(Boolean.FALSE);
-        List<Order> orders = orderRepository.findListOrderByCreateDate(date);
+        List<Order> orders = orderRepository.findListOrderByCreateDateAndCuaHangId(date, cuaHangId);
         List<DoanhThuDanhMuc> doanhThuDanhMucList = buildListDoanhThuTheoDanhMuc(orders , cuaHangId);
         if (CollectionUtils.isNotEmpty(doanhThuDanhMucList)) {
             response.setSuccess(Boolean.TRUE);
