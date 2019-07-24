@@ -23,6 +23,8 @@ public class OrderDTO {
 
     private List<MatHangTieuThu> listMatHangTieuThu;
 
+    private String cuaHangId;
+
 
     public OrderDTO(Order order) {
         this.id = order.getId();
@@ -30,5 +32,6 @@ public class OrderDTO {
         this.total = order.getTotal();
         this.sumOfKhuyenMaiPrice = order.getSumOfKhuyenMaiPrice();
         this.listMatHangTieuThu = order.getListMatHangTieuThu();
+        this.cuaHangId = order.getCuaHangId();
     }
 }

@@ -33,21 +33,21 @@ public class OrderService {
     @Autowired
     private KhuyenMaiRepository khuyenMaiRepository;
 
-    public MatHangBanChayResponse getListMatHangBanChay() {
+    public MatHangBanChayResponse getListMatHangBanChay(String cuaHangId) {
         MatHangBanChayResponse response = null;
         try {
             String currentDate = DateUtils.getCurrentDate();
-            response = buildMatHangBanChayResponse(currentDate);
+            response = buildMatHangBanChayResponse(currentDate, cuaHangId);
         } catch (Exception e) {
             log.error("Error when getListMatHangBanChay: {}", e);
         }
         return response;
     }
 
-    public MatHangBanChayResponse getListMatHangBanChayByDate(String date) {
+    public MatHangBanChayResponse getListMatHangBanChayByDate(String date, String cuaHangId) {
         MatHangBanChayResponse response = null;
         try {
-            response = buildMatHangBanChayResponse(date);
+            response = buildMatHangBanChayResponse(date,cuaHangId);
         } catch (Exception e) {
             log.error("Error when getListMatHangBanChay: {}", e);
         }
@@ -55,11 +55,11 @@ public class OrderService {
     }
 
 
-    private MatHangBanChayResponse buildMatHangBanChayResponse(String date) {
+    private MatHangBanChayResponse buildMatHangBanChayResponse(String date, String cuaHangId) {
         MatHangBanChayResponse response = new MatHangBanChayResponse();
         response.setMessage(CommonConstants.STR_FAIL_STATUS);
         response.setSuccess(Boolean.FALSE);
-        List<Order> orders = orderRepository.findListOrderByCreateDate(date);
+        List<Order> orders = orderRepository.findListOrderByCreateDateAndCuaHangId(date, cuaHangId);
         List<MatHangBanChay> matHangBanChayList = buildListMatHangBanChay(orders);
         if (CollectionUtils.isNotEmpty(matHangBanChayList)) {
             response.setSuccess(Boolean.TRUE);
@@ -145,12 +145,12 @@ public class OrderService {
         }
     }
 
-    public OrderResponse findListOrderByDate(String date) {
+    public OrderResponse findListOrderByDate(String date, String cuaHangId) {
         OrderResponse response = new OrderResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_LIST_ORDER_BY_DATE_FAIL);
         try {
-            List<Order> orders = orderRepository.findListOrderByCreateDate(date);
+            List<Order> orders = orderRepository.findListOrderByCreateDateAndCuaHangId(date,cuaHangId);
             if (CollectionUtils.isNotEmpty(orders)) {
                 List<OrderDTO> orderDTOS = new ArrayList<OrderDTO>();
                 for (Order order : orders) {

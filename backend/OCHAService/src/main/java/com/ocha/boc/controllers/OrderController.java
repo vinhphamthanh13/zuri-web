@@ -19,28 +19,28 @@ public class OrderController {
     private OrderService orderService;
 
     @ApiOperation(value = "Get List Mat Hang Ban Chay")
-    @GetMapping("/order/mat-hang-ban-chay")
-    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChay() {
+    @GetMapping("/order/{cuaHangId}/mat-hang-ban-chay")
+    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChay(@PathVariable("cuaHangId") String cuaHangId) {
         log.info("START: getListMatHangBanChay");
-        MatHangBanChayResponse response = orderService.getListMatHangBanChay();
+        MatHangBanChayResponse response = orderService.getListMatHangBanChay(cuaHangId);
         log.info("END: getListMatHangBanChay");
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get List Mat Hang Ban Chay By Date")
-    @GetMapping("/order/mat-hang-ban-chay/{date}")
-    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChayByDate(@PathVariable String date) {
+    @GetMapping("/order/{cuaHangId}/mat-hang-ban-chay/{date}")
+    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChayByDate(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("date") String date) {
         log.info("START: getListMatHangBanChayByDate " + date);
-        MatHangBanChayResponse response = orderService.getListMatHangBanChayByDate(date);
+        MatHangBanChayResponse response = orderService.getListMatHangBanChayByDate(date, cuaHangId);
         log.info("END: getListMatHangBanChayByDate");
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get List Order By Date")
-    @GetMapping("/order/{date}")
-    public ResponseEntity<OrderResponse> findListOrderByDate(@PathVariable String date){
+    @GetMapping("/order/{cuaHangId}/{date}")
+    public ResponseEntity<OrderResponse> findListOrderByDate(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("date") String date){
         log.info("START: findListOrderByDate " + date);
-        OrderResponse response = orderService.findListOrderByDate(date);
+        OrderResponse response = orderService.findListOrderByDate(date, cuaHangId);
         log.info("END: findListOrderByDate");
         return ResponseEntity.ok(response);
     }

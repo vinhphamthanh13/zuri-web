@@ -25,4 +25,5 @@ public class Order {
 
     private BigDecimal sumOfKhuyenMaiPrice;
 
+    private String cuaHangId;
 }
