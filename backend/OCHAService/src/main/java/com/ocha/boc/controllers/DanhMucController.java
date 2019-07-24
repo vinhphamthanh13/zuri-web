@@ -34,7 +34,7 @@ public class DanhMucController {
 
     @ApiOperation(value = "Find Danh muc By DanhMucId")
     @GetMapping("/danh-muc/{cuaHangId}/{id}")
-    public ResponseEntity<DanhMucResponse> findDanhMucById( @PathVariable String cuaHangId,@PathVariable String id) {
+    public ResponseEntity<DanhMucResponse> findDanhMucById( @PathVariable("cuaHangId") String cuaHangId,@PathVariable("id") String id) {
         DanhMucResponse response = danhMucService.findDanhMucByDanhMucId(id, cuaHangId);
         return ResponseEntity.ok(response);
     }
@@ -48,14 +48,14 @@ public class DanhMucController {
 
     @ApiOperation(value = "Delete Danh Muc By DanhMucId")
     @DeleteMapping("/danh-muc/{cuaHangId}/{id}")
-    public ResponseEntity<AbstractResponse> deleteDanhMucById(@PathVariable String cuaHangId,@PathVariable String id) {
+    public ResponseEntity<AbstractResponse> deleteDanhMucById(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("id") String id) {
         AbstractResponse response = danhMucService.deleteDanhMucByDanhMucId(id, cuaHangId);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Get Doanh Thu Theo Danh Muc By Date")
     @GetMapping("/danh-muc/doanh-thu/{cuaHangId}/{date}")
-    public ResponseEntity<DoanhThuDanhMucResponse> getDoanhThuTheoDanhMucByDate(@PathVariable String cuaHangId, @PathVariable String date) {
+    public ResponseEntity<DoanhThuDanhMucResponse> getDoanhThuTheoDanhMucByDate(@PathVariable("cuaHangId") String cuaHangId, @PathVariable("date") String date) {
         DoanhThuDanhMucResponse response = danhMucService.getDoanhThuTheoDanhMucByDate(date, cuaHangId);
         return ResponseEntity.ok(response);
     }

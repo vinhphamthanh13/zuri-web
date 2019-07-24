@@ -32,14 +32,14 @@ public class BangGiaDetailController {
 
     @ApiOperation(value = "Find Bang Gia Detail By Id")
     @GetMapping("/thong-tin-bang-gia/{id}")
-    public ResponseEntity<BangGiaDetailResponse> findBangGiaDetailById(@PathVariable String id) {
+    public ResponseEntity<BangGiaDetailResponse> findBangGiaDetailById(@PathVariable("id") String id) {
         BangGiaDetailResponse response = bangGiaDetailService.findBangGiaDetailById(id);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Find Bang Gia Detail By BangGiaId")
     @GetMapping("/bang-gia/thong-tin-bang-gia/{id}")
-    public ResponseEntity<BangGiaDetailResponse> findBangGiaDetailByBangGiaId(@PathVariable String id) {
+    public ResponseEntity<BangGiaDetailResponse> findBangGiaDetailByBangGiaId(@PathVariable("id") String id) {
         BangGiaDetailResponse response = bangGiaDetailService.findBangGiaDetailByBangGiaId(id);
         return ResponseEntity.ok(response);
     }
@@ -53,7 +53,7 @@ public class BangGiaDetailController {
 
     @ApiOperation(value = "Delete Bang Gia Detail By Id")
     @DeleteMapping("/thong-tin-bang-gia/{id}")
-    public ResponseEntity<AbstractResponse> deleteBangGiaDetailById(@PathVariable String id){
+    public ResponseEntity<AbstractResponse> deleteBangGiaDetailById(@PathVariable("id") String id){
         AbstractResponse response = bangGiaDetailService.deleteBangGiaDetailById(id);
         return ResponseEntity.ok(response);
     }

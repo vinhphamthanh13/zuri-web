@@ -31,7 +31,7 @@ public class BangGiaController {
 
     @ApiOperation(value = "Find Bang Gia by BangGiaId")
     @GetMapping("/bang-gia/{id}")
-    public ResponseEntity<BangGiaResponse> findBangGiaByBangGiaId(@PathVariable String id) {
+    public ResponseEntity<BangGiaResponse> findBangGiaByBangGiaId(@PathVariable("id") String id) {
         BangGiaResponse response = bangGiaService.findBangGiaByBangGiaId(id);
         return ResponseEntity.ok(response);
     }
@@ -45,7 +45,7 @@ public class BangGiaController {
 
     @ApiOperation(value = "Delete Bang Gia By BangGiaId")
     @DeleteMapping("/bang-gia/{id}")
-    public ResponseEntity<BangGiaResponse> deleteBangGiaByBangGiaId(@PathVariable String id) {
+    public ResponseEntity<BangGiaResponse> deleteBangGiaByBangGiaId(@PathVariable("id") String id) {
         BangGiaResponse response = bangGiaService.deleteBangGiaByBangGiaId(id);
         return ResponseEntity.ok(response);
     }

@@ -31,14 +31,14 @@ public class KhuyenMaiController {
 
     @ApiOperation(value = "Get Khuyen Mai By KhuyenMaiId")
     @GetMapping("/khuyen-mai/{cuaHangId}/{id}")
-    public ResponseEntity<KhuyenMaiResponse> getKhuyenMaiByKhuyenMaiId(@PathVariable String cuaHangId,@PathVariable String id) {
+    public ResponseEntity<KhuyenMaiResponse> getKhuyenMaiByKhuyenMaiId(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("id") String id) {
         KhuyenMaiResponse response = khuyenMaiService.getKhuyenMaiByKhuyenMaiId(cuaHangId, id);
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Delete Khuyen Mai By KhuyenMaiId")
     @DeleteMapping("/khuyen-mai/{cuaHangId}/{id}")
-    public ResponseEntity<KhuyenMaiResponse> deleteKhuyenMaiByKhuyenMaiId(@PathVariable String cuaHangId, @PathVariable String id) {
+    public ResponseEntity<KhuyenMaiResponse> deleteKhuyenMaiByKhuyenMaiId(@PathVariable("cuaHangId") String cuaHangId, @PathVariable("id") String id) {
         KhuyenMaiResponse response = khuyenMaiService.deleteKhuyenMaiByKhuyenMaiId(cuaHangId , id);
         return ResponseEntity.ok(response);
     }

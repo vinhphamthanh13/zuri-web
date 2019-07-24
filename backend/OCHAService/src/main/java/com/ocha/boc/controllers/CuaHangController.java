@@ -27,11 +27,11 @@ public class CuaHangController {
     }
 
     @ApiOperation("Update Cua Hang Information")
-    @PutMapping("/cua-hang/email")
+    @PutMapping("/cua-hang")
     public ResponseEntity<CuaHangResponse> updateEmailCuaHang(@RequestBody CuaHangUpdateRequest request){
-        log.info("START: update email cua hang");
+        log.info("START: update cua hang information ");
         CuaHangResponse response = cuaHangService.updateEmailCuaHang(request);
-        log.info("END: update email cua hang");
+        log.info("END: update cua hang information");
         return ResponseEntity.ok(response);
     }
 

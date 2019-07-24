@@ -25,7 +25,7 @@ public class MatHangController {
 
 
     @ApiOperation(value = "Update Mat Hang")
-    @PutMapping("/mat-hang/{id}")
+    @PutMapping("/mat-hang")
     public ResponseEntity<MatHangResponse> updateMatHangInfor(@RequestBody MatHangUpdateRequest request) {
         MatHangResponse response = matHangService.updateMatHangInfor(request);
         return ResponseEntity.ok(response);
@@ -33,7 +33,7 @@ public class MatHangController {
 
     @ApiOperation(value = "Find Mat Hang By Id")
     @GetMapping("/mat-hang/{cuaHangId}/{id}")
-    public ResponseEntity<MatHangResponse> findMatHangById(@PathVariable String cuaHangId, @PathVariable String id) {
+    public ResponseEntity<MatHangResponse> findMatHangById(@PathVariable("cuaHangId") String cuaHangId, @PathVariable("id") String id) {
         MatHangResponse response = matHangService.findMatHangById(cuaHangId,id);
         return ResponseEntity.ok(response);
     }
@@ -47,7 +47,7 @@ public class MatHangController {
 
     @ApiOperation(value = "Delete Mat Hang By Id")
     @DeleteMapping("/mat-hang/{cuaHangId}/{id}")
-    public ResponseEntity<AbstractResponse> deleteMatHangById(@PathVariable String cuaHangId,@PathVariable String id) {
+    public ResponseEntity<AbstractResponse> deleteMatHangById(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("id") String id) {
         MatHangResponse response = matHangService.deleteMatHangById(cuaHangId,id);
         return ResponseEntity.ok(response);
     }
