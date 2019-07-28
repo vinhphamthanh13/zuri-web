@@ -15,6 +15,7 @@ class Input extends Component {
     className: string,
     disabled: bool,
     errors: objectOf(string),
+    placeholder: string,
   };
 
   static defaultProps = {
@@ -23,6 +24,7 @@ class Input extends Component {
     disabled: false,
     errors: {},
     className: '',
+    placeholder: '',
   };
 
   render() {
@@ -34,12 +36,14 @@ class Input extends Component {
       className,
       disabled,
       errors,
+      placeholder,
     } = this.props;
 
     return (
       <div className={s.inputWrapper}>
         <input
           id={uuidv1()}
+          placeholder={placeholder}
           type={type}
           name={name}
           value={value}

@@ -105,6 +105,7 @@ class Activation extends Component {
                 name="phoneNumber"
                 type="tel"
                 value={phoneNumber}
+                placeholder="Số điện thoại"
                 onChange={handleChange}
                 className={s.phoneNumber}
                 errors={errors}

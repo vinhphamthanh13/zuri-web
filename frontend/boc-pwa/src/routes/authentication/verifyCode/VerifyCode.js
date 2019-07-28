@@ -56,21 +56,20 @@ class VerifyCode extends React.Component {
     const { values, handleChange, handleSubmit, errors, isValid } = this.props;
     const { phoneNumber } = this.state;
     const submittingCode = get(values, 'verifyCode');
-    console.log('props form>>>', this.props);
 
     return (
       <div className={s.container}>
         <Header title="Xác nhận mã kích hoạt" />
         <div className={s.textSMS}>
-          Quý khách vui lòng nhập mã xác minh được gởi qua SMS đến số đăng ký:{' '}
+          Quý khách vui lòng nhập mã xác thực được gởi qua SMS đến số đăng ký:{' '}
           {phoneNumber}
         </div>
         <div className={s.verifyCodeWrapper}>
           <form onSubmit={handleSubmit}>
             <Input
-              id="verifyCode"
               name="verifyCode"
               type="tel"
+              placeholder="Mã xác thực"
               onChange={handleChange}
               value={submittingCode || ''}
               className={s.verifyCode}
@@ -89,7 +88,6 @@ export default compose(
     isInitialValid: false,
     handleSubmit: (values, { setSubmitting }, props) => {
       const code = get(values, 'verifyCode');
-      console.log('orpooss>>>', props);
       setSubmitting(true);
       setTimeout(() => {
         setSubmitting(false);
