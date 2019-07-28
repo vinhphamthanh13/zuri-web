@@ -57,7 +57,7 @@ module.exports = {
   },
 
   masterData: {
-    url: process.env.MASTER_DATA_URL || 'http://10.19.175.40:8000/master-data',
+    url: process.env.MASTER_DATA_URL || 'http://68.183.188.123:8080',
     apikey: process.env.API_KEY || '485cafb9a6804461b3c6e440fe568c6e',
   },
 
@@ -110,21 +110,6 @@ module.exports = {
     },
     internalApiKey:
       process.env.INTERNAL_API_KEY || '9d59dc9bf300f17fecf22df34e6262d7',
-
-    // oapi: {
-    //   loginUrl:
-    //     process.env.LOGIN_URL ||
-    //     'http://openapi.vn01p.vn.nonprod:8000/authentication/v1/partner',
-    //   url: process.env.OPEN_API_URL || 'http://openapi.vn01p.vn.nonprod:8000',
-    //   clientId: process.env.CLIENT_ID || 'ee73d89fd4af46f7b2c3d8e9647a2672',
-    //   clientSecret:
-    //     process.env.CLIENT_SECRECT || '27b0794e8a244e51bf2295657417fa2c',
-    //   userName: process.env.OPEN_API_USERNAME || 'wUkQsEXzoT',
-    //   password: process.env.OPEN_API_PASSWORD || 'Qwer1234',
-    //   authToken:
-    //     process.env.OPEN_API_AUTH_TOKEN ||
-    //     'T3BlbkFwaV9QYXJ0bmVyOk9wZW5BcGlfUGFydG5lcg==',
-    // },
 
     oapi: {
       loginUrl:

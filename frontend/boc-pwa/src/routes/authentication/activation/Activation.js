@@ -22,6 +22,7 @@ class Activation extends Component {
     isValid: bool.isRequired,
     handleChange: func.isRequired,
     handleSubmit: func.isRequired,
+    loginPhone: func.isRequired,
   };
 
   static defaultProps = {
@@ -52,12 +53,8 @@ class Activation extends Component {
     return null;
   }
 
-  componentDidMount() {
-    const { facebookAppId, akApiVersion } = this.props;
-  }
-
   componentDidUpdate() {
-    const { setPhoneNumber, values, isValid } = this.props;
+    const { setPhoneNumber, values, isValid, loginPhone } = this.props;
     const { isSubmitting, isValidating } = this.state;
     const phoneNumber = get(values, 'phoneNumber');
     const countryCode = get(values, 'countryCode');
@@ -72,12 +69,9 @@ class Activation extends Component {
         '$1*****$2',
       );
       setPhoneNumber(encryptPhone);
+      loginPhone(registerPhoneNumber);
     }
   }
-
-  handleOnChange = () => {
-    console.log('handleOnChange');
-  };
 
   render() {
     const {

@@ -1,35 +1,6 @@
-import loginHandler from './login';
-import generateOTP from './otp/generateOTP';
-import verifyOTP from './otp/verifyOTP';
-import getCashOffer from './customerOffer/getCashOffer';
-import createApplication from './application';
-import searchPOS from './map/searchPOS';
-import getRegions from './map/getRegions';
-import getDistricts from './map/getDistricts';
-import sendEmail from './email/sendEmail';
-import getDateCreate from './contract';
-import generateShortURL from './shortURL/generateShortURL';
-import verifyShortId from './shortURL/verifyShortId';
-import saleRouter from './sale/router';
-import userRouter from './user/router';
-import appTrackingRouter from './appTracking/router';
-import asRegister from './saRegister';
+import { NODE_URL } from 'constants/api';
+import login from './authentication/login';
 
 export default app => {
-  app.post('/api/login', loginHandler);
-  app.post('/api/generateOTP', generateOTP);
-  app.post('/api/verifyOTP', verifyOTP);
-  app.post('/api/getCashOffer', getCashOffer);
-  app.post('/api/createApplication', createApplication);
-  app.post('/api/searchPOS', searchPOS);
-  app.get('/api/getRegions', getRegions);
-  app.post('/api/getDistricts', getDistricts);
-  app.post('/api/sendEmail', sendEmail);
-  app.get('/api/contract/:id', getDateCreate);
-  app.get('/api/generateShortURL/:saCode', generateShortURL);
-  app.get('/api/verifyShortId/:shortId', verifyShortId);
-  app.use('/api/sale', saleRouter);
-  app.use('/api/user', userRouter);
-  app.use('/api/tracking', appTrackingRouter);
-  app.use('/api/sa-register', asRegister);
+  app.get(`${NODE_URL.LOGIN}/:userId`, login);
 };

@@ -1,31 +1,10 @@
-import fetch from 'node-fetch';
-import { get } from 'lodash';
-import { generateHeaders } from 'utils/http';
-import { HTTP_STATUS, CONTENT_TYPE, HTTP_METHOD } from 'constants/http';
-
-export const getRequestToken = headers => {
-  const auth = get(headers, 'authorization');
-  return auth ? auth.replace(/\w+\s(\w+)/, '$1') : '';
-};
-
-/**
- * Util for fetch POST
- * @param {String} url
- * @param {Object} body
- * @param {String} token
- */
-export const postApi = (url, body, token) =>
-  fetch(url, {
-    method: HTTP_METHOD.POST,
-    headers: generateHeaders(token),
-    body: JSON.stringify(body),
-  });
-
-export const fetchApi = (url, param, headersOptions = null) =>
-  fetch(`${url}/${param}`, {
-    method: HTTP_STATUS.GET,
-    headers: headersOptions,
-  });
+// import { get } from 'lodash';
+import { HTTP_STATUS, CONTENT_TYPE } from 'constants/http';
+//
+// export const getRequestToken = headers => {
+//   const auth = get(headers, 'authorization');
+//   return auth ? auth.replace(/\w+\s(\w+)/, '$1') : '';
+// };
 
 const handleResponse = async (response, defaultResponse) => {
   if (response) {
@@ -64,7 +43,7 @@ export const handleRequest = async (reqFunction, args, defaultResponse) => {
   }
 };
 
-export const errorHandle = (res, err) => {
+export const handleServerError = (res, err) => {
   res.status(500);
   res.set('Content-Type', CONTENT_TYPE.JSON);
   res.send(
@@ -72,7 +51,7 @@ export const errorHandle = (res, err) => {
       errors: [
         {
           code: 'INTERNAL ERROR',
-          message: `Cannot create application: ${err.message}`,
+          message: err.message,
           severity: 'ERROR',
         },
       ],
@@ -80,7 +59,7 @@ export const errorHandle = (res, err) => {
   );
 };
 
-export const resultHandle = (res, result) => {
+export const handleServerResponse = (res, result) => {
   const status =
     result.status === HTTP_STATUS.UNPROCESSABLE_ENTITY
       ? HTTP_STATUS.UNAUTHORIZED
@@ -99,13 +78,6 @@ export const resultHandle = (res, result) => {
   res.send(result.data);
 };
 
-/**
- *
- * @param {Object} err {status = 500, message}
- * @param {Object} req
- * @param {Object} res
- * @param {Function} next
- */
 export const errorStatusMiddleware = (err, req, res) => {
   const { status = 500, message } = err;
 
