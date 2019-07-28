@@ -15,9 +15,9 @@ public class UserLoginRequest implements Serializable {
     @ApiModelProperty(required=true)
     private String phone;
 
-    @ApiModelProperty(required=true)
-    private String verificationCode;
-
-    @ApiModelProperty(required=true)
-    private String countryCode;
+//    @ApiModelProperty(required=true)
+//    private String verificationCode;
+//
+//    @ApiModelProperty(required=true)
+//    private String countryCode;
 }

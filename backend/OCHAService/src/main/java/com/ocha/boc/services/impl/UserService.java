@@ -42,26 +42,25 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_USER_FAIL);
         try {
-            boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhone());
-            if(!isVerificationCodeSuccess){
-                response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
-            }else{
-                User user = userRepository.findUserByPhone(request.getPhone());
-                if (user == null) {
-                    user = new User();
-                    user.setPhone(request.getPhone());
-                    user.setActive(Boolean.TRUE);
-                    user.setCreatedDate(Instant.now().toString());
-                    user.setRole(UserType.USER);
-                    userRepository.save(user);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObjectId(user.getId());
-                    UserDTO userDTO = new UserDTO(user);
-                    response.setObject(userDTO);
-                } else {
-                    response.setMessage(CommonConstants.USER_EXISTED);
-                }
+//            boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhone());
+//            if(!isVerificationCodeSuccess){
+//                response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
+            //}
+            User user = userRepository.findUserByPhone(request.getPhone());
+            if (user == null) {
+                user = new User();
+                user.setPhone(request.getPhone());
+                user.setActive(Boolean.TRUE);
+                user.setCreatedDate(Instant.now().toString());
+                user.setRole(UserType.USER);
+                userRepository.save(user);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObjectId(user.getId());
+                UserDTO userDTO = new UserDTO(user);
+                response.setObject(userDTO);
+            } else {
+                response.setMessage(CommonConstants.USER_EXISTED);
             }
         } catch (Exception e) {
             log.error("Error when newUser: ", e);
@@ -74,35 +73,34 @@ public class UserService {
         response.setMessage(CommonConstants.UPDATE_USER_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhoneNumber());
-            if(!isVerificationCodeSuccess){
-                response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
-            }else{
-                User user = checkUserExisted(request.getUserId());
-                if (user != null) {
-                    if (StringUtils.isNotEmpty(request.getEmail())) {
-                        user.setEmail(request.getEmail());
-                    }
-                    if (StringUtils.isNotEmpty(request.getFirstName())) {
-                        user.setFirstName(request.getFirstName());
-                    }
-                    if (StringUtils.isNotEmpty(request.getLastName())) {
-                        user.setLastName(request.getLastName());
-                    }
-                    if (StringUtils.isNotEmpty(request.getPhoto())) {
-                        user.setPhoto(request.getPhoto());
-                    }
-                    if (StringUtils.isNotEmpty(request.getRole().toString())) {
-                        user.setRole(request.getRole());
-                    }
-                    user.setLastModifiedDate(Instant.now().toString());
-                    userRepository.save(user);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new UserDTO(user));
-                } else {
-                    response.setMessage(CommonConstants.USER_IS_NULL);
+            //boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhoneNumber());
+//            if(!isVerificationCodeSuccess){
+//                response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
+//            }
+            User user = checkUserExisted(request.getUserId());
+            if (user != null) {
+                if (StringUtils.isNotEmpty(request.getEmail())) {
+                    user.setEmail(request.getEmail());
                 }
+                if (StringUtils.isNotEmpty(request.getFirstName())) {
+                    user.setFirstName(request.getFirstName());
+                }
+                if (StringUtils.isNotEmpty(request.getLastName())) {
+                    user.setLastName(request.getLastName());
+                }
+                if (StringUtils.isNotEmpty(request.getPhoto())) {
+                    user.setPhoto(request.getPhoto());
+                }
+                if (StringUtils.isNotEmpty(request.getRole().toString())) {
+                    user.setRole(request.getRole());
+                }
+                user.setLastModifiedDate(Instant.now().toString());
+                userRepository.save(user);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObject(new UserDTO(user));
+            } else {
+                response.setMessage(CommonConstants.USER_IS_NULL);
             }
         } catch (Exception e) {
             log.error("Error when updateUserInformation: ", e);
