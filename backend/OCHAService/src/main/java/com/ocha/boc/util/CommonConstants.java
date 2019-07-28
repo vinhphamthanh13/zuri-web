@@ -101,6 +101,10 @@ public class CommonConstants {
 
     public static final String GET_ALL_USER_FAIL                        = "Hệ thống không tồn tại người dùng nào !";
 
+    public static final String SEND_VERIFICATION_CODE_FAIL              = "Lỗi trong quá trình gửi mã xác thực.";
+
+    public static final String VERIFICATION_CODE_FAIL                   = "Mã xác thực sai.";
+
     /**
      * Cửa Hàng Error:
      */

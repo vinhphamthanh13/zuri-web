@@ -1,5 +1,8 @@
 package com.ocha.boc.services.impl;
 
+import com.authy.AuthyApiClient;
+import com.authy.api.Params;
+import com.authy.api.Verification;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.entity.User;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -26,26 +30,38 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private AuthyApiClient authyApiClient;
+
+    @Autowired
+    public UserService(AuthyApiClient authyApiClient) {
+        this.authyApiClient = authyApiClient;
+    }
+
     public UserResponse newUser(UserLoginRequest request) {
         UserResponse response = new UserResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_USER_FAIL);
         try {
-            User user = userRepository.findUserByPhone(request.getPhone());
-            if (user == null) {
-                user = new User();
-                user.setPhone(request.getPhone());
-                user.setActive(Boolean.TRUE);
-                user.setCreatedDate(Instant.now().toString());
-                user.setRole(UserType.USER);
-                userRepository.save(user);
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObjectId(user.getId());
-                UserDTO userDTO = new UserDTO(user);
-                response.setObject(userDTO);
-            } else {
-                response.setMessage(CommonConstants.USER_EXISTED);
+            boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhone());
+            if(!isVerificationCodeSuccess){
+                response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
+            }else{
+                User user = userRepository.findUserByPhone(request.getPhone());
+                if (user == null) {
+                    user = new User();
+                    user.setPhone(request.getPhone());
+                    user.setActive(Boolean.TRUE);
+                    user.setCreatedDate(Instant.now().toString());
+                    user.setRole(UserType.USER);
+                    userRepository.save(user);
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObjectId(user.getId());
+                    UserDTO userDTO = new UserDTO(user);
+                    response.setObject(userDTO);
+                } else {
+                    response.setMessage(CommonConstants.USER_EXISTED);
+                }
             }
         } catch (Exception e) {
             log.error("Error when newUser: ", e);
@@ -58,30 +74,35 @@ public class UserService {
         response.setMessage(CommonConstants.UPDATE_USER_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            User user = checkUserExisted(request.getUserId());
-            if (user != null) {
-                if (StringUtils.isNotEmpty(request.getEmail())) {
-                    user.setEmail(request.getEmail());
+            boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhoneNumber());
+            if(!isVerificationCodeSuccess){
+                response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
+            }else{
+                User user = checkUserExisted(request.getUserId());
+                if (user != null) {
+                    if (StringUtils.isNotEmpty(request.getEmail())) {
+                        user.setEmail(request.getEmail());
+                    }
+                    if (StringUtils.isNotEmpty(request.getFirstName())) {
+                        user.setFirstName(request.getFirstName());
+                    }
+                    if (StringUtils.isNotEmpty(request.getLastName())) {
+                        user.setLastName(request.getLastName());
+                    }
+                    if (StringUtils.isNotEmpty(request.getPhoto())) {
+                        user.setPhoto(request.getPhoto());
+                    }
+                    if (StringUtils.isNotEmpty(request.getRole().toString())) {
+                        user.setRole(request.getRole());
+                    }
+                    user.setLastModifiedDate(Instant.now().toString());
+                    userRepository.save(user);
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObject(new UserDTO(user));
+                } else {
+                    response.setMessage(CommonConstants.USER_IS_NULL);
                 }
-                if (StringUtils.isNotEmpty(request.getFirstName())) {
-                    user.setFirstName(request.getFirstName());
-                }
-                if (StringUtils.isNotEmpty(request.getLastName())) {
-                    user.setLastName(request.getLastName());
-                }
-                if (StringUtils.isNotEmpty(request.getPhoto())) {
-                    user.setPhoto(request.getPhoto());
-                }
-                if (StringUtils.isNotEmpty(request.getRole().toString())) {
-                    user.setRole(request.getRole());
-                }
-                user.setLastModifiedDate(Instant.now().toString());
-                userRepository.save(user);
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObject(new UserDTO(user));
-            } else {
-                response.setMessage(CommonConstants.USER_IS_NULL);
             }
         } catch (Exception e) {
             log.error("Error when updateUserInformation: ", e);
@@ -179,5 +200,58 @@ public class UserService {
             log.error("Error when activeUser: ", e);
         }
         return response;
+    }
+
+    public AbstractResponse sendVerificationCode (String countryCode,String phoneNumber){
+        AbstractResponse respsone = new AbstractResponse();
+        respsone.setSuccess(Boolean.FALSE);
+        respsone.setMessage(CommonConstants.SEND_VERIFICATION_CODE_FAIL);
+        try{
+            boolean isSendVerificationCodeSuccess = handlingSendVerificationCode(phoneNumber, countryCode);
+            if(isSendVerificationCodeSuccess){
+                respsone.setSuccess(Boolean.TRUE);
+                respsone.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            }
+        }catch(Exception e){
+            log.error("Error when sendVerificationCode: ", e);
+        }
+        return respsone;
+    }
+
+
+    private boolean handlingSendVerificationCode(String phoneNumber, String countryCode) throws Exception {
+        boolean isSuccess = false;
+        String via = "sms";
+        Params params = new Params();
+        params.setAttribute("locale", "vi");
+        Verification verification = authyApiClient
+                .getPhoneVerification()
+                .start(phoneNumber, countryCode, via, params);
+        if(!verification.isOk()) {
+            logAndThrow("Error requesting phone verification. " +
+                    verification.getMessage());
+        }else{
+            isSuccess = true;
+        }
+        return isSuccess;
+    }
+
+
+    private boolean checkVerificationCode(String token, String countryCode, String phoneNumber) throws Exception {
+        boolean isSuccess = false;
+        Verification verification = authyApiClient
+                .getPhoneVerification()
+                .check(phoneNumber, countryCode, token);
+        if(verification.isOk()){
+            isSuccess = true;
+        }else{
+            logAndThrow("Error verifying token. " + verification.getMessage());
+        }
+        return isSuccess;
+    }
+
+    private void logAndThrow(String message) throws Exception {
+        log.warn(message);
+        throw new Exception(message);
     }
 }

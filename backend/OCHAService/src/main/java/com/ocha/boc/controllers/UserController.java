@@ -58,4 +58,11 @@ public class UserController {
         UserResponse response = userService.activeUser(userId);
         return ResponseEntity.ok(response);
     }
+
+    @ApiOperation(value = "Send Verification Code")
+    @PostMapping("/user/{countryCode}/{phoneNumber}")
+    public ResponseEntity<AbstractResponse> sendVerificationCode(@PathVariable(value = "countryCode") String countryCode,@PathVariable(value = "phoneNumber") String phoneNumber){
+        AbstractResponse response = userService.sendVerificationCode(countryCode,phoneNumber);
+        return ResponseEntity.ok(response);
+    }
 }
