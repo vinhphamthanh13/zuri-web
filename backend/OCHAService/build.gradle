@@ -66,4 +66,5 @@ dependencies {
     // https://mvnrepository.com/artifact/com.twilio.sdk/twilio
     compile group: "com.twilio.sdk", name: "twilio", version: "7.37.4"
     testCompile("org.springframework.boot:spring-boot-starter-test")
+    compile('com.authy:authy-java:1.2.0')
 }
