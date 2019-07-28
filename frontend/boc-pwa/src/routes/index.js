@@ -28,6 +28,22 @@ const routes = {
       load: () =>
         import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
     },
+    {
+      path: '/home',
+      load: () => import(/* webpackChunkName: 'home' */ './home'),
+    },
+    {
+      path: '/report',
+      load: () => import(/* webpackChunkName: 'report' */ './report'),
+    },
+    {
+      path: '/activity',
+      load: () => import(/* webpackChunkName: 'activity' */ './activity'),
+    },
+    {
+      path: '/shop',
+      load: () => import(/* webpackChunkName: 'shop' */ './shop'),
+    },
     // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
     {
       path: '(.*)',

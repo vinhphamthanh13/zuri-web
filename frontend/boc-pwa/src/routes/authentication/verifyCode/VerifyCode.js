@@ -86,11 +86,12 @@ class VerifyCode extends React.Component {
 export default compose(
   withFormik({
     isInitialValid: false,
-    handleSubmit: (values, { setSubmitting }, props) => {
+    handleSubmit: (values, { setSubmitting }) => {
       const code = get(values, 'verifyCode');
       setSubmitting(true);
       setTimeout(() => {
         setSubmitting(false);
+        history.push('/home');
       }, 1000);
     },
     validationSchema: verifyCode,

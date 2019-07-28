@@ -6,7 +6,7 @@ import {
   handleRequest,
 } from 'api/utils';
 
-export const loginBase = number => axios.get(`${SERVER_URL.LOGIN}/${number}`);
+const loginBase = number => axios.get(`${SERVER_URL.LOGIN}/${number}`);
 
 const loginPhone = async number => {
   const [result, error] = await handleRequest(loginBase, [number]);

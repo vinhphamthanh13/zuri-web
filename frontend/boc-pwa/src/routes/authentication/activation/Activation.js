@@ -69,7 +69,7 @@ class Activation extends Component {
         '$1*****$2',
       );
       setPhoneNumber(encryptPhone);
-      loginPhone(registerPhoneNumber);
+      // loginPhone(registerPhoneNumber);
     }
   }
 
@@ -124,7 +124,7 @@ export default compose(
       setSubmitting(true);
       setTimeout(() => {
         setSubmitting(false);
-        // history.push('/verify-code');
+        history.push('/verify-code');
       }, 1200);
     },
   }),

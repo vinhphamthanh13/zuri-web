@@ -50,7 +50,7 @@ An action _MUST NOT_ include properties other than `type`, `payload`, `error`, a
 {
   type: ADD_TODO,
   payload: {
-    text: 'Contribute to Home Credit.',
+    text: 'Contribute to Activity Credit.',
   },
 }
 // Modal action example:
