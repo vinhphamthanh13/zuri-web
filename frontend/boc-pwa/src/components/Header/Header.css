@@ -1,0 +1,27 @@
+@import '../variables.css';
+
+.container {
+  background: var(--c-brand-1);
+  height: var(--size-header-bar);
+  font-size: var(--font-size-header);
+  color: var(--c-bright);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.button {
+  margin: var(--size-06);
+  padding: var(--size-12) var(--size-24);
+  border: var(--size-01) solid var(--c-brand-1);
+  border-radius: var(--size-28);
+  display: flex;
+  align-items: center;
+}
+
+.button:hover {
+  cursor: pointer;
+}

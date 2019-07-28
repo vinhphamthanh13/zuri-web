@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Login snapshot 1`] = `
+exports[`VerifyCode snapshot 1`] = `
 <div
   className="container"
 >
@@ -21,7 +21,7 @@ exports[`Login snapshot 1`] = `
         <i
           className="material-icons Input_icon__1jjsS"
         >
-          
+
         </i>
         <input
           accept=""
@@ -56,7 +56,7 @@ exports[`Login snapshot 1`] = `
         <i
           className="material-icons Input_icon__1jjsS"
         >
-          
+
         </i>
         <input
           accept=""

@@ -35,6 +35,8 @@ body {
   height: 100%;
   -webkit-tap-highlight-color: transparent;
   background-color: var(--c-bright);
+  font-size: var(--font-size-18);
+  color: var(--c-bg-brand-3);
 }
 
 .layout {
@@ -201,6 +203,11 @@ textarea {
 
 /* Layout selection */
 
+.defaultLayout {
+  width: 100%;
+  height: 100vh;
+}
+
 .w360H640 {
   width: 360px;
   height: 640px;
@@ -208,7 +215,7 @@ textarea {
 
 .w640H360 {
   width: 640px;
-  height: 360px;
+  height: 640px;
 }
 
 .w414H896 {
@@ -218,12 +225,12 @@ textarea {
 
 .w896H414 {
   width: 896px;
-  height: 414px;
+  height: 896px;
 }
 
 .w812H375 {
   width: 812px;
-  height: 375px;
+  height: 812px;
 }
 
 .w375H812 {
@@ -238,7 +245,7 @@ textarea {
 
 .w736H414 {
   width: 736px;
-  height: 414px;
+  height: 736px;
 }
 
 .w375H667 {
@@ -258,7 +265,7 @@ textarea {
 
 .w568H320 {
   width: 568px;
-  height: 320px;
+  height: 568px;
 }
 
 .w320H480 {
@@ -268,7 +275,7 @@ textarea {
 
 .w480H320 {
   width: 480px;
-  height: 320px;
+  height: 480px;
 }
 
 .w1024H1366 {
@@ -278,7 +285,7 @@ textarea {
 
 .w1366H1024 {
   width: 1366px;
-  height: 1024px;
+  height: 1366px;
 }
 
 .w768H1024 {
@@ -288,5 +295,5 @@ textarea {
 
 .w1024H768 {
   width: 1024px;
-  height: 768px;
+  height: 1024px;
 }

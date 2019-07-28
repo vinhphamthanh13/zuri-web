@@ -15,11 +15,18 @@ const routes = {
   children: [
     {
       path: '/',
-      load: () => import(/* webpackChunkName: 'login' */ './login'),
+      load: () =>
+        import(/* webpackChunkName: 'login' */ './authentication/login'),
     },
     {
       path: '/activation',
-      load: () => import(/* webpackChunkName: 'activation' */ './activation'),
+      load: () =>
+        import(/* webpackChunkName: 'activation' */ './authentication/activation'),
+    },
+    {
+      path: '/verify-code',
+      load: () =>
+        import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
     },
     // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
     {

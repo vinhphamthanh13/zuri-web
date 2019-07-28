@@ -1,0 +1,25 @@
+.inputWrapper {
+  width: auto;
+  height: var(--size-input-wrapper-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: var(--size-padding) 0;
+}
+
+input {
+  width: var(--max-input-width);
+  height: var(--size-input-height);
+  border: 1px solid var(--c-brand-3);
+  border-radius: var(--size-radius-standard);
+  font-size: var(--font-size-input);
+  letter-spacing: 2px;
+  padding: 0 var(--size-12);
+}
+
+.errorMessage {
+  text-align: left;
+  font-size: var(--font-size-label);
+  color: var(--c-error);
+}

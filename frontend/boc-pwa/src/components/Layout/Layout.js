@@ -24,7 +24,9 @@ class Layout extends React.Component {
 
   render() {
     const { windowWidth, windowHeight } = this.props;
-    const layoutDimensionStyle = s[`w${windowWidth}H${windowHeight}`];
+    const layoutDimensionStyle = s[`w${windowWidth}H${windowHeight}`]
+      ? s[`w${windowWidth}H${windowHeight}`]
+      : s.defaultLayout;
     return (
       <div className={`${s.layout} ${layoutDimensionStyle}`}>
         {this.props.children}

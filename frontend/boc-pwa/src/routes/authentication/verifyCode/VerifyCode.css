@@ -1,0 +1,39 @@
+/**
+ * BOC VN (http://www.bocvietnam.com/)
+ *
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+@import '../../../components/variables.css';
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(147, 226, 255, 1) 100%);
+}
+
+.textSMS {
+  margin: 0 var(--size-24);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.verifyCodeWrapper {
+  margin-bottom: var(--size-padding);
+}
+
+.verifyCode {
+  height: var(--size-input-height);
+  font-size: var(--font-size-input);
+  letter-spacing: var(--size-02);
+  text-align: center;
+}

@@ -15,3 +15,9 @@ export const activation = Yup.object().shape({
       excludeEmptyString: true,
     }),
 });
+
+export const verifyCode = Yup.object().shape({
+  verifyCode: Yup.string()
+    .required('Nhập mã xác minh')
+    .matches(REGEXP.VERIFY_CODE, { message: 'Mã xác minh không hợp lệ' }),
+});

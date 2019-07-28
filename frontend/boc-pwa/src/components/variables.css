@@ -17,6 +17,7 @@
   --font-family-base: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Open Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --line-height-base: 1.375;
   --home-logo-width: calc(var(--size-56) * 3);
+  --max-input-width: 320px;
 
   /* Layout */
 
@@ -84,7 +85,7 @@
   --font-size-36: calc(var(--unit) * 2.25);   /* 36px */
   --font-size-40: calc(var(--unit) * 2.5);    /* 40px */
   --font-size-44: calc(var(--unit) * 2.75);   /* 44px */
-  --font-size-48: calc(var(--unit) * 3);        /* 48px */
+  --font-size-48: calc(var(--unit) * 3);      /* 48px */
 
   /* Font Weight */
 
@@ -131,14 +132,16 @@
   /* Size */
 
   --size-header-bar: var(--size-44);
-  --size-padding: var(--size-18);
-  --size-input-height: var(--font-size-36);
+  --size-padding: var(--size-20);
+  --size-input-wrapper-height: var(--size-72);
+  --size-input-height: var(--size-44);
+  --size-radius-standard: 6px;
 
   /* Font */
 
   --font-size-caption: var(--size-10);
   --font-size-small: var(--size-12);
-  --font-size-input: var(--size-16);
+  --font-size-input: var(--size-18);
   --font-size-label: var(--size-18);
   --font-size-header: var(--size-20);
 }
