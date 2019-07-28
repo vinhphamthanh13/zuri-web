@@ -1,0 +1,42 @@
+@import '../variables.css';
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-index-high);
+}
+
+.modal {
+  border-radius: var(--size-radius-standard);
+  width: var(--max-content-width);
+  background: var(--c-bg-light);
+  overflow: hidden;
+}
+
+.title {
+  background: var(--c-brand-4);
+  padding: var(--size-10);
+  font-size: var(--font-size-input);
+  font-weight: var(--font-weight-700);
+  text-transform: uppercase;
+  color: var(--c-brand-1);
+  border-bottom: var(--size-01) solid var(--c-error);
+  display: flex;
+  justify-content: space-between;
+}
+
+.content {
+  padding: var(--size-10);
+  min-height: var(--modal-content-width);
+}
+
+.cta {
+  cursor: pointer;
+}

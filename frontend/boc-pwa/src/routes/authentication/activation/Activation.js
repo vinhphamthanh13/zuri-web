@@ -124,8 +124,8 @@ export default compose(
       setSubmitting(true);
       setTimeout(() => {
         setSubmitting(false);
-        history.push('/verify-code');
-      }, 1500);
+        // history.push('/verify-code');
+      }, 1200);
     },
   }),
   connect(

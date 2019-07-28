@@ -9,6 +9,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Error from 'components/Error';
 import { Provider as ReduxProvider } from 'react-redux';
 
 const ContextType = {
@@ -91,7 +92,10 @@ class App extends React.PureComponent {
 
     return (
       <ReduxProvider store={store}>
-        {React.Children.only(children)}
+        <>
+          <Error />
+          {React.Children.only(children)}
+        </>
       </ReduxProvider>
     );
   }
