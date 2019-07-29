@@ -285,7 +285,7 @@ textarea {
 
 .w1366H1024 {
   width: 1366px;
-  height: 1366px;
+  height: 1024px;
 }
 
 .w768H1024 {
@@ -295,5 +295,5 @@ textarea {
 
 .w1024H768 {
   width: 1024px;
-  height: 1024px;
+  height: 768px;
 }

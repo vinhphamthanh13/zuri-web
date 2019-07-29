@@ -24,11 +24,13 @@ class Layout extends React.Component {
 
   render() {
     const { windowWidth, windowHeight } = this.props;
-    const layoutDimensionStyle = s[`w${windowWidth}H${windowHeight}`]
-      ? s[`w${windowWidth}H${windowHeight}`]
-      : s.defaultLayout;
+    const dimension = {
+      width: `${windowWidth}px`,
+      height:
+        windowWidth > windowHeight ? `${windowWidth}px` : `${windowHeight}px`,
+    };
     return (
-      <div className={`${s.layout} ${layoutDimensionStyle}`}>
+      <div style={dimension} className={s.layout}>
         {this.props.children}
       </div>
     );

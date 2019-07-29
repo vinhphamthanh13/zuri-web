@@ -13,7 +13,7 @@ import Layout from '../../components/Layout';
 
 async function action() {
   return {
-    title: 'http://www.bocvietnam.com',
+    title: 'Trang Chính',
     chunks: ['home'],
     component: (
       <Layout>

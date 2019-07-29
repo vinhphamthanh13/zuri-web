@@ -1,21 +1,121 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 @import '../../components/variables.css';
 
-.root {
-  padding-left: 20px;
-  padding-right: 20px;
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  color: var(--c-brand-1);
 }
 
-.container {
-  margin: 0 auto;
-  padding: 0 0 40px;
-  max-width: var(--max-content-width);
+hr {
+  border: 1px solid var(--c-brand-4);
+  margin: 0;
+}
+
+.invoice {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--size-08) var(--size-14) var(--size-10);
+}
+
+.top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header {
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-500);
+}
+
+.date {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-400);
+}
+
+.label {
+  font-size: var(--font-size-14);
+}
+
+.cabinet {
+  text-align: center;
+  margin: auto var(--size-02);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cabinet div:first-child {
+  font-weight: var(--font-weight-500);
+  font-size: var(--font-size-18);
+}
+
+.middle {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: var(--size-10) auto var(--size-08);
+}
+
+.middle span:first-child {
+  font-size: var(--size-22);
+  font-weight: var(--font-weight-500);
+}
+
+.rowTotal {
+  width: 100%;
+  display: flex;
+  margin: var(--size-18) auto auto;
+}
+
+.statistic {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.statistic div:first-child {
+  font-size: var(--font-size-24);
+}
+
+.statistic div:last-child {
+  font-size: var(--font-size-14);
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.toolBar {
+  width: 100%;
+  height: var(--size-56);
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  border-top: var(--size-01) solid var(--c-brand-5);
+  box-sizing: border-box;
+}
+
+.tab {
+  width: 25%;
+  border-right: var(--size-01) solid var(--c-brand-5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: var(--font-size-12);
+  cursor: pointer;
+}
+
+.toolBar .tab:last-child {
+  border: none;
 }
