@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entity Object presents for User
@@ -26,15 +28,13 @@ public class User extends AbstractEntity {
 
     private String photo;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private boolean isActive;
 
     private UserType role;
 
-    private String cuaHangId;
+    private List<CuaHang> listCuaHang = new ArrayList<>();
 
     public User() {
 
@@ -44,11 +44,10 @@ public class User extends AbstractEntity {
         this.phone = userDTO.getPhone();
         this.email = userDTO.getEmail();
         this.phone = userDTO.getPhoto();
-        this.lastName = userDTO.getLastName();
-        this.firstName = userDTO.getFirstName();
+        this.name = userDTO.getName();
         this.isActive = userDTO.isActive();
         this.role = userDTO.getRole();
         this.id = userDTO.getId();
-        this.cuaHangId = userDTO.getCuaHangId();
+        this.listCuaHang = userDTO.getListCuaHang();
     }
 }

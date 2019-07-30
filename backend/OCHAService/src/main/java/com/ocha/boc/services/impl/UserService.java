@@ -84,11 +84,8 @@ public class UserService {
                     if (StringUtils.isNotEmpty(request.getEmail())) {
                         user.setEmail(request.getEmail());
                     }
-                    if (StringUtils.isNotEmpty(request.getFirstName())) {
-                        user.setFirstName(request.getFirstName());
-                    }
-                    if (StringUtils.isNotEmpty(request.getLastName())) {
-                        user.setLastName(request.getLastName());
+                    if (StringUtils.isNotEmpty(request.getName())) {
+                        user.setName(request.getName());
                     }
                     if (StringUtils.isNotEmpty(request.getPhoto())) {
                         user.setPhoto(request.getPhoto());
