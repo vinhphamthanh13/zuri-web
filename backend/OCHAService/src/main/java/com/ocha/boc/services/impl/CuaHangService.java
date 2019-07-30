@@ -131,4 +131,23 @@ public class CuaHangService {
         }
         return isExisted;
     }
+
+    public CuaHangResponse findCuaHangByCuaHangId(String cuaHangId){
+        CuaHangResponse response = new CuaHangResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.CUA_HANG_IS_NOT_EXISTED);
+        try{
+            if(StringUtils.isNotEmpty(cuaHangId)){
+                CuaHang cuaHang = cuaHangRepository.findCuaHangById(cuaHangId);
+                if(cuaHang != null){
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObject(new CuaHangDTO(cuaHang));
+                }
+            }
+        }catch (Exception e){
+            log.error("Error when findCuaHangByCuaHangId: {}", e);
+        }
+        return response;
+    }
 }

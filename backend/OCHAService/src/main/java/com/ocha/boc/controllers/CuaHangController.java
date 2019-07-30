@@ -36,4 +36,13 @@ public class CuaHangController {
         return ResponseEntity.ok(response);
     }
 
+    @ApiModelProperty("Find Cua Hang Information by CuaHangId")
+    @GetMapping("/cua-hang/{cuaHangId}")
+    public ResponseEntity<CuaHangResponse> findCuaHangByCuaHangId(@PathVariable(value = "cuaHangId") String cuaHangId){
+        log.info("START: find cua hang information by cuaHangId: " + cuaHangId);
+        CuaHangResponse response = cuaHangService.findCuaHangByCuaHangId(cuaHangId);
+        log.info("END: find cua hang information by cuaHangId");
+        return ResponseEntity.ok(response);
+    }
+
 }
