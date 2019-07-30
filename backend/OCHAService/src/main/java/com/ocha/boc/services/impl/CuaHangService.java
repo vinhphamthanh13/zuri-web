@@ -50,7 +50,7 @@ public class CuaHangService {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     //Update cua hang id on table user
-                    cuaHang = cuaHangRepository.findCuaHangByPhone(request.getPhone());
+                    cuaHang = cuaHangRepository.findTopByOrderByCreatedDateDesc();
                     String cuaHangId = cuaHang.getId();
                     User user = userRepository.findUserByPhone(request.getPhone());
                     if(user != null){

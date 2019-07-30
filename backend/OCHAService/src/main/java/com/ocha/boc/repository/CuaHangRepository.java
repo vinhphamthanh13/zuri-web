@@ -7,4 +7,6 @@ public interface CuaHangRepository extends MongoRepository<CuaHang, String > {
     CuaHang findCuaHangByPhone(String phone);
 
     CuaHang findCuaHangById(String id);
+
+    CuaHang findTopByOrderByCreatedDateDesc();
 }
