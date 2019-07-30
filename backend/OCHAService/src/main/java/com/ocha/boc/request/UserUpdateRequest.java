@@ -27,10 +27,10 @@ public class UserUpdateRequest implements Serializable {
 
     private UserType role;
 
-//    private String verificationCode;
-//
-//    private String countryCode;
-//
-//    private String phoneNumber;
+    private String verificationCode;
+
+    private String countryCode;
+
+    private String phoneNumber;
 
 }
