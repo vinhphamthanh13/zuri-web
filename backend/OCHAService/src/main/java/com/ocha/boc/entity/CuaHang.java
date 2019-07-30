@@ -35,6 +35,8 @@ public class CuaHang {
 
     private String lastModifiedDate;
 
+    private String userId;
+
 
 
 }

@@ -4,6 +4,7 @@ import com.ocha.boc.request.CuaHangRequest;
 import com.ocha.boc.request.CuaHangUpdateRequest;
 import com.ocha.boc.response.CuaHangResponse;
 import com.ocha.boc.services.impl.CuaHangService;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

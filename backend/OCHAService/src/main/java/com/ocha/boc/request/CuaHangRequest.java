@@ -11,7 +11,6 @@ import java.io.Serializable;
 @Setter
 @ToString
 public class CuaHangRequest implements Serializable {
-    private String id;
 
     @ApiModelProperty(required=true)
     private MoHinhKinhDoanhType moHinhKinhDoanhType;
