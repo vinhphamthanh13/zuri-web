@@ -34,12 +34,6 @@ import java.util.List;
 public class OchaApplication extends SpringBootServletInitializer {
 
     @Autowired
-    private BangGiaDetailRepository bangGiaDetailRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private MatHangRepository matHangRepository;
 
     @Autowired
@@ -47,9 +41,6 @@ public class OchaApplication extends SpringBootServletInitializer {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    @Autowired
-    private BangGiaRepository bangGiaRepository;
 
     @Autowired
     private DanhMucRepository danhMucRepository;
@@ -114,34 +105,11 @@ public class OchaApplication extends SpringBootServletInitializer {
     public void migrateMasterAddress() {
         MongoClient mongo = connectMongoDB();
         MongoDatabase db = mongo.getDatabase(databaseName);
-        initBangGiaDetail(db);
-        initBangGia(db);
-        initDanhMuc(db);
-        initMatHangTable(db);
-        initKhuyenMai(db);
-        initNguyenLieuTable(db);
-        initOrder(db);
     }
 
     private MongoClient connectMongoDB() {
         MongoClient mongo = new MongoClient(mongoDBHostName, mongoDBPortNumber);
         return mongo;
-    }
-
-    private void initBangGiaDetail(MongoDatabase db) {
-        try {
-            boolean isExisted = checkExistsCollectionName(db, bangGiaDetailTableName);
-            List<BangGiaDetail> bangGiaDetails = new ArrayList<BangGiaDetail>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/banggia_detail.json");
-            ObjectMapper mapper = new ObjectMapper();
-            bangGiaDetails = mapper.readValue(stream, new TypeReference<List<BangGiaDetail>>() {
-            });
-            if (!isExisted) {
-                bangGiaDetailRepository.saveAll(bangGiaDetails);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void initMatHangTable(MongoDatabase db) {
@@ -186,22 +154,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             });
             if (!isExisted) {
                 orderRepository.saveAll(orders);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initBangGia(MongoDatabase db) {
-        try {
-            boolean isExisted = checkExistsCollectionName(db, bangGiaTableName);
-            List<BangGia> bangGias = new ArrayList<BangGia>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/banggia.json");
-            ObjectMapper mapper = new ObjectMapper();
-            bangGias = mapper.readValue(stream, new TypeReference<List<BangGia>>() {
-            });
-            if (!isExisted) {
-                bangGiaRepository.saveAll(bangGias);
             }
         } catch (Exception e) {
             e.printStackTrace();
