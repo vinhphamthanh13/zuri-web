@@ -26,7 +26,4 @@ public class MatHangRequest implements Serializable {
     @NonNull
     private List<BangGia> listBangGia = new ArrayList<BangGia>();
 
-    private String khuyenMaiId;
-
-
 }

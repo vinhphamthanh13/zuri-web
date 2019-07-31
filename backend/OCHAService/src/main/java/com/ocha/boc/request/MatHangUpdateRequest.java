@@ -25,7 +25,4 @@ public class MatHangUpdateRequest implements Serializable {
     private String danhMucId;
 
     private List<BangGia> listBangGia = new ArrayList<BangGia>();
-
-    private String khuyenMaiId;
-
 }

@@ -28,5 +28,4 @@ public class MatHang extends AbstractEntity {
 
     private List<BangGia> listBangGia = new ArrayList<BangGia>();
 
-    private String khuyenMaiId;
 }
