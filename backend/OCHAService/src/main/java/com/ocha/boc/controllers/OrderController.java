@@ -18,23 +18,23 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @ApiOperation(value = "Get List Mat Hang Ban Chay")
-    @GetMapping("/order/{cuaHangId}/mat-hang-ban-chay")
-    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChay(@PathVariable("cuaHangId") String cuaHangId) {
-        log.info("START: getListMatHangBanChay");
-        MatHangBanChayResponse response = orderService.getListMatHangBanChay(cuaHangId);
-        log.info("END: getListMatHangBanChay");
-        return ResponseEntity.ok(response);
-    }
-
-    @ApiOperation(value = "Get List Mat Hang Ban Chay By Date")
-    @GetMapping("/order/{cuaHangId}/mat-hang-ban-chay/{date}")
-    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChayByDate(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("date") String date) {
-        log.info("START: getListMatHangBanChayByDate " + date);
-        MatHangBanChayResponse response = orderService.getListMatHangBanChayByDate(date, cuaHangId);
-        log.info("END: getListMatHangBanChayByDate");
-        return ResponseEntity.ok(response);
-    }
+//    @ApiOperation(value = "Get List Mat Hang Ban Chay")
+//    @GetMapping("/order/{cuaHangId}/mat-hang-ban-chay")
+//    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChay(@PathVariable("cuaHangId") String cuaHangId) {
+//        log.info("START: getListMatHangBanChay");
+//        MatHangBanChayResponse response = orderService.getListMatHangBanChay(cuaHangId);
+//        log.info("END: getListMatHangBanChay");
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @ApiOperation(value = "Get List Mat Hang Ban Chay By Date")
+//    @GetMapping("/order/{cuaHangId}/mat-hang-ban-chay/{date}")
+//    public ResponseEntity<MatHangBanChayResponse> getListMatHangBanChayByDate(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("date") String date) {
+//        log.info("START: getListMatHangBanChayByDate " + date);
+//        //MatHangBanChayResponse response = orderService.getListMatHangBanChayByDate(date, cuaHangId);
+//        log.info("END: getListMatHangBanChayByDate");
+//        return ResponseEntity.ok(response);
+//    }
 
     @ApiOperation(value = "Get List Order By Date")
     @GetMapping("/order/{cuaHangId}/{date}")
