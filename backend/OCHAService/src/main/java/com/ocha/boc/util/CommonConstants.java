@@ -118,4 +118,19 @@ public class CommonConstants {
 
     public static final String  CUA_HANG_IS_NOT_EXISTED                 = "Không tìm thấy thông tin của cửa hàng. ";
 
+    /**
+     * Nhân Viên Error:
+     */
+    public static final String CREATE_NEW_NHAN_VIEN_FAIL                = "Không thể tạo mới thông tin nhân viên này.";
+
+    public static final String USERNAME_EXISTED                         = "Username này đã tồn tại trong hệ thống. Xin chọn lại tên khác";
+
+    public static final String GET_LIST_NHAN_VIEN_BY_CUA_HANG_ID_FAIL   = "Lỗi khi tìm kiếm thông tin nhân viên của cửa hàng.";
+
+    public static final String NOT_EXISTED_ANY_NHAN_VIEN                = "Cửa hàng không có thông tin của nhân viên nào";
+
+    public static final String DELETE_NHAN_VIEN_BY_NHAN_VIEN_ID_FAIL    = "Lỗi khi xóa nhân viên này khỏi cửa hàng.";
+
+    public static final String NHAN_VIEN_IS_NOT_EXISTED                 = "Nhân viên này không tồn tại. Không thể xóa khỏi hệ thống";
+
 }
