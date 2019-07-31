@@ -36,8 +36,10 @@ public class MatHangService {
                         MatHang matHang = new MatHang();
                         matHang.setCuaHangId(request.getCuaHangId());
                         matHang.setName(request.getName());
-                        matHang.setBangGiaId(request.getBangGiaId());
                         matHang.setDanhMucId(request.getDanhMucId());
+                        if(CollectionUtils.isNotEmpty(request.getListBangGia())){
+                            matHang.setListBangGia(request.getListBangGia());
+                        }
                         if (StringUtils.isNotEmpty(request.getKhuyenMaiId())) {
                             matHang.setKhuyenMaiId(request.getKhuyenMaiId());
                         }
@@ -66,8 +68,8 @@ public class MatHangService {
                 MatHang matHang = matHangRepository.findMatHangByIdAndCuaHangId(request.getId(), request.getCuaHangId());
                 if (matHang != null) {
                     matHang.setName(request.getName());
-                    if (StringUtils.isNotEmpty(request.getBangGiaId())) {
-                        matHang.setBangGiaId(request.getBangGiaId());
+                    if(CollectionUtils.isNotEmpty(request.getListBangGia())){
+                        matHang.setListBangGia(request.getListBangGia());
                     }
                     if (StringUtils.isNotEmpty(request.getDanhMucId())) {
                         matHang.setDanhMucId(request.getDanhMucId());

@@ -6,6 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * MatHang Object means "Mặt hàng"
  */
@@ -17,13 +20,13 @@ public class MatHang extends AbstractEntity {
 
     public static final String COLLECTION_NAME = "mathang";
 
-    private String name;
+    private String cuaHangId;
 
-    private String bangGiaId;
+    private String name;
 
     private String danhMucId;
 
-    private String khuyenMaiId;
+    private List<BangGia> listBangGia = new ArrayList<BangGia>();
 
-    private String cuaHangId;
+    private String khuyenMaiId;
 }
