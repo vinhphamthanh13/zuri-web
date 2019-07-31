@@ -1,9 +1,10 @@
 package com.ocha.boc.request;
 
-import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 
@@ -12,12 +13,12 @@ import java.io.Serializable;
 @ToString
 public class UserLoginRequest implements Serializable {
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private String phone;
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private String verificationCode;
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private String countryCode;
 }

@@ -3,6 +3,7 @@ package com.ocha.boc.request;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ public class KhuyenMaiRequest implements Serializable {
 
     private String toDate;
 
+    @NonNull
     private String cuaHangId;
 
 }

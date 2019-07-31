@@ -3,8 +3,8 @@ package com.ocha.boc.request;
 import com.ocha.boc.enums.DanhMucMatHangType;
 import com.ocha.boc.enums.MoHinhKinhDoanhType;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 
@@ -13,24 +13,24 @@ import java.io.Serializable;
 @ToString
 public class CuaHangRequest implements Serializable {
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private MoHinhKinhDoanhType moHinhKinhDoanhType;
 
-    @ApiModelProperty(required = true)
+    @NonNull
     private DanhMucMatHangType danhMucMatHangType;
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private String cuaHangName;
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private String phone;
 
     private String address;
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private String managerName;
 
-    @ApiModelProperty(required=true)
+    @NonNull
     private String managerPhone;
 
     private String managerEmail;
