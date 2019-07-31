@@ -13,11 +13,11 @@ import s from './Report.css';
 
 class Report extends React.Component {
   render() {
+    const { params } = this.props;
+    console.log('paramas', this.props);
     return (
-      <div className={s.root}>
-        <div className={s.container}>
-          <h1>http://www.bocvietnam.com</h1>
-        </div>
+      <div className={s.container}>
+        <h1>Báo cáo thu nhập</h1>
       </div>
     );
   }

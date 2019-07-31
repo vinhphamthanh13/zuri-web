@@ -104,21 +104,21 @@ class Home extends React.Component {
           </div>
         </div>
         <div className={s.toolBar}>
-          <div className={s.tab}>
+          <div className={s.tab} onClick={this.handleTabClick('home')}>
             <Reorder hexColor="#2e4698" />
-            <div className={s.iconBottom}>Tổng quan</div>
+            <div>Tổng quan</div>
           </div>
-          <div className={s.tab}>
+          <div className={s.tab} onClick={this.handleTabClick('report')}>
             <ShowChart hexColor="#2e4698" />
-            <div className={s.iconBottom}>Báo cáo</div>
+            <div>Báo cáo</div>
           </div>
-          <div className={s.tab}>
+          <div className={s.tab} onClick={this.handleTabClick('activity')}>
             <BubbleChart hexColor="#2e4698" />
-            <div className={s.iconBottom}>Hoạt động</div>
+            <div>Hoạt động</div>
           </div>
-          <div className={s.tab}>
+          <div className={s.tab} onClick={this.handleTabClick('shop')}>
             <FilterVintage hexColor="#2e4698" />
-            <div className={s.iconBottom}>Cửa hàng</div>
+            <div>Cửa hàng</div>
           </div>
         </div>
       </div>

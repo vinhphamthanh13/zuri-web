@@ -11,13 +11,13 @@ import React from 'react';
 import Layout from 'components/Layout';
 import Report from './Report';
 
-async function action() {
+async function action(context, params) {
   return {
     title: 'Báo Cáo',
     chunks: ['report'],
     component: (
       <Layout>
-        <Report news={[]} />
+        <Report params={params} />
       </Layout>
     ),
   };
