@@ -1,5 +1,6 @@
 package com.ocha.boc.request;
 
+import com.ocha.boc.enums.DanhMucMatHangType;
 import com.ocha.boc.enums.MoHinhKinhDoanhType;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -14,6 +15,9 @@ public class CuaHangRequest implements Serializable {
 
     @ApiModelProperty(required=true)
     private MoHinhKinhDoanhType moHinhKinhDoanhType;
+
+    @ApiModelProperty(required = true)
+    private DanhMucMatHangType danhMucMatHangType;
 
     @ApiModelProperty(required=true)
     private String cuaHangName;

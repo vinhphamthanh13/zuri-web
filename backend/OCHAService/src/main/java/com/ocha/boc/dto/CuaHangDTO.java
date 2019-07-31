@@ -1,6 +1,7 @@
 package com.ocha.boc.dto;
 
 import com.ocha.boc.entity.CuaHang;
+import com.ocha.boc.enums.DanhMucMatHangType;
 import com.ocha.boc.enums.MoHinhKinhDoanhType;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,8 @@ public class CuaHangDTO {
     private String id;
 
     private MoHinhKinhDoanhType moHinhKinhDoanhType;
+
+    private DanhMucMatHangType danhMucMatHangType;
 
     private String cuaHangName;
 
@@ -33,6 +36,7 @@ public class CuaHangDTO {
     public CuaHangDTO(CuaHang cuaHang) {
         this.id = cuaHang.getId();
         this.moHinhKinhDoanhType = cuaHang.getMoHinhKinhDoanhType();
+        this.danhMucMatHangType = cuaHang.getDanhMucMatHangType();
         this.cuaHangName = cuaHang.getCuaHangName();
         this.phone = cuaHang.getPhone();
         this.address = cuaHang.getAddress();

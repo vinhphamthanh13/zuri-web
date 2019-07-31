@@ -44,6 +44,7 @@ public class CuaHangService {
                     cuaHang.setPhone(request.getPhone());
                     cuaHang.setManagerName(request.getManagerName());
                     cuaHang.setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
+                    cuaHang.setDanhMucMatHangType(request.getDanhMucMatHangType());
                     cuaHang.setManagerPhone(request.getManagerPhone());
                     cuaHang.setCreatedDate(Instant.now().toString());
                     if (StringUtils.isNotEmpty(request.getAddress())) {

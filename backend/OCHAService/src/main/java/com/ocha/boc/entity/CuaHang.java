@@ -1,5 +1,6 @@
 package com.ocha.boc.entity;
 
+import com.ocha.boc.enums.DanhMucMatHangType;
 import com.ocha.boc.enums.MoHinhKinhDoanhType;
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,6 +19,8 @@ public class CuaHang {
     private String id;
 
     private MoHinhKinhDoanhType moHinhKinhDoanhType;
+
+    private DanhMucMatHangType danhMucMatHangType;
 
     private String cuaHangName;
 
