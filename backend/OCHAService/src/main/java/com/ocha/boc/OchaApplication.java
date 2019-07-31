@@ -45,12 +45,6 @@ public class OchaApplication extends SpringBootServletInitializer {
     @Autowired
     private DanhMucRepository danhMucRepository;
 
-    @Autowired
-    private KhuyenMaiRepository khuyenMaiRepository;
-
-    @Value(value = "${boc.table.banggia}")
-    private String bangGiaTableName;
-
     @Value(value = "${boc.table.mathang}")
     private String matHangTableName;
 
@@ -60,17 +54,11 @@ public class OchaApplication extends SpringBootServletInitializer {
     @Value(value = "${boc.table.nguyenlieu}")
     private String nguyenLieuTableName;
 
-    @Value(value = "${boc.table.banggiaDetail}")
-    private String bangGiaDetailTableName;
-
     @Value(value = "${boc.table.order}")
     private String orderTableName;
 
     @Value(value = "${boc.table.danhmuc}")
     private String danhMucTableName;
-
-    @Value(value = "${boc.table.khuyenmai}")
-    private String khuyenMaiTableName;
 
     @Value(value = "${spring.data.mongodb.host}")
     private String mongoDBHostName;
@@ -170,22 +158,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             });
             if (!isExisted) {
                 danhMucRepository.saveAll(danhMucList);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initKhuyenMai(MongoDatabase db) {
-        try {
-            boolean isExisted = checkExistsCollectionName(db, khuyenMaiTableName);
-            List<KhuyenMai> khuyenMaiList = new ArrayList<KhuyenMai>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/khuyenmai.json");
-            ObjectMapper mapper = new ObjectMapper();
-            khuyenMaiList = mapper.readValue(stream, new TypeReference<List<KhuyenMai>>() {
-            });
-            if (!isExisted) {
-                khuyenMaiRepository.saveAll(khuyenMaiList);
             }
         } catch (Exception e) {
             e.printStackTrace();
