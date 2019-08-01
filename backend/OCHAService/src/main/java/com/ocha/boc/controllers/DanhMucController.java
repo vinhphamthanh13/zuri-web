@@ -4,7 +4,6 @@ import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.request.DanhMucRequest;
 import com.ocha.boc.request.DanhMucUpdateRequest;
 import com.ocha.boc.response.DanhMucResponse;
-import com.ocha.boc.response.DoanhThuDanhMucResponse;
 import com.ocha.boc.services.impl.DanhMucService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +52,4 @@ public class DanhMucController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Get Doanh Thu Theo Danh Muc By Date")
-    @GetMapping("/danh-muc/doanh-thu/{cuaHangId}/{date}")
-    public ResponseEntity<DoanhThuDanhMucResponse> getDoanhThuTheoDanhMucByDate(@PathVariable("cuaHangId") String cuaHangId, @PathVariable("date") String date) {
-        DoanhThuDanhMucResponse response = danhMucService.getDoanhThuTheoDanhMucByDate(date, cuaHangId);
-        return ResponseEntity.ok(response);
-    }
 }

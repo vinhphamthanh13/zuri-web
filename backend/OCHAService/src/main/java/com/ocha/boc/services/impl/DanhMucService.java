@@ -3,15 +3,10 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.DanhMucDTO;
 import com.ocha.boc.entity.DanhMuc;
-import com.ocha.boc.entity.DoanhThuDanhMuc;
-import com.ocha.boc.entity.MatHangTieuThu;
-import com.ocha.boc.entity.Order;
 import com.ocha.boc.repository.DanhMucRepository;
-import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.request.DanhMucRequest;
 import com.ocha.boc.request.DanhMucUpdateRequest;
 import com.ocha.boc.response.DanhMucResponse;
-import com.ocha.boc.response.DoanhThuDanhMucResponse;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -19,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +27,6 @@ public class DanhMucService {
     @Autowired
     private DanhMucRepository danhMucRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
 
 
     public DanhMucResponse createNewDanhMuc(DanhMucRequest request) {
@@ -166,91 +158,6 @@ public class DanhMucService {
             log.error("Error when deleteDanhMucById: {}", e);
         }
         return response;
-    }
-
-    public DoanhThuDanhMucResponse getDoanhThuTheoDanhMucByDate(String date, String cuaHangId) {
-        DoanhThuDanhMucResponse response = null;
-        try {
-            response = buildDoanhThuDanhMucResponse(date, cuaHangId);
-        } catch (Exception e) {
-            log.error("Error when getDoanhThuTheoDanhMucByDate: {}", e);
-        }
-        return response;
-    }
-
-    private DoanhThuDanhMucResponse buildDoanhThuDanhMucResponse(String date, String cuaHangId) {
-        DoanhThuDanhMucResponse response = new DoanhThuDanhMucResponse();
-        response.setMessage(CommonConstants.GET_DOANH_THU_THEO_DANH_MUC_FAIL);
-        response.setSuccess(Boolean.FALSE);
-        List<Order> orders = orderRepository.findListOrderByCreateDateAndCuaHangId(date, cuaHangId);
-        List<DoanhThuDanhMuc> doanhThuDanhMucList = buildListDoanhThuTheoDanhMuc(orders , cuaHangId);
-        if (CollectionUtils.isNotEmpty(doanhThuDanhMucList)) {
-            response.setSuccess(Boolean.TRUE);
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setObjects(doanhThuDanhMucList);
-            response.setTotalResultCount((long) doanhThuDanhMucList.size());
-        }
-        return response;
-    }
-
-    private List<DoanhThuDanhMuc> buildListDoanhThuTheoDanhMuc(List<Order> orders, String cuaHangId) {
-        List<DoanhThuDanhMuc> listDoanhThu = new ArrayList<DoanhThuDanhMuc>();
-        if (CollectionUtils.isNotEmpty(orders)) {
-            for (Order orderTemp : orders) {
-                List<MatHangTieuThu> matHangTieuThuList = orderTemp.getListMatHangTieuThu();
-                for (MatHangTieuThu matHangTieuThu : matHangTieuThuList) {
-                    DoanhThuDanhMuc doanhThu = createDoanhThuDanhMuc(matHangTieuThu, cuaHangId);
-                    boolean isExist = checkDoanhThuDanhMucExist(doanhThu, listDoanhThu);
-                    if (isExist) {
-                        listDoanhThu = updateAmountOfConsumptionAndCalculateCostPrice(doanhThu, listDoanhThu);
-                    } else {
-                        double costPriceTemp = doanhThu.getUnitPrice().multiply(BigDecimal.valueOf((long) doanhThu.getAmountOfConsumption())).doubleValue();
-                        doanhThu.setCostPrice(BigDecimal.valueOf(costPriceTemp));
-                        listDoanhThu.add(doanhThu);
-                    }
-                }
-            }
-        }
-        return listDoanhThu;
-    }
-
-    private DoanhThuDanhMuc createDoanhThuDanhMuc(MatHangTieuThu matHangTieuThu, String cuaHangId) {
-        DoanhThuDanhMuc doanhThu = new DoanhThuDanhMuc();
-        doanhThu.setAmountOfConsumption(matHangTieuThu.getAmountOfConsumption());
-        doanhThu.setUnitPrice(matHangTieuThu.getUnitPrice());
-        DanhMuc danhMuc = getDanhMucByDanhMucId(matHangTieuThu.getMatHang().getDanhMucId(), cuaHangId);
-        doanhThu.setDanhMuc(danhMuc);
-        return doanhThu;
-    }
-
-    private DanhMuc getDanhMucByDanhMucId(String danhMucId, String cuaHangId) {
-        DanhMuc danhMuc = new DanhMuc();
-        danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(danhMucId, cuaHangId);
-        return danhMuc;
-    }
-
-    private boolean checkDoanhThuDanhMucExist(DoanhThuDanhMuc doanhThu, List<DoanhThuDanhMuc> listDoanhThu) {
-        boolean isExist = false;
-        for (DoanhThuDanhMuc temp : listDoanhThu) {
-            if (temp.getDanhMuc().getName().equalsIgnoreCase(doanhThu.getDanhMuc().getName())) {
-                isExist = true;
-                break;
-            }
-        }
-        return isExist;
-    }
-
-    private List<DoanhThuDanhMuc> updateAmountOfConsumptionAndCalculateCostPrice(DoanhThuDanhMuc doanhThu, List<DoanhThuDanhMuc> listDoanhThu) {
-        for (DoanhThuDanhMuc temp : listDoanhThu) {
-            if (temp.getDanhMuc().getName().equalsIgnoreCase(doanhThu.getDanhMuc().getName())) {
-                temp.setAmountOfConsumption(temp.getAmountOfConsumption() + doanhThu.getAmountOfConsumption());
-                double costPriceTemp = doanhThu.getUnitPrice().multiply(BigDecimal.valueOf((long) doanhThu.getAmountOfConsumption())).doubleValue();
-                double costPrice = temp.getCostPrice().doubleValue() + costPriceTemp;
-                temp.setCostPrice(BigDecimal.valueOf(costPrice));
-                break;
-            }
-        }
-        return listDoanhThu;
     }
 
 }
