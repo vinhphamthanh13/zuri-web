@@ -101,64 +101,64 @@ public class OrderService {
 //        return matHangBanChay;
 //    }
 
-    private List<MatHangBanChay> updateAmountOfConsumptionAndDiscountPrice(MatHangBanChay matHangBanChay, List<MatHangBanChay> banChayList) {
-        for (MatHangBanChay temp : banChayList) {
-            if (temp.getMatHang().getName().equalsIgnoreCase(matHangBanChay.getMatHang().getName())) {
-                temp.setAmountOfConsumption(matHangBanChay.getAmountOfConsumption() + temp.getAmountOfConsumption());
-                double discountPriceTemp = temp.getDiscountPrice().doubleValue();
-                double discountPriceMatHangBanChay = matHangBanChay.getDiscountPrice().doubleValue();
-                temp.setDiscountPrice(BigDecimal.valueOf(discountPriceTemp + discountPriceMatHangBanChay));
-                break;
-            }
-        }
-        return banChayList;
-    }
+//    private List<MatHangBanChay> updateAmountOfConsumptionAndDiscountPrice(MatHangBanChay matHangBanChay, List<MatHangBanChay> banChayList) {
+//        for (MatHangBanChay temp : banChayList) {
+//            if (temp.getMatHang().getName().equalsIgnoreCase(matHangBanChay.getMatHang().getName())) {
+//                temp.setAmountOfConsumption(matHangBanChay.getAmountOfConsumption() + temp.getAmountOfConsumption());
+//                double discountPriceTemp = temp.getDiscountPrice().doubleValue();
+//                double discountPriceMatHangBanChay = matHangBanChay.getDiscountPrice().doubleValue();
+//                temp.setDiscountPrice(BigDecimal.valueOf(discountPriceTemp + discountPriceMatHangBanChay));
+//                break;
+//            }
+//        }
+//        return banChayList;
+//    }
+//
+//    private boolean checkMatHangBanChayExisted(MatHangBanChay matHangBanChay, List<MatHangBanChay> banChayList) {
+//        boolean isExisted = false;
+//        for (MatHangBanChay temp : banChayList) {
+//            if (temp.getMatHang().getName().equalsIgnoreCase(matHangBanChay.getMatHang().getName()) && temp.getUnitPrice().compareTo(matHangBanChay.getUnitPrice()) == 0) {
+//                isExisted = true;
+//                break;
+//            }
+//        }
+//        return isExisted;
+//    }
+//
+//    private void sortingBanChayList(List<MatHangBanChay> banChayList) {
+//        Collections.sort(banChayList, (object1, object2) -> Integer.compare(object2.getAmountOfConsumption(), object1.getAmountOfConsumption()));
+//    }
+//
+//    private void calcualteCostPriceMatHangBanChay(List<MatHangBanChay> banChayList) {
+//        for (MatHangBanChay temp : banChayList) {
+//            BigDecimal costPriceBeforeApplyingDiscount = temp.getUnitPrice().multiply(BigDecimal.valueOf((long) temp.getAmountOfConsumption()));
+//            double dCostPriceBeforeApplyingDiscount = costPriceBeforeApplyingDiscount.doubleValue();
+//            double dDiscountPrice = temp.getDiscountPrice().doubleValue();
+//            double costPrice = dCostPriceBeforeApplyingDiscount - dDiscountPrice;
+//            temp.setCostPrice(BigDecimal.valueOf(costPrice));
+//        }
+//    }
 
-    private boolean checkMatHangBanChayExisted(MatHangBanChay matHangBanChay, List<MatHangBanChay> banChayList) {
-        boolean isExisted = false;
-        for (MatHangBanChay temp : banChayList) {
-            if (temp.getMatHang().getName().equalsIgnoreCase(matHangBanChay.getMatHang().getName()) && temp.getUnitPrice().compareTo(matHangBanChay.getUnitPrice()) == 0) {
-                isExisted = true;
-                break;
-            }
-        }
-        return isExisted;
-    }
-
-    private void sortingBanChayList(List<MatHangBanChay> banChayList) {
-        Collections.sort(banChayList, (object1, object2) -> Integer.compare(object2.getAmountOfConsumption(), object1.getAmountOfConsumption()));
-    }
-
-    private void calcualteCostPriceMatHangBanChay(List<MatHangBanChay> banChayList) {
-        for (MatHangBanChay temp : banChayList) {
-            BigDecimal costPriceBeforeApplyingDiscount = temp.getUnitPrice().multiply(BigDecimal.valueOf((long) temp.getAmountOfConsumption()));
-            double dCostPriceBeforeApplyingDiscount = costPriceBeforeApplyingDiscount.doubleValue();
-            double dDiscountPrice = temp.getDiscountPrice().doubleValue();
-            double costPrice = dCostPriceBeforeApplyingDiscount - dDiscountPrice;
-            temp.setCostPrice(BigDecimal.valueOf(costPrice));
-        }
-    }
-
-    public OrderResponse findListOrderByDate(String date, String cuaHangId) {
-        OrderResponse response = new OrderResponse();
-        response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_LIST_ORDER_BY_DATE_FAIL);
-        try {
-            List<Order> orders = orderRepository.findListOrderByCreateDateAndCuaHangId(date,cuaHangId);
-            if (CollectionUtils.isNotEmpty(orders)) {
-                List<OrderDTO> orderDTOS = new ArrayList<OrderDTO>();
-                for (Order order : orders) {
-                    OrderDTO temp = new OrderDTO(order);
-                    orderDTOS.add(temp);
-                }
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setSuccess(Boolean.TRUE);
-                response.setObjects(orderDTOS);
-                response.setTotalResultCount((long) orderDTOS.size());
-            }
-        } catch (Exception e) {
-            log.error("Error when findListOrderByDate: ", e);
-        }
-        return response;
-    }
+//    public OrderResponse findListOrderByDate(String date, String cuaHangId) {
+//        OrderResponse response = new OrderResponse();
+//        response.setSuccess(Boolean.FALSE);
+//        response.setMessage(CommonConstants.GET_LIST_ORDER_BY_DATE_FAIL);
+//        try {
+//            List<Order> orders = orderRepository.findListOrderByCreateDateAndCuaHangId(date,cuaHangId);
+//            if (CollectionUtils.isNotEmpty(orders)) {
+//                List<OrderDTO> orderDTOS = new ArrayList<OrderDTO>();
+//                for (Order order : orders) {
+//                    OrderDTO temp = new OrderDTO(order);
+//                    orderDTOS.add(temp);
+//                }
+//                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+//                response.setSuccess(Boolean.TRUE);
+//                response.setObjects(orderDTOS);
+//                response.setTotalResultCount((long) orderDTOS.size());
+//            }
+//        } catch (Exception e) {
+//            log.error("Error when findListOrderByDate: ", e);
+//        }
+//        return response;
+//    }
 }

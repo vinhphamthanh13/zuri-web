@@ -36,12 +36,12 @@ public class OrderController {
 //        return ResponseEntity.ok(response);
 //    }
 
-    @ApiOperation(value = "Get List Order By Date")
-    @GetMapping("/order/{cuaHangId}/{date}")
-    public ResponseEntity<OrderResponse> findListOrderByDate(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("date") String date){
-        log.info("START: findListOrderByDate " + date);
-        OrderResponse response = orderService.findListOrderByDate(date, cuaHangId);
-        log.info("END: findListOrderByDate");
-        return ResponseEntity.ok(response);
-    }
+//    @ApiOperation(value = "Get List Order By Date")
+//    @GetMapping("/order/{cuaHangId}/{date}")
+//    public ResponseEntity<OrderResponse> findListOrderByDate(@PathVariable("cuaHangId") String cuaHangId,@PathVariable("date") String date){
+//        log.info("START: findListOrderByDate " + date);
+//        OrderResponse response = orderService.findListOrderByDate(date, cuaHangId);
+//        log.info("END: findListOrderByDate");
+//        return ResponseEntity.ok(response);
+//    }
 }
