@@ -37,12 +37,6 @@ public class OchaApplication extends SpringBootServletInitializer {
     private MatHangRepository matHangRepository;
 
     @Autowired
-    private NguyenLieuRepository nguyenLieuRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
     private DanhMucRepository danhMucRepository;
 
     @Value(value = "${boc.table.mathang}")
@@ -50,12 +44,6 @@ public class OchaApplication extends SpringBootServletInitializer {
 
     @Value(value = "${boc.table.user}")
     private String userTableName;
-
-    @Value(value = "${boc.table.nguyenlieu}")
-    private String nguyenLieuTableName;
-
-    @Value(value = "${boc.table.order}")
-    private String orderTableName;
 
     @Value(value = "${boc.table.danhmuc}")
     private String danhMucTableName;
@@ -110,38 +98,6 @@ public class OchaApplication extends SpringBootServletInitializer {
             });
             if (!isExisted) {
                 matHangRepository.saveAll(listMatHang);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initNguyenLieuTable(MongoDatabase db) {
-        try {
-            boolean isExisted = checkExistsCollectionName(db, nguyenLieuTableName);
-            List<NguyenLieu> listNguyenLieu = new ArrayList<NguyenLieu>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/nguyenlieu.json");
-            ObjectMapper mapper = new ObjectMapper();
-            listNguyenLieu = mapper.readValue(stream, new TypeReference<List<NguyenLieu>>() {
-            });
-            if (!isExisted) {
-                nguyenLieuRepository.saveAll(listNguyenLieu);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initOrder(MongoDatabase db) {
-        try {
-            boolean isExisted = checkExistsCollectionName(db, orderTableName);
-            List<Order> orders = new ArrayList<Order>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/order.json");
-            ObjectMapper mapper = new ObjectMapper();
-            orders = mapper.readValue(stream, new TypeReference<List<Order>>() {
-            });
-            if (!isExisted) {
-                orderRepository.saveAll(orders);
             }
         } catch (Exception e) {
             e.printStackTrace();
