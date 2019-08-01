@@ -12,24 +12,6 @@ public class CommonConstants {
     public static final String STR_SUCCESS_STATUS = "SUCCESS";
 
     /**
-     * Khuyến Mãi Error:
-     */
-
-    public static final String CREATE_NEW_KHUYEN_MAI_FAIL               = "Không thể tạo mới mã khuyến mãi. Lỗi hệ thống";
-
-    public static final String GET_KHUYEN_MAI_BY_KHUYEN_MAI_ID_FAIL     = "Không tìm thấy khuyến mãi theo yêu cầu. Lỗi hệ thống";
-
-    public static final String GET_ALL_KHUYEN_MAI_FAIL                  = "Không tìm thấy thông tin khuyến mãi. Lỗi hệ thống";
-
-    public static final String DELETE_KHUYEN_MAI_BY_KHUYEN_MAI_ID_FAIL  = "Không thể xóa mã khuyến mãi này. Lỗi hệ thống";
-
-    public static final String UPDATE_KHUYEN_MAI_FAIL                   = "Không thể cập nhật cho mã khuyến mãi này. Lỗi hệ thống";
-
-    public static final String GET_LIST_ORDER_BY_DATE_FAIL              = "Không có dữ liệu hóa đơn. Lỗi hệ thống!";
-
-    public static final String KHUYEN_MAI_IS_EXISTED                    = "Khuyến mãi này đã có trong hệ thống.";
-
-    /**
      * Danh Mục Error:
      */
     public static final String CREATE_NEW_DANH_MUC_FAIL                 = "Không thể tạo mới danh mục. Lỗi hệ thống !";
@@ -45,19 +27,6 @@ public class CommonConstants {
     public static final String GET_DOANH_THU_THEO_DANH_MUC_FAIL         = "Có lỗi trong quá trình xử lý doanh thu theo danh mục";
 
     public static final String DANH_MUC_IS_EXISTED                      = "Danh mục này đã có trong hệ thống.";
-
-    /**
-     * Bảng giá Error:
-     */
-    public static final String CREATE_NEW_BANG_GIA_FAIL                 = "Không thể tạo mới thông tin bảng giá. Lỗi hệ thống !";
-
-    public static final String UPDATE_BANG_GIA_FAIL                     = "Không thể cập nhật thông tin cho bảng giá này. Lỗi hệ thống !";
-
-    public static final String BANG_GIA_IS_NULL                         = "Không thể tìm thấy bảng giá này.";
-
-    public static final String GET_ALL_BANG_GIA_FAIL                    = "Không tìm thấy thông tin bảng giá. Lỗi hệ thống !";
-
-    public static final String DELETE_BANG_GIA_BY_BANG_GIA_ID_FAIL      = "Không thể xóa bảng giá này. Lỗi hệ thống !";
 
     /**
      * Mặt hàng Error:
@@ -133,4 +102,12 @@ public class CommonConstants {
 
     public static final String NHAN_VIEN_IS_NOT_EXISTED                 = "Nhân viên này không tồn tại. Không thể xóa khỏi hệ thống";
 
+    /**
+     * Giảm Giá Error:
+     */
+    public static final String CREATE_NEW_GIAM_GIA_FAIL                 = "Lỗi trong quá trình tạo mới mã giảm giá.";
+
+    public static final String DELETE_GIAM_GIA_BY_ID_FAIL               = "Lỗi trong quá trình xóa mã giảm giá.";
+
+    public static final String UPDATE_GIAM_GIA_FAIL                     = "Lỗi trong quá trình cập nhật mã giảm giá";
 }
