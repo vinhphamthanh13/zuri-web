@@ -1,6 +1,7 @@
 package com.ocha.boc.dto;
 
 import com.ocha.boc.base.AbstractEntity;
+import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
@@ -9,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -68,6 +71,8 @@ public class OrderDTO extends AbstractEntity {
      */
     private BigDecimal excessCash = BigDecimal.ZERO;
 
+    private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
+
     public OrderDTO(Order order) {
         this.id = order.getId();
         this.cuaHangId = order.getCuaHangId();
@@ -85,5 +90,6 @@ public class OrderDTO extends AbstractEntity {
         this.excessCash = order.getExcessCash();
         this.createdDate = order.getCreatedDate();
         this.lastModifiedDate = order.getLastModifiedDate();
+        this.listMatHangTieuThu = order.getListMatHangTieuThu();
     }
 }
