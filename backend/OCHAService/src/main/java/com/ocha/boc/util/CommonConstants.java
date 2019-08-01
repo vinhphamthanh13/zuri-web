@@ -110,4 +110,9 @@ public class CommonConstants {
     public static final String DELETE_GIAM_GIA_BY_ID_FAIL               = "Lỗi trong quá trình xóa mã giảm giá.";
 
     public static final String UPDATE_GIAM_GIA_FAIL                     = "Lỗi trong quá trình cập nhật mã giảm giá";
+
+    /**
+     * Order Error:
+     */
+    public static final String INITIAL_ORDER_FAIL                       = "Lỗi trong quá trình tạo đơn hàng.";
 }
