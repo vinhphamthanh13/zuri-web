@@ -1,5 +1,6 @@
 package com.ocha.boc.services.impl;
 
+import com.ocha.boc.dto.OrderDTO;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
 import com.ocha.boc.enums.OrderStatus;
@@ -50,6 +51,10 @@ public class OrderService {
                 }
                 BigDecimal tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
                 order.setTotalMoney(tempTotalMoney);
+                orderRepository.save(order);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObject(new OrderDTO(order));
             }
         } catch (Exception e) {
             log.error("Error when initialOrder: {}", e);
