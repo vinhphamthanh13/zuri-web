@@ -11,6 +11,9 @@ class Login extends React.Component {
   handleActivation = () => {
     history.push('/activation');
   };
+  redirectRegister = () => {
+    history.push('/register');
+  };
 
   render() {
     return (
@@ -22,7 +25,7 @@ class Login extends React.Component {
             <div className={s.greeting}>Quản lý cửa hàng hiệu quả hơn</div>
           </div>
         </div>
-        <div className={s.facebookInitAK}>
+        <div className={s.login}>
           <Button
             label="Đăng Nhập"
             className={s.button}
@@ -30,6 +33,10 @@ class Login extends React.Component {
           >
             <HowToReg />
           </Button>
+        </div>
+        <div className={s.register}>
+          Hoặc chưa có tài khoản?{' '}
+          <span onClick={this.redirectRegister}>Đăng ký</span>
         </div>
         <div className={s.copyRight}>Bản quyền thuộc về BOCVN@2019</div>
       </div>

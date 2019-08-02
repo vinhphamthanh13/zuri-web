@@ -1,11 +1,11 @@
 import React from 'react';
-import { string } from 'prop-types';
+import { string, number } from 'prop-types';
 
-export const HowToReg = ({ hexColor }) => (
+export const HowToReg = ({ hexColor, size }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
   >
     <path fillRule="evenodd" clipRule="evenodd" fill="none" d="M0 0h24v24H0z" />
@@ -24,17 +24,19 @@ export const HowToReg = ({ hexColor }) => (
 
 HowToReg.propTypes = {
   hexColor: string,
+  size: number,
 };
 
 HowToReg.defaultProps = {
   hexColor: '#fff',
+  size: 24,
 };
 
-export const Clear = ({ hexColor }) => (
+export const Clear = ({ hexColor, size }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill={hexColor}
   >
@@ -45,17 +47,19 @@ export const Clear = ({ hexColor }) => (
 
 Clear.propTypes = {
   hexColor: string,
+  size: number,
 };
 
 Clear.defaultProps = {
   hexColor: '#fff',
+  size: 24,
 };
 
-export const Reorder = ({ hexColor }) => (
+export const Reorder = ({ hexColor, size }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill={hexColor}
   >
@@ -66,17 +70,19 @@ export const Reorder = ({ hexColor }) => (
 
 Reorder.propTypes = {
   hexColor: string,
+  size: number,
 };
 
 Reorder.defaultProps = {
   hexColor: '#fff',
+  size: 24,
 };
 
-export const ShowChart = ({ hexColor }) => (
+export const ShowChart = ({ hexColor, size }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill={hexColor}
   >
@@ -87,17 +93,19 @@ export const ShowChart = ({ hexColor }) => (
 
 ShowChart.propTypes = {
   hexColor: string,
+  size: number,
 };
 
 ShowChart.defaultProps = {
   hexColor: '#fff',
+  size: 24,
 };
 
-export const FilterVintage = ({ hexColor }) => (
+export const FilterVintage = ({ hexColor, size }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill={hexColor}
   >
@@ -108,17 +116,19 @@ export const FilterVintage = ({ hexColor }) => (
 
 FilterVintage.propTypes = {
   hexColor: string,
+  size: number,
 };
 
 FilterVintage.defaultProps = {
   hexColor: '#fff',
+  size: 24,
 };
 
-export const BubbleChart = ({ hexColor }) => (
+export const BubbleChart = ({ hexColor, size }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill={hexColor}
   >
@@ -131,8 +141,33 @@ export const BubbleChart = ({ hexColor }) => (
 
 BubbleChart.propTypes = {
   hexColor: string,
+  size: number,
 };
 
 BubbleChart.defaultProps = {
   hexColor: '#fff',
+  size: 24,
+};
+
+export const Announcement = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z" />
+    <path d="M0 0h24v24H0z" fill="none" />
+  </svg>
+);
+
+Announcement.propTypes = {
+  hexColor: string,
+  size: number,
+};
+
+Announcement.defaultProps = {
+  hexColor: '#fff',
+  size: 24,
 };

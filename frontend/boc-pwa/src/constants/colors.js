@@ -1,0 +1,11 @@
+export const brand01 = '#2e4698';
+export const brand02 = '#1c75bc';
+export const brand03 = '#00aeef';
+export const brand04 = '#c1c8e4';
+export const brand05 = '#8860d0';
+export const bright = '#fff';
+export const dark = '#000';
+export const gray = '#ccc';
+export const success = '#4bcb21';
+export const error = '#c41010';
+export const warning = '#e3e926';

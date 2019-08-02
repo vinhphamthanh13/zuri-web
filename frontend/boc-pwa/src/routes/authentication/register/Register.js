@@ -1,73 +1,82 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
-import React from 'react';
-// import PropTypes from 'prop-types';
-// import { get } from 'lodash';
+import React, { Component } from 'react';
+import { func, objectOf, any, bool } from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import BocLogo from 'assets/images/welcome_boc.png';
-import BocGreet from 'assets/images/boc_greeting.png';
-import { HowToReg } from 'constants/svg';
+import Header from 'components/Header';
 import Button from 'components/Button';
+import Input from 'components/Input';
+import { withFormik } from 'formik';
+import { register } from 'constants/schemas';
+import { INPUT } from 'constants/common';
+import BocGreet from 'assets/images/boc_greeting.png';
 import history from '../../../history';
 import s from './Register.css';
 
-class Register extends React.Component {
-  state = {
-    // facebookAppId: null,
-    // facebookAppSecret: null,
-    // facebookAkApiVersion: null,
+class Register extends Component {
+  static propTypes = {
+    handleChange: func.isRequired,
+    handleSubmit: func.isRequired,
+    values: objectOf(any).isRequired,
+    errors: objectOf(any).isRequired,
+    isValid: bool.isRequired,
   };
-
-  componentWillMount() {
-    // const { appId, appSecret, akApiVersion } = get(process.env, 'FACEBOOK');
-    this.setState({
-      // facebookAppId: appId,
-      // facebookAppSecret: appSecret,
-      // facebookAkApiVersion: akApiVersion,
-    });
-  }
 
   handleActivation = () => {
     history.push('/activation');
   };
 
+  createForm = () => {
+    const { handleChange, errors, values } = this.props;
+    return Object.keys(INPUT).map(input => (
+      <Input
+        key={INPUT[input].value}
+        label={INPUT[input].label}
+        name={INPUT[input].value}
+        onChange={handleChange}
+        errors={errors}
+        value={values[INPUT[input].value]}
+        placeholder={INPUT[input].placeholder}
+      />
+    ));
+  };
+
   render() {
-    // eslint-disable-next-line no-empty-pattern
-    const {
-      // facebookAppId,
-      // facebookAppSecret,
-      // facebookAkApiVersion,
-    } = this.state;
+    const { isValid, handleSubmit } = this.props;
 
     return (
       <div className={s.container}>
-        <div className={s.welcome}>
-          <img src={BocLogo} alt="boc-logo" className={s.logo} />
-          <div className={s.title}>
-            <img src={BocGreet} alt="Boc Brand" className={s.brand} />
-            <div className={s.greeting}>Quản lý cửa hàng hiệu quả hơn</div>
-          </div>
+        <Header title="Tạo tài khoản" />
+        <div className={s.greetingLogo}>
+          <img src={BocGreet} alt="Boc Greeting" width="100%" />
         </div>
-        <div className={s.facebookInitAK}>
+        <div className={s.register}>
+          <form onSubmit={handleSubmit}>{this.createForm()}</form>
           <Button
-            label="Đăng Nhập"
-            className={s.button}
-            onClick={this.handleActivation}
-          >
-            <HowToReg />
-          </Button>
+            onClick={this.handleRegister}
+            label="Tiếp theo"
+            disabled={!isValid}
+          />
         </div>
-        <div className={s.copyRight}>Bản quyền thuộc về BOCVN@2019</div>
       </div>
     );
   }
 }
 
-export default withStyles(s)(Register);
+export default compose(
+  withFormik({
+    initialValues: {
+      userName: '',
+      lastName: '',
+      phoneNumber: '',
+      shopAddress: '',
+    },
+    validationSchema: register,
+    // isInitialValid: true,
+    handleSubmit: (values, { isSubmitting }) => {
+      console.log('values on submit', values);
+    },
+  }),
+  connect(null),
+  withStyles(s),
+)(Register);

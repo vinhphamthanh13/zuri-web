@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { string, oneOfType, number, func, bool, objectOf } from 'prop-types';
-import uuidv1 from 'uuid/v1';
 import { noop } from 'lodash';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -16,6 +15,7 @@ class Input extends Component {
     disabled: bool,
     errors: objectOf(string),
     placeholder: string,
+    label: string,
   };
 
   static defaultProps = {
@@ -25,6 +25,7 @@ class Input extends Component {
     errors: {},
     className: '',
     placeholder: '',
+    label: '',
   };
 
   render() {
@@ -37,12 +38,17 @@ class Input extends Component {
       disabled,
       errors,
       placeholder,
+      label,
     } = this.props;
+    const wrapperStyle = label
+      ? s.inputWrapper
+      : `${s.inputWrapper} ${s.inputWrapperGutter}`;
 
     return (
-      <div className={s.inputWrapper}>
+      <div className={wrapperStyle}>
+        <span className={s.label}>{label}</span>
         <input
-          id={uuidv1()}
+          id={name}
           placeholder={placeholder}
           type={type}
           name={name}

@@ -12,7 +12,7 @@ import Layout from 'components/Layout';
 import Register from './Register';
 
 const action = () => ({
-  chunks: ['Register'],
+  chunks: ['register'],
   title: 'Đăng Ký BOCVN',
   component: (
     <Layout>

@@ -29,6 +29,11 @@ const routes = {
         import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
     },
     {
+      path: '/register',
+      load: () =>
+        import(/* webpackChunkName: 'register' */ './authentication/register'),
+    },
+    {
       path: '/home',
       load: () => import(/* webpackChunkName: 'home' */ './home'),
     },

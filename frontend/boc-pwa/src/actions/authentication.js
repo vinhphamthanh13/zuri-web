@@ -3,11 +3,7 @@ import { get } from 'lodash';
 import { NODE_URL } from 'constants/api';
 import { handleRequest } from 'api/utils';
 import { setLoading, setError, LOADING } from 'actions/common';
-import {
-  SET_PHONE_NUMBER,
-  SET_USER_ID,
-  SET_VERIFICATION_CODE_STATUS,
-} from 'constants/authentication';
+import { SET_PHONE_NUMBER, SET_USER_ID } from 'constants/authentication';
 
 // Action API to Node Server
 const loginUrl = number => axios.get(`${NODE_URL.LOGIN}/${number}`);

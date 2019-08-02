@@ -6,11 +6,11 @@ import {
   handleRequest,
 } from 'api/utils';
 
-const verifyCode = (countryCode, phoneNumber) =>
+const generateVerificationCode = (countryCode, phoneNumber) =>
   axios.post(`${SERVER_URL.VERIFY_CODE}/${countryCode}/${phoneNumber}`);
 
 const verifyingCode = async (countryCode, phoneNumber) => {
-  const [result, error] = await handleRequest(verifyCode, [
+  const [result, error] = await handleRequest(generateVerificationCode, [
     countryCode,
     phoneNumber,
   ]);

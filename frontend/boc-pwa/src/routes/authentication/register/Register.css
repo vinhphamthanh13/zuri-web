@@ -19,45 +19,15 @@
   background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(147, 226, 255, 1) 100%);
 }
 
-.welcome {
+.register {
   color: var(--c-brand-3);
   text-align: center;
+  border: 1px solid var(--c-brand-5);
+  padding: var(--size-16);
+  border-radius: var(--size-08);
 }
 
-.logo {
-  margin: var(--size-64) auto;
-  width: var(--home-logo-width);
-}
-
-.title {
-  margin: var(--size-12) 0 var(--size-36);
-}
-
-.brand {
-  width: var(--size-86);
-  margin: var(--size-14);
-}
-
-.greeting {
-  color: var(--c-brand-1);
-  font-size: var(--font-size-16);
-}
-
-.facebookInitAK {
-  display: flex;
-  position: absolute;
-  bottom: var(--size-64);
-}
-
-.button {
-  color: var(--c-text-bright);
-  background: var(--c-brand-1);
-}
-
-.copyRight {
-  position: absolute;
-  bottom: var(--size-12);
-  color: var(--c-brand-1);
-  font-size: var(--font-size-10);
-  text-align: center;
+.greetingLogo {
+  width: var(--home-brand-width);
+  margin-bottom: var(--size-14);
 }

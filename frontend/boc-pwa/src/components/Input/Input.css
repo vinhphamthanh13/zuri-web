@@ -5,6 +5,11 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  margin: calc(var(--size-padding) * 1.5) 0;
+  position: relative;
+}
+
+.inputWrapperGutter {
   margin: var(--size-padding) 0;
 }
 
@@ -19,11 +24,21 @@ input {
 }
 
 input::placeholder {
-  color: var(--c-warning);
+  color: var(--c-gray);
+  font-style: italic;
+  font-weight: var(--font-weight-300);
+}
+
+.label {
+  position: absolute;
+  top: calc(var(--size-16) * -1.8);
+  color: var(--c-text-dark);
+  font-weight: var(--font-weight-500)
 }
 
 .errorMessage {
   text-align: left;
   font-size: var(--font-size-label);
   color: var(--c-error);
+  font-style: italic;
 }
