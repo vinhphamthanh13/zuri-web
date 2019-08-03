@@ -115,4 +115,10 @@ public class CommonConstants {
      * Order Error:
      */
     public static final String INITIAL_ORDER_FAIL                       = "Lỗi trong quá trình tạo đơn hàng.";
+
+    public static final String UPDATE_ORDER_FAIL                        = "Lỗi trong quá trình cập nhật đơn hàng.";
+
+    public static final String ORDER_NOT_EXISTED                        = "Không có thông tin đơn hàng trong hệ thống.";
+
+    public static final String ORDER_CHECKOUT_FAIL                      = "Lỗi trong quá trình thanh toán đơn hàng.";
 }
