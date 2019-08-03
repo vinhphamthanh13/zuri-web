@@ -71,6 +71,8 @@ public class OrderDTO extends AbstractEntity {
      */
     private BigDecimal excessCash = BigDecimal.ZERO;
 
+    private BigDecimal refunds;
+
     private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
 
     public OrderDTO(Order order) {
@@ -88,6 +90,7 @@ public class OrderDTO extends AbstractEntity {
         this.cash = order.getCash();
         this.tips = order.getTips();
         this.excessCash = order.getExcessCash();
+        this.refunds = order.getRefunds();
         this.createdDate = order.getCreatedDate();
         this.lastModifiedDate = order.getLastModifiedDate();
         this.listMatHangTieuThu = order.getListMatHangTieuThu();
