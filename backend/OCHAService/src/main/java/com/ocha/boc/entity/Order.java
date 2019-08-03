@@ -75,4 +75,9 @@ public class Order extends AbstractEntity {
      */
     private BigDecimal excessCash = BigDecimal.ZERO;
 
+    /**
+     * Hoàn Tiền: Only if status order is CANCEL
+     */
+    private BigDecimal refunds;
+
 }
