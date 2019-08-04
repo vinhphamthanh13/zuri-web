@@ -15,6 +15,8 @@ public class MatHangTieuThu {
 
     private BangGia bangGia;
 
+    private GiamGia giamGia;
+
     private int quantity;
 
     private BigDecimal total;

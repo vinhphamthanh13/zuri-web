@@ -1,8 +1,10 @@
 package com.ocha.boc.services.impl;
 
 import com.ocha.boc.dto.OrderDTO;
+import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
+import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
 import com.ocha.boc.repository.OrderRepository;
@@ -202,10 +204,49 @@ public class OrderService {
     private BigDecimal calculateTotalMoney(List<MatHangTieuThu> listMatHangTieuThu) {
         BigDecimal total = BigDecimal.ZERO;
         for (MatHangTieuThu matHangTieuThu : listMatHangTieuThu) {
-            int quantity = matHangTieuThu.getQuantity();
-            BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
-            total = total.add(price.multiply(BigDecimal.valueOf((double) quantity)));
+            if (matHangTieuThu.getGiamGia() != null) {
+                BigDecimal discountMoney = BigDecimal.ZERO;
+                GiamGia giamGia = matHangTieuThu.getGiamGia();
+                if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
+                    discountMoney = calculateGiamGiaThongThuongType(matHangTieuThu);
+                } else if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
+                    discountMoney = calculateGiamGiaTheoDanhMucType(matHangTieuThu);
+                }
+                total = total.add(calculateTotalWhenGiamGiaIsExisted(discountMoney,
+                        matHangTieuThu.getQuantity(), matHangTieuThu.getBangGia().getLoaiGia().getPrice()));
+            } else {
+                int quantity = matHangTieuThu.getQuantity();
+                BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
+                total = total.add(price.multiply(BigDecimal.valueOf((double) quantity)));
+            }
         }
+        return total;
+    }
+
+    private BigDecimal calculateGiamGiaThongThuongType(MatHangTieuThu matHangTieuThu) {
+        BigDecimal discountMoney = BigDecimal.ZERO;
+        BigDecimal originalPrice = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
+        if (matHangTieuThu.getGiamGia().getDiscountAmount() != null) {
+            discountMoney = originalPrice.subtract(matHangTieuThu.getGiamGia().getDiscountAmount());
+        } else if (matHangTieuThu.getGiamGia().getPercentage() != null) {
+            BigDecimal percent = matHangTieuThu.getGiamGia().getPercentage();
+            discountMoney = originalPrice.multiply(percent.divide(BigDecimal.valueOf(100)));
+        }
+        return discountMoney;
+    }
+
+    private BigDecimal calculateGiamGiaTheoDanhMucType(MatHangTieuThu matHangTieuThu) {
+        BigDecimal discountMoney = BigDecimal.ZERO;
+        BigDecimal originalPrice = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
+        BigDecimal percent = matHangTieuThu.getGiamGia().getPercentage();
+        discountMoney = originalPrice.multiply(percent);
+        return discountMoney;
+    }
+
+    private BigDecimal calculateTotalWhenGiamGiaIsExisted(BigDecimal discountMoney, int quantity, BigDecimal originalPrice) {
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal amountOfAssumption = originalPrice.multiply(BigDecimal.valueOf((double) quantity));
+        total = amountOfAssumption.subtract(discountMoney);
         return total;
     }
 

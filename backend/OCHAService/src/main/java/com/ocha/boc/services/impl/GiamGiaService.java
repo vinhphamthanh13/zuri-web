@@ -42,6 +42,7 @@ public class GiamGiaService {
                     giamGia.setPercentage(request.getPercentage());
                 }
                 giamGia.setCreatedDate(Instant.now().toString());
+                giamGia.setGiamGiaType(request.getGiamGiaType());
                 giamGiaRepository.save(giamGia);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -94,9 +95,11 @@ public class GiamGiaService {
                         } else if (request.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label.toString())) {
                             if (request.getPercentage() != null) {
                                 giamGia.setPercentage(request.getPercentage());
+                                giamGia.setDiscountAmount(null);
                             }
                             if (request.getDiscountAmount() != null) {
                                 giamGia.setDiscountAmount(request.getDiscountAmount());
+                                giamGia.setPercentage(null);
                             }
                         }
 
