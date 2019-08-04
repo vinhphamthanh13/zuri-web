@@ -51,7 +51,7 @@ public class OrderController {
     public ResponseEntity<OrderResponse> checkoutOrder(@RequestBody OrderCheckoutObjectRequest request) {
         log.info("START: checkout order: " + request.getOrderId());
         OrderResponse response = orderService.checkoutOrder(request);
-        log.info("END: reject order");
+        log.info("END: checkout order");
         return ResponseEntity.ok(response);
     }
 
