@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -55,6 +52,15 @@ public class OrderController {
         log.info("START: checkout order: " + request.getOrderId());
         OrderResponse response = orderService.checkoutOrder(request);
         log.info("END: reject order");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation("Get Order By CuaHangId")
+    @GetMapping("/orders/{cuaHangId}")
+    public ResponseEntity<OrderResponse> getOrdersByCuaHangId(@PathVariable(value = "cuaHangId") String cuaHangId){
+        log.info("START: get orders by cuaHangId: " + cuaHangId);
+        OrderResponse response = orderService.getOrdersByCuaHangId(cuaHangId);
+        log.info("END: get orders by cuaHangId");
         return ResponseEntity.ok(response);
     }
 }

@@ -13,12 +13,14 @@ import com.ocha.boc.request.OrderUpdateRequest;
 import com.ocha.boc.response.OrderResponse;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -161,6 +163,30 @@ public class OrderService {
             }
         } catch (Exception e) {
             log.error("Error when checkoutOrder: {}", e);
+        }
+        return response;
+    }
+
+    public OrderResponse getOrdersByCuaHangId(String cuaHangId) {
+        OrderResponse response = new OrderResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_ORDERS_BY_CUAHANGID_FAIL);
+        try {
+            if (StringUtils.isNotEmpty(cuaHangId)) {
+                List<Order> temp = orderRepository.findAllOrderByCuaHangId(cuaHangId);
+                if (CollectionUtils.isNotEmpty(temp)) {
+                    List<OrderDTO> ordersResult = new ArrayList<OrderDTO>();
+                    for (Order order : temp) {
+                        ordersResult.add(new OrderDTO(order));
+                    }
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObjects(ordersResult);
+                    response.setTotalResultCount((long) ordersResult.size());
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error when getOrdersByCuaHangId: {}", e);
         }
         return response;
     }

@@ -121,4 +121,8 @@ public class CommonConstants {
     public static final String ORDER_NOT_EXISTED                        = "Không có thông tin đơn hàng trong hệ thống.";
 
     public static final String ORDER_CHECKOUT_FAIL                      = "Lỗi trong quá trình thanh toán đơn hàng.";
+
+    public static final String GET_ORDERS_BY_CUAHANGID_FAIL             = "Lỗi trong quá trình truy xuất thông tin đơn hàng";
+
+
 }
