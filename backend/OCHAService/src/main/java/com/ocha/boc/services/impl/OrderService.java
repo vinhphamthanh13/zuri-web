@@ -22,15 +22,18 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Slf4j
 public class OrderService {
 
     private static Random rand = new Random();
+
+    private static final String TOTAL_MONEY = "TOTAL";
+
+    private static final String DISCOUNT_MONEY = "DISCOUNT";
+
     @Autowired
     private OrderRepository orderRepository;
 
@@ -144,11 +147,21 @@ public class OrderService {
                     order.setOrderTimeCheckOut(Instant.now().toString());
                     order.setListMatHangTieuThu(request.getListMatHangTieuThu());
                     if (request.getGiamGia() != null) {
-                        tempTotalMoney = calculateTotalMoneyWhenOrderWasDiscounted(request.getListMatHangTieuThu(), request.getGiamGia());
+                        Map<String, BigDecimal> typeOrPrice = calculateTotalMoneyWhenOrderWasDiscounted(request.getListMatHangTieuThu(), request.getGiamGia());
+                        for (Map.Entry<String, BigDecimal> entry : typeOrPrice.entrySet()) {
+                            String key = entry.getKey();
+                            BigDecimal value = entry.getValue();
+                            if (key.equalsIgnoreCase(TOTAL_MONEY)) {
+                                order.setTotalMoney(value);
+                            } else if (key.equalsIgnoreCase(DISCOUNT_MONEY)) {
+                                order.setDiscountMoney(value);
+                            }
+                        }
+                        order.setGiamGia(request.getGiamGia());
                     } else {
                         tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
+                        order.setTotalMoney(tempTotalMoney);
                     }
-                    order.setTotalMoney(tempTotalMoney);
                     order.setCash(request.getCash());
                     BigDecimal excessMoney = request.getCash().subtract(tempTotalMoney);
                     if (excessMoney.compareTo(BigDecimal.ZERO) != 0) {
@@ -215,45 +228,58 @@ public class OrderService {
         return total;
     }
 
-    private BigDecimal calculateTotalMoneyWhenOrderWasDiscounted(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+    private Map<String, BigDecimal> calculateTotalMoneyWhenOrderWasDiscounted(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+        Map<String, BigDecimal> mapOfPriceType = new HashMap<String, BigDecimal>();
         BigDecimal tempTotal = BigDecimal.ZERO;
-        BigDecimal total = BigDecimal.ZERO;
         if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
             tempTotal = calculateTotalMoney(listMatTieuThu);
-            total = calculateTotalWithGiamGiaThongThuongType(tempTotal, giamGia);
+            mapOfPriceType = calculateTotalWithGiamGiaThongThuongType(tempTotal, giamGia);
         } else if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
-            total = calculateTotalWithGiamGiaDanhMucType(listMatTieuThu, giamGia);
+            mapOfPriceType = calculateTotalWithGiamGiaDanhMucType(listMatTieuThu, giamGia);
         }
-        return total;
+        return mapOfPriceType;
     }
 
-    private BigDecimal calculateTotalWithGiamGiaThongThuongType(BigDecimal amountOfAssumption, GiamGia giamGia) {
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaThongThuongType(BigDecimal amountOfAssumption, GiamGia giamGia) {
+        Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
         BigDecimal total = BigDecimal.ZERO;
+        BigDecimal discountMoney = BigDecimal.ZERO;
         if (giamGia.getDiscountAmount() != null) {
             total = amountOfAssumption.subtract(giamGia.getDiscountAmount());
         } else if (giamGia.getPercentage() != null) {
-            BigDecimal discountMoney = amountOfAssumption.multiply(giamGia.getPercentage().divide(BigDecimal.valueOf(100)));
+            discountMoney = amountOfAssumption.multiply(giamGia.getPercentage().divide(BigDecimal.valueOf(100)));
             total = amountOfAssumption.subtract(discountMoney);
         }
-        return total;
+        results.put(TOTAL_MONEY, total);
+        results.put(DISCOUNT_MONEY, discountMoney);
+        return results;
     }
 
-    private BigDecimal calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+        Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
         String danhMucId = giamGia.getDanhMucId();
         BigDecimal percent = giamGia.getPercentage();
         BigDecimal total = BigDecimal.ZERO;
+        BigDecimal discountMoney = BigDecimal.ZERO;
         for (MatHangTieuThu matHangTieuThu : listMatTieuThu) {
             String danhMucIdInMatHang = matHangTieuThu.getMatHang().getDanhMucId();
             int quantity = matHangTieuThu.getQuantity();
             BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
             if (danhMucId.equalsIgnoreCase(danhMucIdInMatHang)) {
+                //origin price * quantity
                 BigDecimal temp = price.multiply(BigDecimal.valueOf((double) quantity));
-                total = temp.multiply(percent.divide(BigDecimal.valueOf(100)));
+                //calculate discount money: discount money = discount + (temp * percent discount)
+                discountMoney = discountMoney.add(temp.multiply(percent.divide(BigDecimal.valueOf(100))));
+                //amount of money have to pay = temp - discount money
+                BigDecimal amountOfAssumption = temp.subtract(discountMoney);
+                total = total.add(amountOfAssumption);
             } else {
-                total = price.multiply(BigDecimal.valueOf((double) quantity));
+                total = total.add(price.multiply(BigDecimal.valueOf((double) quantity)));
             }
         }
-        return total;
+        results.put(TOTAL_MONEY, total);
+        results.put(DISCOUNT_MONEY, discountMoney);
+        return results;
     }
 
     private boolean checkReceiptCodeIsExisted(String receiptCode, String cuaHangId) {

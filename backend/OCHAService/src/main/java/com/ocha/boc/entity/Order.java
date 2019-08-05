@@ -82,4 +82,9 @@ public class Order extends AbstractEntity {
      */
     private BigDecimal refunds;
 
+    /**
+     * Discount Money: Tiền được giảm.
+     */
+    private BigDecimal discountMoney;
+
 }

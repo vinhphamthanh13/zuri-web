@@ -78,6 +78,8 @@ public class OrderDTO extends AbstractEntity {
 
     private GiamGia giamGia;
 
+    private BigDecimal discountMoney;
+
     public OrderDTO(Order order) {
         this.id = order.getId();
         this.cuaHangId = order.getCuaHangId();
@@ -98,5 +100,6 @@ public class OrderDTO extends AbstractEntity {
         this.lastModifiedDate = order.getLastModifiedDate();
         this.listMatHangTieuThu = order.getListMatHangTieuThu();
         this.giamGia = order.getGiamGia();
+        this.discountMoney = order.getDiscountMoney();
     }
 }
