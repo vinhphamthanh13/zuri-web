@@ -30,10 +30,9 @@ import java.util.Random;
 @Slf4j
 public class OrderService {
 
+    private static Random rand = new Random();
     @Autowired
     private OrderRepository orderRepository;
-
-    private static Random rand = new Random();
 
     public OrderResponse initialOrder(OrderRequest request) {
         OrderResponse response = new OrderResponse();
@@ -135,6 +134,7 @@ public class OrderService {
         OrderResponse response = new OrderResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.ORDER_CHECKOUT_FAIL);
+        BigDecimal tempTotalMoney = BigDecimal.ZERO;
         try {
             if (request != null) {
                 Order order = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
@@ -143,7 +143,11 @@ public class OrderService {
                     order.setLastModifiedDate(Instant.now().toString());
                     order.setOrderTimeCheckOut(Instant.now().toString());
                     order.setListMatHangTieuThu(request.getListMatHangTieuThu());
-                    BigDecimal tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
+                    if (request.getGiamGia() != null) {
+                        tempTotalMoney = calculateTotalMoneyWhenOrderWasDiscounted(request.getListMatHangTieuThu(), request.getGiamGia());
+                    } else {
+                        tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
+                    }
                     order.setTotalMoney(tempTotalMoney);
                     order.setCash(request.getCash());
                     BigDecimal excessMoney = request.getCash().subtract(tempTotalMoney);
@@ -204,49 +208,51 @@ public class OrderService {
     private BigDecimal calculateTotalMoney(List<MatHangTieuThu> listMatHangTieuThu) {
         BigDecimal total = BigDecimal.ZERO;
         for (MatHangTieuThu matHangTieuThu : listMatHangTieuThu) {
-            if (matHangTieuThu.getGiamGia() != null) {
-                BigDecimal discountMoney = BigDecimal.ZERO;
-                GiamGia giamGia = matHangTieuThu.getGiamGia();
-                if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
-                    discountMoney = calculateGiamGiaThongThuongType(matHangTieuThu);
-                } else if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
-                    discountMoney = calculateGiamGiaTheoDanhMucType(matHangTieuThu);
-                }
-                total = total.add(calculateTotalWhenGiamGiaIsExisted(discountMoney,
-                        matHangTieuThu.getQuantity(), matHangTieuThu.getBangGia().getLoaiGia().getPrice()));
-            } else {
-                int quantity = matHangTieuThu.getQuantity();
-                BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
-                total = total.add(price.multiply(BigDecimal.valueOf((double) quantity)));
-            }
+            int quantity = matHangTieuThu.getQuantity();
+            BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
+            total = total.add(price.multiply(BigDecimal.valueOf((double) quantity)));
         }
         return total;
     }
 
-    private BigDecimal calculateGiamGiaThongThuongType(MatHangTieuThu matHangTieuThu) {
-        BigDecimal discountMoney = BigDecimal.ZERO;
-        BigDecimal originalPrice = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
-        if (matHangTieuThu.getGiamGia().getDiscountAmount() != null) {
-            discountMoney = originalPrice.subtract(matHangTieuThu.getGiamGia().getDiscountAmount());
-        } else if (matHangTieuThu.getGiamGia().getPercentage() != null) {
-            BigDecimal percent = matHangTieuThu.getGiamGia().getPercentage();
-            discountMoney = originalPrice.multiply(percent.divide(BigDecimal.valueOf(100)));
-        }
-        return discountMoney;
-    }
-
-    private BigDecimal calculateGiamGiaTheoDanhMucType(MatHangTieuThu matHangTieuThu) {
-        BigDecimal discountMoney = BigDecimal.ZERO;
-        BigDecimal originalPrice = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
-        BigDecimal percent = matHangTieuThu.getGiamGia().getPercentage();
-        discountMoney = originalPrice.multiply(percent);
-        return discountMoney;
-    }
-
-    private BigDecimal calculateTotalWhenGiamGiaIsExisted(BigDecimal discountMoney, int quantity, BigDecimal originalPrice) {
+    private BigDecimal calculateTotalMoneyWhenOrderWasDiscounted(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+        BigDecimal tempTotal = BigDecimal.ZERO;
         BigDecimal total = BigDecimal.ZERO;
-        BigDecimal amountOfAssumption = originalPrice.multiply(BigDecimal.valueOf((double) quantity));
-        total = amountOfAssumption.subtract(discountMoney);
+        if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
+            tempTotal = calculateTotalMoney(listMatTieuThu);
+            total = calculateTotalWithGiamGiaThongThuongType(tempTotal, giamGia);
+        } else if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
+            total = calculateTotalWithGiamGiaDanhMucType(listMatTieuThu, giamGia);
+        }
+        return total;
+    }
+
+    private BigDecimal calculateTotalWithGiamGiaThongThuongType(BigDecimal amountOfAssumption, GiamGia giamGia) {
+        BigDecimal total = BigDecimal.ZERO;
+        if (giamGia.getDiscountAmount() != null) {
+            total = amountOfAssumption.subtract(giamGia.getDiscountAmount());
+        } else if (giamGia.getPercentage() != null) {
+            BigDecimal discountMoney = amountOfAssumption.multiply(giamGia.getPercentage().divide(BigDecimal.valueOf(100)));
+            total = amountOfAssumption.subtract(discountMoney);
+        }
+        return total;
+    }
+
+    private BigDecimal calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+        String danhMucId = giamGia.getDanhMucId();
+        BigDecimal percent = giamGia.getPercentage();
+        BigDecimal total = BigDecimal.ZERO;
+        for (MatHangTieuThu matHangTieuThu : listMatTieuThu) {
+            String danhMucIdInMatHang = matHangTieuThu.getMatHang().getDanhMucId();
+            int quantity = matHangTieuThu.getQuantity();
+            BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
+            if (danhMucId.equalsIgnoreCase(danhMucIdInMatHang)) {
+                BigDecimal temp = price.multiply(BigDecimal.valueOf((double) quantity));
+                total = temp.multiply(percent.divide(BigDecimal.valueOf(100)));
+            } else {
+                total = price.multiply(BigDecimal.valueOf((double) quantity));
+            }
+        }
         return total;
     }
 

@@ -1,5 +1,6 @@
 package com.ocha.boc.request;
 
+import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +27,6 @@ public class OrderCheckoutObjectRequest implements Serializable {
     private BigDecimal cash;
 
     private BigDecimal tips;
+
+    private GiamGia giamGia;
 }

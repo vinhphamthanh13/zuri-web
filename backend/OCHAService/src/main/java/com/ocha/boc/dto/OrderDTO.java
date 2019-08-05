@@ -1,6 +1,7 @@
 package com.ocha.boc.dto;
 
 import com.ocha.boc.base.AbstractEntity;
+import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
 import com.ocha.boc.enums.OrderStatus;
@@ -75,6 +76,8 @@ public class OrderDTO extends AbstractEntity {
 
     private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
 
+    private GiamGia giamGia;
+
     public OrderDTO(Order order) {
         this.id = order.getId();
         this.cuaHangId = order.getCuaHangId();
@@ -94,5 +97,6 @@ public class OrderDTO extends AbstractEntity {
         this.createdDate = order.getCreatedDate();
         this.lastModifiedDate = order.getLastModifiedDate();
         this.listMatHangTieuThu = order.getListMatHangTieuThu();
+        this.giamGia = order.getGiamGia();
     }
 }

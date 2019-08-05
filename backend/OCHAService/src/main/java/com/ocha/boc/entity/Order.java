@@ -56,6 +56,8 @@ public class Order extends AbstractEntity {
      */
     private String takeAWayOptionCode;
 
+    private GiamGia giamGia;
+
     private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
 
     private BigDecimal totalMoney;
