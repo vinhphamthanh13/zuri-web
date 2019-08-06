@@ -14,6 +14,7 @@ import com.ocha.boc.request.OrderRequest;
 import com.ocha.boc.request.OrderUpdateRequest;
 import com.ocha.boc.response.OrderResponse;
 import com.ocha.boc.util.CommonConstants;
+import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +48,7 @@ public class OrderService {
                 order.setCuaHangId(request.getCuaHangId());
                 order.setWaiterName(request.getWaiterName());
                 order.setOrderType(request.getOrderType());
-                order.setCreatedDate(Instant.now().toString());
+                order.setCreatedDate(DateUtils.getCurrentDate());
                 order.setOrderTime(Instant.now().toString());
                 order.setOrderStatus(OrderStatus.PENDING);
                 order.setListMatHangTieuThu(request.getListMatHangTieuThu());
@@ -153,6 +154,7 @@ public class OrderService {
                             BigDecimal value = entry.getValue();
                             if (key.equalsIgnoreCase(TOTAL_MONEY)) {
                                 order.setTotalMoney(value);
+                                tempTotalMoney = value;
                             } else if (key.equalsIgnoreCase(DISCOUNT_MONEY)) {
                                 order.setDiscountMoney(value);
                             }

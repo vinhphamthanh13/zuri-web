@@ -14,4 +14,6 @@ public interface OrderRepository extends MongoRepository<Order, String> {
     Order findOrderByTakeAWayOptionCodeAndCuaHangId(String takeAWayCode, String cuaHangId);
 
     List<Order> findAllOrderByCuaHangId(String cuaHangId);
+
+    List<Order> findAllOrderByCreatedDateAndCuaHangId(String createDate, String cuaHangId);
 }
