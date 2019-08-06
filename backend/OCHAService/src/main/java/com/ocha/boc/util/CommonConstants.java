@@ -128,4 +128,6 @@ public class CommonConstants {
      * Báo cáo
      */
     public static final String GET_DOANH_THU_TONG_QUAN_FAIL             = "Lỗi trong quá trình xử lý doanh thu tổng quản.";
+
+    public static final String GET_DOANH_THU_TONG_QUAN_IN_RANGE_DATE_FAIL= "Không có thông tin về doanh thu.";
 }

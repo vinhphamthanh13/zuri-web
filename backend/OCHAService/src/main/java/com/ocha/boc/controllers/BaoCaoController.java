@@ -1,14 +1,13 @@
 package com.ocha.boc.controllers;
 
+import com.ocha.boc.request.DoanhThuTongQuanRequest;
 import com.ocha.boc.response.DoanhThuTongQuanResponse;
 import com.ocha.boc.services.impl.BaoCaoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -26,10 +25,13 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-//    @ApiOperation("Get Doanh Thu Tong Quan in range")
-//    @GetMapping("/doanh-thu-tong-quan")
-//    public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuanInRangeDate(){
-//
-//    }
+    @ApiOperation("Get Doanh Thu Tong Quan in range")
+    @PostMapping("/doanh-thu-tong-quan")
+    public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuanInRangeDate(@RequestBody DoanhThuTongQuanRequest request){
+        log.info("START: get doanh thu tong quan from: " + request.getFromDate() + " to: " + request.getToDate());
+        DoanhThuTongQuanResponse response = baoCaoService.getDoanhThuTongQuanInRangeDate(request);
+        log.info("END: get doanh thu tong quan in range date");
+        return ResponseEntity.ok(response);
+    }
 
 }
