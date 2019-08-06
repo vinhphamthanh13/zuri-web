@@ -25,6 +25,9 @@ class Register extends Component {
   handleActivation = () => {
     history.push('/activation');
   };
+  handleRedirectLogin = () => {
+    history.push('/activation');
+  };
 
   createForm = () => {
     const { handleChange, errors, values } = this.props;
@@ -57,6 +60,10 @@ class Register extends Component {
             label="Tiếp theo"
             disabled={!isValid}
           />
+        </div>
+        <div className={s.login}>
+          Hoặc đã có tài khoản?{' '}
+          <span onClick={this.handleRedirectLogin}>Đăng nhập</span>
         </div>
       </div>
     );

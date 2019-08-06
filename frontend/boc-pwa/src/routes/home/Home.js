@@ -1,24 +1,11 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
 import React from 'react';
 import moment from 'moment';
 import Header from 'components/Header';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { Reorder, ShowChart, BubbleChart, FilterVintage } from 'constants/svg';
-import history from '../../history';
+import BocTabs from 'components/BocTabs';
 import s from './Home.css';
 
 class Home extends React.Component {
-  handleTabClick = name => () => {
-    history.push(`/${name}`);
-  };
-
   render() {
     return (
       <div className={s.container}>
@@ -103,24 +90,7 @@ class Home extends React.Component {
             <div className={s.date}>7 ngày gần nhất</div>
           </div>
         </div>
-        <div className={s.toolBar}>
-          <div className={s.tab} onClick={this.handleTabClick('home')}>
-            <Reorder hexColor="#2e4698" />
-            <div>Tổng quan</div>
-          </div>
-          <div className={s.tab} onClick={this.handleTabClick('report')}>
-            <ShowChart hexColor="#2e4698" />
-            <div>Báo cáo</div>
-          </div>
-          <div className={s.tab} onClick={this.handleTabClick('activity')}>
-            <BubbleChart hexColor="#2e4698" />
-            <div>Hoạt động</div>
-          </div>
-          <div className={s.tab} onClick={this.handleTabClick('shop')}>
-            <FilterVintage hexColor="#2e4698" />
-            <div>Cửa hàng</div>
-          </div>
-        </div>
+        <BocTabs activeIndex={0} />
       </div>
     );
   }

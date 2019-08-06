@@ -1,12 +1,3 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 export const REGEXP = {
   PHONE_NUMBER: /^\d{10,11}$/,
   COUNTRY_CODE: /^\+\d{2,3}$/,
@@ -34,5 +25,24 @@ export const INPUT = {
     label: 'Địa chỉ cửa hàng:',
     value: 'shopAddress',
     placeholder: 'Nhập địa chỉ cửa hàng',
+  },
+};
+
+export const TABS = {
+  GENERAL: {
+    name: 'tổng quan',
+    url: '/home',
+  },
+  REPORT: {
+    name: 'báo cáo',
+    url: '/report',
+  },
+  ACTIVITY: {
+    name: 'hoạt động',
+    url: '/activity',
+  },
+  SHOP: {
+    name: 'cửa hàng',
+    url: '/shop',
   },
 };

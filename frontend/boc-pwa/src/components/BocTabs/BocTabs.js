@@ -1,56 +1,45 @@
 import { BubbleChart, FilterVintage, Reorder, ShowChart } from 'constants/svg';
 import React, { Component } from 'react';
-import { string, func, bool, node } from 'prop-types';
-import { noop } from 'lodash';
+import { number } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import uuidv1 from 'uuid/v1';
+import { TABS } from 'constants/common';
+import { brand01, brand03 } from 'constants/colors';
+import history from '../../history';
 import s from './BocTabs.css';
+
+const TabIcons = [Reorder, ShowChart, BubbleChart, FilterVintage];
 
 class BocTabs extends Component {
   static propTypes = {
-    label: string.isRequired,
-    className: string,
-    disabled: bool,
-    onClick: func,
-    children: node,
-    type: string,
+    activeIndex: number.isRequired,
   };
 
-  static defaultProps = {
-    className: '',
-    disabled: false,
-    onClick: noop,
-    children: null,
-    type: '',
+  handleTabClick = url => () => {
+    history.push(url);
   };
 
   render() {
-    const { className, onClick, disabled, type } = this.props;
-    const props = {
-      className: disabled
-        ? `${s.button} ${className} ${s.buttonDisabled}`
-        : `${s.button} ${className}`,
-      onClick: disabled ? noop : onClick,
-      type: disabled ? 'button' : type,
-    };
-
+    const { activeIndex } = this.props;
     return (
       <div className={s.toolBar}>
-        <div className={s.tab} onClick={this.handleTabClick('home')}>
-          <Reorder hexColor="#2e4698" />
-          <div>Tổng quan</div>
-        </div>
-        <div className={s.tab} onClick={this.handleTabClick('report')}>
-          <ShowChart hexColor="#2e4698" />
-          <div>Báo cáo</div>
-        </div>
-        <div className={s.tab} onClick={this.handleTabClick('activity')}>
-          <BubbleChart hexColor="#2e4698" />
-          <div>Hoạt động</div>
-        </div>
-        <div className={s.tab} onClick={this.handleTabClick('shop')}>
-          <FilterVintage hexColor="#2e4698" />
-          <div>Cửa hàng</div>
-        </div>
+        {Object.keys(TABS).map((tab, index) => {
+          const [activeStyle, iconSize, iconColor] =
+            index === activeIndex
+              ? [`${s.tab} ${s.activeTab}`, 28, brand03]
+              : [s.tab, 24, brand01];
+          const Icon = TabIcons[index];
+          return (
+            <div
+              key={uuidv1()}
+              className={activeStyle}
+              onClick={this.handleTabClick(TABS[tab].url)}
+            >
+              <Icon hexColor={iconColor} size={iconSize} />
+              <div>{TABS[tab].name}</div>
+            </div>
+          );
+        })}
       </div>
     );
   }

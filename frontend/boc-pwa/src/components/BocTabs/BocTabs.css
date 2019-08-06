@@ -1,35 +1,38 @@
 @import '../variables.css';
 
-.button {
-  width: var(--max-input-width);
-  padding: var(--size-12) var(--size-10);
-  border: var(--size-01) solid var(--c-brand-3);
-  border-radius: var(--size-28);
+.toolBar {
+  width: 100%;
+  height: var(--size-56);
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  border-top: var(--size-01) solid var(--c-brand-1);
   box-sizing: border-box;
-  background: linear-gradient(to bottom, var(--c-brand-1), var(--c-brand-3));
-  color: var(--c-text-lighter);
 }
 
-.button:hover {
-  background: var(--c-brand-3);
-  color: var(--c-bg-light);
+.tab {
+  width: 25%;
+  border-right: var(--size-01) solid var(--c-brand-1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: var(--font-size-12);
+  cursor: pointer;
+  text-transform: capitalize;
+  transition: all 0.3s ease-in;
 }
 
-.label {
-  font-size: var(--font-size-label);
-  margin: auto var(--size-08);
-  color: inherit;
-  text-transform: uppercase;
+.activeTab {
+  background: linear-gradient(to top, var(--c-brand-1), var(--c-bright));
 }
 
-.buttonDisabled,
-.buttonDisabled:hover {
-  color: var(--c-gray);
-  border-color: var(--c-bg-light);
-  background: var(--c-bg-light);
-  cursor: not-allowed;
+.activeTab div {
+  color: var(--c-text-bright);
+  font-weight: var(--font-weight-500);
+}
+
+.toolBar .tab:last-child {
+  border: none;
 }

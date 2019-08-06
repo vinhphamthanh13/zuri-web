@@ -1,11 +1,3 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
 @import '../../../components/variables.css';
 
 .container {
@@ -28,6 +20,17 @@
 }
 
 .greetingLogo {
-  width: var(--home-brand-width);
+  width: var(--size-64);
   margin-bottom: var(--size-14);
+}
+
+.login {
+  margin-top: var(--size-08);
+  color: var(--c-brand-5);
+}
+
+.login span {
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: var(--c-error);
 }

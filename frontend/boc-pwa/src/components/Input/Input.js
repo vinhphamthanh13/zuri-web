@@ -9,7 +9,7 @@ class Input extends Component {
   static propTypes = {
     type: string,
     name: string.isRequired,
-    value: oneOfType([string, number]).isRequired,
+    value: oneOfType([string, number]),
     onChange: func,
     className: string,
     disabled: bool,
@@ -20,6 +20,7 @@ class Input extends Component {
 
   static defaultProps = {
     type: 'text',
+    value: '',
     onChange: noop,
     disabled: false,
     errors: {},
