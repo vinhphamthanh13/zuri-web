@@ -124,5 +124,8 @@ public class CommonConstants {
 
     public static final String GET_ORDERS_BY_CUAHANGID_FAIL             = "Lỗi trong quá trình truy xuất thông tin đơn hàng";
 
-
+    /**
+     * Báo cáo
+     */
+    public static final String GET_DOANH_THU_TONG_QUAN_FAIL             = "Lỗi trong quá trình xử lý doanh thu tổng quản.";
 }
