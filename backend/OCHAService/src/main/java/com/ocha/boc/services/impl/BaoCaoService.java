@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -33,30 +32,8 @@ public class BaoCaoService {
                 String currentDate = DateUtils.getCurrentDate();
                 List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 if (CollectionUtils.isNotEmpty(orders)) {
-                    response.setNumberOfTransactions(orders.size());
-                    BigDecimal total = BigDecimal.ZERO;
-                    BigDecimal discount = BigDecimal.ZERO;
-                    BigDecimal refunds = BigDecimal.ZERO;
-                    BigDecimal serviceFee = BigDecimal.ZERO;
-                    BigDecimal tax = BigDecimal.ZERO;
-                    for (Order order : orders) {
-                        total = total.add(order.getTotalMoney());
-                        if (order.getDiscountMoney() != null) {
-                            discount = discount.add(order.getDiscountMoney());
-                        }
-                        if (order.getRefunds() != null) {
-                            refunds = refunds.add(order.getRefunds());
-                        }
-                    }
                     response.setCuaHangId(cuaHangId);
-                    response.setRefunds(refunds);
-                    response.setTax(tax);
-                    response.setTotal(total);
-                    response.setServiceFee(serviceFee);
-                    response.setDiscount(discount);
-                    response.setAverageOfTransactionFee(total.divide(BigDecimal.valueOf(orders.size()), 0, RoundingMode.HALF_UP));
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setSuccess(Boolean.TRUE);
+                    analysisDoanhThuTongQuan(orders, response);
                 }
             }
         } catch (Exception e) {
@@ -74,37 +51,41 @@ public class BaoCaoService {
                 String fromDate = request.getFromDate();
                 String toDate = request.getToDate();
                 List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(), fromDate, toDate);
-                if(CollectionUtils.isNotEmpty(orders)){
-                    response.setNumberOfTransactions(orders.size());
-                    BigDecimal total = BigDecimal.ZERO;
-                    BigDecimal discount = BigDecimal.ZERO;
-                    BigDecimal refunds = BigDecimal.ZERO;
-                    BigDecimal serviceFee = BigDecimal.ZERO;
-                    BigDecimal tax = BigDecimal.ZERO;
-                    for (Order order : orders) {
-                        total = total.add(order.getTotalMoney());
-                        if (order.getDiscountMoney() != null) {
-                            discount = discount.add(order.getDiscountMoney());
-                        }
-                        if (order.getRefunds() != null) {
-                            refunds = refunds.add(order.getRefunds());
-                        }
-                    }
+                if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(request.getCuaHangId());
-                    response.setRefunds(refunds);
-                    response.setTax(tax);
-                    response.setTotal(total);
-                    response.setServiceFee(serviceFee);
-                    response.setDiscount(discount);
-                    response.setAverageOfTransactionFee(total.divide(BigDecimal.valueOf(orders.size()), 0, RoundingMode.HALF_UP));
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setSuccess(Boolean.TRUE);
+                    analysisDoanhThuTongQuan(orders, response);
                 }
             }
         } catch (Exception e) {
             log.error("Error when getDoanhThuTongQuanInRangeDate: {}", e);
         }
         return response;
+    }
+
+    private void analysisDoanhThuTongQuan(List<Order> orders, DoanhThuTongQuanResponse response) {
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal discount = BigDecimal.ZERO;
+        BigDecimal refunds = BigDecimal.ZERO;
+        BigDecimal serviceFee = BigDecimal.ZERO;
+        BigDecimal tax = BigDecimal.ZERO;
+        for (Order order : orders) {
+            total = total.add(order.getTotalMoney());
+            if (order.getDiscountMoney() != null) {
+                discount = discount.add(order.getDiscountMoney());
+            }
+            if (order.getRefunds() != null) {
+                refunds = refunds.add(order.getRefunds());
+            }
+        }
+        response.setNumberOfTransactions(orders.size());
+        response.setRefunds(refunds);
+        response.setTax(tax);
+        response.setTotal(total);
+        response.setServiceFee(serviceFee);
+        response.setDiscount(discount);
+        response.setAverageOfTransactionFee(total.divide(BigDecimal.valueOf(orders.size()), 0, RoundingMode.HALF_UP));
+        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+        response.setSuccess(Boolean.TRUE);
     }
 
 

@@ -25,7 +25,7 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Get Doanh Thu Tong Quan in range")
+    @ApiOperation("Get Doanh Thu Tong Quan in range date")
     @PostMapping("/doanh-thu-tong-quan")
     public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuanInRangeDate(@RequestBody DoanhThuTongQuanRequest request){
         log.info("START: get doanh thu tong quan from: " + request.getFromDate() + " to: " + request.getToDate());
