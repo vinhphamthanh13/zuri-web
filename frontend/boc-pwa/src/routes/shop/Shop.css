@@ -20,11 +20,12 @@
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
-  border-right: var(--size-01) solid var(--c-brand-4);
-  border-bottom: var(--size-01) solid var(--c-brand-4);
+  border-right: var(--size-01) solid var(--c-smoke);
+  border-bottom: var(--size-01) solid var(--c-smoke);
   height: var(--size-72);
   padding: var(--size-08) var(--size-12);
   cursor: pointer;
+  background-color: var(--c-bright);
 }
 
 .item:nth-child(even) {

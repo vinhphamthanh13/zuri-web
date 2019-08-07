@@ -7,13 +7,13 @@
   justify-content: center;
   position: absolute;
   bottom: 0;
-  border-top: var(--size-01) solid var(--c-brand-1);
+  border-top: var(--size-01) solid var(--c-smoke);
   box-sizing: border-box;
 }
 
 .tab {
   width: 25%;
-  border-right: var(--size-01) solid var(--c-brand-1);
+  border-right: var(--size-01) solid var(--c-smoke);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,6 +22,7 @@
   cursor: pointer;
   text-transform: capitalize;
   transition: all 0.3s ease-in;
+  background-color: var(--c-bright);
 }
 
 .activeTab {
