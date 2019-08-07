@@ -171,3 +171,141 @@ Announcement.defaultProps = {
   hexColor: '#fff',
   size: 24,
 };
+
+export const Store = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M0 0h24v24H0z" fill="none" />
+    <path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" />
+  </svg>
+);
+
+Store.propTypes = {
+  hexColor: string,
+  size: number,
+};
+
+Store.defaultProps = {
+  hexColor: '#fff',
+  size: 24,
+};
+
+export const List = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+    <path d="M0 0h24v24H0z" fill="none" />
+  </svg>
+);
+
+List.propTypes = {
+  hexColor: string,
+  size: number,
+};
+
+List.defaultProps = {
+  hexColor: '#fff',
+  size: 24,
+};
+
+export const ViewStream = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M4 18h17v-6H4v6zM4 5v6h17V5H4z" />
+    <path d="M0 0h24v24H0z" fill="none" />
+  </svg>
+);
+
+ViewStream.propTypes = {
+  hexColor: string,
+  size: number,
+};
+
+ViewStream.defaultProps = {
+  hexColor: '#fff',
+  size: 24,
+};
+
+export const SupervisedUser = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M11.99 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm3.61 6.34c1.07 0 1.93.86 1.93 1.93 0 1.07-.86 1.93-1.93 1.93-1.07 0-1.93-.86-1.93-1.93-.01-1.07.86-1.93 1.93-1.93zm-6-1.58c1.3 0 2.36 1.06 2.36 2.36 0 1.3-1.06 2.36-2.36 2.36s-2.36-1.06-2.36-2.36c0-1.31 1.05-2.36 2.36-2.36zm0 9.13v3.75c-2.4-.75-4.3-2.6-5.14-4.96 1.05-1.12 3.67-1.69 5.14-1.69.53 0 1.2.08 1.9.22-1.64.87-1.9 2.02-1.9 2.68zM11.99 20c-.27 0-.53-.01-.79-.04v-4.07c0-1.42 2.94-2.13 4.4-2.13 1.07 0 2.92.39 3.84 1.15-1.17 2.97-4.06 5.09-7.45 5.09z" />
+    <path fill="none" d="M0 0h24v24H0z" />
+  </svg>
+);
+
+SupervisedUser.propTypes = {
+  hexColor: string,
+  size: number,
+};
+
+SupervisedUser.defaultProps = {
+  hexColor: '#fff',
+  size: 24,
+};
+
+export const MonetizationOn = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z" />
+    <path fill="none" d="M0 0h24v24H0z" />
+  </svg>
+);
+
+MonetizationOn.propTypes = {
+  hexColor: string,
+  size: number,
+};
+
+MonetizationOn.defaultProps = {
+  hexColor: '#fff',
+  size: 24,
+};
+
+export const Print = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+    <path d="M0 0h24v24H0z" fill="none" />
+  </svg>
+);
+
+Print.propTypes = {
+  hexColor: string,
+  size: number,
+};
+
+Print.defaultProps = {
+  hexColor: '#fff',
+  size: 24,
+};

@@ -1,7 +1,7 @@
 @import '../variables.css';
 
 .container {
-  background: var(--c-brand-1);
+  background: linear-gradient(to bottom, var(--c-brand-1), var(--c-brand-3));
   height: var(--size-header-bar);
   font-size: var(--font-size-header);
   color: var(--c-bright);

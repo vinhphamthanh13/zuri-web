@@ -67,6 +67,17 @@
   --c-text-light: var(--c-bg-brand-3);
   --c-text-dark: var(--c-brand-1);
 
+  /* Triad */
+
+  --c-triad-01: var(--c-brand-1);
+  --c-triad-02: #ff8666;
+  --c-triad-03: #4d76ff;
+  --c-triad-04: #81cc29;
+  --c-triad-05: #75b32d;
+  --c-triad-06: #991605;
+  --c-triad-07: #dbff66;
+  --c-triad-08: #ff614d;
+
   /* Helper colors */
 
   --c-bright: #fff;

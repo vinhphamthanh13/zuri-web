@@ -5,7 +5,38 @@
   height: 100%;
   position: relative;
   color: var(--c-brand-1);
+}
+
+.row {
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
+}
+
+.item {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  border-right: var(--size-01) solid var(--c-brand-4);
+  border-bottom: var(--size-01) solid var(--c-brand-4);
+  height: var(--size-72);
+  padding: var(--size-08) var(--size-12);
+  cursor: pointer;
+}
+
+.item:nth-child(even) {
+  border-right: unset;
+}
+
+.item:hover {
+  font-weight: var(--font-weight-500);
+}
+
+.icon {
+  margin-right: var(--size-12);
+  border: var(--size-01) solid var(--c-triad-05);
+  border-radius: 50%;
 }

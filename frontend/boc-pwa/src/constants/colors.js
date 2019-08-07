@@ -9,3 +9,12 @@ export const gray = '#ccc';
 export const success = '#4bcb21';
 export const error = '#c41010';
 export const warning = '#e3e926';
+// Triad
+export const triad01 = '#2e4698';
+export const triad02 = '#ff8666';
+export const triad03 = '#4d76ff';
+export const triad04 = '#81cc29';
+export const triad05 = '#75b32d';
+export const triad06 = '#991605';
+export const triad07 = '#dbff66';
+export const triad08 = '#ff614d';
