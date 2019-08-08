@@ -1,6 +1,7 @@
 package com.ocha.boc.controllers;
 
-import com.ocha.boc.request.DoanhThuTongQuanRequest;
+import com.ocha.boc.request.AbstractBaoCaoRequest;
+import com.ocha.boc.response.DoanhThuTheoDanhMucResponse;
 import com.ocha.boc.response.DoanhThuTongQuanResponse;
 import com.ocha.boc.services.impl.BaoCaoService;
 import io.swagger.annotations.ApiOperation;
@@ -27,10 +28,19 @@ public class BaoCaoController {
 
     @ApiOperation("Get Doanh Thu Tong Quan in range date")
     @PostMapping("/doanh-thu-tong-quan")
-    public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuanInRangeDate(@RequestBody DoanhThuTongQuanRequest request){
+    public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuanInRangeDate(@RequestBody AbstractBaoCaoRequest request){
         log.info("START: get doanh thu tong quan from: " + request.getFromDate() + " to: " + request.getToDate());
         DoanhThuTongQuanResponse response = baoCaoService.getDoanhThuTongQuanInRangeDate(request);
         log.info("END: get doanh thu tong quan in range date");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation("Doanh Thu Theo Danh Mục")
+    @GetMapping("/doanh-thu-theo-danh-muc/{cuaHangId}")
+    public ResponseEntity<DoanhThuTheoDanhMucResponse> getDoanhThuTheoDanhMuc(@PathVariable(value = "cuaHangId") String cuaHangId){
+        log.info("START: get current doanh thu theo danh muc");
+        DoanhThuTheoDanhMucResponse response = baoCaoService.getDoanhThuTheoDanhMuc(cuaHangId);
+        log.info("END: get current doanh thu theo danh muc");
         return ResponseEntity.ok(response);
     }
 
