@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
-public class DoanhThuTongQuanRequest {
+public class AbstractBaoCaoRequest {
 
     @NotNull
     private String cuaHangId;
