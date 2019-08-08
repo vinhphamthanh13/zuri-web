@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 @Service
@@ -29,6 +31,10 @@ public class BaoCaoService {
 
     @Autowired
     private DanhMucRepository danhMucRepository;
+
+    private static final String TOTAL_PRICE = "TOTAL";
+
+    private static final String QUANTITY = "QUANTITY";
 
     public DoanhThuTongQuanResponse getDoanhThuTongQuan(String cuaHangId) {
         DoanhThuTongQuanResponse response = new DoanhThuTongQuanResponse();
@@ -117,16 +123,36 @@ public class BaoCaoService {
         return response;
     }
 
+    public DoanhThuTheoDanhMucResponse getDoanhThuTheoDanhMucInRangeDate(AbstractBaoCaoRequest request){
+        DoanhThuTheoDanhMucResponse response = new DoanhThuTheoDanhMucResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_DANH_MUC_FAIL);
+        if (request != null) {
+            String fromDate = request.getFromDate();
+            String toDate = request.getToDate();
+            List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(), fromDate, toDate);
+            if (CollectionUtils.isNotEmpty(orders)) {
+                response.setCuaHangId(request.getCuaHangId());
+                List<DanhMucBanChay> listDanhMucBanChay =  analysisDoanhThuTheoDanhMuc(orders, response);
+                response.setListDanhMucBanChay(listDanhMucBanChay);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            }
+        }
+        return response;
+    }
+
     private List<DanhMucBanChay> analysisDoanhThuTheoDanhMuc(List<Order> orders, DoanhThuTheoDanhMucResponse response) {
         List<DanhMucBanChay> listDanhMucBanChay = new ArrayList<DanhMucBanChay>();
         for (Order order : orders) {
             List<MatHangTieuThu> listMatHangTieuThu = order.getListMatHangTieuThu();
-            DanhMucBanChay danhMucBanChay = new DanhMucBanChay();
+
             for (MatHangTieuThu temp : listMatHangTieuThu) {
+                DanhMucBanChay danhMucBanChay = new DanhMucBanChay();
                 String bangGiaName = temp.getBangGia().getName();
                 MatHang matHang = temp.getMatHang();
 
-                String matHangName = matHang.getName();
+                String matHangName = matHang.getName() + " (" + bangGiaName + ") ";
                 DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(matHang.getDanhMucId(), matHang.getCuaHangId());
                 if (danhMuc != null) {
                     //Check danh muc existed List<DanhMucBanChay>
@@ -138,9 +164,17 @@ public class BaoCaoService {
                         matHangBanChay.setQuantity(temp.getQuantity());
                         matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice());
                         listMatHangBanChay.add(matHangBanChay);
-                        BigDecimal totalPrice = calculateTotalPriceListMatHangBanChay(listMatHangBanChay);
+                        Map<String , BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
+                        for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
+                            String key = entry.getKey();
+                            BigDecimal value = entry.getValue();
+                            if (key.equalsIgnoreCase(TOTAL_PRICE)) {
+                              danhMucBanChay.setTotalPrice(value);
+                            } else if (key.equalsIgnoreCase(QUANTITY)) {
+                                danhMucBanChay.setTotalQuantity(value.intValue());
+                            }
+                        }
                         danhMucBanChay.setDanhMucName(danhMuc.getName());
-                        danhMucBanChay.setTotalPrice(totalPrice);
                         danhMucBanChay.setListMatHangBanChay(listMatHangBanChay);
                         listDanhMucBanChay.add(danhMucBanChay);
                     } else {
@@ -163,8 +197,16 @@ public class BaoCaoService {
                             matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice());
                             listMatHangBanChay.add(matHangBanChay);
                         }
-                        BigDecimal totalPrice = calculateTotalPriceListMatHangBanChay(listMatHangBanChay);
-                        listDanhMucBanChay.get(index).setTotalPrice(totalPrice);
+                        Map<String , BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
+                        for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
+                            String key = entry.getKey();
+                            BigDecimal value = entry.getValue();
+                            if (key.equalsIgnoreCase(TOTAL_PRICE)) {
+                                listDanhMucBanChay.get(index).setTotalPrice(value);
+                            } else if (key.equalsIgnoreCase(QUANTITY)) {
+                                listDanhMucBanChay.get(index).setTotalQuantity(value.intValue());
+                            }
+                        }
                     }
                 }
             }
@@ -189,13 +231,17 @@ public class BaoCaoService {
         return isExisted;
     }
 
-    private BigDecimal calculateTotalPriceListMatHangBanChay(List<MatHangBanChay> listMatHangBanChay) {
-        BigDecimal result = BigDecimal.ZERO;
-        for (MatHangBanChay matHangBanChay : listMatHangBanChay) {
-            result = result.add(matHangBanChay.getTotalPrice());
+    private Map<String , BigDecimal  > calculateTotalPriceAndQuantityListMatHangBanChay(List<MatHangBanChay> listMatHangBanChay){
+        Map<String, BigDecimal> result = new HashMap<>();
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        int quantity  = 0;
+        for(MatHangBanChay matHangBanChay: listMatHangBanChay){
+            totalPrice = totalPrice.add(matHangBanChay.getTotalPrice());
+            quantity += matHangBanChay.getQuantity();
         }
+        result.put(TOTAL_PRICE, totalPrice);
+        result.put(QUANTITY, BigDecimal.valueOf((double)quantity));
         return result;
     }
-
 
 }

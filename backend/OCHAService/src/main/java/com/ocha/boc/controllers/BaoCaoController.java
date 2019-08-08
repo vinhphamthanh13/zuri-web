@@ -26,7 +26,7 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Get Doanh Thu Tong Quan in range date")
+    @ApiOperation("Get Doanh Thu Tong Quan In Range Date")
     @PostMapping("/doanh-thu-tong-quan")
     public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuanInRangeDate(@RequestBody AbstractBaoCaoRequest request){
         log.info("START: get doanh thu tong quan from: " + request.getFromDate() + " to: " + request.getToDate());
@@ -41,6 +41,15 @@ public class BaoCaoController {
         log.info("START: get current doanh thu theo danh muc");
         DoanhThuTheoDanhMucResponse response = baoCaoService.getDoanhThuTheoDanhMuc(cuaHangId);
         log.info("END: get current doanh thu theo danh muc");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation("Doanh Thu Theo Danh Mục In Range Date ")
+    @PostMapping("/doanh-thu-theo-danh-muc")
+    public ResponseEntity<DoanhThuTheoDanhMucResponse> getDoanhThuTheoDanhMucInRangeDate(@RequestBody AbstractBaoCaoRequest request){
+        log.info("START: get doanh thu theo danh muc from: " + request.getFromDate() + " to: " + request.getToDate());
+        DoanhThuTheoDanhMucResponse response = baoCaoService.getDoanhThuTheoDanhMucInRangeDate(request);
+        log.info("END: get doanh thu theo danh muc in range date");
         return ResponseEntity.ok(response);
     }
 

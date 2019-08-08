@@ -14,6 +14,8 @@ public class DanhMucBanChay {
 
     private String danhMucName;
 
+    private int totalQuantity;
+
     private BigDecimal totalPrice;
 
     private List<MatHangBanChay> listMatHangBanChay;
