@@ -131,5 +131,7 @@ public class CommonConstants {
 
     public static final String GET_DOANH_THU_TONG_QUAN_IN_RANGE_DATE_FAIL= "Không có thông tin về doanh thu.";
 
-    public static final String GET_BAO_CAO_DOANH_THU_THEO_DANH_MUC_FAIL          = "Lỗi trong quá trình lấy thông tin doanh thu theo danh mục";
+    public static final String GET_BAO_CAO_DOANH_THU_THEO_DANH_MUC_FAIL  = "Lỗi trong quá trình lấy thông tin doanh thu theo danh mục";
+
+    public static final String GET_MAT_HANG_BAN_CHAY_FAIL                = "Lỗi trong quá trình lấy thông tin mặt hàng bán chạy";
 }
