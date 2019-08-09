@@ -1,6 +1,7 @@
 package com.ocha.boc.controllers;
 
 import com.ocha.boc.request.AbstractBaoCaoRequest;
+import com.ocha.boc.response.BaoCaoGiamGiaResponse;
 import com.ocha.boc.response.DoanhThuTheoDanhMucResponse;
 import com.ocha.boc.response.DoanhThuTongQuanResponse;
 import com.ocha.boc.response.MatHangBanChayResponse;
@@ -69,6 +70,24 @@ public class BaoCaoController {
         log.info("START: get mat hang ban chay from: " + request.getFromDate() + " to: " + request.getToDate());
         MatHangBanChayResponse response = baoCaoService.getMatHangBanChayInRangeDate(request);
         log.info("END: get mat hang ban chay in range date");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation("Báo Cáo Giảm Giá")
+    @GetMapping("/bao-cao-giam-gia/{cuaHangId}")
+    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGia(@PathVariable(value = "cuaHangId") String cuaHangId){
+        log.info("START: get current bao cao giam gia");
+        BaoCaoGiamGiaResponse response = baoCaoService.getBaoCaoGiamGia(cuaHangId);
+        log.info("END: get current bao cao giam gia");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation("Báo Cáo Giảm Giá In Range Date")
+    @PostMapping("/bao-cao-giam-gia")
+    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGiaInRangeDate(@RequestBody AbstractBaoCaoRequest request){
+        log.info("START: get bao cao giam gia from: " + request.getFromDate() + " to: " + request.getToDate());
+        BaoCaoGiamGiaResponse response = baoCaoService.getBaoCaoGiamGiaInRangeDate(request);
+        log.info("END: get bao cao giam gia in range date");
         return ResponseEntity.ok(response);
     }
 

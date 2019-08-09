@@ -1,9 +1,11 @@
 package com.ocha.boc.services.impl;
 
 import com.ocha.boc.entity.*;
+import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.repository.DanhMucRepository;
 import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.request.AbstractBaoCaoRequest;
+import com.ocha.boc.response.BaoCaoGiamGiaResponse;
 import com.ocha.boc.response.DoanhThuTheoDanhMucResponse;
 import com.ocha.boc.response.DoanhThuTongQuanResponse;
 import com.ocha.boc.response.MatHangBanChayResponse;
@@ -234,7 +236,6 @@ public class BaoCaoService {
         return result;
     }
 
-
     public MatHangBanChayResponse getMatHangBanChay(String cuaHangId) {
         MatHangBanChayResponse response = new MatHangBanChayResponse();
         response.setSuccess(Boolean.FALSE);
@@ -319,5 +320,122 @@ public class BaoCaoService {
             isExisted = true;
         }
         return isExisted;
+    }
+
+    public BaoCaoGiamGiaResponse getBaoCaoGiamGia(String cuaHangId) {
+        BaoCaoGiamGiaResponse response = new BaoCaoGiamGiaResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_BAO_CAO_GIAM_GIA_FAIL);
+        try {
+            if (StringUtils.isNotEmpty(cuaHangId)) {
+                String currentDate = DateUtils.getCurrentDate();
+                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
+                if (CollectionUtils.isNotEmpty(orders)) {
+                    response.setCuaHangId(cuaHangId);
+                    List<BaoCaoGiamGia> baoCaoGiamGiaList = analysisBaoCaoGiamGia(orders);
+                    response.setListGiamGiaReport(baoCaoGiamGiaList);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setSuccess(Boolean.TRUE);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error when getBaoCaoGiamGia: {}", e);
+        }
+        return response;
+    }
+
+    public BaoCaoGiamGiaResponse getBaoCaoGiamGiaInRangeDate(AbstractBaoCaoRequest request) {
+        BaoCaoGiamGiaResponse response = new BaoCaoGiamGiaResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_BAO_CAO_GIAM_GIA_FAIL);
+        try {
+            if (request != null) {
+                String fromDate = request.getFromDate();
+                String toDate = request.getToDate();
+                List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(), fromDate, toDate);
+                if (CollectionUtils.isNotEmpty(orders)) {
+                    response.setCuaHangId(request.getCuaHangId());
+                    List<BaoCaoGiamGia> baoCaoGiamGiaList = analysisBaoCaoGiamGia(orders);
+                    response.setListGiamGiaReport(baoCaoGiamGiaList);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setSuccess(Boolean.TRUE);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error when getBaoCaoGiamGiaInRangeDate: {}", e);
+        }
+        return response;
+    }
+
+    private List<BaoCaoGiamGia> analysisBaoCaoGiamGia(List<Order> orders) {
+        List<BaoCaoGiamGia> listBaoCaoGiamGia = new ArrayList<BaoCaoGiamGia>();
+        for (Order order : orders) {
+            BaoCaoGiamGia baoCaoGiamGia = new BaoCaoGiamGia();
+            if (order.getGiamGia() != null) {
+                GiamGia giamGia = order.getGiamGia();
+                String giamGiaName = giamGia.getName();
+                String baoCaoGiamGiaName = "";
+                GiamGiaType giamGiaType = giamGia.getGiamGiaType();
+                if (giamGiaType.label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
+                    String percent = giamGia.getPercentage() + "%";
+                    baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
+                } else if (giamGiaType.label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
+                    if (giamGia.getDiscountAmount() != null) {
+                        String discountAmount = giamGia.getDiscountAmount() + "đ";
+                        baoCaoGiamGiaName = giamGiaName + " (-" + discountAmount + ")";
+                    } else if (giamGia.getPercentage() != null) {
+                        String percent = giamGia.getPercentage() + "%";
+                        baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
+                    }
+                }
+                boolean isBaoCaoGiamGiaExisted = checkBaoCaoGiamGiaExist(listBaoCaoGiamGia, baoCaoGiamGiaName);
+                if (isBaoCaoGiamGiaExisted) {
+                    String finalBaoCaoGiamGiaName = baoCaoGiamGiaName;
+                    int index = IntStream.range(0, listBaoCaoGiamGia.size()).filter(i ->
+                            finalBaoCaoGiamGiaName.equalsIgnoreCase(listBaoCaoGiamGia.get(i).getName())).findFirst().getAsInt();
+                    int quantity = listBaoCaoGiamGia.get(index).getTotalQuantity();
+                    listBaoCaoGiamGia.get(index).setTotalQuantity(quantity + 1);
+                    List<BaoCaoGiamGiaDetail> giamGiaDetails = listBaoCaoGiamGia.get(index).getListDiscountInvoice();
+                    BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
+                    temp.setDiscountPrice(order.getDiscountMoney());
+                    temp.setReceiptCode(order.getReceiptCode());
+                    temp.setTime(order.getOrderTimeCheckOut());
+                    giamGiaDetails.add(temp);
+                    listBaoCaoGiamGia.get(index).setListDiscountInvoice(giamGiaDetails);
+                    BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
+                    listBaoCaoGiamGia.get(index).setTotalDiscount(totalDiscount);
+                } else {
+                    baoCaoGiamGia.setTotalQuantity(1);
+                    baoCaoGiamGia.setName(baoCaoGiamGiaName);
+                    List<BaoCaoGiamGiaDetail> giamGiaDetails = new ArrayList<BaoCaoGiamGiaDetail>();
+                    BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
+                    temp.setDiscountPrice(order.getDiscountMoney());
+                    temp.setReceiptCode(order.getReceiptCode());
+                    temp.setTime(order.getOrderTimeCheckOut());
+                    giamGiaDetails.add(temp);
+                    baoCaoGiamGia.setListDiscountInvoice(giamGiaDetails);
+                    listBaoCaoGiamGia.add(baoCaoGiamGia);
+                    BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
+                    baoCaoGiamGia.setTotalDiscount(totalDiscount);
+                }
+            }
+        }
+        return listBaoCaoGiamGia;
+    }
+
+    private boolean checkBaoCaoGiamGiaExist(List<BaoCaoGiamGia> listBaoCaoGiamGia, String baoCaoGiamGiaName) {
+        boolean isExisted = false;
+        if (listBaoCaoGiamGia.stream().filter(tmp -> tmp.getName().equalsIgnoreCase(baoCaoGiamGiaName)).findFirst().isPresent()) {
+            isExisted = true;
+        }
+        return isExisted;
+    }
+
+    private BigDecimal calculateDiscountMoney(List<BaoCaoGiamGiaDetail> giamGiaDetails) {
+        BigDecimal totalDiscount = BigDecimal.ZERO;
+        for (BaoCaoGiamGiaDetail temp : giamGiaDetails) {
+            totalDiscount = totalDiscount.add(temp.getDiscountPrice());
+        }
+        return totalDiscount;
     }
 }
