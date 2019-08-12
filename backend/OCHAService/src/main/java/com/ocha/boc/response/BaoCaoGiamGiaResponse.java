@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
-public class BaoCaoGiamGiaResponse extends AbstractResponse {
+public class BaoCaoGiamGiaResponse extends AbstractResponse implements Serializable {
 
     private String cuaHangId;
 

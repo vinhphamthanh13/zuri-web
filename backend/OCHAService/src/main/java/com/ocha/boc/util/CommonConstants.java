@@ -136,4 +136,6 @@ public class CommonConstants {
     public static final String GET_MAT_HANG_BAN_CHAY_FAIL                = "Lỗi trong quá trình lấy thông tin mặt hàng bán chạy";
 
     public static final String GET_BAO_CAO_GIAM_GIA_FAIL                 = "Lỗi trong quá trình lấy báo cáo giảm giá";
+
+    public static final String GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL = "Lỗi trong quá trình lấy báo cáo doanh thu theo nhân viên.";
 }

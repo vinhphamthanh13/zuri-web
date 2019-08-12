@@ -2,13 +2,11 @@ package com.ocha.boc.services.impl;
 
 import com.ocha.boc.entity.*;
 import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.repository.DanhMucRepository;
 import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.request.AbstractBaoCaoRequest;
-import com.ocha.boc.response.BaoCaoGiamGiaResponse;
-import com.ocha.boc.response.DoanhThuTheoDanhMucResponse;
-import com.ocha.boc.response.DoanhThuTongQuanResponse;
-import com.ocha.boc.response.MatHangBanChayResponse;
+import com.ocha.boc.response.*;
 import com.ocha.boc.util.CommonConstants;
 import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -437,5 +435,86 @@ public class BaoCaoService {
             totalDiscount = totalDiscount.add(temp.getDiscountPrice());
         }
         return totalDiscount;
+    }
+
+    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVien(String cuaHangId){
+        DoanhThuTheoNhanVienResponse response = new DoanhThuTheoNhanVienResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL);
+        try{
+            if(StringUtils.isNotEmpty(cuaHangId)){
+                String currentDate = DateUtils.getCurrentDate();
+                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
+                if(CollectionUtils.isNotEmpty(orders)){
+                    response.setCuaHangId(cuaHangId);
+
+                }
+            }
+        }catch (Exception e){
+            log.error("Error when getBaoCaoDoanhThuTheoNhanVien: {}", e);
+        }
+        return response;
+    }
+
+    private List<DoanhThuTheoNhanVien> analysisDoanhThuTheoNhanVien(List<Order> orders){
+        List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = new ArrayList<DoanhThuTheoNhanVien>();
+        for(Order order: orders){
+            if(order.getOrderStatus().toString().equalsIgnoreCase(OrderStatus.SUCCESS.toString())){
+                String waiterName = order.getWaiterName();
+                boolean isWaiterNameIsExisted = checkWaiterNameIsExisted(listDoanhThuTheoNhanVien, waiterName);
+                if(isWaiterNameIsExisted){
+                    int index = IntStream.range(0, listDoanhThuTheoNhanVien.size()).filter(i ->
+                            waiterName.equalsIgnoreCase(listDoanhThuTheoNhanVien.get(i).getEmployeeName())).findFirst().getAsInt();
+                    OrdersWerePaidInformation orderPaidInformation = new OrdersWerePaidInformation();
+                    orderPaidInformation.setReceiptCode(order.getReceiptCode());
+                    orderPaidInformation.setTime(order.getOrderTimeCheckOut());
+                    orderPaidInformation.setTotalPrice(order.getTotalMoney());
+                    listDoanhThuTheoNhanVien.get(index).getListOrdersWerePaidInfor().add(orderPaidInformation);
+//                    Map<String , BigDecimal> totalPriceAndQuantity = calculateDoanhThuTheoNhanVienTotalPrice(listDoanhThuTheoNhanVien.get(index).getListOrdersWerePaidInfor());
+//                    for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
+//                        String key = entry.getKey();
+//                        BigDecimal value = entry.getValue();
+//                        if (key.equalsIgnoreCase(TOTAL_PRICE)) {
+//                            listDoanhThuTheoNhanVien.get(index).setTotalPrice(value);
+//                        } else if (key.equalsIgnoreCase(QUANTITY)) {
+//                            listDoanhThuTheoNhanVien.get(index).setTotalOrderSuccess(value.intValue());
+//                        }
+//                    }
+                }else{
+                    DoanhThuTheoNhanVien doanhThuTheoNhanVien = new DoanhThuTheoNhanVien();
+                    doanhThuTheoNhanVien.setEmployeeName(waiterName);
+                    List<OrdersWerePaidInformation> listOrdersWerePaidInformations = new ArrayList<OrdersWerePaidInformation>();
+                    OrdersWerePaidInformation orderPaidInformation = new OrdersWerePaidInformation();
+                    orderPaidInformation.setReceiptCode(order.getReceiptCode());
+                    orderPaidInformation.setTime(order.getOrderTimeCheckOut());
+                    orderPaidInformation.setTotalPrice(order.getTotalMoney());
+                    listOrdersWerePaidInformations.add(orderPaidInformation);
+                    doanhThuTheoNhanVien.setListOrdersWerePaidInfor(listOrdersWerePaidInformations);
+
+                }
+
+            }
+        }
+        return listDoanhThuTheoNhanVien;
+    }
+
+    private boolean checkWaiterNameIsExisted(List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien, String waiterName){
+        boolean isExisted = false;
+        if(listDoanhThuTheoNhanVien.stream().filter(tmp -> tmp.getEmployeeName().equalsIgnoreCase(waiterName)).findFirst().isPresent()){
+            isExisted = true;
+        }
+        return isExisted;
+    }
+
+    private Map<String , BigDecimal> calculateDoanhThuTheoNhanVienTotalPrice(List<OrdersWerePaidInformation> listOrdersWerePaidInformations){
+        Map<String , BigDecimal> result = new HashMap<String , BigDecimal>();
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        BigDecimal quantity = BigDecimal.valueOf((long)listOrdersWerePaidInformations.size());
+        for(OrdersWerePaidInformation temp: listOrdersWerePaidInformations){
+            totalPrice = totalPrice.add(temp.getTotalPrice());
+        }
+        result.put(TOTAL_PRICE, totalPrice);
+        result.put(QUANTITY, quantity);
+        return result;
     }
 }

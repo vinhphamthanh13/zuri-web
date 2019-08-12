@@ -1,10 +1,7 @@
 package com.ocha.boc.controllers;
 
 import com.ocha.boc.request.AbstractBaoCaoRequest;
-import com.ocha.boc.response.BaoCaoGiamGiaResponse;
-import com.ocha.boc.response.DoanhThuTheoDanhMucResponse;
-import com.ocha.boc.response.DoanhThuTongQuanResponse;
-import com.ocha.boc.response.MatHangBanChayResponse;
+import com.ocha.boc.response.*;
 import com.ocha.boc.services.impl.BaoCaoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -91,4 +88,12 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
+    @ApiOperation("Báo Cáo Doanh Thu Theo Nhân Viên")
+    @GetMapping("doanh-thu-theo-nhan-vien/{cuaHangId}")
+    public ResponseEntity<DoanhThuTheoNhanVienResponse> getBaoCaoDoanhThuTheoNhanVien(@PathVariable(value = "cuaHangId") String cuaHangId){
+        log.info("START: get current bao cao doanh thu theo nhan vien");
+        DoanhThuTheoNhanVienResponse response = baoCaoService.getBaoCaoDoanhThuTheoNhanVien(cuaHangId);
+        log.info("END: get current bao cao doanh thu theo nhan vien");
+        return ResponseEntity.ok(response);
+    }
 }
