@@ -437,32 +437,58 @@ public class BaoCaoService {
         return totalDiscount;
     }
 
-    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVien(String cuaHangId){
+    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVien(String cuaHangId) {
         DoanhThuTheoNhanVienResponse response = new DoanhThuTheoNhanVienResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL);
-        try{
-            if(StringUtils.isNotEmpty(cuaHangId)){
+        try {
+            if (StringUtils.isNotEmpty(cuaHangId)) {
                 String currentDate = DateUtils.getCurrentDate();
                 List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
-                if(CollectionUtils.isNotEmpty(orders)){
+                if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(cuaHangId);
-
+                    List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = analysisDoanhThuTheoNhanVien(orders);
+                    response.setListEmployeeSRevenue(listDoanhThuTheoNhanVien);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setSuccess(Boolean.TRUE);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error when getBaoCaoDoanhThuTheoNhanVien: {}", e);
         }
         return response;
     }
 
-    private List<DoanhThuTheoNhanVien> analysisDoanhThuTheoNhanVien(List<Order> orders){
+    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVienInRangeDate(AbstractBaoCaoRequest request) {
+        DoanhThuTheoNhanVienResponse response = new DoanhThuTheoNhanVienResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL);
+        try {
+            if(request != null){
+                String fromDate = request.getFromDate();
+                String toDate = request.getToDate();
+                List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(), fromDate, toDate);
+                if(CollectionUtils.isNotEmpty(orders)){
+                    response.setCuaHangId(request.getCuaHangId());
+                    List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = analysisDoanhThuTheoNhanVien(orders);
+                    response.setListEmployeeSRevenue(listDoanhThuTheoNhanVien);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setSuccess(Boolean.TRUE);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error when getBaoCaoDoanhThuTheoNhanVienInRangeDate: {}", e);
+        }
+        return response;
+    }
+
+    private List<DoanhThuTheoNhanVien> analysisDoanhThuTheoNhanVien(List<Order> orders) {
         List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = new ArrayList<DoanhThuTheoNhanVien>();
-        for(Order order: orders){
-            if(order.getOrderStatus().toString().equalsIgnoreCase(OrderStatus.SUCCESS.toString())){
+        for (Order order : orders) {
+            if (order.getOrderStatus().toString().equalsIgnoreCase(OrderStatus.SUCCESS.toString())) {
                 String waiterName = order.getWaiterName();
                 boolean isWaiterNameIsExisted = checkWaiterNameIsExisted(listDoanhThuTheoNhanVien, waiterName);
-                if(isWaiterNameIsExisted){
+                if (isWaiterNameIsExisted) {
                     int index = IntStream.range(0, listDoanhThuTheoNhanVien.size()).filter(i ->
                             waiterName.equalsIgnoreCase(listDoanhThuTheoNhanVien.get(i).getEmployeeName())).findFirst().getAsInt();
                     OrdersWerePaidInformation orderPaidInformation = new OrdersWerePaidInformation();
@@ -470,17 +496,17 @@ public class BaoCaoService {
                     orderPaidInformation.setTime(order.getOrderTimeCheckOut());
                     orderPaidInformation.setTotalPrice(order.getTotalMoney());
                     listDoanhThuTheoNhanVien.get(index).getListOrdersWerePaidInfor().add(orderPaidInformation);
-//                    Map<String , BigDecimal> totalPriceAndQuantity = calculateDoanhThuTheoNhanVienTotalPrice(listDoanhThuTheoNhanVien.get(index).getListOrdersWerePaidInfor());
-//                    for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
-//                        String key = entry.getKey();
-//                        BigDecimal value = entry.getValue();
-//                        if (key.equalsIgnoreCase(TOTAL_PRICE)) {
-//                            listDoanhThuTheoNhanVien.get(index).setTotalPrice(value);
-//                        } else if (key.equalsIgnoreCase(QUANTITY)) {
-//                            listDoanhThuTheoNhanVien.get(index).setTotalOrderSuccess(value.intValue());
-//                        }
-//                    }
-                }else{
+                    Map<String, BigDecimal> totalPriceAndQuantity = calculateDoanhThuTheoNhanVienTotalPrice(listDoanhThuTheoNhanVien.get(index).getListOrdersWerePaidInfor());
+                    for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
+                        String key = entry.getKey();
+                        BigDecimal value = entry.getValue();
+                        if (key.equalsIgnoreCase(TOTAL_PRICE)) {
+                            listDoanhThuTheoNhanVien.get(index).setTotalPrice(value);
+                        } else if (key.equalsIgnoreCase(QUANTITY)) {
+                            listDoanhThuTheoNhanVien.get(index).setTotalOrderSuccess(value.intValue());
+                        }
+                    }
+                } else {
                     DoanhThuTheoNhanVien doanhThuTheoNhanVien = new DoanhThuTheoNhanVien();
                     doanhThuTheoNhanVien.setEmployeeName(waiterName);
                     List<OrdersWerePaidInformation> listOrdersWerePaidInformations = new ArrayList<OrdersWerePaidInformation>();
@@ -490,7 +516,17 @@ public class BaoCaoService {
                     orderPaidInformation.setTotalPrice(order.getTotalMoney());
                     listOrdersWerePaidInformations.add(orderPaidInformation);
                     doanhThuTheoNhanVien.setListOrdersWerePaidInfor(listOrdersWerePaidInformations);
-
+                    Map<String, BigDecimal> totalPriceAndQuantity = calculateDoanhThuTheoNhanVienTotalPrice(listOrdersWerePaidInformations);
+                    for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
+                        String key = entry.getKey();
+                        BigDecimal value = entry.getValue();
+                        if (key.equalsIgnoreCase(TOTAL_PRICE)) {
+                            doanhThuTheoNhanVien.setTotalPrice(value);
+                        } else if (key.equalsIgnoreCase(QUANTITY)) {
+                            doanhThuTheoNhanVien.setTotalOrderSuccess(value.intValue());
+                        }
+                    }
+                    listDoanhThuTheoNhanVien.add(doanhThuTheoNhanVien);
                 }
 
             }
@@ -498,19 +534,19 @@ public class BaoCaoService {
         return listDoanhThuTheoNhanVien;
     }
 
-    private boolean checkWaiterNameIsExisted(List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien, String waiterName){
+    private boolean checkWaiterNameIsExisted(List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien, String waiterName) {
         boolean isExisted = false;
-        if(listDoanhThuTheoNhanVien.stream().filter(tmp -> tmp.getEmployeeName().equalsIgnoreCase(waiterName)).findFirst().isPresent()){
+        if (listDoanhThuTheoNhanVien.stream().filter(tmp -> tmp.getEmployeeName().equalsIgnoreCase(waiterName)).findFirst().isPresent()) {
             isExisted = true;
         }
         return isExisted;
     }
 
-    private Map<String , BigDecimal> calculateDoanhThuTheoNhanVienTotalPrice(List<OrdersWerePaidInformation> listOrdersWerePaidInformations){
-        Map<String , BigDecimal> result = new HashMap<String , BigDecimal>();
+    private Map<String, BigDecimal> calculateDoanhThuTheoNhanVienTotalPrice(List<OrdersWerePaidInformation> listOrdersWerePaidInformations) {
+        Map<String, BigDecimal> result = new HashMap<String, BigDecimal>();
         BigDecimal totalPrice = BigDecimal.ZERO;
-        BigDecimal quantity = BigDecimal.valueOf((long)listOrdersWerePaidInformations.size());
-        for(OrdersWerePaidInformation temp: listOrdersWerePaidInformations){
+        BigDecimal quantity = BigDecimal.valueOf((long) listOrdersWerePaidInformations.size());
+        for (OrdersWerePaidInformation temp : listOrdersWerePaidInformations) {
             totalPrice = totalPrice.add(temp.getTotalPrice());
         }
         result.put(TOTAL_PRICE, totalPrice);
