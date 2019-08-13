@@ -215,7 +215,7 @@ public class BaoCaoService {
 
     private boolean checkDanhMucExistInListDanhMucBanChay(List<DanhMucBanChay> listDanhMucBanChay, DanhMuc danhMuc) {
         boolean isExisted = false;
-        if (listDanhMucBanChay.stream().filter(tmp -> tmp.getDanhMucName().equalsIgnoreCase(danhMuc.getName())).findFirst().isPresent()) {
+        if (listDanhMucBanChay.stream().anyMatch(tmp -> tmp.getDanhMucName().equalsIgnoreCase(danhMuc.getName()))) {
             isExisted = true;
         }
         return isExisted;
@@ -314,7 +314,7 @@ public class BaoCaoService {
 
     private boolean checkMatHangBanChayExist(List<MatHangBanChay> listMatHangBanChay, String matHangName) {
         boolean isExisted = false;
-        if (listMatHangBanChay.stream().filter(tmp -> tmp.getName().equalsIgnoreCase(matHangName)).findFirst().isPresent()) {
+        if (listMatHangBanChay.stream().anyMatch(tmp -> tmp.getName().equalsIgnoreCase(matHangName))) {
             isExisted = true;
         }
         return isExisted;
@@ -423,7 +423,7 @@ public class BaoCaoService {
 
     private boolean checkBaoCaoGiamGiaExist(List<BaoCaoGiamGia> listBaoCaoGiamGia, String baoCaoGiamGiaName) {
         boolean isExisted = false;
-        if (listBaoCaoGiamGia.stream().filter(tmp -> tmp.getName().equalsIgnoreCase(baoCaoGiamGiaName)).findFirst().isPresent()) {
+        if (listBaoCaoGiamGia.stream().anyMatch(tmp -> tmp.getName().equalsIgnoreCase(baoCaoGiamGiaName))) {
             isExisted = true;
         }
         return isExisted;
@@ -536,7 +536,7 @@ public class BaoCaoService {
 
     private boolean checkWaiterNameIsExisted(List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien, String waiterName) {
         boolean isExisted = false;
-        if (listDoanhThuTheoNhanVien.stream().filter(tmp -> tmp.getEmployeeName().equalsIgnoreCase(waiterName)).findFirst().isPresent()) {
+        if (listDoanhThuTheoNhanVien.stream().anyMatch(tmp -> tmp.getEmployeeName().equalsIgnoreCase(waiterName))) {
             isExisted = true;
         }
         return isExisted;
