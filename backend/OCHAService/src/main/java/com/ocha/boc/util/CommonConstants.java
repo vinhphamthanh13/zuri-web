@@ -138,4 +138,13 @@ public class CommonConstants {
     public static final String GET_BAO_CAO_GIAM_GIA_FAIL                 = "Lỗi trong quá trình lấy báo cáo giảm giá";
 
     public static final String GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL = "Lỗi trong quá trình lấy báo cáo doanh thu theo nhân viên.";
+
+    /**
+     * System Configuration
+     */
+    public static final String GET_ALL_GIAY_IN_SYSTEM_CONFIGURATION_FAIL  = "Lỗi trong quá trình lấy thông tin thiết lập giấy in của hệ thống.";
+
+    public static final String CREATE_NEW_GIAY_IN_INFORMATION_FAIL        = "Lỗi trong quá trình tạo mới giấy in hệ thống.";
+
+    public static final String DELETE_GIAY_IN_BY_TITLE_FAIL               = "Lỗi trong quá trình xóa thông tin giấy in trong hệ thống.";
 }
