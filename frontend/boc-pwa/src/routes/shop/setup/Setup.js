@@ -11,7 +11,7 @@ class Setup extends React.Component {
   createMenu = () => (
     <div className={s.menu}>
       {SHOP.SETUP.map(menu => (
-        <div className={s.wrappedItem} key={uuidv1()}>
+        <div className={s.wrappedItem} key={uuidv1()} onClick={menu.action}>
           <div className={s.item}>
             <div className={s.icon}>{menu.icon}</div>
             <div>{menu.name}</div>

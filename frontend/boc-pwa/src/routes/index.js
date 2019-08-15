@@ -54,11 +54,10 @@ const routes = {
       path: '/shop/setup',
       load: () => import(/* webpackChunkName: 'shopSetup' */ './shop/setup'),
     },
-    // {
-    //   path: '/shop/setup/tax',
-    //   load: () =>
-    //     import(/* webpackChunkName: 'shopSetupTax' */ './shop/setup/tax'),
-    // },
+    {
+      path: '/shop/setup/tax',
+      load: () => import(/* webpackChunkName: 'shopTax' */ './shop/setup/tax'),
+    },
     // {
     //   path: '/shop/setup/service',
     //   load: () =>

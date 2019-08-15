@@ -40,6 +40,32 @@ export const register = Yup.object().shape({
     .required('* Nhập địa chỉ cửa hàng'),
 });
 
+export const registerTax = Yup.object().shape({
+  coName: Yup.string()
+    .matches(/[\w]{2,}/, {
+      message: '* Tên phải có ít nhất 2 ký tự',
+    })
+    .required('* Nhập tên công ty'),
+  coAddress: Yup.string()
+    .matches(/[\w\s]{10,}/, {
+      message: '* Địa chỉ không hợp lệ',
+    })
+    .required('* Nhập địa chỉ công ty'),
+  coBranch: Yup.string().matches(/[\w]{3,}/, {
+    message: '* Tên chi nhánh có ít nhất 3 ký tự',
+  }),
+  taxNumber: Yup.string()
+    .required('* Nhập số mã số thuế')
+    .matches(REGEXP.TAX_NUMBER, {
+      message: '* Mã số thuế không hợp lệ.',
+      excludeEmptyString: true,
+    }),
+  registerNumber: Yup.string().matches(REGEXP.PHONE_NUMBER, {
+    message: '* Số đăng ký không hợp lệ.',
+    excludeEmptyString: true,
+  }),
+});
+
 export const verifyCode = Yup.object().shape({
   verifyCode: Yup.string()
     .required('* Nhập mã xác minh')

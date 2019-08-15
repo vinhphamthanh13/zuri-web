@@ -3,6 +3,7 @@ export const REGEXP = {
   COUNTRY_CODE: /^\+\d{2,3}$/,
   VERIFY_CODE: /^\d{6}$/,
   ENCRYPT_PHONE: /(\d{2})\d{5}(\d+)/,
+  TAX_NUMBER: /\d{9,12}/,
 };
 
 export const INPUT = {
@@ -25,6 +26,34 @@ export const INPUT = {
     label: 'Địa chỉ cửa hàng:',
     value: 'shopAddress',
     placeholder: 'Nhập địa chỉ cửa hàng',
+  },
+};
+
+export const TAX = {
+  CO_NAME: {
+    label: 'Tên công ty:',
+    value: 'coName',
+    placeholder: 'Nhập tên công ty',
+  },
+  CO_ADDRESS: {
+    label: 'Địa chỉ công ty:',
+    value: 'coAddress',
+    placeholder: 'Nhập địa chỉ công ty',
+  },
+  BRANCH_NAME: {
+    label: 'Chi nhánh (không bắt buộc):',
+    value: 'coBranch',
+    placeholder: 'Nhập tên chi nhánh',
+  },
+  TAX_NUMBER: {
+    label: 'Mã số thuế:',
+    value: 'taxNumber',
+    placeholder: 'Nhập mã số thuế',
+  },
+  REGISTER_NUMBER: {
+    label: 'Số đăng ký (không bắt buộc):',
+    value: 'registerNumber',
+    placeholder: 'Nhập số đăng ký',
   },
 };
 

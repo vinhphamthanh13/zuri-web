@@ -14,8 +14,8 @@
 .register {
   color: var(--c-brand-3);
   text-align: center;
-  border: 1px solid var(--c-brand-5);
-  padding: var(--size-16);
+  border: 1px solid var(--c-bright);
+  padding: var(--size-22) var(--size-12);
   border-radius: var(--size-08);
 }
 

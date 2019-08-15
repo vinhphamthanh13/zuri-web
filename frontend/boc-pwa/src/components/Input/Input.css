@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  margin: calc(var(--size-padding) * 1.5) 0;
+  margin: var(--size-12) 0;
   position: relative;
 }
 
@@ -16,10 +16,10 @@
 input {
   width: var(--max-input-width);
   height: var(--size-input-height);
-  border: 1px solid var(--c-brand-3);
+  border: var(--size-01) solid var(--c-gray);
   border-radius: var(--size-radius-standard);
   font-size: var(--font-size-input);
-  letter-spacing: 2px;
+  letter-spacing: var(--size-02);
   padding: 0 var(--size-12);
 }
 
@@ -31,12 +31,15 @@ input::placeholder {
 
 .label {
   position: absolute;
-  top: calc(var(--size-16) * -1.8);
+  top: calc(var(--size-16) * -1.5);
+  font-size: var(--font-size-label);
   color: var(--c-text-dark);
-  font-weight: var(--font-weight-500)
+  font-weight: var(--font-weight-500);
 }
 
 .errorMessage {
+  position: absolute;
+  bottom: var(--size-14);
   text-align: left;
   font-size: var(--font-size-label);
   color: var(--c-error);

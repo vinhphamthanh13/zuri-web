@@ -5,7 +5,6 @@ const svgProps = {
   hexColor: string,
   size: number,
 };
-
 const svgDefaultProps = {
   hexColor: '#fff',
   size: 24,
@@ -31,11 +30,9 @@ export const HowToReg = ({ hexColor, size }) => (
     </g>
   </svg>
 );
-
 HowToReg.propTypes = {
   ...svgProps,
 };
-
 HowToReg.defaultProps = {
   ...svgDefaultProps,
 };
@@ -52,11 +49,9 @@ export const Clear = ({ hexColor, size }) => (
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>
 );
-
 Clear.propTypes = {
   ...svgProps,
 };
-
 Clear.defaultProps = {
   ...svgDefaultProps,
 };
@@ -73,11 +68,9 @@ export const Reorder = ({ hexColor, size }) => (
     <path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z" />
   </svg>
 );
-
 Reorder.propTypes = {
   ...svgProps,
 };
-
 Reorder.defaultProps = {
   ...svgDefaultProps,
 };
@@ -94,11 +87,9 @@ export const ShowChart = ({ hexColor, size }) => (
     <path fill="none" d="M0 0h24v24H0z" />
   </svg>
 );
-
 ShowChart.propTypes = {
   ...svgProps,
 };
-
 ShowChart.defaultProps = {
   ...svgDefaultProps,
 };
@@ -115,11 +106,9 @@ export const FilterVintage = ({ hexColor, size }) => (
     <path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" />
   </svg>
 );
-
 FilterVintage.propTypes = {
   ...svgProps,
 };
-
 FilterVintage.defaultProps = {
   ...svgDefaultProps,
 };
@@ -138,11 +127,9 @@ export const BubbleChart = ({ hexColor, size }) => (
     <circle cx="15.2" cy="8.8" r="4.8" />
   </svg>
 );
-
 BubbleChart.propTypes = {
   ...svgProps,
 };
-
 BubbleChart.defaultProps = {
   ...svgDefaultProps,
 };
@@ -159,11 +146,9 @@ export const Announcement = ({ hexColor, size }) => (
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>
 );
-
 Announcement.propTypes = {
   ...svgProps,
 };
-
 Announcement.defaultProps = {
   ...svgDefaultProps,
 };
@@ -180,11 +165,9 @@ export const Store = ({ hexColor, size }) => (
     <path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" />
   </svg>
 );
-
 Store.propTypes = {
   ...svgProps,
 };
-
 Store.defaultProps = {
   ...svgDefaultProps,
 };
@@ -201,11 +184,9 @@ export const List = ({ hexColor, size }) => (
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>
 );
-
 List.propTypes = {
   ...svgProps,
 };
-
 List.defaultProps = {
   ...svgDefaultProps,
 };
@@ -222,11 +203,9 @@ export const ViewStream = ({ hexColor, size }) => (
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>
 );
-
 ViewStream.propTypes = {
   ...svgProps,
 };
-
 ViewStream.defaultProps = {
   ...svgDefaultProps,
 };
@@ -243,11 +222,9 @@ export const SupervisedUser = ({ hexColor, size }) => (
     <path fill="none" d="M0 0h24v24H0z" />
   </svg>
 );
-
 SupervisedUser.propTypes = {
   ...svgProps,
 };
-
 SupervisedUser.defaultProps = {
   ...svgDefaultProps,
 };
@@ -264,11 +241,9 @@ export const MonetizationOn = ({ hexColor, size }) => (
     <path fill="none" d="M0 0h24v24H0z" />
   </svg>
 );
-
 MonetizationOn.propTypes = {
   ...svgProps,
 };
-
 MonetizationOn.defaultProps = {
   ...svgDefaultProps,
 };
@@ -285,11 +260,9 @@ export const Print = ({ hexColor, size }) => (
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>
 );
-
 Print.propTypes = {
   ...svgProps,
 };
-
 Print.defaultProps = {
   ...svgDefaultProps,
 };
@@ -306,11 +279,9 @@ export const ArrowBack = ({ hexColor, size }) => (
     <path fill="none" d="M0 0h24v24H0z" />
   </svg>
 );
-
 ArrowBack.propTypes = {
   ...svgProps,
 };
-
 ArrowBack.defaultProps = {
   ...svgDefaultProps,
 };
@@ -327,11 +298,9 @@ export const ArrowForward = ({ hexColor, size }) => (
     <path fill="none" d="M0 0h24v24H0z" />
   </svg>
 );
-
 ArrowForward.propTypes = {
   ...svgProps,
 };
-
 ArrowForward.defaultProps = {
   ...svgDefaultProps,
 };

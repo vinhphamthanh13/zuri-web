@@ -72,4 +72,10 @@ export const SHOP = {
       action: () => history.push('/shop/setup/shopInfo'),
     },
   ],
+  TAX: [
+    {
+      icon: <MonetizationOn size={28} hexColor={triad01} />,
+      name: 'Thuế VAT đã đăng ký',
+    },
+  ],
 };
