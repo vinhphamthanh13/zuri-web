@@ -1,6 +1,16 @@
 import React from 'react';
 import { string, number } from 'prop-types';
 
+const svgProps = {
+  hexColor: string,
+  size: number,
+};
+
+const svgDefaultProps = {
+  hexColor: '#fff',
+  size: 24,
+};
+
 export const HowToReg = ({ hexColor, size }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -23,13 +33,11 @@ export const HowToReg = ({ hexColor, size }) => (
 );
 
 HowToReg.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 HowToReg.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const Clear = ({ hexColor, size }) => (
@@ -46,13 +54,11 @@ export const Clear = ({ hexColor, size }) => (
 );
 
 Clear.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 Clear.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const Reorder = ({ hexColor, size }) => (
@@ -69,13 +75,11 @@ export const Reorder = ({ hexColor, size }) => (
 );
 
 Reorder.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 Reorder.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const ShowChart = ({ hexColor, size }) => (
@@ -92,13 +96,11 @@ export const ShowChart = ({ hexColor, size }) => (
 );
 
 ShowChart.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 ShowChart.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const FilterVintage = ({ hexColor, size }) => (
@@ -115,13 +117,11 @@ export const FilterVintage = ({ hexColor, size }) => (
 );
 
 FilterVintage.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 FilterVintage.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const BubbleChart = ({ hexColor, size }) => (
@@ -140,13 +140,11 @@ export const BubbleChart = ({ hexColor, size }) => (
 );
 
 BubbleChart.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 BubbleChart.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const Announcement = ({ hexColor, size }) => (
@@ -163,13 +161,11 @@ export const Announcement = ({ hexColor, size }) => (
 );
 
 Announcement.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 Announcement.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const Store = ({ hexColor, size }) => (
@@ -186,13 +182,11 @@ export const Store = ({ hexColor, size }) => (
 );
 
 Store.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 Store.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const List = ({ hexColor, size }) => (
@@ -209,13 +203,11 @@ export const List = ({ hexColor, size }) => (
 );
 
 List.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 List.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const ViewStream = ({ hexColor, size }) => (
@@ -232,13 +224,11 @@ export const ViewStream = ({ hexColor, size }) => (
 );
 
 ViewStream.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 ViewStream.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const SupervisedUser = ({ hexColor, size }) => (
@@ -255,13 +245,11 @@ export const SupervisedUser = ({ hexColor, size }) => (
 );
 
 SupervisedUser.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 SupervisedUser.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const MonetizationOn = ({ hexColor, size }) => (
@@ -278,13 +266,11 @@ export const MonetizationOn = ({ hexColor, size }) => (
 );
 
 MonetizationOn.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 MonetizationOn.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
 };
 
 export const Print = ({ hexColor, size }) => (
@@ -301,11 +287,51 @@ export const Print = ({ hexColor, size }) => (
 );
 
 Print.propTypes = {
-  hexColor: string,
-  size: number,
+  ...svgProps,
 };
 
 Print.defaultProps = {
-  hexColor: '#fff',
-  size: 24,
+  ...svgDefaultProps,
+};
+
+export const ArrowBack = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z" />
+    <path fill="none" d="M0 0h24v24H0z" />
+  </svg>
+);
+
+ArrowBack.propTypes = {
+  ...svgProps,
+};
+
+ArrowBack.defaultProps = {
+  ...svgDefaultProps,
+};
+
+export const ArrowForward = ({ hexColor, size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={hexColor}
+  >
+    <path d="M5.88 4.12L13.76 12l-7.88 7.88L8 22l10-10L8 2z" />
+    <path fill="none" d="M0 0h24v24H0z" />
+  </svg>
+);
+
+ArrowForward.propTypes = {
+  ...svgProps,
+};
+
+ArrowForward.defaultProps = {
+  ...svgDefaultProps,
 };

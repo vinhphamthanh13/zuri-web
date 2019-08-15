@@ -45,10 +45,40 @@ const routes = {
       path: '/activity',
       load: () => import(/* webpackChunkName: 'activity' */ './activity'),
     },
+    // Shop Route and Children
     {
       path: '/shop',
       load: () => import(/* webpackChunkName: 'shop' */ './shop'),
     },
+    {
+      path: '/shop/setup',
+      load: () => import(/* webpackChunkName: 'shopSetup' */ './shop/setup'),
+    },
+    // {
+    //   path: '/shop/setup/tax',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupTax' */ './shop/setup/tax'),
+    // },
+    // {
+    //   path: '/shop/setup/service',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupService' */ './shop/setup/service'),
+    // },
+    // {
+    //   path: '/shop/setup/openedOrder',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupOpenedOrder' */ './shop/setup/openOrder'),
+    // },
+    // {
+    //   path: '/shop/setup/printer',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupPrinter' */ './shop/setup/printer'),
+    // },
+    // {
+    //   path: '/shop/setup/shopInfo',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupPrinter' */ './shop/setup/shopInfo'),
+    // },
     // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
     {
       path: '(.*)',

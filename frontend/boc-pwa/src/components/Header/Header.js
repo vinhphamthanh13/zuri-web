@@ -7,26 +7,35 @@ import s from './Header.css';
 class Header extends Component {
   static propTypes = {
     title: string.isRequired,
-    iconName: string,
+    icon: string,
+    iconLeft: string,
     onClick: func,
+    onClickLeft: func,
     gutter: bool,
   };
 
   static defaultProps = {
     onClick: noop,
-    iconName: '',
+    onClickLeft: noop,
+    icon: '',
+    iconLeft: '',
     gutter: false,
   };
 
   render() {
-    const { title, onClick, iconName, gutter } = this.props;
+    const { title, onClick, onClickLeft, icon, iconLeft, gutter } = this.props;
     const headerStyle = gutter ? `${s.container} ${s.gutter}` : s.container;
     return (
       <div className={headerStyle}>
+        {iconLeft && (
+          <button className={s.button} onClick={onClickLeft}>
+            <i className="material-icons">{iconLeft}</i>
+          </button>
+        )}
         {title}
-        {iconName && (
+        {icon && (
           <button className={s.button} onClick={onClick}>
-            <i className="material-icons">{iconName}</i>
+            <i className="material-icons">{icon}</i>
           </button>
         )}
       </div>

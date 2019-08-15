@@ -12,7 +12,7 @@ class Shop extends React.Component {
     chunk(SHOP.MENU, 2).map(row => (
       <div className={s.row} key={uuidv1()}>
         {row.map(menu => (
-          <div className={s.item} key={uuidv1()}>
+          <div className={s.item} key={uuidv1()} onClick={menu.action}>
             <div className={s.icon}>{menu.icon}</div>
             <div>{menu.name}</div>
           </div>
