@@ -11,6 +11,7 @@
   width: 100%;
   margin-bottom: var(--size-16);
   text-transform: uppercase;
+  position: relative;
 }
 
 .gutter {
@@ -18,14 +19,17 @@
 }
 
 .button {
-  margin: var(--size-06);
-  padding: var(--size-12) var(--size-24);
-  border: var(--size-01) solid var(--c-brand-1);
-  border-radius: var(--size-28);
+  position: absolute;
   display: flex;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-.button:hover {
-  cursor: pointer;
+.left {
+  left: var(--size-18);
+}
+
+.right {
+  right: var(--size-18);
 }

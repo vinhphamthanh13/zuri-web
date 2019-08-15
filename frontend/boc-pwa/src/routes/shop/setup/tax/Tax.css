@@ -2,7 +2,6 @@
 
 .container {
   width: 100%;
-  height: 100%;
   position: relative;
   color: var(--c-brand-1);
 }
@@ -49,9 +48,10 @@
   font-size: var(--font-size-medium);
   display: flex;
   justify-content: center;
+  align-items: center;
   margin: var(--size-10) auto;
 }
 
 .legendIcon {
-  padding-right: var(--size-10);
+  padding-right: var(--size-02);
 }

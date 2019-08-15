@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { string, func, bool } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { noop } from 'lodash';
+import { ArrowBack, ArrowForward } from 'constants/svg';
 import s from './Header.css';
 
 class Header extends Component {
@@ -28,15 +29,15 @@ class Header extends Component {
     return (
       <div className={headerStyle}>
         {iconLeft && (
-          <button className={s.button} onClick={onClickLeft}>
-            <i className="material-icons">{iconLeft}</i>
-          </button>
+          <div className={`${s.button} ${s.left}`} onClick={onClickLeft}>
+            <ArrowBack />
+          </div>
         )}
         {title}
         {icon && (
-          <button className={s.button} onClick={onClick}>
-            <i className="material-icons">{icon}</i>
-          </button>
+          <div className={`${s.button} ${s.right}`} onClick={onClick}>
+            <ArrowForward />
+          </div>
         )}
       </div>
     );
