@@ -4,6 +4,7 @@ import uuidv1 from 'uuid/v1';
 import Header from 'components/Header';
 import { SHOP } from 'constants/shop';
 import { brand02 } from 'constants/colors';
+import { goBack } from 'utils/browser';
 import { ArrowForward } from 'constants/svg';
 import s from './Setup.css';
 
@@ -27,7 +28,12 @@ class Setup extends React.Component {
   render() {
     return (
       <div className={s.container}>
-        <Header title="Thiết lập cửa hàng" gutter />
+        <Header
+          title="Thiết lập cửa hàng"
+          gutter
+          iconLeft
+          onClickLeft={goBack}
+        />
         {this.createMenu()}
       </div>
     );

@@ -1,8 +1,18 @@
-export function hasGetUserMedia() {
+import history from '../history';
+
+export const hasGetUserMedia = () => {
   return !!(
     (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ||
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia
   );
-}
+};
+
+export const goBack = () => {
+  history.goBack();
+};
+
+export const goForward = () => {
+  history.goForward();
+};

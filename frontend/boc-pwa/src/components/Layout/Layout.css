@@ -34,7 +34,7 @@ body {
   margin: 0;
   height: 100%;
   -webkit-tap-highlight-color: transparent;
-  background-color: var(--c-bright);
+  background-color: var(--c-smoke);
   font-size: var(--font-size-18);
   color: var(--c-bg-brand-3);
 }

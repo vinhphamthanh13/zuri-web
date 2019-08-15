@@ -2,6 +2,7 @@ import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import uuidv1 from 'uuid/v1';
 import Header from 'components/Header';
+import { goBack } from 'utils/browser';
 import { SHOP } from 'constants/shop';
 import { triad05, gray } from 'constants/colors';
 import { ToggleOn, ToggleOff, NotificationImportant } from 'constants/svg';
@@ -31,9 +32,9 @@ class Tax extends React.Component {
               <div>{menu.name}</div>
               <div className={s.arrow} onClick={this.handleTaxToggled}>
                 {isTaxToggled ? (
-                  <ToggleOn size={32} hexColor={triad05} />
+                  <ToggleOn size={38} hexColor={triad05} />
                 ) : (
-                  <ToggleOff size={32} hexColor={gray} />
+                  <ToggleOff size={38} hexColor={gray} />
                 )}
               </div>
             </div>
@@ -47,7 +48,7 @@ class Tax extends React.Component {
     const { isTaxToggled } = this.state;
     return (
       <div className={s.container}>
-        <Header title="Thiết lập thuế" gutter iconLeft icon />
+        <Header title="Thiết lập thuế" gutter iconLeft onClickLeft={goBack} />
         {this.createMenu()}
         {!isTaxToggled ? (
           <div className={s.legend}>

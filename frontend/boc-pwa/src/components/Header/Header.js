@@ -30,13 +30,13 @@ class Header extends Component {
       <div className={headerStyle}>
         {iconLeft && (
           <div className={`${s.button} ${s.left}`} onClick={onClickLeft}>
-            <ArrowBack />
+            <ArrowBack size={20} />
           </div>
         )}
         {title}
         {icon && (
           <div className={`${s.button} ${s.right}`} onClick={onClick}>
-            <ArrowForward />
+            <ArrowForward size={20} />
           </div>
         )}
       </div>
