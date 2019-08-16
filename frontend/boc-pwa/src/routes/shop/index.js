@@ -17,7 +17,7 @@ async function action() {
     chunks: ['shop'],
     component: (
       <Layout>
-        <Shop news={[]} />
+        <Shop />
       </Layout>
     ),
   };

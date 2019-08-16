@@ -1,4 +1,9 @@
-import { BubbleChart, FilterVintage, Reorder, ShowChart } from 'constants/svg';
+import {
+  TrackChanges,
+  ShowChart,
+  BubbleChart,
+  FilterVintage,
+} from 'constants/svg';
 import React, { Component } from 'react';
 import { number } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
@@ -8,7 +13,7 @@ import { brand01, brand03 } from 'constants/colors';
 import history from '../../history';
 import s from './BocTabs.css';
 
-const TabIcons = [Reorder, ShowChart, BubbleChart, FilterVintage];
+const TabIcons = [TrackChanges, ShowChart, BubbleChart, FilterVintage];
 
 class BocTabs extends Component {
   static propTypes = {

@@ -11,7 +11,7 @@ import s from './Setup.css';
 class Setup extends React.Component {
   createMenu = () => (
     <div className={s.menu}>
-      {SHOP.SETUP.map(menu => (
+      {SHOP.SETUP.STORE.MENU.map(menu => (
         <div className={s.wrappedItem} key={uuidv1()} onClick={menu.action}>
           <div className={s.item}>
             <div className={s.icon}>{menu.icon}</div>

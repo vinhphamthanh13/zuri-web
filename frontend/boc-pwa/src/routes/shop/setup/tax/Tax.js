@@ -25,7 +25,7 @@ class Tax extends React.Component {
 
     return (
       <div className={s.menu}>
-        {SHOP.TAX.map(menu => (
+        {SHOP.SETUP.STORE.TAX.map(menu => (
           <div className={s.wrappedItem} key={uuidv1()}>
             <div className={s.item}>
               <div className={s.icon}>{menu.icon}</div>
