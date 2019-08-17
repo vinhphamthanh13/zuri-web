@@ -46,6 +46,22 @@ body {
   margin: 0 auto;
 }
 
+.unSupport {
+  padding: var(--size-30) var(--size-16) 0;
+  color: var(--c-triad-01);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.logo {
+  width: var(--home-logo-width);
+  display: flex;
+  justify-content: center;
+}
+
 *,
 *::before,
 *::after {
@@ -88,7 +104,7 @@ hr {
   height: var(--size-01);
   border: 0;
   border-top: var(--size-01) solid var(--c-gray);
-  margin: 1em 0;
+  margin: 1rem 0;
   padding: 0;
 }
 

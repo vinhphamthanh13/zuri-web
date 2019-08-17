@@ -7,6 +7,10 @@
   color: var(--c-brand-1);
 }
 
+.content {
+  overflow: auto;
+}
+
 .shopInfo {
   margin: var(--size-12) auto;
   color: var(--c-brand-1);

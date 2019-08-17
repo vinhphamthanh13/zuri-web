@@ -1,19 +1,13 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-/* eslint-disable css-modules/no-unused-class */
-
 import React from 'react';
-import { node, number } from 'prop-types';
+import { node, number, func } from 'prop-types';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { isIE, isEdge, isMobile } from 'react-device-detect';
+import { isIE, isEdge } from 'react-device-detect';
 import windowSize from 'react-window-size';
+import logo from 'assets/images/welcome_boc.png';
+import { resolveDimension } from 'utils/browser';
+import { setLayoutDimension } from 'actions/common';
 import s from './Layout.css';
 
 class Layout extends React.Component {
@@ -21,21 +15,68 @@ class Layout extends React.Component {
     children: node.isRequired,
     windowWidth: number.isRequired,
     windowHeight: number.isRequired,
+    setViewDimension: func.isRequired,
   };
+
+  state = {
+    windowWidth: null,
+    windowHeight: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    const { windowWidth, windowHeight } = props;
+    const {
+      windowWidth: cachedWindowWidth,
+      windowHeight: cachedWindowHeight,
+    } = state;
+    if (
+      windowWidth !== cachedWindowWidth ||
+      windowHeight !== cachedWindowHeight
+    ) {
+      return {
+        windowWidth,
+        windowHeight,
+      };
+    }
+
+    return null;
+  }
+
+  componentDidMount() {
+    const { windowWidth, windowHeight, setViewDimension } = this.props;
+    setViewDimension({ windowWidth, windowHeight });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { windowWidth, windowHeight } = prevProps;
+    const { setViewDimension } = this.props;
+    const {
+      windowWidth: cachedWindowWidth,
+      windowHeight: cachedWindowHeight,
+    } = this.state;
+
+    if (
+      windowWidth !== cachedWindowWidth ||
+      windowHeight !== cachedWindowHeight
+    ) {
+      setViewDimension({ windowWidth, windowHeight });
+    }
+  }
 
   render() {
     const { windowWidth, windowHeight } = this.props;
-    const dimension = {
-      width: `${windowWidth}px`,
-      height:
-        windowWidth > windowHeight && isMobile
-          ? `${windowWidth}px`
-          : `${windowHeight}px`,
-    };
-    return isIE || isEdge ? (
-      <div>
-        Không hỗ trợ trình duyệt Internet Explorer! Vui lòng cài trình duyệt
-        Chrome cho việc tối ưu hóa ứng dụng BOCVN
+    const dimension = resolveDimension(windowWidth, windowHeight);
+    return isIE || isEdge || !resolveDimension(windowWidth, windowHeight) ? (
+      <div className={s.unSupport}>
+        <div className={s.logo}>
+          <img src={logo} alt="BOC VN" width="100%" />
+        </div>
+        <p>
+          BOC VN chỉ hỗ trợ thiết bị có kích thước màn hình tương đối rộng để
+          hiển thị thông tin tốt nhất.
+        </p>
+        <p>BOC VN chạy tốt nhất trên trình duyệt Chrome!</p>
+        <p>BOCVN&copy;</p>
       </div>
     ) : (
       <div style={dimension} className={s.layout}>
@@ -45,6 +86,17 @@ class Layout extends React.Component {
   }
 }
 
-const enhancers = [withStyles(s), windowSize];
+const enhancers = [
+  withStyles(s),
+  windowSize,
+  connect(
+    null,
+    dispatch => ({
+      setViewDimension(dimension) {
+        dispatch(setLayoutDimension(dimension));
+      },
+    }),
+  ),
+];
 
 export default compose(...enhancers)(Layout);

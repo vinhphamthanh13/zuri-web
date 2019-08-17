@@ -11,13 +11,15 @@ import React from 'react';
 import Layout from 'components/Layout';
 import Shop from './Shop';
 
-async function action() {
+async function action(props) {
+  const { store } = props;
+  const { layoutDimension } = store.getState().common;
   return {
     title: 'Cửa Hàng',
     chunks: ['shop'],
     component: (
       <Layout>
-        <Shop />
+        <Shop layoutDimension={layoutDimension} />
       </Layout>
     ),
   };
