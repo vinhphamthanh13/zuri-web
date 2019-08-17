@@ -62,6 +62,19 @@ body {
   justify-content: center;
 }
 
+.copyRight {
+  width: var(--home-brand-width);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: var(--size-18);
+}
+
+.copyRight span {
+  padding-right: var(--size-10);
+}
+
 *,
 *::before,
 *::after {

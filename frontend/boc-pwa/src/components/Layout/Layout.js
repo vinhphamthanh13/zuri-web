@@ -6,6 +6,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { isIE, isEdge } from 'react-device-detect';
 import windowSize from 'react-window-size';
 import logo from 'assets/images/welcome_boc.png';
+import brand from 'assets/images/boc_greeting.png';
 import { resolveDimension } from 'utils/browser';
 import { setLayoutDimension } from 'actions/common';
 import s from './Layout.css';
@@ -76,7 +77,10 @@ class Layout extends React.Component {
           hiển thị thông tin tốt nhất.
         </p>
         <p>BOC VN chạy tốt nhất trên trình duyệt Chrome!</p>
-        <p>BOCVN&copy;</p>
+        <div className={s.copyRight}>
+          <span>&copy;2020</span>
+          <img src={brand} alt="Copy Right BOC" width="70%" />
+        </div>
       </div>
     ) : (
       <div style={dimension} className={s.layout}>
