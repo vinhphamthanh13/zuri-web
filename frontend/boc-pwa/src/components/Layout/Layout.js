@@ -1,14 +1,12 @@
 import React from 'react';
-import { node, number, func } from 'prop-types';
+import { node, number } from 'prop-types';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { isIE, isEdge } from 'react-device-detect';
 import windowSize from 'react-window-size';
 import logo from 'assets/images/welcome_boc.png';
 import brand from 'assets/images/boc_greeting.png';
 import { resolveDimension } from 'utils/browser';
-import { setLayoutDimension } from 'actions/common';
 import s from './Layout.css';
 
 class Layout extends React.Component {
@@ -16,53 +14,7 @@ class Layout extends React.Component {
     children: node.isRequired,
     windowWidth: number.isRequired,
     windowHeight: number.isRequired,
-    setViewDimension: func.isRequired,
   };
-
-  state = {
-    windowWidth: null,
-    windowHeight: null,
-  };
-
-  static getDerivedStateFromProps(props, state) {
-    const { windowWidth, windowHeight } = props;
-    const {
-      windowWidth: cachedWindowWidth,
-      windowHeight: cachedWindowHeight,
-    } = state;
-    if (
-      windowWidth !== cachedWindowWidth ||
-      windowHeight !== cachedWindowHeight
-    ) {
-      return {
-        windowWidth,
-        windowHeight,
-      };
-    }
-
-    return null;
-  }
-
-  componentDidMount() {
-    const { windowWidth, windowHeight, setViewDimension } = this.props;
-    setViewDimension({ windowWidth, windowHeight });
-  }
-
-  componentDidUpdate(prevProps) {
-    const { windowWidth, windowHeight } = prevProps;
-    const { setViewDimension } = this.props;
-    const {
-      windowWidth: cachedWindowWidth,
-      windowHeight: cachedWindowHeight,
-    } = this.state;
-
-    if (
-      windowWidth !== cachedWindowWidth ||
-      windowHeight !== cachedWindowHeight
-    ) {
-      setViewDimension({ windowWidth, windowHeight });
-    }
-  }
 
   render() {
     const { windowWidth, windowHeight } = this.props;
@@ -90,17 +42,6 @@ class Layout extends React.Component {
   }
 }
 
-const enhancers = [
-  withStyles(s),
-  windowSize,
-  connect(
-    null,
-    dispatch => ({
-      setViewDimension(dimension) {
-        dispatch(setLayoutDimension(dimension));
-      },
-    }),
-  ),
-];
+const enhancers = [withStyles(s), windowSize];
 
 export default compose(...enhancers)(Layout);

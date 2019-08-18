@@ -15,7 +15,7 @@
 }
 
 .button:hover {
-  background: var(--c-brand-3);
+  background: linear-gradient(to top, var(--c-brand-1), var(--c-brand-3));
   color: var(--c-bg-light);
 }
 

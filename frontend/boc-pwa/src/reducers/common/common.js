@@ -1,12 +1,7 @@
 import storage from 'redux-persist/lib/storage';
 import persistReducer from 'redux-persist/lib/persistReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import {
-  SET_LOADING,
-  SET_ERROR,
-  RESET_ERROR,
-  SET_LAYOUT_DIMENSION,
-} from 'actions/common';
+import { SET_LOADING, SET_ERROR, RESET_ERROR } from 'actions/common';
 
 const persistConfig = {
   key: 'common',
@@ -41,12 +36,6 @@ const reducer = (state = initState, action) => {
       ...state,
       isError: null,
       errorMessage: '',
-    };
-  }
-  if (action.type === SET_LAYOUT_DIMENSION) {
-    return {
-      ...state,
-      layoutDimension: action.payload,
     };
   }
 

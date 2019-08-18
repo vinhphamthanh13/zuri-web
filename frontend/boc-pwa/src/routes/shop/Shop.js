@@ -1,6 +1,8 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { objectOf, number } from 'prop-types';
+import { number } from 'prop-types';
+import { compose } from 'redux';
+import windowSize from 'react-window-size';
 import uuidv1 from 'uuid/v1';
 import { chunk } from 'lodash';
 import BocTabs from 'components/BocTabs';
@@ -20,7 +22,8 @@ const mockDetail = {
 
 class Shop extends React.Component {
   static propTypes = {
-    layoutDimension: objectOf(number).isRequired,
+    windowWidth: number.isRequired,
+    windowHeight: number.isRequired,
   };
 
   createMenu = () =>
@@ -43,8 +46,7 @@ class Shop extends React.Component {
     ));
 
   render() {
-    const { layoutDimension } = this.props;
-    const { windowWidth, windowHeight } = layoutDimension;
+    const { windowWidth, windowHeight } = this.props;
     const height = windowHeight - 90;
 
     return (
@@ -83,4 +85,5 @@ class Shop extends React.Component {
   }
 }
 
-export default withStyles(s)(Shop);
+const enhancers = [withStyles(s), windowSize];
+export default compose(...enhancers)(Shop);

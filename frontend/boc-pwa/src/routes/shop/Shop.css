@@ -53,6 +53,7 @@
 }
 
 .shopCategory {
+  width: 100%;
   background: var(--c-bright);
   margin: var(--size-08) auto;
 }
@@ -94,5 +95,5 @@
 }
 
 .label {
-  font-size: var(--font-size-medium);
+  font-size: var(--font-size-small);
 }
