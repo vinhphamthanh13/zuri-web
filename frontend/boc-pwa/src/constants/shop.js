@@ -27,25 +27,25 @@ export const SHOP = {
       NAME: 'Quản lý cửa hàng',
       MENU: [
         {
-          icon: <SettingApps size={36} hexColor={triad01} />,
-          name: 'Thiết lập',
+          ICON: <SettingApps size={36} hexColor={triad01} />,
+          NAME: 'Thiết lập',
           action: () => history.push('/shop/setup'),
         },
         {
-          icon: <Assignment size={36} hexColor={triad02} />,
-          name: 'Mặt hàng',
+          ICON: <Assignment size={36} hexColor={triad02} />,
+          NAME: 'Mặt hàng',
         },
         {
-          icon: <ViewStream size={36} hexColor={triad03} />,
-          name: 'Hàng tồn',
+          ICON: <ViewStream size={36} hexColor={triad03} />,
+          NAME: 'Hàng tồn',
         },
         {
-          icon: <SupervisedUser size={36} hexColor={triad04} />,
-          name: 'Nhân viên',
+          ICON: <SupervisedUser size={36} hexColor={triad04} />,
+          NAME: 'Nhân viên',
         },
         {
-          icon: <PersonalPin size={36} hexColor={triad05} />,
-          name: 'Thành viên',
+          ICON: <PersonalPin size={36} hexColor={triad05} />,
+          NAME: 'Thành viên',
         },
       ],
     },
@@ -53,12 +53,12 @@ export const SHOP = {
       NAME: 'Các dịch vụ khác',
       MENU: [
         {
-          icon: <MonetizationOn size={36} hexColor={triad06} />,
-          name: 'Thanh toán',
+          ICON: <MonetizationOn size={36} hexColor={triad06} />,
+          NAME: 'Thanh toán',
         },
         {
-          icon: <Receipt size={36} hexColor={triad03} />,
-          name: 'Giấy in',
+          ICON: <Receipt size={36} hexColor={triad03} />,
+          NAME: 'Giấy in',
         },
       ],
     },
@@ -66,8 +66,8 @@ export const SHOP = {
       NAME: 'Hỗ trợ khách hàng',
       MENU: [
         {
-          icon: <HeadsetMic size={36} hexColor={triad08} />,
-          name: 'Hỗ trợ',
+          ICON: <HeadsetMic size={36} hexColor={triad08} />,
+          NAME: 'Hỗ trợ',
         },
       ],
     },
@@ -76,35 +76,35 @@ export const SHOP = {
     STORE: {
       MENU: [
         {
-          icon: <Store size={28} hexColor={triad01} />,
-          name: 'Thuế',
+          ICON: <MonetizationOn size={28} hexColor={triad06} />,
+          NAME: 'Thuế',
           action: () => history.push('/shop/setup/tax'),
         },
         {
-          icon: <Store size={28} hexColor={triad01} />,
-          name: 'Phí dịch vụ',
+          ICON: <Store size={28} hexColor={triad01} />,
+          NAME: 'Phí dịch vụ',
           action: () => history.push('/shop/setup/service'),
         },
         {
-          icon: <Store size={28} hexColor={triad01} />,
-          name: 'Đơn hàng mở',
+          ICON: <Store size={28} hexColor={triad01} />,
+          NAME: 'Đơn hàng mở',
           action: () => history.push('/shop/setup/openedOrder'),
         },
         {
-          icon: <Store size={28} hexColor={triad01} />,
-          name: 'Máy in',
+          ICON: <Store size={28} hexColor={triad01} />,
+          NAME: 'Máy in',
           action: () => history.push('/shop/setup/printer'),
         },
         {
-          icon: <Store size={28} hexColor={triad01} />,
-          name: 'Thông tin cửa hàng',
+          ICON: <Store size={28} hexColor={triad01} />,
+          NAME: 'Thông tin cửa hàng',
           action: () => history.push('/shop/setup/shopInfo'),
         },
       ],
       TAX: [
         {
-          icon: <MonetizationOn size={28} hexColor={triad01} />,
-          name: 'Thuế VAT đã đăng ký',
+          ICON: <MonetizationOn size={28} hexColor={triad06} />,
+          NAME: 'Thuế VAT đã đăng ký',
         },
       ],
       DETAIL: [],

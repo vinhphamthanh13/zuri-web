@@ -1,3 +1,7 @@
+export const LAYOUT = {
+  MAX_WIDTH: 768,
+};
+
 export const REGEXP = {
   PHONE_NUMBER: /^\d{10,11}$/,
   COUNTRY_CODE: /^\+\d{2,3}$/,
@@ -18,6 +22,7 @@ export const INPUT = {
     PLACEHOLDER: 'Vui lòng nhập họ',
   },
   PHONE_NUMBER: {
+    TYPE: 'tel',
     LABEL: 'Số điện thoại:',
     VALUE: 'phoneNumber',
     PLACEHOLDER: 'Vui lòng nhập số điện thoại',
@@ -46,11 +51,13 @@ export const TAX = {
     PLACEHOLDER: 'Nhập tên chi nhánh',
   },
   TAX_NUMBER: {
+    TYPE: 'tel',
     LABEL: 'Mã số thuế:',
     VALUE: 'taxNumber',
     PLACEHOLDER: 'Nhập mã số thuế',
   },
   REGISTER_NUMBER: {
+    TYPE: 'tel',
     LABEL: 'Số đăng ký (không bắt buộc):',
     VALUE: 'registerNumber',
     PLACEHOLDER: 'Nhập số đăng ký',
@@ -66,11 +73,13 @@ export const SHOP_DETAIL = {
           LABEL: 'Mô hình kinh doanh',
           VALUE: 'businessName',
           PLACEHOLDER: 'Chọn mô hình kinh doanh',
+          DROPDOWN: true,
         },
         {
           LABEL: 'Doanh mục sản phẩm',
           VALUE: 'BusinessType',
           PLACEHOLDER: 'Chọn sản phẩm kinh doanh',
+          GUTTER: true,
         },
       ],
     },
@@ -83,6 +92,7 @@ export const SHOP_DETAIL = {
           PLACEHOLDER: 'Nhập tên cửa hàng',
         },
         {
+          TYPE: 'tel',
           LABEL: 'Số điện thoại',
           VALUE: 'phoneNumber',
           PLACEHOLDER: 'Nhập số điện thoại',
@@ -91,6 +101,7 @@ export const SHOP_DETAIL = {
           LABEL: 'Địa chỉ',
           VALUE: 'shopAddress',
           PLACEHOLDER: 'Nhập địa chỉ cửa hàng',
+          GUTTER: true,
         },
       ],
     },
@@ -98,41 +109,43 @@ export const SHOP_DETAIL = {
       NAME: 'Thông tin chi nhánh',
       MENU: [
         {
-          NAME: 'Tên quản lý',
+          LABEL: 'Tên quản lý',
           VALUE: 'branchName',
           PLACEHOLDER: 'Nhập tên quản lý chi nhánh',
         },
         {
-          NAME: 'Số điện thoại',
+          TYPE: 'tel',
+          LABEL: 'Số điện thoại',
           VALUE: 'branchPhoneNumber',
           PLACEHOLDER: 'Nhập số điện thoại',
         },
         {
-          NAME: 'Email',
+          TYPE: 'email',
+          LABEL: 'Email',
           VALUE: 'branchEmail',
           PLACEHOLDER: 'Nhập địa chỉ email',
+          GUTTER: true,
         },
       ],
     },
   },
 };
 
-
 export const TABS = {
   GENERAL: {
-    name: 'tổng quan',
-    url: '/home',
+    NAME: 'tổng quan',
+    URL: '/home',
   },
   REPORT: {
-    name: 'báo cáo',
-    url: '/report',
+    NAME: 'báo cáo',
+    URL: '/report',
   },
   ACTIVITY: {
-    name: 'hoạt động',
-    url: '/activity',
+    NAME: 'hoạt động',
+    URL: '/activity',
   },
   SHOP: {
-    name: 'cửa hàng',
-    url: '/shop',
+    NAME: 'cửa hàng',
+    URL: '/shop',
   },
 };

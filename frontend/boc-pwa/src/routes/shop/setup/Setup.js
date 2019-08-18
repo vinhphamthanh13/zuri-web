@@ -14,8 +14,8 @@ class Setup extends React.Component {
       {SHOP.SETUP.STORE.MENU.map(menu => (
         <div className={s.wrappedItem} key={uuidv1()} onClick={menu.action}>
           <div className={s.item}>
-            <div className={s.icon}>{menu.icon}</div>
-            <div>{menu.name}</div>
+            <div className={s.icon}>{menu.ICON}</div>
+            <div>{menu.NAME}</div>
             <div className={s.arrow}>
               {<ArrowForward size={18} hexColor={brand02} />}
             </div>

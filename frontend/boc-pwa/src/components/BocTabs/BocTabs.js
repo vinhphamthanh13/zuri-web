@@ -38,10 +38,10 @@ class BocTabs extends Component {
             <div
               key={uuidv1()}
               className={activeStyle}
-              onClick={this.handleTabClick(TABS[tab].url)}
+              onClick={this.handleTabClick(TABS[tab].URL)}
             >
               <Icon hexColor={iconColor} size={iconSize} />
-              <div>{TABS[tab].name}</div>
+              <div>{TABS[tab].NAME}</div>
             </div>
           );
         })}

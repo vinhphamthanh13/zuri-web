@@ -25,3 +25,16 @@
   margin-bottom: var(--size-28);
   padding-bottom: var(--size-08);
 }
+
+.warning {
+  font-size: var(--font-size-medium);
+  color: var(--c-gray);
+  font-weight: var(--font-weight-300);
+  margin: var(--size-08) auto 0;
+}
+
+.registerCta {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

@@ -26,11 +26,11 @@ class Tax extends React.Component {
     return (
       <div className={s.menu}>
         {SHOP.SETUP.STORE.TAX.map(menu => (
-          <div className={s.wrappedItem} key={uuidv1()}>
+          <div key={uuidv1()}>
             <div className={s.item}>
-              <div className={s.icon}>{menu.icon}</div>
-              <div>{menu.name}</div>
-              <div className={s.arrow} onClick={this.handleTaxToggled}>
+              <div className={s.icon}>{menu.ICON}</div>
+              <div>{menu.NAME}</div>
+              <div className={s.toggle} onClick={this.handleTaxToggled}>
                 {isTaxToggled ? (
                   <ToggleOn size={38} hexColor={triad05} />
                 ) : (

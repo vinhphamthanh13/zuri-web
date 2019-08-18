@@ -8,6 +8,8 @@ import Input from 'components/Input';
 import { withFormik } from 'formik';
 import { registerTax } from 'constants/schemas';
 import { TAX } from 'constants/common';
+import { NotificationImportant } from 'constants/svg';
+import { gray } from 'constants/colors';
 import s from './RegisterTax.css';
 
 class RegisterTax extends Component {
@@ -28,6 +30,7 @@ class RegisterTax extends Component {
     return Object.keys(TAX).map(input => (
       <Input
         key={TAX[input].VALUE}
+        type={TAX[input].TYPE || 'text'}
         label={TAX[input].LABEL}
         name={TAX[input].VALUE}
         onChange={handleChange}
@@ -44,13 +47,23 @@ class RegisterTax extends Component {
     return (
       <div className={s.container}>
         <div className={s.register}>
-          <div className={s.formTitle}>Thông tin đăng ký</div>
+          <div className={s.formTitle}>
+            Thông tin đăng ký
+            <div className={s.warning}>
+              <NotificationImportant size={20} hexColor={gray} />
+              <span>
+                Thông tin này sẽ được hiển thị trên hóa đơn/hóa đơn thuế.
+              </span>
+            </div>
+          </div>
           <form onSubmit={handleSubmit}>{this.createForm()}</form>
-          <Button
-            onClick={this.handleRegisterTax}
-            label="Lưu"
-            disabled={!isValid}
-          />
+          <div className={s.registerCta}>
+            <Button
+              onClick={this.handleRegisterTax}
+              label="Lưu"
+              disabled={!isValid}
+            />
+          </div>
         </div>
       </div>
     );

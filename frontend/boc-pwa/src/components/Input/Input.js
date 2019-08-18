@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { string, oneOfType, number, func, bool, objectOf } from 'prop-types';
 import { noop } from 'lodash';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { ArrowForward } from 'constants/svg';
 
 import s from './Input.css';
 
@@ -16,6 +17,8 @@ class Input extends Component {
     errors: objectOf(string),
     placeholder: string,
     label: string,
+    gutter: bool,
+    dropDown: func,
   };
 
   static defaultProps = {
@@ -27,6 +30,8 @@ class Input extends Component {
     className: '',
     placeholder: '',
     label: '',
+    gutter: false,
+    dropDown: null,
   };
 
   render() {
@@ -40,13 +45,17 @@ class Input extends Component {
       errors,
       placeholder,
       label,
+      gutter,
+      dropDown,
     } = this.props;
     const wrapperStyle = label
       ? s.inputWrapper
       : `${s.inputWrapper} ${s.inputWrapperGutter}`;
+    const gutterStyle = gutter ? s.inputWrapperGutter : '';
+    const dropDownButton = !dropDown ? null : <ArrowForward />;
 
     return (
-      <div className={wrapperStyle}>
+      <div className={`${wrapperStyle} ${gutterStyle}`}>
         <span className={s.label}>{label}</span>
         <input
           id={name}
@@ -58,6 +67,7 @@ class Input extends Component {
           className={className}
           disabled={disabled}
         />
+        {dropDownButton}
         {errors[name] && <div className={s.errorMessage}>{errors[name]}</div>}
       </div>
     );

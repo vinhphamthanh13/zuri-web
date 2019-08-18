@@ -9,10 +9,11 @@ import BocTabs from 'components/BocTabs';
 import Header from 'components/Header';
 import { SHOP } from 'constants/shop';
 import { gray } from 'constants/colors';
-import ShopDetail from './components/ShopDetail';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
+import { LAYOUT } from 'constants/common';
 import { formatStringLength } from 'utils/string';
 import { resolveDimension } from 'utils/browser';
+import ShopDetail from './components/ShopDetail';
 import s from './Shop.css';
 
 const mockDetail = {
@@ -31,7 +32,7 @@ class Shop extends React.Component {
     isOpenShopDetail: false,
   };
 
-  handleShowShopDetail = (value) => () => {
+  handleShowShopDetail = value => () => {
     this.setState({
       isOpenShopDetail: value,
     });
@@ -46,8 +47,8 @@ class Shop extends React.Component {
             <div className={s.row} key={uuidv1()}>
               {row.map(menu => (
                 <div className={s.item} key={uuidv1()} onClick={menu.action}>
-                  <div className={s.icon}>{menu.icon}</div>
-                  <div className={s.label}>{menu.name}</div>
+                  <div className={s.icon}>{menu.ICON}</div>
+                  <div className={s.label}>{menu.NAME}</div>
                 </div>
               ))}
             </div>
@@ -59,45 +60,49 @@ class Shop extends React.Component {
   render() {
     const { windowWidth, windowHeight } = this.props;
     const { isOpenShopDetail } = this.state;
+    const maxWidth =
+      windowWidth > LAYOUT.MAX_WIDTH ? LAYOUT.MAX_WIDTH : windowWidth;
     const height = windowHeight - 90;
 
     return (
       <>
         {isOpenShopDetail && <ShopDetail onClose={this.handleShowShopDetail} />}
-        <div className={s.container}>
-          <Header title="Cửa hàng của tôi" gutter />
-          <div
-            className={s.content}
-            style={resolveDimension(windowWidth, height)}
-          >
-            <div className={s.shopInfo}>
-              <div className={s.shopIcon}>
-                <Store size={72} hexColor={gray} />
-              </div>
-              <div className={s.shopDetail}>
-                <div className={s.title}>
-                  {formatStringLength(mockDetail.shopName, 20)}
+        {!isOpenShopDetail && (
+          <div className={s.container}>
+            <Header title="Cửa hàng của tôi" gutter />
+            <div
+              className={s.content}
+              style={resolveDimension(maxWidth, height)}
+            >
+              <div className={s.shopInfo}>
+                <div className={s.shopIcon}>
+                  <Store size={72} hexColor={gray} />
                 </div>
-                <div className={s.detailItem}>
-                  <PhoneIphone size={20} hexColor={gray} />
-                  <span>{mockDetail.phoneNumber}</span>
+                <div className={s.shopDetail}>
+                  <div className={s.title}>
+                    {formatStringLength(mockDetail.shopName, 20)}
+                  </div>
+                  <div className={s.detailItem}>
+                    <PhoneIphone size={20} hexColor={gray} />
+                    <span>{mockDetail.phoneNumber}</span>
+                  </div>
+                  <div className={s.detailItem}>
+                    <Place size={20} hexColor={gray} />
+                    <span>{formatStringLength(mockDetail.shopAddress, 69)}</span>
+                  </div>
                 </div>
-                <div className={s.detailItem}>
-                  <Place size={20} hexColor={gray} />
-                  <span>{formatStringLength(mockDetail.shopAddress, 69)}</span>
+                <div
+                  className={s.viewDetail}
+                  onClick={this.handleShowShopDetail(true)}
+                >
+                  <ArrowForward size={18} hexColor={gray} />
                 </div>
               </div>
-              <div
-                className={s.viewDetail}
-                onClick={this.handleShowShopDetail(true)}
-              >
-                <ArrowForward size={18} hexColor={gray} />
-              </div>
+              {this.createMenu()}
             </div>
-            {this.createMenu()}
+            <BocTabs activeIndex={3} />
           </div>
-          <BocTabs activeIndex={3} />
-        </div>
+        )}
       </>
     );
   }

@@ -67,6 +67,7 @@
   --c-text-lighter: var(--c-brand-4);
   --c-text-light: var(--c-bg-brand-3);
   --c-text-dark: var(--c-brand-1);
+  --c-title: var(--c-triad-05);
 
   /* Triad */
 
@@ -88,7 +89,7 @@
   --c-success: #4bcb21;
   --c-error: #c41010;
   --c-warning: #e3e926;
-
+  --c-input-border: #eaeaea;
   /* Font Size */
 
   --font-size-08: calc(var(--unit) * 0.5);    /* 08px */
@@ -142,6 +143,8 @@
   --size-44: calc(var(--unit) * 2.75);    /* 44px */
   --size-48: calc(var(--unit) * 3);       /* 48px */
   --size-56: calc(var(--unit) * 3.5);     /* 56px */
+  --size-58: calc(var(--unit) * 3.625);     /* 58px */
+  --size-60: calc(var(--unit) * 3.75);    /* 60px */
   --size-62: calc(var(--unit) * 3.875);   /* 62px */
   --size-64: calc(var(--unit) * 4);       /* 64px */
   --size-72: calc(var(--unit) * 4.5);     /* 72px */
@@ -154,8 +157,8 @@
 
   --size-header-bar: var(--size-34);
   --size-padding: var(--size-18);
-  --size-input-wrapper-height: var(--size-72);
-  --size-input-height: var(--size-38);
+  --size-input-wrapper-height: var(--size-56);
+  --size-input-height: var(--size-32);
   --size-radius-standard: var(--size-06);
   --size-standard-cell-height: var(--size-78);
 

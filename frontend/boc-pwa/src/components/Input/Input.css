@@ -5,18 +5,18 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  margin: var(--size-12) 0;
+  margin: var(--size-10) 0;
   position: relative;
 }
 
 .inputWrapperGutter {
-  margin: var(--size-padding) 0;
+  margin-bottom: 0;
 }
 
 input {
-  width: var(--max-input-width);
+  width: 100%;
   height: var(--size-input-height);
-  border: var(--size-01) solid var(--c-gray);
+  border: var(--size-01) solid var(--c-input-border);
   border-radius: var(--size-radius-standard);
   font-size: var(--font-size-input);
   letter-spacing: var(--size-02);
@@ -31,7 +31,7 @@ input::placeholder {
 
 .label {
   position: absolute;
-  top: calc(var(--size-16) * -1.5);
+  top: calc(var(--size-16) * -1.2);
   font-size: var(--font-size-label);
   color: var(--c-text-dark);
   font-weight: var(--font-weight-500);
@@ -39,9 +39,11 @@ input::placeholder {
 
 .errorMessage {
   position: absolute;
-  bottom: var(--size-14);
+  bottom: var(--size-06);
+  right: 0;
   text-align: left;
   font-size: var(--font-size-label);
   color: var(--c-error);
   font-style: italic;
+  opacity: 0.3;
 }

@@ -14,20 +14,12 @@
   border-bottom: var(--size-01) solid var(--c-bg-light);
 }
 
-.wrappedItem:hover {
-  background: var(--c-smoke);
-}
-
 .item {
   color: var(--c-brand-2);
   display: flex;
   padding: var(--size-12) var(--size-16);
   width: 100%;
   align-items: center;
-}
-
-.item:hover {
-  font-weight: var(--font-weight-500);
 }
 
 .icon {
@@ -38,9 +30,10 @@
   border-radius: 50%;
 }
 
-.arrow {
+.toggle {
   position: absolute;
   right: var(--size-16);
+  cursor: pointer;
 }
 
 .legend {

@@ -9,6 +9,7 @@
 
 .content {
   overflow: auto;
+  width: 100%;
 }
 
 .shopInfo {
@@ -62,7 +63,7 @@
   padding: var(--size-10) var(--size-12);
   font-size: var(--font-size);
   font-weight: var(--font-weight-500);
-  color: var(--c-triad-05);
+  color: var(--c-title);
 }
 
 .row {
