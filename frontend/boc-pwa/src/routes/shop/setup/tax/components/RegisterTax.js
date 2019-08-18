@@ -27,13 +27,13 @@ class RegisterTax extends Component {
     const { handleChange, errors, values } = this.props;
     return Object.keys(TAX).map(input => (
       <Input
-        key={TAX[input].value}
-        label={TAX[input].label}
-        name={TAX[input].value}
+        key={TAX[input].VALUE}
+        label={TAX[input].LABEL}
+        name={TAX[input].VALUE}
         onChange={handleChange}
         errors={errors}
-        value={values[TAX[input].value]}
-        placeholder={TAX[input].placeholder}
+        value={values[TAX[input].VALUE]}
+        placeholder={TAX[input].PLACEHOLDER}
       />
     ));
   };

@@ -8,54 +8,115 @@ export const REGEXP = {
 
 export const INPUT = {
   USER_NAME: {
-    label: 'Tên:',
-    value: 'userName',
-    placeholder: 'Vui lòng nhập tên',
+    LABEL: 'Tên:',
+    VALUE: 'userName',
+    PLACEHOLDER: 'Vui lòng nhập tên',
   },
   LAST_NAME: {
-    label: 'Họ:',
-    value: 'lastName',
-    placeholder: 'Vui lòng nhập họ',
+    LABEL: 'Họ:',
+    VALUE: 'lastName',
+    PLACEHOLDER: 'Vui lòng nhập họ',
   },
   PHONE_NUMBER: {
-    label: 'Số điện thoại:',
-    value: 'phoneNumber',
-    placeholder: 'Vui lòng nhập số điện thoại',
+    LABEL: 'Số điện thoại:',
+    VALUE: 'phoneNumber',
+    PLACEHOLDER: 'Vui lòng nhập số điện thoại',
   },
   SHOP_ADDRESS: {
-    label: 'Địa chỉ cửa hàng:',
-    value: 'shopAddress',
-    placeholder: 'Nhập địa chỉ cửa hàng',
+    LABEL: 'Địa chỉ cửa hàng:',
+    VALUE: 'shopAddress',
+    PLACEHOLDER: 'Nhập địa chỉ cửa hàng',
   },
 };
 
 export const TAX = {
   CO_NAME: {
-    label: 'Tên công ty:',
-    value: 'coName',
-    placeholder: 'Nhập tên công ty',
+    LABEL: 'Tên công ty:',
+    VALUE: 'coName',
+    PLACEHOLDER: 'Nhập tên công ty',
   },
   CO_ADDRESS: {
-    label: 'Địa chỉ công ty:',
-    value: 'coAddress',
-    placeholder: 'Nhập địa chỉ công ty',
+    LABEL: 'Địa chỉ công ty:',
+    VALUE: 'coAddress',
+    PLACEHOLDER: 'Nhập địa chỉ công ty',
   },
   BRANCH_NAME: {
-    label: 'Chi nhánh (không bắt buộc):',
-    value: 'coBranch',
-    placeholder: 'Nhập tên chi nhánh',
+    LABEL: 'Chi nhánh (không bắt buộc):',
+    VALUE: 'coBranch',
+    PLACEHOLDER: 'Nhập tên chi nhánh',
   },
   TAX_NUMBER: {
-    label: 'Mã số thuế:',
-    value: 'taxNumber',
-    placeholder: 'Nhập mã số thuế',
+    LABEL: 'Mã số thuế:',
+    VALUE: 'taxNumber',
+    PLACEHOLDER: 'Nhập mã số thuế',
   },
   REGISTER_NUMBER: {
-    label: 'Số đăng ký (không bắt buộc):',
-    value: 'registerNumber',
-    placeholder: 'Nhập số đăng ký',
+    LABEL: 'Số đăng ký (không bắt buộc):',
+    VALUE: 'registerNumber',
+    PLACEHOLDER: 'Nhập số đăng ký',
   },
 };
+
+export const SHOP_DETAIL = {
+  CATEGORY: {
+    BUSINESS: {
+      NAME: 'Cửa hàng & Loại sản phẩm',
+      MENU: [
+        {
+          LABEL: 'Mô hình kinh doanh',
+          VALUE: 'businessName',
+          PLACEHOLDER: 'Chọn mô hình kinh doanh',
+        },
+        {
+          LABEL: 'Doanh mục sản phẩm',
+          VALUE: 'BusinessType',
+          PLACEHOLDER: 'Chọn sản phẩm kinh doanh',
+        },
+      ],
+    },
+    INFO: {
+      NAME: 'Thông tin cửa hàng',
+      MENU: [
+        {
+          LABEL: 'Tên cửa hàng',
+          VALUE: 'shopName',
+          PLACEHOLDER: 'Nhập tên cửa hàng',
+        },
+        {
+          LABEL: 'Số điện thoại',
+          VALUE: 'phoneNumber',
+          PLACEHOLDER: 'Nhập số điện thoại',
+        },
+        {
+          LABEL: 'Địa chỉ',
+          VALUE: 'shopAddress',
+          PLACEHOLDER: 'Nhập địa chỉ cửa hàng',
+        },
+      ],
+    },
+    BRANCH: {
+      NAME: 'Thông tin chi nhánh',
+      MENU: [
+        {
+          NAME: 'Tên quản lý',
+          VALUE: 'branchName',
+          PLACEHOLDER: 'Nhập tên quản lý chi nhánh',
+        },
+        {
+          NAME: 'Số điện thoại',
+          VALUE: 'branchPhoneNumber',
+          PLACEHOLDER: 'Nhập số điện thoại',
+        },
+        {
+          NAME: 'Email',
+          VALUE: 'branchEmail',
+          PLACEHOLDER: 'Nhập địa chỉ email',
+        },
+      ],
+    },
+  },
+};
+
 
 export const TABS = {
   GENERAL: {

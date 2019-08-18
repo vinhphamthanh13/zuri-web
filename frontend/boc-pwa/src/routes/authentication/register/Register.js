@@ -33,13 +33,13 @@ class Register extends Component {
     const { handleChange, errors, values } = this.props;
     return Object.keys(INPUT).map(input => (
       <Input
-        key={INPUT[input].value}
-        label={INPUT[input].label}
-        name={INPUT[input].value}
+        key={INPUT[input].VALUE}
+        label={INPUT[input].LABEL}
+        name={INPUT[input].VALUE}
         onChange={handleChange}
         errors={errors}
-        value={values[INPUT[input].value]}
-        placeholder={INPUT[input].placeholder}
+        value={values[INPUT[input].VALUE]}
+        placeholder={INPUT[input].PLACEHOLDER}
       />
     ));
   };

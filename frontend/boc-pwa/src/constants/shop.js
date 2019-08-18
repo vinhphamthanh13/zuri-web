@@ -107,6 +107,7 @@ export const SHOP = {
           name: 'Thuế VAT đã đăng ký',
         },
       ],
+      DETAIL: [],
     },
   },
 };

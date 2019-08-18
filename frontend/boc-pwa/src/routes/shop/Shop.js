@@ -9,6 +9,7 @@ import BocTabs from 'components/BocTabs';
 import Header from 'components/Header';
 import { SHOP } from 'constants/shop';
 import { gray } from 'constants/colors';
+import ShopDetail from './components/ShopDetail';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
 import { formatStringLength } from 'utils/string';
 import { resolveDimension } from 'utils/browser';
@@ -24,6 +25,16 @@ class Shop extends React.Component {
   static propTypes = {
     windowWidth: number.isRequired,
     windowHeight: number.isRequired,
+  };
+
+  state = {
+    isOpenShopDetail: false,
+  };
+
+  handleShowShopDetail = (value) => () => {
+    this.setState({
+      isOpenShopDetail: value,
+    });
   };
 
   createMenu = () =>
@@ -47,40 +58,47 @@ class Shop extends React.Component {
 
   render() {
     const { windowWidth, windowHeight } = this.props;
+    const { isOpenShopDetail } = this.state;
     const height = windowHeight - 90;
 
     return (
-      <div className={s.container}>
-        <Header title="Cửa hàng của tôi" gutter />
-        <div
-          className={s.content}
-          style={resolveDimension(windowWidth, height)}
-        >
-          <div className={s.shopInfo}>
-            <div className={s.shopIcon}>
-              <Store size={72} hexColor={gray} />
-            </div>
-            <div className={s.shopDetail}>
-              <div className={s.title}>
-                {formatStringLength(mockDetail.shopName, 20)}
+      <>
+        {isOpenShopDetail && <ShopDetail onClose={this.handleShowShopDetail} />}
+        <div className={s.container}>
+          <Header title="Cửa hàng của tôi" gutter />
+          <div
+            className={s.content}
+            style={resolveDimension(windowWidth, height)}
+          >
+            <div className={s.shopInfo}>
+              <div className={s.shopIcon}>
+                <Store size={72} hexColor={gray} />
               </div>
-              <div className={s.detailItem}>
-                <PhoneIphone size={20} hexColor={gray} />
-                <span>{mockDetail.phoneNumber}</span>
+              <div className={s.shopDetail}>
+                <div className={s.title}>
+                  {formatStringLength(mockDetail.shopName, 20)}
+                </div>
+                <div className={s.detailItem}>
+                  <PhoneIphone size={20} hexColor={gray} />
+                  <span>{mockDetail.phoneNumber}</span>
+                </div>
+                <div className={s.detailItem}>
+                  <Place size={20} hexColor={gray} />
+                  <span>{formatStringLength(mockDetail.shopAddress, 69)}</span>
+                </div>
               </div>
-              <div className={s.detailItem}>
-                <Place size={20} hexColor={gray} />
-                <span>{formatStringLength(mockDetail.shopAddress, 69)}</span>
+              <div
+                className={s.viewDetail}
+                onClick={this.handleShowShopDetail(true)}
+              >
+                <ArrowForward size={18} hexColor={gray} />
               </div>
             </div>
-            <div className={s.viewDetail}>
-              <ArrowForward size={18} hexColor={gray} />
-            </div>
+            {this.createMenu()}
           </div>
-          {this.createMenu()}
+          <BocTabs activeIndex={3} />
         </div>
-        <BocTabs activeIndex={3} />
-      </div>
+      </>
     );
   }
 }
