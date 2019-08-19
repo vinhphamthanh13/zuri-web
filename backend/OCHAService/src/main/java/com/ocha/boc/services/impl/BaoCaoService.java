@@ -109,7 +109,7 @@ public class BaoCaoService {
                 List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(cuaHangId);
-                    List<DanhMucBanChay> listDanhMucBanChay = analysisDoanhThuTheoDanhMuc(orders, response);
+                    List<DanhMucBanChay> listDanhMucBanChay = analysisDoanhThuTheoDanhMuc(orders);
                     response.setListDanhMucBanChay(listDanhMucBanChay);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -131,7 +131,7 @@ public class BaoCaoService {
             List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(), fromDate, toDate);
             if (CollectionUtils.isNotEmpty(orders)) {
                 response.setCuaHangId(request.getCuaHangId());
-                List<DanhMucBanChay> listDanhMucBanChay = analysisDoanhThuTheoDanhMuc(orders, response);
+                List<DanhMucBanChay> listDanhMucBanChay = analysisDoanhThuTheoDanhMuc(orders);
                 response.setListDanhMucBanChay(listDanhMucBanChay);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -140,7 +140,7 @@ public class BaoCaoService {
         return response;
     }
 
-    private List<DanhMucBanChay> analysisDoanhThuTheoDanhMuc(List<Order> orders, DoanhThuTheoDanhMucResponse response) {
+    private List<DanhMucBanChay> analysisDoanhThuTheoDanhMuc(List<Order> orders) {
         List<DanhMucBanChay> listDanhMucBanChay = new ArrayList<DanhMucBanChay>();
         for (Order order : orders) {
             List<MatHangTieuThu> listMatHangTieuThu = order.getListMatHangTieuThu();
