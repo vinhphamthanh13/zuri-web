@@ -250,26 +250,41 @@ public class BaoCaoService {
     private List<DanhMucBanChay> calculateDoanhThuTheoDanhMucRevenuePercentage(List<DanhMucBanChay> ordersCurrentDay, List<DanhMucBanChay> ordersTheDayBefore) {
         List<DanhMucBanChay> result = new ArrayList<DanhMucBanChay>();
         if (ordersCurrentDay.size() > 0 && ordersTheDayBefore.size() > 0) {
-            for(DanhMucBanChay danhMucBanChayCurrenDay: ordersCurrentDay){
-                for(DanhMucBanChay danhMucBanChayTheDayBefore: ordersTheDayBefore){
-                    if(danhMucBanChayTheDayBefore.getDanhMucName().equalsIgnoreCase(danhMucBanChayCurrenDay.getDanhMucName())){
+            for (DanhMucBanChay danhMucBanChayCurrenDay : ordersCurrentDay) {
+                boolean isFounded = false;
+                for (DanhMucBanChay danhMucBanChayTheDayBefore : ordersTheDayBefore) {
+                    if (danhMucBanChayTheDayBefore.getDanhMucName().equalsIgnoreCase(danhMucBanChayCurrenDay.getDanhMucName())) {
+                        isFounded = true;
+                        BigDecimal currentDayPrice = danhMucBanChayCurrenDay.getTotalPrice();
                         DanhMucBanChay temp = new DanhMucBanChay();
                         temp.setDanhMucName(danhMucBanChayCurrenDay.getDanhMucName());
-                        BigDecimal currentDayPrice = danhMucBanChayCurrenDay.getTotalPrice();
+                        temp.setTotalQuantity(danhMucBanChayCurrenDay.getTotalQuantity());
                         temp.setTotalPrice(currentDayPrice);
                         BigDecimal theDayBeforePrice = danhMucBanChayTheDayBefore.getTotalPrice();
                         BigDecimal revenuePercentage = ((currentDayPrice.subtract(theDayBeforePrice)).multiply(BigDecimal.valueOf(100))).divide(theDayBeforePrice, 2, RoundingMode.HALF_UP);
                         temp.setRevenuePercentage(revenuePercentage + "%");
-                        if(revenuePercentage.compareTo(BigDecimal.ZERO) > 0){
+                        if (revenuePercentage.compareTo(BigDecimal.ZERO) > 0) {
                             temp.setStatus(RevenuePercentageStatusType.INCREASE);
-                        }else{
+                        } else {
                             temp.setStatus(RevenuePercentageStatusType.DECREASE);
                         }
-                        temp.setTotalPrice(currentDayPrice);
-                        temp.setDanhMucName(danhMucBanChayCurrenDay.getDanhMucName());
-                        //Calculate List<MatHangBanChay>
-
+                        List<MatHangBanChay> listMatHangBanChay = calculateMatHangBanChayRevenuePercentage(danhMucBanChayCurrenDay.getListMatHangBanChay(), danhMucBanChayTheDayBefore.getListMatHangBanChay());
+                        temp.setListMatHangBanChay(listMatHangBanChay);
+                        result.add(temp);
+                        break;
                     }
+                }
+                if(!isFounded){
+                    DanhMucBanChay temp = new DanhMucBanChay();
+                    temp.setDanhMucName(danhMucBanChayCurrenDay.getDanhMucName());
+                    temp.setTotalQuantity(danhMucBanChayCurrenDay.getTotalQuantity());
+                    temp.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
+                    temp.setTotalPrice(danhMucBanChayCurrenDay.getTotalPrice());
+                    for(MatHangBanChay matHangBanChay: danhMucBanChayCurrenDay.getListMatHangBanChay()){
+                        matHangBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
+                    }
+                    temp.setListMatHangBanChay(danhMucBanChayCurrenDay.getListMatHangBanChay());
+                    result.add(temp);
                 }
             }
         } else if (ordersCurrentDay.size() == 0 && ordersTheDayBefore.size() > 0) {
@@ -286,6 +301,23 @@ public class BaoCaoService {
                 danhMucBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
             }
             result = ordersCurrentDay;
+        }
+        for(int i = 0; i < ordersTheDayBefore.size(); i++){
+            int j;
+            for(j =0 ; j < result.size(); j++){
+                if(ordersTheDayBefore.get(i).getDanhMucName().equalsIgnoreCase(result.get(j).getDanhMucName())){
+                    break;
+                }
+            }
+            if ( j == ordersTheDayBefore.size()){
+                DanhMucBanChay temp = new DanhMucBanChay();
+                temp.setDanhMucName(ordersTheDayBefore.get(j).getDanhMucName());
+                temp.setTotalQuantity(ZERO_NUMBER);
+                temp.setStatus(RevenuePercentageStatusType.DECREASE);
+                temp.setTotalPrice(BigDecimal.ZERO);
+                temp.setRevenuePercentage(ONE_HUNDRED_PERCENT);
+                result.add(temp);
+            }
         }
         return result;
     }
@@ -375,6 +407,63 @@ public class BaoCaoService {
             isExisted = true;
         }
         return isExisted;
+    }
+
+    private List<MatHangBanChay> calculateMatHangBanChayRevenuePercentage(List<MatHangBanChay> listCurrentDay, List<MatHangBanChay> listTheDayBefore) {
+        List<MatHangBanChay> result = new ArrayList<MatHangBanChay>();
+        if (listCurrentDay.size() > 0 && listTheDayBefore.size() > 0) {
+            for(MatHangBanChay matHangBanChayCurrentDay: listCurrentDay){
+                for(MatHangBanChay matHangBanChayTheDayBefore: listTheDayBefore){
+                    if(matHangBanChayTheDayBefore.getName().equalsIgnoreCase(matHangBanChayCurrentDay.getName())){
+                        MatHangBanChay temp = new MatHangBanChay();
+                        temp.setName(matHangBanChayCurrentDay.getName());
+                        temp.setQuantity(matHangBanChayCurrentDay.getQuantity());
+                        BigDecimal currentDayPrice = matHangBanChayCurrentDay.getTotalPrice();
+                        temp.setTotalPrice(currentDayPrice);
+                        BigDecimal theDayBeforePrice = matHangBanChayTheDayBefore.getTotalPrice();
+                        BigDecimal revenuePercentage = ((currentDayPrice.subtract(theDayBeforePrice)).multiply(BigDecimal.valueOf(100))).divide(theDayBeforePrice,2, RoundingMode.HALF_UP);
+                        temp.setRevenuePercentage(revenuePercentage + "%");
+                        if (revenuePercentage.compareTo(BigDecimal.ZERO) > 0) {
+                            temp.setStatus(RevenuePercentageStatusType.INCREASE);
+                        } else {
+                            temp.setStatus(RevenuePercentageStatusType.DECREASE);
+                        }
+                        result.add(temp);
+                    }
+                }
+            }
+        } else if (listCurrentDay.size() == 0 && listTheDayBefore.size() > 0) {
+            for(MatHangBanChay matHangBanChay: listTheDayBefore){
+                matHangBanChay.setTotalPrice(BigDecimal.ZERO);
+                matHangBanChay.setQuantity(ZERO_NUMBER);
+                matHangBanChay.setStatus(RevenuePercentageStatusType.DECREASE);
+                matHangBanChay.setRevenuePercentage(ONE_HUNDRED_PERCENT);
+            }
+            result = listTheDayBefore;
+        } else if (listCurrentDay.size() > 0 && listTheDayBefore.size() == 0) {
+            for(MatHangBanChay matHangBanChay: listCurrentDay){
+                matHangBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
+            }
+            result = listCurrentDay;
+        }
+        for(int i = 0; i < listTheDayBefore.size(); i++){
+            int j ;
+            for(j = 0; j < result.size(); j++){
+                if(listTheDayBefore.get(i).getName().equalsIgnoreCase(result.get(j).getName())){
+                    break;
+                }
+            }
+            if(j == listTheDayBefore.size()){
+                MatHangBanChay matHangBanChay = new MatHangBanChay();
+                matHangBanChay.setName(listTheDayBefore.get(i).getName());
+                matHangBanChay.setTotalPrice(BigDecimal.ZERO);
+                matHangBanChay.setQuantity(ZERO_NUMBER);
+                matHangBanChay.setStatus(RevenuePercentageStatusType.DECREASE);
+                matHangBanChay.setRevenuePercentage(ONE_HUNDRED_PERCENT);
+                result.add(matHangBanChay);
+            }
+        }
+        return result;
     }
 
     public BaoCaoGiamGiaResponse getBaoCaoGiamGia(String cuaHangId) {
