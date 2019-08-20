@@ -1,5 +1,7 @@
 package com.ocha.boc.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ocha.boc.enums.RevenuePercentageStatusType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +15,11 @@ import java.util.List;
 public class DanhMucBanChay {
 
     private String danhMucName;
+
+    @JsonProperty(value = "percent")
+    private String revenuePercentage;
+
+    private RevenuePercentageStatusType status;
 
     private int totalQuantity;
 

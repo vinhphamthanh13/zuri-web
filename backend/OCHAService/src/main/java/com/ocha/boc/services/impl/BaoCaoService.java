@@ -3,6 +3,7 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.entity.*;
 import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.enums.OrderStatus;
+import com.ocha.boc.enums.RevenuePercentageStatusType;
 import com.ocha.boc.repository.DanhMucRepository;
 import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.request.AbstractBaoCaoRequest;
@@ -29,6 +30,9 @@ public class BaoCaoService {
 
     private static final String TOTAL_PRICE = "TOTAL";
     private static final String QUANTITY = "QUANTITY";
+    private static final int    ZERO_NUMBER = 0;
+    private static final String ONE_HUNDRED_PERCENT = "100%";
+
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -106,11 +110,21 @@ public class BaoCaoService {
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
                 String currentDate = DateUtils.getCurrentDate();
-                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
-                if (CollectionUtils.isNotEmpty(orders)) {
+                String theDayBefore = DateUtils.getDayBeforeTheCurrentDay();
+                List<Order> listOrdersCurrentDay = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
+                List<Order> listOrdersTheDayBefore = orderRepository.findAllOrderByCreatedDateAndCuaHangId(theDayBefore, cuaHangId);
+                List<DanhMucBanChay> listDanhMucBanChayCurrentDay = new ArrayList<DanhMucBanChay>();
+                List<DanhMucBanChay> listDanhMucBanChayTheDayBefore = new ArrayList<DanhMucBanChay>();
+                if (CollectionUtils.isNotEmpty(listOrdersCurrentDay)) {
+                    listDanhMucBanChayCurrentDay = analysisDoanhThuTheoDanhMuc(listOrdersCurrentDay);
+                }
+                if (CollectionUtils.isNotEmpty(listOrdersTheDayBefore)) {
+                    listDanhMucBanChayTheDayBefore = analysisDoanhThuTheoDanhMuc(listOrdersTheDayBefore);
+                }
+                List<DanhMucBanChay> result = calculateDoanhThuTheoDanhMucRevenuePercentage(listDanhMucBanChayCurrentDay, listDanhMucBanChayTheDayBefore);
+                if (!result.isEmpty()) {
                     response.setCuaHangId(cuaHangId);
-                    List<DanhMucBanChay> listDanhMucBanChay = analysisDoanhThuTheoDanhMuc(orders);
-                    response.setListDanhMucBanChay(listDanhMucBanChay);
+                    response.setListDanhMucBanChay(result);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 }
@@ -160,7 +174,7 @@ public class BaoCaoService {
                         MatHangBanChay matHangBanChay = new MatHangBanChay();
                         matHangBanChay.setName(matHangName);
                         matHangBanChay.setQuantity(temp.getQuantity());
-                        matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice());
+                        matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice().multiply(BigDecimal.valueOf((long) temp.getQuantity())));
                         listMatHangBanChay.add(matHangBanChay);
                         Map<String, BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
                         for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
@@ -231,6 +245,29 @@ public class BaoCaoService {
         }
         result.put(TOTAL_PRICE, totalPrice);
         result.put(QUANTITY, BigDecimal.valueOf((double) quantity));
+        return result;
+    }
+
+    private List<DanhMucBanChay> calculateDoanhThuTheoDanhMucRevenuePercentage(List<DanhMucBanChay> ordersCurrentDay, List<DanhMucBanChay> ordersTheDayBefore) {
+        List<DanhMucBanChay> result = new ArrayList<DanhMucBanChay>();
+        if (ordersCurrentDay.size() > 0 && ordersTheDayBefore.size() > 0) {
+
+
+        } else if (ordersCurrentDay.size() == 0 && ordersTheDayBefore.size() > 0) {
+            for(DanhMucBanChay danhMucBanChay: ordersTheDayBefore){
+                danhMucBanChay.setTotalPrice(BigDecimal.ZERO);
+                danhMucBanChay.setTotalQuantity(ZERO_NUMBER);
+                danhMucBanChay.setListMatHangBanChay(new ArrayList<MatHangBanChay>());
+                danhMucBanChay.setStatus(RevenuePercentageStatusType.DECREASE);
+                danhMucBanChay.setRevenuePercentage(ONE_HUNDRED_PERCENT);
+            }
+            result = ordersTheDayBefore;
+        } else if (ordersCurrentDay.size() > 0 && ordersTheDayBefore.size() == 0) {
+            for(DanhMucBanChay danhMucBanChay: ordersCurrentDay){
+                danhMucBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
+            }
+            result = ordersCurrentDay;
+        }
         return result;
     }
 
@@ -464,11 +501,11 @@ public class BaoCaoService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL);
         try {
-            if(request != null){
+            if (request != null) {
                 String fromDate = request.getFromDate();
                 String toDate = request.getToDate();
                 List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(), fromDate, toDate);
-                if(CollectionUtils.isNotEmpty(orders)){
+                if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(request.getCuaHangId());
                     List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = analysisDoanhThuTheoNhanVien(orders);
                     response.setListEmployeeSRevenue(listDoanhThuTheoNhanVien);
@@ -552,5 +589,25 @@ public class BaoCaoService {
         result.put(TOTAL_PRICE, totalPrice);
         result.put(QUANTITY, quantity);
         return result;
+    }
+
+    public static void main(String [] args){
+        List<String> arr1 = new ArrayList<>();
+        arr1.add("a");
+        arr1.add("b");
+        arr1.add("c");
+        List<String> arr2 = new ArrayList<>();
+        arr2.add("a");
+        arr2.add("d");
+        arr2.add("c");
+        List<String> result = new ArrayList<>();
+        for(String tmp : arr1){
+            for(String tmp2 : arr2){
+                if(tmp.equalsIgnoreCase(tmp2)){
+                    System.err.println("Duplicate: " + tmp);
+                }
+            }
+            result.add(tmp);
+        }
     }
 }
