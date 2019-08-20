@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Service
@@ -30,7 +27,7 @@ public class BaoCaoService {
 
     private static final String TOTAL_PRICE = "TOTAL";
     private static final String QUANTITY = "QUANTITY";
-    private static final int    ZERO_NUMBER = 0;
+    private static final int ZERO_NUMBER = 0;
     private static final String ONE_HUNDRED_PERCENT = "100%";
 
     @Autowired
@@ -84,12 +81,14 @@ public class BaoCaoService {
         BigDecimal serviceFee = BigDecimal.ZERO;
         BigDecimal tax = BigDecimal.ZERO;
         for (Order order : orders) {
-            total = total.add(order.getTotalMoney());
-            if (order.getDiscountMoney() != null) {
-                discount = discount.add(order.getDiscountMoney());
-            }
-            if (order.getRefunds() != null) {
-                refunds = refunds.add(order.getRefunds());
+            if (order.getOrderStatus().equals(OrderStatus.SUCCESS)) {
+                total = total.add(order.getTotalMoney());
+                if (order.getDiscountMoney() != null) {
+                    discount = discount.add(order.getDiscountMoney());
+                }
+                if (order.getRefunds() != null) {
+                    refunds = refunds.add(order.getRefunds());
+                }
             }
         }
         response.setNumberOfTransactions(orders.size());
@@ -157,73 +156,73 @@ public class BaoCaoService {
     private List<DanhMucBanChay> analysisDoanhThuTheoDanhMuc(List<Order> orders) {
         List<DanhMucBanChay> listDanhMucBanChay = new ArrayList<DanhMucBanChay>();
         for (Order order : orders) {
-            List<MatHangTieuThu> listMatHangTieuThu = order.getListMatHangTieuThu();
+            if (order.getOrderStatus().equals(OrderStatus.SUCCESS)) {
+                List<MatHangTieuThu> listMatHangTieuThu = order.getListMatHangTieuThu();
+                for (MatHangTieuThu temp : listMatHangTieuThu) {
+                    DanhMucBanChay danhMucBanChay = new DanhMucBanChay();
+                    String bangGiaName = temp.getBangGia().getName();
+                    MatHang matHang = temp.getMatHang();
 
-            for (MatHangTieuThu temp : listMatHangTieuThu) {
-                DanhMucBanChay danhMucBanChay = new DanhMucBanChay();
-                String bangGiaName = temp.getBangGia().getName();
-                MatHang matHang = temp.getMatHang();
-
-                String matHangName = matHang.getName() + " (" + bangGiaName + ") ";
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(matHang.getDanhMucId(), matHang.getCuaHangId());
-                if (danhMuc != null) {
-                    //Check danh muc existed List<DanhMucBanChay>
-                    boolean isExisted = checkDanhMucExistInListDanhMucBanChay(listDanhMucBanChay, danhMuc);
-                    if (!isExisted) {
-                        List<MatHangBanChay> listMatHangBanChay = new ArrayList<MatHangBanChay>();
-                        MatHangBanChay matHangBanChay = new MatHangBanChay();
-                        matHangBanChay.setName(matHangName);
-                        matHangBanChay.setQuantity(temp.getQuantity());
-                        matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice().multiply(BigDecimal.valueOf((long) temp.getQuantity())));
-                        listMatHangBanChay.add(matHangBanChay);
-                        Map<String, BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
-                        for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
-                            String key = entry.getKey();
-                            BigDecimal value = entry.getValue();
-                            if (key.equalsIgnoreCase(TOTAL_PRICE)) {
-                                danhMucBanChay.setTotalPrice(value);
-                            } else if (key.equalsIgnoreCase(QUANTITY)) {
-                                danhMucBanChay.setTotalQuantity(value.intValue());
-                            }
-                        }
-                        danhMucBanChay.setDanhMucName(danhMuc.getName());
-                        danhMucBanChay.setListMatHangBanChay(listMatHangBanChay);
-                        listDanhMucBanChay.add(danhMucBanChay);
-                    } else {
-                        int index = IntStream.range(0, listDanhMucBanChay.size()).filter(i ->
-                                danhMuc.getName().equalsIgnoreCase(listDanhMucBanChay.get(i).getDanhMucName())).findFirst().getAsInt();
-                        List<MatHangBanChay> listMatHangBanChay = listDanhMucBanChay.get(index).getListMatHangBanChay();
-                        boolean isMatHangBanChayExisted = checkMatHangBanChayExist(listMatHangBanChay, matHangName);
-                        if (isMatHangBanChayExisted) {
-                            int indexMatHang = IntStream.range(0, listMatHangBanChay.size()).filter(i ->
-                                    matHangName.equalsIgnoreCase(listMatHangBanChay.get(i).getName())).findFirst().getAsInt();
-                            int quantity = listMatHangBanChay.get(indexMatHang).getQuantity();
-                            listMatHangBanChay.get(indexMatHang).setQuantity(quantity + temp.getQuantity());
-                            BigDecimal price = listMatHangBanChay.get(indexMatHang).getTotalPrice();
-                            listMatHangBanChay.get(indexMatHang).setTotalPrice(
-                                    price.add(temp.getBangGia().getLoaiGia().getPrice().multiply(BigDecimal.valueOf(temp.getQuantity()))));
-                        } else {
+                    String matHangName = matHang.getName() + " (" + bangGiaName + ") ";
+                    DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(matHang.getDanhMucId(), matHang.getCuaHangId());
+                    if (danhMuc != null) {
+                        //Check danh muc existed List<DanhMucBanChay>
+                        boolean isExisted = checkDanhMucExistInListDanhMucBanChay(listDanhMucBanChay, danhMuc);
+                        if (!isExisted) {
+                            List<MatHangBanChay> listMatHangBanChay = new ArrayList<MatHangBanChay>();
                             MatHangBanChay matHangBanChay = new MatHangBanChay();
                             matHangBanChay.setName(matHangName);
                             matHangBanChay.setQuantity(temp.getQuantity());
-                            matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice());
+                            matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice().multiply(BigDecimal.valueOf((long) temp.getQuantity())));
                             listMatHangBanChay.add(matHangBanChay);
-                        }
-                        Map<String, BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
-                        for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
-                            String key = entry.getKey();
-                            BigDecimal value = entry.getValue();
-                            if (key.equalsIgnoreCase(TOTAL_PRICE)) {
-                                listDanhMucBanChay.get(index).setTotalPrice(value);
-                            } else if (key.equalsIgnoreCase(QUANTITY)) {
-                                listDanhMucBanChay.get(index).setTotalQuantity(value.intValue());
+                            Map<String, BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
+                            for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
+                                String key = entry.getKey();
+                                BigDecimal value = entry.getValue();
+                                if (key.equalsIgnoreCase(TOTAL_PRICE)) {
+                                    danhMucBanChay.setTotalPrice(value);
+                                } else if (key.equalsIgnoreCase(QUANTITY)) {
+                                    danhMucBanChay.setTotalQuantity(value.intValue());
+                                }
+                            }
+                            danhMucBanChay.setDanhMucName(danhMuc.getName());
+                            danhMucBanChay.setListMatHangBanChay(listMatHangBanChay);
+                            listDanhMucBanChay.add(danhMucBanChay);
+                        } else {
+                            int index = IntStream.range(0, listDanhMucBanChay.size()).filter(i ->
+                                    danhMuc.getName().equalsIgnoreCase(listDanhMucBanChay.get(i).getDanhMucName())).findFirst().getAsInt();
+                            List<MatHangBanChay> listMatHangBanChay = listDanhMucBanChay.get(index).getListMatHangBanChay();
+                            boolean isMatHangBanChayExisted = checkMatHangBanChayExist(listMatHangBanChay, matHangName);
+                            if (isMatHangBanChayExisted) {
+                                int indexMatHang = IntStream.range(0, listMatHangBanChay.size()).filter(i ->
+                                        matHangName.equalsIgnoreCase(listMatHangBanChay.get(i).getName())).findFirst().getAsInt();
+                                int quantity = listMatHangBanChay.get(indexMatHang).getQuantity();
+                                listMatHangBanChay.get(indexMatHang).setQuantity(quantity + temp.getQuantity());
+                                BigDecimal price = listMatHangBanChay.get(indexMatHang).getTotalPrice();
+                                listMatHangBanChay.get(indexMatHang).setTotalPrice(
+                                        price.add(temp.getBangGia().getLoaiGia().getPrice().multiply(BigDecimal.valueOf(temp.getQuantity()))));
+                            } else {
+                                MatHangBanChay matHangBanChay = new MatHangBanChay();
+                                matHangBanChay.setName(matHangName);
+                                matHangBanChay.setQuantity(temp.getQuantity());
+                                matHangBanChay.setTotalPrice(temp.getBangGia().getLoaiGia().getPrice());
+                                listMatHangBanChay.add(matHangBanChay);
+                            }
+                            Map<String, BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
+                            for (Map.Entry<String, BigDecimal> entry : totalPriceAndQuantity.entrySet()) {
+                                String key = entry.getKey();
+                                BigDecimal value = entry.getValue();
+                                if (key.equalsIgnoreCase(TOTAL_PRICE)) {
+                                    listDanhMucBanChay.get(index).setTotalPrice(value);
+                                } else if (key.equalsIgnoreCase(QUANTITY)) {
+                                    listDanhMucBanChay.get(index).setTotalQuantity(value.intValue());
+                                }
                             }
                         }
                     }
                 }
             }
         }
-
         return listDanhMucBanChay;
     }
 
@@ -251,10 +250,30 @@ public class BaoCaoService {
     private List<DanhMucBanChay> calculateDoanhThuTheoDanhMucRevenuePercentage(List<DanhMucBanChay> ordersCurrentDay, List<DanhMucBanChay> ordersTheDayBefore) {
         List<DanhMucBanChay> result = new ArrayList<DanhMucBanChay>();
         if (ordersCurrentDay.size() > 0 && ordersTheDayBefore.size() > 0) {
+            for(DanhMucBanChay danhMucBanChayCurrenDay: ordersCurrentDay){
+                for(DanhMucBanChay danhMucBanChayTheDayBefore: ordersTheDayBefore){
+                    if(danhMucBanChayTheDayBefore.getDanhMucName().equalsIgnoreCase(danhMucBanChayCurrenDay.getDanhMucName())){
+                        DanhMucBanChay temp = new DanhMucBanChay();
+                        temp.setDanhMucName(danhMucBanChayCurrenDay.getDanhMucName());
+                        BigDecimal currentDayPrice = danhMucBanChayCurrenDay.getTotalPrice();
+                        temp.setTotalPrice(currentDayPrice);
+                        BigDecimal theDayBeforePrice = danhMucBanChayTheDayBefore.getTotalPrice();
+                        BigDecimal revenuePercentage = ((currentDayPrice.subtract(theDayBeforePrice)).multiply(BigDecimal.valueOf(100))).divide(theDayBeforePrice, 2, RoundingMode.HALF_UP);
+                        temp.setRevenuePercentage(revenuePercentage + "%");
+                        if(revenuePercentage.compareTo(BigDecimal.ZERO) > 0){
+                            temp.setStatus(RevenuePercentageStatusType.INCREASE);
+                        }else{
+                            temp.setStatus(RevenuePercentageStatusType.DECREASE);
+                        }
+                        temp.setTotalPrice(currentDayPrice);
+                        temp.setDanhMucName(danhMucBanChayCurrenDay.getDanhMucName());
+                        //Calculate List<MatHangBanChay>
 
-
+                    }
+                }
+            }
         } else if (ordersCurrentDay.size() == 0 && ordersTheDayBefore.size() > 0) {
-            for(DanhMucBanChay danhMucBanChay: ordersTheDayBefore){
+            for (DanhMucBanChay danhMucBanChay : ordersTheDayBefore) {
                 danhMucBanChay.setTotalPrice(BigDecimal.ZERO);
                 danhMucBanChay.setTotalQuantity(ZERO_NUMBER);
                 danhMucBanChay.setListMatHangBanChay(new ArrayList<MatHangBanChay>());
@@ -263,7 +282,7 @@ public class BaoCaoService {
             }
             result = ordersTheDayBefore;
         } else if (ordersCurrentDay.size() > 0 && ordersTheDayBefore.size() == 0) {
-            for(DanhMucBanChay danhMucBanChay: ordersCurrentDay){
+            for (DanhMucBanChay danhMucBanChay : ordersCurrentDay) {
                 danhMucBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
             }
             result = ordersCurrentDay;
@@ -316,33 +335,34 @@ public class BaoCaoService {
         return response;
     }
 
-
     private List<MatHangBanChay> analysisMatHangBanChay(List<Order> orders) {
         List<MatHangBanChay> listMatHangBanChay = new ArrayList<MatHangBanChay>();
         for (Order order : orders) {
-            List<MatHangTieuThu> matHangTieuThuList = order.getListMatHangTieuThu();
-            for (MatHangTieuThu matHangTieuThu : matHangTieuThuList) {
-                int quantity = matHangTieuThu.getQuantity();
-                BigDecimal price = matHangTieuThu.getTotal();
-                String bangGiaName = "";
-                if (matHangTieuThu.getBangGia() != null) {
-                    bangGiaName = matHangTieuThu.getBangGia().getName();
-                }
-                String matHangName = matHangTieuThu.getMatHang().getName() + " (" + bangGiaName + ") ";
-                boolean isMatHangBanChayExisted = checkMatHangBanChayExist(listMatHangBanChay, matHangName);
-                if (isMatHangBanChayExisted) {
-                    int indexMatHang = IntStream.range(0, listMatHangBanChay.size()).filter(i ->
-                            matHangName.equalsIgnoreCase(listMatHangBanChay.get(i).getName())).findFirst().getAsInt();
-                    int originalQuantity = listMatHangBanChay.get(indexMatHang).getQuantity();
-                    listMatHangBanChay.get(indexMatHang).setQuantity(quantity + originalQuantity);
-                    BigDecimal originalPrice = listMatHangBanChay.get(indexMatHang).getTotalPrice();
-                    listMatHangBanChay.get(indexMatHang).setTotalPrice(price.add(originalPrice));
-                } else {
-                    MatHangBanChay matHangBanChay = new MatHangBanChay();
-                    matHangBanChay.setQuantity(quantity);
-                    matHangBanChay.setTotalPrice(price);
-                    matHangBanChay.setName(matHangName);
-                    listMatHangBanChay.add(matHangBanChay);
+            if (order.getOrderStatus().equals(OrderStatus.SUCCESS)) {
+                List<MatHangTieuThu> matHangTieuThuList = order.getListMatHangTieuThu();
+                for (MatHangTieuThu matHangTieuThu : matHangTieuThuList) {
+                    int quantity = matHangTieuThu.getQuantity();
+                    BigDecimal price = matHangTieuThu.getTotal();
+                    String bangGiaName = "";
+                    if (matHangTieuThu.getBangGia() != null) {
+                        bangGiaName = matHangTieuThu.getBangGia().getName();
+                    }
+                    String matHangName = matHangTieuThu.getMatHang().getName() + " (" + bangGiaName + ") ";
+                    boolean isMatHangBanChayExisted = checkMatHangBanChayExist(listMatHangBanChay, matHangName);
+                    if (isMatHangBanChayExisted) {
+                        int indexMatHang = IntStream.range(0, listMatHangBanChay.size()).filter(i ->
+                                matHangName.equalsIgnoreCase(listMatHangBanChay.get(i).getName())).findFirst().getAsInt();
+                        int originalQuantity = listMatHangBanChay.get(indexMatHang).getQuantity();
+                        listMatHangBanChay.get(indexMatHang).setQuantity(quantity + originalQuantity);
+                        BigDecimal originalPrice = listMatHangBanChay.get(indexMatHang).getTotalPrice();
+                        listMatHangBanChay.get(indexMatHang).setTotalPrice(price.add(originalPrice));
+                    } else {
+                        MatHangBanChay matHangBanChay = new MatHangBanChay();
+                        matHangBanChay.setQuantity(quantity);
+                        matHangBanChay.setTotalPrice(price);
+                        matHangBanChay.setName(matHangName);
+                        listMatHangBanChay.add(matHangBanChay);
+                    }
                 }
             }
         }
@@ -405,53 +425,55 @@ public class BaoCaoService {
     private List<BaoCaoGiamGia> analysisBaoCaoGiamGia(List<Order> orders) {
         List<BaoCaoGiamGia> listBaoCaoGiamGia = new ArrayList<BaoCaoGiamGia>();
         for (Order order : orders) {
-            BaoCaoGiamGia baoCaoGiamGia = new BaoCaoGiamGia();
-            if (order.getGiamGia() != null) {
-                GiamGia giamGia = order.getGiamGia();
-                String giamGiaName = giamGia.getName();
-                String baoCaoGiamGiaName = "";
-                GiamGiaType giamGiaType = giamGia.getGiamGiaType();
-                if (giamGiaType.label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
-                    String percent = giamGia.getPercentage() + "%";
-                    baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
-                } else if (giamGiaType.label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
-                    if (giamGia.getDiscountAmount() != null) {
-                        String discountAmount = giamGia.getDiscountAmount() + "đ";
-                        baoCaoGiamGiaName = giamGiaName + " (-" + discountAmount + ")";
-                    } else if (giamGia.getPercentage() != null) {
+            if (order.getOrderStatus().equals(OrderStatus.SUCCESS)) {
+                BaoCaoGiamGia baoCaoGiamGia = new BaoCaoGiamGia();
+                if (order.getGiamGia() != null) {
+                    GiamGia giamGia = order.getGiamGia();
+                    String giamGiaName = giamGia.getName();
+                    String baoCaoGiamGiaName = "";
+                    GiamGiaType giamGiaType = giamGia.getGiamGiaType();
+                    if (giamGiaType.label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
                         String percent = giamGia.getPercentage() + "%";
                         baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
+                    } else if (giamGiaType.label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
+                        if (giamGia.getDiscountAmount() != null) {
+                            String discountAmount = giamGia.getDiscountAmount() + "đ";
+                            baoCaoGiamGiaName = giamGiaName + " (-" + discountAmount + ")";
+                        } else if (giamGia.getPercentage() != null) {
+                            String percent = giamGia.getPercentage() + "%";
+                            baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
+                        }
                     }
-                }
-                boolean isBaoCaoGiamGiaExisted = checkBaoCaoGiamGiaExist(listBaoCaoGiamGia, baoCaoGiamGiaName);
-                if (isBaoCaoGiamGiaExisted) {
-                    String finalBaoCaoGiamGiaName = baoCaoGiamGiaName;
-                    int index = IntStream.range(0, listBaoCaoGiamGia.size()).filter(i ->
-                            finalBaoCaoGiamGiaName.equalsIgnoreCase(listBaoCaoGiamGia.get(i).getName())).findFirst().getAsInt();
-                    int quantity = listBaoCaoGiamGia.get(index).getTotalQuantity();
-                    listBaoCaoGiamGia.get(index).setTotalQuantity(quantity + 1);
-                    List<BaoCaoGiamGiaDetail> giamGiaDetails = listBaoCaoGiamGia.get(index).getListDiscountInvoice();
-                    BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
-                    temp.setDiscountPrice(order.getDiscountMoney());
-                    temp.setReceiptCode(order.getReceiptCode());
-                    temp.setTime(order.getOrderTimeCheckOut());
-                    giamGiaDetails.add(temp);
-                    listBaoCaoGiamGia.get(index).setListDiscountInvoice(giamGiaDetails);
-                    BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
-                    listBaoCaoGiamGia.get(index).setTotalDiscount(totalDiscount);
-                } else {
-                    baoCaoGiamGia.setTotalQuantity(1);
-                    baoCaoGiamGia.setName(baoCaoGiamGiaName);
-                    List<BaoCaoGiamGiaDetail> giamGiaDetails = new ArrayList<BaoCaoGiamGiaDetail>();
-                    BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
-                    temp.setDiscountPrice(order.getDiscountMoney());
-                    temp.setReceiptCode(order.getReceiptCode());
-                    temp.setTime(order.getOrderTimeCheckOut());
-                    giamGiaDetails.add(temp);
-                    baoCaoGiamGia.setListDiscountInvoice(giamGiaDetails);
-                    listBaoCaoGiamGia.add(baoCaoGiamGia);
-                    BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
-                    baoCaoGiamGia.setTotalDiscount(totalDiscount);
+                    boolean isBaoCaoGiamGiaExisted = checkBaoCaoGiamGiaExist(listBaoCaoGiamGia, baoCaoGiamGiaName);
+                    if (isBaoCaoGiamGiaExisted) {
+                        String finalBaoCaoGiamGiaName = baoCaoGiamGiaName;
+                        int index = IntStream.range(0, listBaoCaoGiamGia.size()).filter(i ->
+                                finalBaoCaoGiamGiaName.equalsIgnoreCase(listBaoCaoGiamGia.get(i).getName())).findFirst().getAsInt();
+                        int quantity = listBaoCaoGiamGia.get(index).getTotalQuantity();
+                        listBaoCaoGiamGia.get(index).setTotalQuantity(quantity + 1);
+                        List<BaoCaoGiamGiaDetail> giamGiaDetails = listBaoCaoGiamGia.get(index).getListDiscountInvoice();
+                        BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
+                        temp.setDiscountPrice(order.getDiscountMoney());
+                        temp.setReceiptCode(order.getReceiptCode());
+                        temp.setTime(order.getOrderTimeCheckOut());
+                        giamGiaDetails.add(temp);
+                        listBaoCaoGiamGia.get(index).setListDiscountInvoice(giamGiaDetails);
+                        BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
+                        listBaoCaoGiamGia.get(index).setTotalDiscount(totalDiscount);
+                    } else {
+                        baoCaoGiamGia.setTotalQuantity(1);
+                        baoCaoGiamGia.setName(baoCaoGiamGiaName);
+                        List<BaoCaoGiamGiaDetail> giamGiaDetails = new ArrayList<BaoCaoGiamGiaDetail>();
+                        BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
+                        temp.setDiscountPrice(order.getDiscountMoney());
+                        temp.setReceiptCode(order.getReceiptCode());
+                        temp.setTime(order.getOrderTimeCheckOut());
+                        giamGiaDetails.add(temp);
+                        baoCaoGiamGia.setListDiscountInvoice(giamGiaDetails);
+                        listBaoCaoGiamGia.add(baoCaoGiamGia);
+                        BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
+                        baoCaoGiamGia.setTotalDiscount(totalDiscount);
+                    }
                 }
             }
         }
@@ -591,23 +613,4 @@ public class BaoCaoService {
         return result;
     }
 
-    public static void main(String [] args){
-        List<String> arr1 = new ArrayList<>();
-        arr1.add("a");
-        arr1.add("b");
-        arr1.add("c");
-        List<String> arr2 = new ArrayList<>();
-        arr2.add("a");
-        arr2.add("d");
-        arr2.add("c");
-        List<String> result = new ArrayList<>();
-        for(String tmp : arr1){
-            for(String tmp2 : arr2){
-                if(tmp.equalsIgnoreCase(tmp2)){
-                    System.err.println("Duplicate: " + tmp);
-                }
-            }
-            result.add(tmp);
-        }
-    }
 }
