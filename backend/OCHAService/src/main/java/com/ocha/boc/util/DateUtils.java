@@ -256,7 +256,7 @@ public class DateUtils {
         return dtf.format(now);
     }
 
-    public static String getDayBeforeTheCurrentDay(String currentDayString) throws ParseException {
+    public static String getDayBeforeTheGivenDay(String currentDayString) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date currentDay = dateFormat.parse(currentDayString);
         Date oneDayBefore = new Date(currentDay.getTime() - 2);

@@ -111,7 +111,7 @@ public class BaoCaoService {
         response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_DANH_MUC_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                String theDayBefore = DateUtils.getDayBeforeTheCurrentDay(currentDate);
+                String theDayBefore = DateUtils.getDayBeforeTheGivenDay(currentDate);
                 List<Order> listOrdersCurrentDay = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 List<Order> listOrdersTheDayBefore = orderRepository.findAllOrderByCreatedDateAndCuaHangId(theDayBefore, cuaHangId);
                 List<DanhMucBanChay> listDanhMucBanChayCurrentDay = new ArrayList<DanhMucBanChay>();
@@ -331,7 +331,7 @@ public class BaoCaoService {
         response.setMessage(CommonConstants.GET_MAT_HANG_BAN_CHAY_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                String theDayBefore = DateUtils.getDayBeforeTheCurrentDay(currentDate);
+                String theDayBefore = DateUtils.getDayBeforeTheGivenDay(currentDate);
                 List<Order> listOrdersCurrentDay = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 List<Order> listOrdersTheDayBefore = orderRepository.findAllOrderByCreatedDateAndCuaHangId(theDayBefore, cuaHangId);
                 List<MatHangBanChay> listMatHangBanChayCurrentDay = new ArrayList<MatHangBanChay>();
