@@ -425,8 +425,10 @@ public class BaoCaoService {
         List<MatHangBanChay> result = new ArrayList<MatHangBanChay>();
         if (listCurrentDay.size() > 0 && listTheDayBefore.size() > 0) {
             for (MatHangBanChay matHangBanChayCurrentDay : listCurrentDay) {
+                boolean isFounded = false;
                 for (MatHangBanChay matHangBanChayTheDayBefore : listTheDayBefore) {
                     if (matHangBanChayTheDayBefore.getName().equalsIgnoreCase(matHangBanChayCurrentDay.getName())) {
+                        isFounded = true;
                         MatHangBanChay temp = new MatHangBanChay();
                         temp.setName(matHangBanChayCurrentDay.getName());
                         temp.setQuantity(matHangBanChayCurrentDay.getQuantity());
@@ -444,6 +446,14 @@ public class BaoCaoService {
                         }
                         result.add(temp);
                     }
+                }
+                if(!isFounded){
+                    MatHangBanChay matHangBanChay = new MatHangBanChay();
+                    matHangBanChay.setName(matHangBanChayCurrentDay.getName());
+                    matHangBanChay.setTotalPrice(matHangBanChayCurrentDay.getTotalPrice());
+                    matHangBanChay.setQuantity(matHangBanChayCurrentDay.getQuantity());
+                    matHangBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
+                    result.add(matHangBanChay);
                 }
             }
         } else if (listCurrentDay.size() == 0 && listTheDayBefore.size() > 0) {
