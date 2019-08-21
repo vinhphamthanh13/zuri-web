@@ -17,8 +17,8 @@ public class BaoCaoController {
     private BaoCaoService baoCaoService;
 
     @ApiOperation("Doanh Thu Tổng Quan")
-    @GetMapping("/doanh-thu-tong-quan/{cuaHangId}")
-    public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuan(@PathVariable(value = "cuaHangId") String cuaHangId){
+    @GetMapping("/doanh-thu-tong-quan")
+    public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuan(@RequestParam(value = "cuaHangId") String cuaHangId){
         log.info("START: get current doanh thu tong quan");
         DoanhThuTongQuanResponse response = baoCaoService.getDoanhThuTongQuan(cuaHangId);
         log.info("END: get current doanh thu tong quan");
@@ -35,10 +35,11 @@ public class BaoCaoController {
     }
 
     @ApiOperation("Doanh Thu Theo Danh Mục")
-    @GetMapping("/doanh-thu-theo-danh-muc/{cuaHangId}")
-    public ResponseEntity<DoanhThuTheoDanhMucResponse> getDoanhThuTheoDanhMuc(@PathVariable(value = "cuaHangId") String cuaHangId){
+    @GetMapping("/doanh-thu-theo-danh-muc")
+    public ResponseEntity<DoanhThuTheoDanhMucResponse> getDoanhThuTheoDanhMuc(@RequestParam(value = "cuaHangId") String cuaHangId,
+                                                                              @RequestParam(value = "currentDate") String currentDate){
         log.info("START: get current doanh thu theo danh muc");
-        DoanhThuTheoDanhMucResponse response = baoCaoService.getDoanhThuTheoDanhMuc(cuaHangId);
+        DoanhThuTheoDanhMucResponse response = baoCaoService.getDoanhThuTheoDanhMuc(cuaHangId, currentDate);
         log.info("END: get current doanh thu theo danh muc");
         return ResponseEntity.ok(response);
     }
@@ -53,10 +54,11 @@ public class BaoCaoController {
     }
 
     @ApiOperation("Mặt Hàng Bán Chạy")
-    @GetMapping("/mat-hang-ban-chay/{cuaHangId}")
-    public ResponseEntity<MatHangBanChayResponse> getMatHangBanChay(@PathVariable(value = "cuaHangId") String cuaHangId){
+    @GetMapping("/mat-hang-ban-chay")
+    public ResponseEntity<MatHangBanChayResponse> getMatHangBanChay(@RequestParam(value = "cuaHangId") String cuaHangId,
+                                                                    @RequestParam(value = "currentDate") String currentDate){
         log.info("START: get current mat hang ban chay");
-        MatHangBanChayResponse response = baoCaoService.getMatHangBanChay(cuaHangId);
+        MatHangBanChayResponse response = baoCaoService.getMatHangBanChay(cuaHangId, currentDate);
         log.info("END: get current mat hang ban chay");
         return ResponseEntity.ok(response);
     }
@@ -71,10 +73,11 @@ public class BaoCaoController {
     }
 
     @ApiOperation("Báo Cáo Giảm Giá")
-    @GetMapping("/bao-cao-giam-gia/{cuaHangId}")
-    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGia(@PathVariable(value = "cuaHangId") String cuaHangId){
+    @GetMapping("/bao-cao-giam-gia")
+    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGia(@RequestParam(value = "cuaHangId") String cuaHangId,
+                                                                  @RequestParam(value = "currentDate") String currentDate){
         log.info("START: get current bao cao giam gia");
-        BaoCaoGiamGiaResponse response = baoCaoService.getBaoCaoGiamGia(cuaHangId);
+        BaoCaoGiamGiaResponse response = baoCaoService.getBaoCaoGiamGia(cuaHangId, currentDate);
         log.info("END: get current bao cao giam gia");
         return ResponseEntity.ok(response);
     }
@@ -89,10 +92,11 @@ public class BaoCaoController {
     }
 
     @ApiOperation("Báo Cáo Doanh Thu Theo Nhân Viên")
-    @GetMapping("/doanh-thu-theo-nhan-vien/{cuaHangId}")
-    public ResponseEntity<DoanhThuTheoNhanVienResponse> getBaoCaoDoanhThuTheoNhanVien(@PathVariable(value = "cuaHangId") String cuaHangId){
+    @GetMapping("/doanh-thu-theo-nhan-vien")
+    public ResponseEntity<DoanhThuTheoNhanVienResponse> getBaoCaoDoanhThuTheoNhanVien(@RequestParam(value = "cuaHangId") String cuaHangId,
+                                                                                      @RequestParam(value = "currentDate") String currentDate){
         log.info("START: get current bao cao doanh thu theo nhan vien");
-        DoanhThuTheoNhanVienResponse response = baoCaoService.getBaoCaoDoanhThuTheoNhanVien(cuaHangId);
+        DoanhThuTheoNhanVienResponse response = baoCaoService.getBaoCaoDoanhThuTheoNhanVien(cuaHangId, currentDate);
         log.info("END: get current bao cao doanh thu theo nhan vien");
         return ResponseEntity.ok(response);
     }

@@ -9,7 +9,9 @@ public enum RevenuePercentageStatusType {
 
     INCREASE_INFINITY("INCREASE_INFINITY"),
 
-    DECREASE_INFINITY("DECREASE_INFINITY");
+    DECREASE_INFINITY("DECREASE_INFINITY"),
+
+    NORMAL("NORMAL");
 
     public final String label;
 

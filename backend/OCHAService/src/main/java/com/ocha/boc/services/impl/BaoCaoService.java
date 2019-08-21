@@ -102,14 +102,13 @@ public class BaoCaoService {
         response.setSuccess(Boolean.TRUE);
     }
 
-    public DoanhThuTheoDanhMucResponse getDoanhThuTheoDanhMuc(String cuaHangId) {
+    public DoanhThuTheoDanhMucResponse getDoanhThuTheoDanhMuc(String cuaHangId, String currentDate) {
         DoanhThuTheoDanhMucResponse response = new DoanhThuTheoDanhMucResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_DANH_MUC_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                String currentDate = DateUtils.getCurrentDate();
-                String theDayBefore = DateUtils.getDayBeforeTheCurrentDay();
+                String theDayBefore = DateUtils.getDayBeforeTheCurrentDay(currentDate);
                 List<Order> listOrdersCurrentDay = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 List<Order> listOrdersTheDayBefore = orderRepository.findAllOrderByCreatedDateAndCuaHangId(theDayBefore, cuaHangId);
                 List<DanhMucBanChay> listDanhMucBanChayCurrentDay = new ArrayList<DanhMucBanChay>();
@@ -302,16 +301,17 @@ public class BaoCaoService {
             }
             result = ordersCurrentDay;
         }
-        for(int i = 0; i < ordersTheDayBefore.size(); i++){
-            int j;
-            for(j =0 ; j < result.size(); j++){
-                if(ordersTheDayBefore.get(i).getDanhMucName().equalsIgnoreCase(result.get(j).getDanhMucName())){
+        for(DanhMucBanChay danhMucBanChayTheDayBefore: ordersTheDayBefore){
+            boolean isFounded = false;
+            for(DanhMucBanChay danhMucBanChayInResult: result){
+                if(danhMucBanChayInResult.getDanhMucName().equalsIgnoreCase(danhMucBanChayTheDayBefore.getDanhMucName())){
+                    isFounded = true;
                     break;
                 }
             }
-            if ( j == ordersTheDayBefore.size()){
+            if(!isFounded){
                 DanhMucBanChay temp = new DanhMucBanChay();
-                temp.setDanhMucName(ordersTheDayBefore.get(j).getDanhMucName());
+                temp.setDanhMucName(danhMucBanChayTheDayBefore.getDanhMucName());
                 temp.setTotalQuantity(ZERO_NUMBER);
                 temp.setStatus(RevenuePercentageStatusType.DECREASE);
                 temp.setTotalPrice(BigDecimal.ZERO);
@@ -322,13 +322,12 @@ public class BaoCaoService {
         return result;
     }
 
-    public MatHangBanChayResponse getMatHangBanChay(String cuaHangId) {
+    public MatHangBanChayResponse getMatHangBanChay(String cuaHangId, String currentDate) {
         MatHangBanChayResponse response = new MatHangBanChayResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_MAT_HANG_BAN_CHAY_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                String currentDate = DateUtils.getCurrentDate();
                 List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(cuaHangId);
@@ -425,6 +424,8 @@ public class BaoCaoService {
                         temp.setRevenuePercentage(revenuePercentage + "%");
                         if (revenuePercentage.compareTo(BigDecimal.ZERO) > 0) {
                             temp.setStatus(RevenuePercentageStatusType.INCREASE);
+                        } else if(revenuePercentage.compareTo(BigDecimal.ZERO) == 0) {
+                            temp.setStatus(RevenuePercentageStatusType.NORMAL);
                         } else {
                             temp.setStatus(RevenuePercentageStatusType.DECREASE);
                         }
@@ -446,16 +447,17 @@ public class BaoCaoService {
             }
             result = listCurrentDay;
         }
-        for(int i = 0; i < listTheDayBefore.size(); i++){
-            int j ;
-            for(j = 0; j < result.size(); j++){
-                if(listTheDayBefore.get(i).getName().equalsIgnoreCase(result.get(j).getName())){
+        for(MatHangBanChay matHangBanChayTheDayBefore: listTheDayBefore){
+            boolean isFounded = false;
+            for(MatHangBanChay matHangBanChayInResult: result){
+                if(matHangBanChayInResult.getName().equalsIgnoreCase(matHangBanChayTheDayBefore.getName())){
+                    isFounded = true;
                     break;
                 }
             }
-            if(j == listTheDayBefore.size()){
+            if(!isFounded){
                 MatHangBanChay matHangBanChay = new MatHangBanChay();
-                matHangBanChay.setName(listTheDayBefore.get(i).getName());
+                matHangBanChay.setName(matHangBanChayTheDayBefore.getName());
                 matHangBanChay.setTotalPrice(BigDecimal.ZERO);
                 matHangBanChay.setQuantity(ZERO_NUMBER);
                 matHangBanChay.setStatus(RevenuePercentageStatusType.DECREASE);
@@ -466,13 +468,12 @@ public class BaoCaoService {
         return result;
     }
 
-    public BaoCaoGiamGiaResponse getBaoCaoGiamGia(String cuaHangId) {
+    public BaoCaoGiamGiaResponse getBaoCaoGiamGia(String cuaHangId, String currentDate) {
         BaoCaoGiamGiaResponse response = new BaoCaoGiamGiaResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_BAO_CAO_GIAM_GIA_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                String currentDate = DateUtils.getCurrentDate();
                 List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(cuaHangId);
@@ -585,13 +586,12 @@ public class BaoCaoService {
         return totalDiscount;
     }
 
-    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVien(String cuaHangId) {
+    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVien(String cuaHangId, String currentDate) {
         DoanhThuTheoNhanVienResponse response = new DoanhThuTheoNhanVienResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                String currentDate = DateUtils.getCurrentDate();
                 List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
                 if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(cuaHangId);
