@@ -18,7 +18,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 @Service
@@ -273,13 +276,13 @@ public class BaoCaoService {
                         break;
                     }
                 }
-                if(!isFounded){
+                if (!isFounded) {
                     DanhMucBanChay temp = new DanhMucBanChay();
                     temp.setDanhMucName(danhMucBanChayCurrenDay.getDanhMucName());
                     temp.setTotalQuantity(danhMucBanChayCurrenDay.getTotalQuantity());
                     temp.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
                     temp.setTotalPrice(danhMucBanChayCurrenDay.getTotalPrice());
-                    for(MatHangBanChay matHangBanChay: danhMucBanChayCurrenDay.getListMatHangBanChay()){
+                    for (MatHangBanChay matHangBanChay : danhMucBanChayCurrenDay.getListMatHangBanChay()) {
                         matHangBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
                     }
                     temp.setListMatHangBanChay(danhMucBanChayCurrenDay.getListMatHangBanChay());
@@ -301,15 +304,15 @@ public class BaoCaoService {
             }
             result = ordersCurrentDay;
         }
-        for(DanhMucBanChay danhMucBanChayTheDayBefore: ordersTheDayBefore){
+        for (DanhMucBanChay danhMucBanChayTheDayBefore : ordersTheDayBefore) {
             boolean isFounded = false;
-            for(DanhMucBanChay danhMucBanChayInResult: result){
-                if(danhMucBanChayInResult.getDanhMucName().equalsIgnoreCase(danhMucBanChayTheDayBefore.getDanhMucName())){
+            for (DanhMucBanChay danhMucBanChayInResult : result) {
+                if (danhMucBanChayInResult.getDanhMucName().equalsIgnoreCase(danhMucBanChayTheDayBefore.getDanhMucName())) {
                     isFounded = true;
                     break;
                 }
             }
-            if(!isFounded){
+            if (!isFounded) {
                 DanhMucBanChay temp = new DanhMucBanChay();
                 temp.setDanhMucName(danhMucBanChayTheDayBefore.getDanhMucName());
                 temp.setTotalQuantity(ZERO_NUMBER);
@@ -328,11 +331,21 @@ public class BaoCaoService {
         response.setMessage(CommonConstants.GET_MAT_HANG_BAN_CHAY_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
-                if (CollectionUtils.isNotEmpty(orders)) {
+                String theDayBefore = DateUtils.getDayBeforeTheCurrentDay(currentDate);
+                List<Order> listOrdersCurrentDay = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
+                List<Order> listOrdersTheDayBefore = orderRepository.findAllOrderByCreatedDateAndCuaHangId(theDayBefore, cuaHangId);
+                List<MatHangBanChay> listMatHangBanChayCurrentDay = new ArrayList<MatHangBanChay>();
+                List<MatHangBanChay> listMatHangBanChayTheDayBefore = new ArrayList<MatHangBanChay>();
+                if (CollectionUtils.isNotEmpty(listOrdersCurrentDay)) {
+                    listMatHangBanChayCurrentDay = analysisMatHangBanChay(listOrdersCurrentDay);
+                }
+                if (CollectionUtils.isNotEmpty(listOrdersTheDayBefore)) {
+                    listMatHangBanChayTheDayBefore = analysisMatHangBanChay(listOrdersTheDayBefore);
+                }
+                List<MatHangBanChay> result = calculateMatHangBanChayRevenuePercentage(listMatHangBanChayCurrentDay, listMatHangBanChayTheDayBefore);
+                if (!result.isEmpty()) {
                     response.setCuaHangId(cuaHangId);
-                    List<MatHangBanChay> matHangBanChayList = analysisMatHangBanChay(orders);
-                    response.setMatHangBanChayList(matHangBanChayList);
+                    response.setMatHangBanChayList(result);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 }
@@ -411,20 +424,20 @@ public class BaoCaoService {
     private List<MatHangBanChay> calculateMatHangBanChayRevenuePercentage(List<MatHangBanChay> listCurrentDay, List<MatHangBanChay> listTheDayBefore) {
         List<MatHangBanChay> result = new ArrayList<MatHangBanChay>();
         if (listCurrentDay.size() > 0 && listTheDayBefore.size() > 0) {
-            for(MatHangBanChay matHangBanChayCurrentDay: listCurrentDay){
-                for(MatHangBanChay matHangBanChayTheDayBefore: listTheDayBefore){
-                    if(matHangBanChayTheDayBefore.getName().equalsIgnoreCase(matHangBanChayCurrentDay.getName())){
+            for (MatHangBanChay matHangBanChayCurrentDay : listCurrentDay) {
+                for (MatHangBanChay matHangBanChayTheDayBefore : listTheDayBefore) {
+                    if (matHangBanChayTheDayBefore.getName().equalsIgnoreCase(matHangBanChayCurrentDay.getName())) {
                         MatHangBanChay temp = new MatHangBanChay();
                         temp.setName(matHangBanChayCurrentDay.getName());
                         temp.setQuantity(matHangBanChayCurrentDay.getQuantity());
                         BigDecimal currentDayPrice = matHangBanChayCurrentDay.getTotalPrice();
                         temp.setTotalPrice(currentDayPrice);
                         BigDecimal theDayBeforePrice = matHangBanChayTheDayBefore.getTotalPrice();
-                        BigDecimal revenuePercentage = ((currentDayPrice.subtract(theDayBeforePrice)).multiply(BigDecimal.valueOf(100))).divide(theDayBeforePrice,2, RoundingMode.HALF_UP);
+                        BigDecimal revenuePercentage = ((currentDayPrice.subtract(theDayBeforePrice)).multiply(BigDecimal.valueOf(100))).divide(theDayBeforePrice, 2, RoundingMode.HALF_UP);
                         temp.setRevenuePercentage(revenuePercentage + "%");
                         if (revenuePercentage.compareTo(BigDecimal.ZERO) > 0) {
                             temp.setStatus(RevenuePercentageStatusType.INCREASE);
-                        } else if(revenuePercentage.compareTo(BigDecimal.ZERO) == 0) {
+                        } else if (revenuePercentage.compareTo(BigDecimal.ZERO) == 0) {
                             temp.setStatus(RevenuePercentageStatusType.NORMAL);
                         } else {
                             temp.setStatus(RevenuePercentageStatusType.DECREASE);
@@ -434,7 +447,7 @@ public class BaoCaoService {
                 }
             }
         } else if (listCurrentDay.size() == 0 && listTheDayBefore.size() > 0) {
-            for(MatHangBanChay matHangBanChay: listTheDayBefore){
+            for (MatHangBanChay matHangBanChay : listTheDayBefore) {
                 matHangBanChay.setTotalPrice(BigDecimal.ZERO);
                 matHangBanChay.setQuantity(ZERO_NUMBER);
                 matHangBanChay.setStatus(RevenuePercentageStatusType.DECREASE);
@@ -442,20 +455,20 @@ public class BaoCaoService {
             }
             result = listTheDayBefore;
         } else if (listCurrentDay.size() > 0 && listTheDayBefore.size() == 0) {
-            for(MatHangBanChay matHangBanChay: listCurrentDay){
+            for (MatHangBanChay matHangBanChay : listCurrentDay) {
                 matHangBanChay.setStatus(RevenuePercentageStatusType.INCREASE_INFINITY);
             }
             result = listCurrentDay;
         }
-        for(MatHangBanChay matHangBanChayTheDayBefore: listTheDayBefore){
+        for (MatHangBanChay matHangBanChayTheDayBefore : listTheDayBefore) {
             boolean isFounded = false;
-            for(MatHangBanChay matHangBanChayInResult: result){
-                if(matHangBanChayInResult.getName().equalsIgnoreCase(matHangBanChayTheDayBefore.getName())){
+            for (MatHangBanChay matHangBanChayInResult : result) {
+                if (matHangBanChayInResult.getName().equalsIgnoreCase(matHangBanChayTheDayBefore.getName())) {
                     isFounded = true;
                     break;
                 }
             }
-            if(!isFounded){
+            if (!isFounded) {
                 MatHangBanChay matHangBanChay = new MatHangBanChay();
                 matHangBanChay.setName(matHangBanChayTheDayBefore.getName());
                 matHangBanChay.setTotalPrice(BigDecimal.ZERO);
