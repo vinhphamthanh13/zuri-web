@@ -20,6 +20,8 @@ class Register extends Component {
     values: objectOf(any).isRequired,
     errors: objectOf(any).isRequired,
     isValid: bool.isRequired,
+    touched: objectOf(bool).isRequired,
+    setFieldTouched: func.isRequired,
   };
 
   handleActivation = () => {
@@ -30,7 +32,13 @@ class Register extends Component {
   };
 
   createForm = () => {
-    const { handleChange, errors, values } = this.props;
+    const {
+      handleChange,
+      errors,
+      values,
+      touched,
+      setFieldTouched,
+    } = this.props;
     return Object.keys(REGISTER).map(input => (
       <Input
         type={REGISTER[input].TYPE}
@@ -41,6 +49,8 @@ class Register extends Component {
         errors={errors}
         value={values[REGISTER[input].VALUE]}
         placeholder={REGISTER[input].PLACEHOLDER}
+        onTouch={setFieldTouched}
+        touched={touched}
       />
     ));
   };

@@ -20,8 +20,10 @@ class Activation extends Component {
     values: objectOf(any).isRequired,
     setPhoneNumber: func.isRequired,
     errors: objectOf(any),
+    touched: objectOf(bool).isRequired,
     isValid: bool.isRequired,
     handleChange: func.isRequired,
+    setFieldTouched: func.isRequired,
     handleSubmit: func.isRequired,
     // loginPhone: func.isRequired,
   };
@@ -81,6 +83,8 @@ class Activation extends Component {
       handleSubmit,
       errors,
       isValid,
+      setFieldTouched,
+      touched,
     } = this.props;
 
     return (
@@ -108,6 +112,8 @@ class Activation extends Component {
                 onChange={handleChange}
                 className={s.phoneNumber}
                 errors={errors}
+                onTouch={setFieldTouched}
+                touched={touched}
               />
             </div>
             <Button label="Lấy Mã Xác Nhận" type="submit" disabled={!isValid} />
@@ -120,6 +126,7 @@ class Activation extends Component {
 
 export default compose(
   withFormik({
+    validateOnBlur: true,
     mapPropsToValues: props => ({
       countryCode: props.code,
       phoneNumber: '',

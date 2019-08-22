@@ -40,11 +40,9 @@ export const register = Yup.object().shape({
     .required('* Nhập địa chỉ cửa hàng'),
   businessType: Yup.string().required('* Chọn mô hình kinh doanh'),
   categoryType: Yup.string().required('* Chọn danh mục sản phẩm'),
-  userEmail: Yup.string()
-    .matches(REGEXP.EMAIL, {
-      message: '* Địa chỉ email không hợp lệ',
-    })
-    .required('* Nhập địa chỉ cửa hàng'),
+  userEmail: Yup.string().matches(REGEXP.EMAIL, {
+    message: '* Địa chỉ email không hợp lệ',
+  }),
 });
 
 export const registerTax = Yup.object().shape({

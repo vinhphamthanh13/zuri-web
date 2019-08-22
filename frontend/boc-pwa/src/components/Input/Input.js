@@ -13,6 +13,7 @@ class Input extends Component {
     name: string.isRequired,
     value: oneOfType([string, number]),
     onChange: func,
+    onTouch: func,
     className: string,
     disabled: bool,
     errors: objectOf(string),
@@ -21,12 +22,14 @@ class Input extends Component {
     gutter: bool,
     dropDown: func,
     search: bool,
+    touched: objectOf(bool),
   };
 
   static defaultProps = {
     type: 'text',
     value: '',
     onChange: noop,
+    onTouch: noop,
     disabled: false,
     errors: {},
     className: '',
@@ -35,6 +38,13 @@ class Input extends Component {
     gutter: false,
     dropDown: null,
     search: false,
+    touched: {},
+  };
+
+  handleOnchange = event => {
+    const { onChange, onTouch, name } = this.props;
+    onChange(event);
+    onTouch(name, true);
   };
 
   render() {
@@ -42,7 +52,6 @@ class Input extends Component {
       type,
       name,
       value,
-      onChange,
       className,
       disabled,
       errors,
@@ -51,6 +60,7 @@ class Input extends Component {
       gutter,
       dropDown,
       search,
+      touched,
     } = this.props;
     const wrapperStyle = label
       ? s.inputWrapper
@@ -70,12 +80,13 @@ class Input extends Component {
           type={type}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={this.handleOnchange}
           className={className}
           disabled={disabled}
         />
         {dropDownButton}
-        {errors[name] && <div className={s.errorMessage}>{errors[name]}</div>}
+        {errors[name] &&
+          touched[name] && <div className={s.errorMessage}>{errors[name]}</div>}
       </div>
     );
   }
