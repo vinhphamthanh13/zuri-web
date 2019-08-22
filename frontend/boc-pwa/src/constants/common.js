@@ -10,27 +10,43 @@ export const REGEXP = {
   TAX_NUMBER: /\d{9,12}/,
 };
 
-export const INPUT = {
+export const REGISTER = {
   USER_NAME: {
-    LABEL: 'Tên:',
+    LABEL: 'Tên quản lý',
     VALUE: 'userName',
-    PLACEHOLDER: 'Vui lòng nhập tên',
+    PLACEHOLDER: 'Nhập tên quản lý',
   },
-  LAST_NAME: {
-    LABEL: 'Họ:',
-    VALUE: 'lastName',
-    PLACEHOLDER: 'Vui lòng nhập họ',
+  SHOP_NAME: {
+    LABEL: 'Tên cửa hàng',
+    VALUE: 'shopName',
+    PLACEHOLDER: 'Nhập tên cửa hàng',
   },
   PHONE_NUMBER: {
     TYPE: 'tel',
-    LABEL: 'Số điện thoại:',
+    LABEL: 'Số điện thoại',
     VALUE: 'phoneNumber',
-    PLACEHOLDER: 'Vui lòng nhập số điện thoại',
+    PLACEHOLDER: 'Nhập số điện thoại',
   },
   SHOP_ADDRESS: {
-    LABEL: 'Địa chỉ cửa hàng:',
+    LABEL: 'Địa chỉ cửa hàng',
     VALUE: 'shopAddress',
     PLACEHOLDER: 'Nhập địa chỉ cửa hàng',
+  },
+  BUSINESS_TYPE: {
+    LABEL: 'Mô hình kinh doanh',
+    VALUE: 'businessType',
+    PLACEHOLDER: 'Nhập mô hình kinh doanh',
+  },
+  CATEGORY_TYPE: {
+    LABEL: 'Danh mục sản phẩm',
+    VALUE: 'categoryType',
+    PLACEHOLDER: 'Nhập danh mục sản phẩm',
+  },
+  EMAIL: {
+    TYPE: 'email',
+    LABEL: 'Email',
+    VALUE: 'userEmail',
+    PLACEHOLDER: 'Nhập địa chỉ email',
   },
 };
 

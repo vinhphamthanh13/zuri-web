@@ -8,7 +8,7 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { withFormik } from 'formik';
 import { register } from 'constants/schemas';
-import { INPUT } from 'constants/common';
+import { REGISTER } from 'constants/common';
 import BocGreet from 'assets/images/boc_greeting.png';
 import history from '../../../history';
 import s from './Register.css';
@@ -31,15 +31,16 @@ class Register extends Component {
 
   createForm = () => {
     const { handleChange, errors, values } = this.props;
-    return Object.keys(INPUT).map(input => (
+    return Object.keys(REGISTER).map(input => (
       <Input
-        key={INPUT[input].VALUE}
-        label={INPUT[input].LABEL}
-        name={INPUT[input].VALUE}
+        type={REGISTER[input].TYPE}
+        key={REGISTER[input].VALUE}
+        label={REGISTER[input].LABEL}
+        name={REGISTER[input].VALUE}
         onChange={handleChange}
         errors={errors}
-        value={values[INPUT[input].VALUE]}
-        placeholder={INPUT[input].PLACEHOLDER}
+        value={values[REGISTER[input].VALUE]}
+        placeholder={REGISTER[input].PLACEHOLDER}
       />
     ));
   };
