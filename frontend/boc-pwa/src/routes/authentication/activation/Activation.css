@@ -16,7 +16,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(147, 226, 255, 1) 100%);
 }
 
 .inputs {
