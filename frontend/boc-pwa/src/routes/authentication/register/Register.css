@@ -13,7 +13,7 @@
 .register {
   color: var(--c-brand-3);
   text-align: center;
-  border: 1px solid var(--c-bright);
+  border: 1px solid var(--c-input-border);
   padding: var(--size-22) var(--size-12);
   border-radius: var(--size-08);
 }
@@ -24,8 +24,9 @@
 }
 
 .login {
-  margin-top: var(--size-08);
-  color: var(--c-brand-5);
+  margin-top: var(--size-10);
+  color: var(--c-brand-1);
+  font-size: var(--font-size-medium);
 }
 
 .login span {
