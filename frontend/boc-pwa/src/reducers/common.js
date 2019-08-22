@@ -1,20 +1,9 @@
-import storage from 'redux-persist/lib/storage';
-import persistReducer from 'redux-persist/lib/persistReducer';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { SET_LOADING, SET_ERROR, RESET_ERROR } from 'actions/common';
-
-const persistConfig = {
-  key: 'common',
-  storage,
-  stateReconciler: autoMergeLevel2,
-  blacklist: ['isLoading', 'isError', 'errorMessage', 'layoutDimension'],
-};
 
 const initState = {
   isLoading: null,
   isError: null,
   errorMessage: '',
-  layoutDimension: {},
 };
 
 const reducer = (state = initState, action) => {
@@ -42,4 +31,4 @@ const reducer = (state = initState, action) => {
   return state;
 };
 
-export default persistReducer(persistConfig, reducer);
+export default reducer;

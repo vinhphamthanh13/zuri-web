@@ -9,10 +9,11 @@ import { withFormik } from 'formik/dist/index';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
+import Loading from 'components/Loading';
 import { activation } from 'constants/schemas';
 import { goBack } from 'utils/browser';
 import history from '../../../history';
-import { mapDispatchToProps } from './commonProps';
+import { mapDispatchToProps, mapStateToProps } from './commonProps';
 import s from './Activation.css';
 
 class Activation extends Component {
@@ -89,6 +90,7 @@ class Activation extends Component {
 
     return (
       <>
+        <Loading />
         <div className={s.container}>
           <Header
             title="đăng nhập số điện thoại"
