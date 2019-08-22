@@ -90,6 +90,7 @@
   --c-error: #c41010;
   --c-warning: #e3e926;
   --c-input-border: #eaeaea;
+
   /* Font Size */
 
   --font-size-08: calc(var(--unit) * 0.5);    /* 08px */
@@ -168,40 +169,7 @@
   --font-size-small: var(--font-size-12);
   --font-size-medium: var(--font-size-14);
   --font-size: var(--font-size-16);
-  --font-size-input: var(--font-size-18);
+  --font-size-input: var(--font-size-16);
   --font-size-label: var(--font-size-14);
   --font-size-header: var(--font-size-18);
 }
-
-@custom-media --smartphones only screen and (min-device-width: 320px) and (max-device-width: 480px);
-
-/* @custom-media --smart phones-landscape only screen and (min-device-width: 321px) and (orientation: landscape); */
-
-/* @custom-media --smart phones-portrait only screen and (max-width: 320px); */
-
-@custom-media --ipads-landscape only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape);
-@custom-media --ipads-portrait only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait);
-@custom-media --ipad3-landscape only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2);
-@custom-media --ipad3-portrait only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2);
-@custom-media --ipadPro-landscape only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2);
-@custom-media --ipadPro-portrait only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2);
-@custom-media --destops-laptops only screen and (min-width: 1224px);
-@custom-media --large-screens only screen and (min-width: 1824px);
-@custom-media --iphone4-landscape only screen and (min-device-width : 320px) and (max-device-height: 480px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio : 2)
-  @custom-media --iphone4-portrait only screen and (min-device-width : 320px) and (max-device-height: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio : 2);
-@custom-media --iphone5-landscape only screen and (min-device-width: 320px) and (max-device-height: 568px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2);
-@custom-media --iphone5-portrait only screen and (min-device-width: 320px) and (max-device-height: 568px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2);
-@custom-media --iphone678-landscape only screen and (min-device-width: 375px) and (max-device-height: 667px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2);
-@custom-media --iphone678-portrait only screen and (min-device-width: 375px) and (max-device-height: 667px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2);
-@custom-media --iphone678-p-landscape only screen and (min-device-width: 414px) and (max-device-height: 736px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2);
-@custom-media --iphone678-p-portrait only screen and (min-device-width: 414px) and (max-device-height: 736px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2);
-@custom-media --iphoneX-landscape only screen and (min-device-width: 375px) and (max-device-height: 812px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3);
-@custom-media --iphoneX-portrait only screen and (min-device-width: 375px) and (max-device-height: 812px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3);
-@custom-media --iphoneXMR-landscape only screen and (min-device-width: 414px) and (max-device-height: 896px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3);
-@custom-media --iphoneXMR-portrait only screen and (min-device-width: 414px) and (max-device-height: 896px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3);
-@custom-media --galaxyS3-landscape only screen and (min-device-width: 320px) and (max-device-height: 640px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2);
-@custom-media --galaxyS3-portrait only screen and (min-device-width: 320px) and (max-device-height: 640px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2);
-@custom-media --galaxyS4-landscape only screen and (min-device-width: 320px) and (max-device-height: 640px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3);
-@custom-media --galaxyS4-portrait only screen and (min-device-width: 320px) and (max-device-height: 640px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3);
-@custom-media --galaxyS5-landscape only screen and (min-device-width: 360px) and (max-device-height: 640px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3);
-@custom-media --galaxyS5-portrait only screen and (min-device-width: 360px) and (max-device-height: 640px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3);

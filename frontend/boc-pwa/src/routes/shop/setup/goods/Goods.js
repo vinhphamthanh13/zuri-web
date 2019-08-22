@@ -1,35 +1,80 @@
 import React from 'react';
+import { number } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import uuidv1 from 'uuid/v1';
+import { compose } from 'redux';
+// import uuidv1 from 'uuid/v1';
+import windowSize from 'react-window-size';
+import { LAYOUT } from 'constants/common';
+import { resolveDimension, goBack } from 'utils/browser';
 import Header from 'components/Header';
 import Button from 'components/Button';
-import { goBack } from 'utils/browser';
-import { SHOP } from 'constants/shop';
-import { triad05, gray } from 'constants/colors';
-import { ToggleOn, ToggleOff, NotificationImportant } from 'constants/svg';
+import Input from 'components/Input';
+// import { SHOP } from 'constants/shop';
+// import { triad05, gray } from 'constants/colors';
+// import { ToggleOn, ToggleOff, NotificationImportant } from 'constants/svg';
 // import RegisterTax from './components/RegisterTax';
 import s from './Goods.css';
 
 class Goods extends React.Component {
-  state = {
-    isTaxToggled: false,
+  static propTypes = {
+    windowWidth: number.isRequired,
+    windowHeight: number.isRequired,
   };
 
-  handleTaxToggled = () => {
-    this.setState(oldState => ({
-      isTaxToggled: !oldState.isTaxToggled,
-    }));
+  state = {
+    isAddGoods: false,
+    searchGood: '',
+  };
+
+  handleSearch = event => {
+    const { name, value } = event.target;
+    event.preventDefault();
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  handleAddGoods = () => {
+    this.setState({ isAddGoods: true });
   };
 
   render() {
+    const { windowWidth, windowHeight } = this.props;
+    const { searchGood } = this.state;
+    const height = windowHeight - 124;
+    const maxWidth =
+      windowWidth > LAYOUT.MAX_WIDTH ? LAYOUT.MAX_WIDTH : windowWidth;
+
     return (
       <div className={s.container}>
-        <Header title="Tất cả mặt hàng" gutter iconLeft onClickLeft={goBack} />
-        {this.createMenu()}
-        <Button>Tạo mặt hàng</Button>
+        <Header
+          title="Danh mục mặt hàng"
+          gutter
+          iconLeft
+          onClickLeft={goBack}
+        />
+        <div className={s.search}>
+          <Input
+            name="searchGood"
+            onChange={this.handleSearch}
+            value={searchGood}
+            gutter
+            placeholder="Tìm kiếm mặt hàng / giảm giá"
+            className={s.input}
+            search
+          />
+        </div>
+        <div style={resolveDimension(maxWidth, height)}>Mat hang tuy chinh</div>
+        <div className={s.goodsCta}>
+          <Button
+            label="Thêm / Chỉnh sửa danh mục"
+            onClick={this.handleAddGoods}
+          />
+        </div>
       </div>
     );
   }
 }
 
-export default withStyles(s)(Goods);
+const enhancers = [withStyles(s), windowSize];
+export default compose(...enhancers)(Goods);

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { string, oneOfType, number, func, bool, objectOf } from 'prop-types';
 import { noop } from 'lodash';
+import { gray } from 'constants/colors';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { ArrowForward } from 'constants/svg';
+import { ArrowForward, Search } from 'constants/svg';
 
 import s from './Input.css';
 
@@ -19,6 +20,7 @@ class Input extends Component {
     label: string,
     gutter: bool,
     dropDown: func,
+    search: bool,
   };
 
   static defaultProps = {
@@ -32,6 +34,7 @@ class Input extends Component {
     label: '',
     gutter: false,
     dropDown: null,
+    search: false,
   };
 
   render() {
@@ -47,6 +50,7 @@ class Input extends Component {
       label,
       gutter,
       dropDown,
+      search,
     } = this.props;
     const wrapperStyle = label
       ? s.inputWrapper
@@ -57,6 +61,9 @@ class Input extends Component {
     return (
       <div className={`${wrapperStyle} ${gutterStyle}`}>
         <span className={s.label}>{label}</span>
+        <div className={s.search}>
+          {search && <Search size={24} hexColor={gray} />}
+        </div>
         <input
           id={name}
           placeholder={placeholder}

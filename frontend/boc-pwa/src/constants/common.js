@@ -6,7 +6,7 @@ export const REGEXP = {
   PHONE_NUMBER: /^\d{10,11}$/,
   COUNTRY_CODE: /^\+\d{2,3}$/,
   VERIFY_CODE: /^\d{6}$/,
-  ENCRYPT_PHONE: /(\d{2})\d{5}(\d+)/,
+  ENCRYPT_PHONE: /([\w+]{4})(\d+)(\d{2})$/,
   TAX_NUMBER: /\d{9,12}/,
 };
 

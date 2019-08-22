@@ -59,7 +59,7 @@ const routes = {
       load: () => import(/* webpackChunkName: 'shopTax' */ './shop/setup/tax'),
     },
     {
-      path: '/shop/setup/goods',
+      path: '/shop/goods',
       load: () =>
         import(/* webpackChunkName: 'shopGoods' */ './shop/setup/goods'),
     },

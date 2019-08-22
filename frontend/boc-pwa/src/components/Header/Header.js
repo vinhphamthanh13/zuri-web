@@ -8,8 +8,8 @@ import s from './Header.css';
 class Header extends Component {
   static propTypes = {
     title: string.isRequired,
-    icon: string,
-    iconLeft: string,
+    icon: bool,
+    iconLeft: bool,
     onClick: func,
     onClickLeft: func,
     gutter: bool,
@@ -18,8 +18,8 @@ class Header extends Component {
   static defaultProps = {
     onClick: noop,
     onClickLeft: noop,
-    icon: '',
-    iconLeft: '',
+    icon: false,
+    iconLeft: false,
     gutter: false,
   };
 

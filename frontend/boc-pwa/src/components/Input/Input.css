@@ -37,6 +37,12 @@ input::placeholder {
   font-weight: var(--font-weight-500);
 }
 
+.search {
+  position: absolute;
+  right: var(--size-04);
+  top: var(--size-02);
+}
+
 .errorMessage {
   position: absolute;
   bottom: var(--size-06);

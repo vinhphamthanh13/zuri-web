@@ -10,6 +10,7 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { activation } from 'constants/schemas';
+import { goBack } from 'utils/browser';
 import history from '../../../history';
 import { mapDispatchToProps } from './commonProps';
 import s from './Activation.css';
@@ -22,7 +23,7 @@ class Activation extends Component {
     isValid: bool.isRequired,
     handleChange: func.isRequired,
     handleSubmit: func.isRequired,
-    loginPhone: func.isRequired,
+    // loginPhone: func.isRequired,
   };
 
   static defaultProps = {
@@ -54,7 +55,7 @@ class Activation extends Component {
   }
 
   componentDidUpdate() {
-    const { setPhoneNumber, values, isValid, loginPhone } = this.props;
+    const { setPhoneNumber, values, isValid } = this.props;
     const { isSubmitting, isValidating } = this.state;
     const phoneNumber = get(values, 'phoneNumber');
     const countryCode = get(values, 'countryCode');
@@ -66,7 +67,7 @@ class Activation extends Component {
       )}`;
       const encryptPhone = registerPhoneNumber.replace(
         REGEXP.ENCRYPT_PHONE,
-        '$1*****$2',
+        (_, p1, p2, p3) => `${p1}${p2.replace(/\d/g, 'x')}${p3}`,
       );
       setPhoneNumber(encryptPhone);
       // loginPhone(registerPhoneNumber);
@@ -85,7 +86,11 @@ class Activation extends Component {
     return (
       <>
         <div className={s.container}>
-          <Header title="đăng nhập số điện thoại" />
+          <Header
+            title="đăng nhập số điện thoại"
+            iconLeft
+            onClickLeft={goBack}
+          />
           <form onSubmit={handleSubmit}>
             <div className={s.inputs}>
               <Input

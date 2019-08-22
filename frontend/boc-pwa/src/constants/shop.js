@@ -34,6 +34,7 @@ export const SHOP = {
         {
           ICON: <Assignment size={36} hexColor={triad02} />,
           NAME: 'Mặt hàng',
+          action: () => history.push('/shop/goods'),
         },
         {
           ICON: <ViewStream size={36} hexColor={triad03} />,
