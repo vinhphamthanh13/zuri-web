@@ -22,12 +22,6 @@ export const REGISTER = {
     VALUE: 'shopName',
     PLACEHOLDER: 'Nhập tên cửa hàng',
   },
-  // PHONE_NUMBER: {
-  //   TYPE: 'tel',
-  //   LABEL: 'Số điện thoại',
-  //   VALUE: 'phoneNumber',
-  //   PLACEHOLDER: 'Nhập số điện thoại',
-  // },
   SHOP_ADDRESS: {
     LABEL: 'Địa chỉ cửa hàng',
     VALUE: 'shopAddress',
@@ -48,6 +42,11 @@ export const REGISTER = {
     LABEL: 'Email',
     VALUE: 'userEmail',
     PLACEHOLDER: 'Nhập địa chỉ email',
+  },
+  POLICIES: {
+    TYPE: 'checkbox',
+    LABEL: 'Đồng ý với chính sách và điều khoản',
+    VALUE: 'policiesAndTerms',
   },
 };
 

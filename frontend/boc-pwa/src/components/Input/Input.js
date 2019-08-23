@@ -11,7 +11,7 @@ class Input extends Component {
   static propTypes = {
     type: string,
     name: string.isRequired,
-    value: oneOfType([string, number]),
+    value: oneOfType([string, number, bool]),
     onChange: func,
     onTouch: func,
     className: string,
@@ -66,28 +66,45 @@ class Input extends Component {
       ? s.inputWrapper
       : `${s.inputWrapper} ${s.inputWrapperGutter}`;
     const gutterStyle = gutter ? s.inputWrapperGutter : '';
+
     const dropDownButton = !dropDown ? null : <ArrowForward />;
 
-    return (
-      <div className={`${wrapperStyle} ${gutterStyle}`}>
-        <span className={s.label}>{label}</span>
-        <div className={s.search}>
-          {search && <Search size={24} hexColor={gray} />}
-        </div>
+    return type === 'checkbox' ? (
+      <div className={`${s.checkBoxGroup} ${className}`}>
         <input
           id={name}
-          placeholder={placeholder}
           type={type}
           name={name}
           value={value}
+          className={s.checkBox}
           onChange={this.handleOnchange}
-          className={className}
-          disabled={disabled}
         />
-        {dropDownButton}
-        {errors[name] &&
-          touched[name] && <div className={s.errorMessage}>{errors[name]}</div>}
+        <div className={s.checkBoxLabel}>{label}</div>
       </div>
+    ) : (
+      <>
+        <div className={`${wrapperStyle} ${gutterStyle}`}>
+          <span className={s.label}>{label}</span>
+          <div className={s.search}>
+            {search && <Search size={24} hexColor={gray} />}
+          </div>
+          <input
+            id={name}
+            placeholder={placeholder}
+            type={type}
+            name={name}
+            value={value}
+            onChange={this.handleOnchange}
+            className={className}
+            disabled={disabled}
+          />
+          {dropDownButton}
+          {errors[name] &&
+            touched[name] && (
+              <div className={s.errorMessage}>{errors[name]}</div>
+            )}
+        </div>
+      </>
     );
   }
 }

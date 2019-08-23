@@ -16,6 +16,7 @@
   border: 1px solid var(--c-input-border);
   padding: var(--size-22) var(--size-12);
   border-radius: var(--size-08);
+  position: relative;
 }
 
 .greetingLogo {
@@ -33,4 +34,22 @@
   text-transform: uppercase;
   font-weight: var(--font-weight-500);
   color: var(--c-error);
+}
+
+.policiesAndTerms {
+  position: absolute;
+  bottom: var(--size-64);
+}
+
+.policiesAndTerms div {
+  color: var(--c-triad-02);
+}
+
+.policiesAndTerms > input[type='checkbox']:checked {
+  color: var(--c-triad-05) !important;
+  border: 1px solid red !important;
+}
+
+.button {
+  margin-top: var(--size-36);
 }

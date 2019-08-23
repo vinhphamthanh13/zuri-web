@@ -27,12 +27,6 @@ export const register = Yup.object().shape({
       message: '* Tên phải có ít nhất 2 ký tự',
     })
     .required('* Nhập tên cửa hàng'),
-  phoneNumber: Yup.string()
-    .required('* Nhập số điện thoại')
-    .matches(REGEXP.PHONE_NUMBER, {
-      message: '* Số điện thoại không hợp lệ.',
-      excludeEmptyString: true,
-    }),
   shopAddress: Yup.string()
     .matches(/[\w\W]{10,}/, {
       message: '* Địa chỉ không hợp lệ',
@@ -43,6 +37,7 @@ export const register = Yup.object().shape({
   userEmail: Yup.string().matches(REGEXP.EMAIL, {
     message: '* Địa chỉ email không hợp lệ',
   }),
+  policiesAndTerms: Yup.bool().oneOf([true], 'Chọn'),
 });
 
 export const registerTax = Yup.object().shape({

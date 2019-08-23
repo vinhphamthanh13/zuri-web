@@ -73,7 +73,6 @@ class Activation extends Component {
         (_, p1, p2, p3) => `${p1}${p2.replace(/\d/g, 'x')}${p3}`,
       );
       setPhoneNumber(encryptPhone);
-      // loginPhone(registerPhoneNumber);
     }
   }
 

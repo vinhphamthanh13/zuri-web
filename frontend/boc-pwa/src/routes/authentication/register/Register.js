@@ -16,7 +16,6 @@ import s from './Register.css';
 class Register extends Component {
   static propTypes = {
     handleChange: func.isRequired,
-    handleSubmit: func.isRequired,
     values: objectOf(any).isRequired,
     errors: objectOf(any).isRequired,
     isValid: bool.isRequired,
@@ -25,10 +24,10 @@ class Register extends Component {
   };
 
   handleActivation = () => {
-    history.push('/activation');
-  };
-  handleRedirectLogin = () => {
-    history.push('/activation');
+    const {
+      values: { policiesAndTerms },
+    } = this.props;
+    history.push('/activation', { register: policiesAndTerms });
   };
 
   createForm = () => {
@@ -47,6 +46,9 @@ class Register extends Component {
         name={REGISTER[input].VALUE}
         onChange={handleChange}
         errors={errors}
+        className={
+          REGISTER[input].TYPE === 'checkbox' ? s.policiesAndTerms : ''
+        }
         value={values[REGISTER[input].VALUE]}
         placeholder={REGISTER[input].PLACEHOLDER}
         onTouch={setFieldTouched}
@@ -56,7 +58,11 @@ class Register extends Component {
   };
 
   render() {
-    const { isValid, handleSubmit } = this.props;
+    const {
+      isValid,
+      values: { policiesAndTerms },
+    } = this.props;
+
     return (
       <div className={s.container}>
         <Header title="Tạo cửa hàng" />
@@ -66,15 +72,18 @@ class Register extends Component {
         <div className={s.register}>
           <form>{this.createForm()}</form>
           <Button
-            onClick={handleSubmit}
+            onClick={this.handleActivation}
             label="Tiếp theo"
             disabled={!isValid}
+            className={s.button}
           />
         </div>
-        <div className={s.login}>
-          Hoặc đã có tài khoản?{' '}
-          <span onClick={this.handleRedirectLogin}>Đăng nhập</span>
-        </div>
+        {!policiesAndTerms && (
+          <div className={s.login}>
+            Hoặc đã có tài khoản?{' '}
+            <span onClick={this.handleActivation}>Đăng nhập</span>
+          </div>
+        )}
       </div>
     );
   }
@@ -85,17 +94,14 @@ export default compose(
     mapPropsToValues: () => ({
       userName: 'BOC',
       shopName: 'BOCVN',
-      phoneNumber: '0936388480',
       shopAddress: '01, đường số 1, Bình Trị Đông B,',
       businessType: 'Quán Cao Cấp',
       categoryType: 'Coffee',
       userEmail: 'bocvn2020@gmail.com',
+      policiesAndTerms: false,
     }),
+    validateOnBlur: true,
     validationSchema: register,
-    isInitialValid: true,
-    handleSubmit: values => {
-      console.log('values on submit', values);
-    },
   }),
   connect(null),
   withStyles(s),

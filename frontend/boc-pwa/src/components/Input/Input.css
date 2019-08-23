@@ -1,5 +1,4 @@
 .inputWrapper {
-  width: auto;
   height: var(--size-input-wrapper-height);
   display: flex;
   flex-direction: column;
@@ -52,4 +51,22 @@ input::placeholder {
   color: var(--c-error);
   font-style: italic;
   opacity: 0.3;
+}
+
+.checkBoxGroup {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: var(--size-12);
+}
+
+.checkBox {
+  width: var(--size-20);
+  border: 1px solid red;
+}
+
+.checkBoxLabel {
+  font-size: var(--font-size-input);
+  margin-left: var(--size-08);
 }
