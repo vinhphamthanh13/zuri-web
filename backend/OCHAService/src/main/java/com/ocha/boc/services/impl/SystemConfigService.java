@@ -137,6 +137,7 @@ public class SystemConfigService {
             response.setObjects(danhMucSanPhamDTOList);
             response.setTotalResultCount((long) danhMucSanPhamDTOList.size());
             response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
         } catch (Exception e) {
             log.error("Exception while get all information about danh muc san pham: ", e);
         }
@@ -162,6 +163,7 @@ public class SystemConfigService {
             response.setObjects(moHinhKinhDoanhDTOList);
             response.setTotalResultCount((long)moHinhKinhDoanhDTOList.size());
             response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
         } catch (Exception e) {
             log.error("Exception while get all information about mo hinh kinh doanh: ", e);
         }
