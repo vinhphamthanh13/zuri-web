@@ -1,5 +1,6 @@
 package com.ocha.boc.controllers;
 
+import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.request.GiayInRequest;
 import com.ocha.boc.response.SystemConfigurationResponse;
 import com.ocha.boc.services.impl.SystemConfigService;
@@ -40,6 +41,24 @@ public class SystemConfigController {
         log.info("START: Delete Giay In with title name: " + title);
         SystemConfigurationResponse response = systemConfigService.deleteGiayInByTitle(title);
         log.info("END: Delete Giay In by title name");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation("Get all information about Danh Muc San Pham")
+    @GetMapping("/system/danh-muc-san-pham")
+    public ResponseEntity<AbstractResponse> getAllInformationAboutDanhMucSanPham(){
+        log.info("START: Get all information about Danh Muc San Pham");
+        AbstractResponse response = systemConfigService.getAllInformationAboutDanhMucSanPham();
+        log.info("END: get all information about Danh Muc San Pham");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation("Get all information about Mo Hinh Kinh Doanh")
+    @GetMapping("/system/mo-hinh-kinh-doanh")
+    public ResponseEntity<AbstractResponse> getAllInformationAboutMoHinhKinhDoanh(){
+        log.info("START: Get all information about Mo Hinh Kinh Doanh");
+        AbstractResponse response = systemConfigService.getAllInformationAboutMoHinhKinhDoanh();
+        log.info("END: Get all information about Mo Hinh Kinh Doanh");
         return ResponseEntity.ok(response);
     }
 
