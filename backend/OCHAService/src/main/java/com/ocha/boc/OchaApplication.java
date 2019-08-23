@@ -9,8 +9,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.ocha.boc.cors.CorsFilter;
-import com.ocha.boc.entity.*;
-import com.ocha.boc.repository.*;
+import com.ocha.boc.entity.DanhMucSanPham;
+import com.ocha.boc.entity.MoHinhKinhDoanh;
+import com.ocha.boc.repository.DanhMucSanPhamRepository;
+import com.ocha.boc.repository.MoHinhKinhDoanhRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -23,7 +25,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,20 +34,21 @@ import java.util.List;
 @SpringBootApplication
 public class OchaApplication extends SpringBootServletInitializer {
 
-    @Autowired
-    private MatHangRepository matHangRepository;
+    private static final String MO_HINH_KINH_DOANH_JSON = "/mohinhkinhdoanh.json";
+
+    private static final String DANH_MUC_SAN_PHAM_JSON = "/danhmucsanpham.json";
 
     @Autowired
-    private DanhMucRepository danhMucRepository;
+    private MoHinhKinhDoanhRepository moHinhKinhDoanhRepository;
 
-    @Value(value = "${boc.table.mathang}")
-    private String matHangTableName;
+    @Autowired
+    private DanhMucSanPhamRepository danhMucSanPhamRepository;
 
-    @Value(value = "${boc.table.user}")
-    private String userTableName;
+    @Value(value = "${boc.table.danhmucsanpham}")
+    private String danhMucSanPhamTableName;
 
-    @Value(value = "${boc.table.danhmuc}")
-    private String danhMucTableName;
+    @Value(value = "${boc.table.mohinhkinhdoanh}")
+    private String moHinhKinhDoanhTableName;
 
     @Value(value = "${spring.data.mongodb.host}")
     private String mongoDBHostName;
@@ -78,9 +80,11 @@ public class OchaApplication extends SpringBootServletInitializer {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void migrateMasterAddress() {
+    public void migrateData() {
         MongoClient mongo = connectMongoDB();
         MongoDatabase db = mongo.getDatabase(databaseName);
+        initMoHinhKinhDoanh(db);
+        initDanhMucSanPham(db);
     }
 
     private MongoClient connectMongoDB() {
@@ -88,45 +92,53 @@ public class OchaApplication extends SpringBootServletInitializer {
         return mongo;
     }
 
-    private void initMatHangTable(MongoDatabase db) {
+    private void initMoHinhKinhDoanh(MongoDatabase db) {
         try {
-            boolean isExisted = checkExistsCollectionName(db, matHangTableName);
-            List<MatHang> listMatHang = new ArrayList<MatHang>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/mathang.json");
-            ObjectMapper mapper = new ObjectMapper();
-            listMatHang = mapper.readValue(stream, new TypeReference<List<MatHang>>() {
-            });
+            boolean isExisted = checkExistsCollectionName(db, moHinhKinhDoanhTableName);
             if (!isExisted) {
-                matHangRepository.saveAll(listMatHang);
+                List<MoHinhKinhDoanh> moHinhKinhDoanhList;
+
+                InputStream stream = OchaApplication.class.getResourceAsStream(MO_HINH_KINH_DOANH_JSON);
+                ObjectMapper mapper = new ObjectMapper();
+                moHinhKinhDoanhList = mapper.readValue(stream, new TypeReference<List<MoHinhKinhDoanh>>() {
+
+                });
+                if (moHinhKinhDoanhList != null && !moHinhKinhDoanhList.isEmpty()) {
+                    moHinhKinhDoanhRepository.deleteAll();
+                    moHinhKinhDoanhRepository.saveAll(moHinhKinhDoanhList);
+                }
+
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception while init Mo Hinh Kinh Doanh: ", e);
         }
     }
 
-    private void initDanhMuc(MongoDatabase db) {
-        try {
-            boolean isExisted = checkExistsCollectionName(db, danhMucTableName);
-            List<DanhMuc> danhMucList = new ArrayList<DanhMuc>();
-            InputStream stream = OchaApplication.class.getResourceAsStream("/danhmuc.json");
-            ObjectMapper mapper = new ObjectMapper();
-            danhMucList = mapper.readValue(stream, new TypeReference<List<DanhMuc>>() {
-            });
+    private void initDanhMucSanPham(MongoDatabase db){
+        try{
+            boolean isExisted = checkExistsCollectionName(db, danhMucSanPhamTableName);
             if (!isExisted) {
-                danhMucRepository.saveAll(danhMucList);
+                List<DanhMucSanPham> danhMucSanPhamList;
+
+                InputStream stream = OchaApplication.class.getResourceAsStream(DANH_MUC_SAN_PHAM_JSON);
+                ObjectMapper mapper = new ObjectMapper();
+                danhMucSanPhamList = mapper.readValue(stream, new TypeReference<List<DanhMucSanPham>>() {
+
+                });
+                if (danhMucSanPhamList != null && !danhMucSanPhamList.isEmpty()) {
+                    danhMucSanPhamRepository.deleteAll();
+                    danhMucSanPhamRepository.saveAll(danhMucSanPhamList);
+                }
+
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            logger.error("Exception while init Danh Muc San Pham: ", e);
         }
     }
 
     private boolean checkExistsCollectionName(MongoDatabase db, String collectionName) {
         MongoCollection dbCollection = db.getCollection(collectionName);
-        if (dbCollection.count() > 0) {
-            return true;
-        }
-        return false;
+        return dbCollection.count() > 0;
     }
-
 
 }
