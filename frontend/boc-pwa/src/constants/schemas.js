@@ -34,7 +34,7 @@ export const register = Yup.object().shape({
       excludeEmptyString: true,
     }),
   shopAddress: Yup.string()
-    .matches(/[\w\s]{10,}/, {
+    .matches(/[\w\W]{10,}/, {
       message: '* Địa chỉ không hợp lệ',
     })
     .required('* Nhập địa chỉ cửa hàng'),

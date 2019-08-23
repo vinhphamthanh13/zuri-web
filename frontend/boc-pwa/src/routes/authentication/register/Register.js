@@ -57,17 +57,16 @@ class Register extends Component {
 
   render() {
     const { isValid, handleSubmit } = this.props;
-
     return (
       <div className={s.container}>
-        <Header title="Tạo tài khoản" />
+        <Header title="Tạo cửa hàng" />
         <div className={s.greetingLogo}>
           <img src={BocGreet} alt="Boc Greeting" width="100%" />
         </div>
         <div className={s.register}>
-          <form onSubmit={handleSubmit}>{this.createForm()}</form>
+          <form>{this.createForm()}</form>
           <Button
-            onClick={this.handleRegister}
+            onClick={handleSubmit}
             label="Tiếp theo"
             disabled={!isValid}
           />
@@ -83,15 +82,18 @@ class Register extends Component {
 
 export default compose(
   withFormik({
-    initialValues: {
-      userName: '',
-      lastName: '',
-      phoneNumber: '',
-      shopAddress: '',
-    },
+    mapPropsToValues: () => ({
+      userName: 'BOC',
+      shopName: 'BOCVN',
+      phoneNumber: '0936388480',
+      shopAddress: '01, đường số 1, Bình Trị Đông B,',
+      businessType: 'Quán Cao Cấp',
+      categoryType: 'Coffee',
+      userEmail: 'bocvn2020@gmail.com',
+    }),
     validationSchema: register,
-    // isInitialValid: true,
-    handleSubmit: (values, { isSubmitting }) => {
+    isInitialValid: true,
+    handleSubmit: values => {
       console.log('values on submit', values);
     },
   }),

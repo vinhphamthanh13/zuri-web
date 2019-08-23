@@ -63,8 +63,8 @@
 
 .register span {
   text-transform: uppercase;
+  font-weight: var(--font-weight-500);
   cursor: pointer;
-  text-decoration: underline;
   color: var(--c-error);
 }
 

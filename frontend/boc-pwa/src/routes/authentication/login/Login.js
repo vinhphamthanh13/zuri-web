@@ -36,7 +36,7 @@ class Login extends React.Component {
         </div>
         <div className={s.register}>
           Hoặc chưa có tài khoản?{' '}
-          <span onClick={this.redirectRegister}>Đăng ký</span>
+          <span onClick={this.redirectRegister}>Tạo cửa hàng</span>
         </div>
         <div className={s.copyRight}>Bản quyền thuộc về BOCVN@2019</div>
       </div>

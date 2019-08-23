@@ -93,7 +93,7 @@ class Activation extends Component {
         <Loading />
         <div className={s.container}>
           <Header
-            title="đăng nhập số điện thoại"
+            title="đăng nhập cửa hàng"
             iconLeft
             onClickLeft={goBack}
           />
