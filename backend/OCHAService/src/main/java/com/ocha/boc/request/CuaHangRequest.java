@@ -14,10 +14,10 @@ import java.io.Serializable;
 public class CuaHangRequest implements Serializable {
 
     @NonNull
-    private MoHinhKinhDoanhType moHinhKinhDoanhType;
+    private String  moHinhKinhDoanhType;
 
     @NonNull
-    private DanhMucMatHangType danhMucMatHangType;
+    private String  danhMucMatHangType;
 
     @NonNull
     private String cuaHangName;

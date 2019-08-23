@@ -15,9 +15,9 @@ public class CuaHangUpdateRequest implements Serializable {
 
     private String id;
 
-    private MoHinhKinhDoanhType moHinhKinhDoanhType;
+    private String  moHinhKinhDoanhType;
 
-    private DanhMucMatHangType danhMucMatHangType;
+    private String  danhMucMatHangType;
 
     private String address;
 

@@ -109,7 +109,7 @@ public class CuaHangService {
                         if (StringUtils.isNotEmpty(request.getManagerEmail())) {
                             cuaHang.setManagerEmail(request.getManagerEmail());
                         }
-                        if (StringUtils.isNotEmpty(request.getMoHinhKinhDoanhType().label)) {
+                        if (StringUtils.isNotEmpty(request.getMoHinhKinhDoanhType())) {
                             cuaHang.setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
                         }
                         cuaHang.setLastModifiedDate(Instant.now().toString());
