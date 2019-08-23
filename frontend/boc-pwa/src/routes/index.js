@@ -19,6 +19,11 @@ const routes = {
         import(/* webpackChunkName: 'login' */ './authentication/login'),
     },
     {
+      path: '/register',
+      load: () =>
+        import(/* webpackChunkName: 'register' */ './authentication/register'),
+    },
+    {
       path: '/activation',
       load: () =>
         import(/* webpackChunkName: 'activation' */ './authentication/activation'),
@@ -29,9 +34,9 @@ const routes = {
         import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
     },
     {
-      path: '/register',
+      path: '/shops',
       load: () =>
-        import(/* webpackChunkName: 'register' */ './authentication/register'),
+        import(/* webpackChunkName: 'shops' */ './authentication/shops'),
     },
     {
       path: '/home',

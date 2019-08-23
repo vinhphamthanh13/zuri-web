@@ -13,7 +13,7 @@ import Loading from 'components/Loading';
 import { activation } from 'constants/schemas';
 import { goBack } from 'utils/browser';
 import history from '../../../history';
-import { mapDispatchToProps, mapStateToProps } from './commonProps';
+import { mapDispatchToProps } from './commonProps';
 import s from './Activation.css';
 
 class Activation extends Component {
@@ -92,11 +92,7 @@ class Activation extends Component {
       <>
         <Loading />
         <div className={s.container}>
-          <Header
-            title="đăng nhập cửa hàng"
-            iconLeft
-            onClickLeft={goBack}
-          />
+          <Header title="đăng nhập cửa hàng" iconLeft onClickLeft={goBack} />
           <form onSubmit={handleSubmit}>
             <div className={s.inputs}>
               <Input

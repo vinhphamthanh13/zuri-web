@@ -1,14 +1,14 @@
 import React from 'react';
 import Layout from 'components/Layout';
-import Activity from './Activity';
+import Shops from './Shops';
 
 async function action() {
   return {
-    title: 'Hoạt Động',
-    chunks: ['activity'],
+    title: 'Danh sách cửa hàng',
+    chunks: ['shops'],
     component: (
       <Layout>
-        <Activity />
+        <Shops />
       </Layout>
     ),
   };
