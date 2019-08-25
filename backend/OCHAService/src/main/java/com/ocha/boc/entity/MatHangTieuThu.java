@@ -11,11 +11,13 @@ import java.math.BigDecimal;
 @ToString
 public class MatHangTieuThu {
 
-    private MatHang matHang;
+    private String matHangName;
 
-    private BangGia bangGia;
+    private String danhMucName;
+
+    private String bangGiaName;
 
     private int quantity;
 
-    private BigDecimal total;
+    private BigDecimal unitPrice;
 }
