@@ -10,7 +10,7 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { verifyCode } from 'constants/schemas';
 import history from '../../../history';
-import { mapStateToProps } from './commonProps';
+// import { mapStateToProps } from 'routes/authentication/commonProps';
 import s from './VerifyCode.css';
 
 class VerifyCode extends React.Component {
@@ -87,6 +87,6 @@ export default compose(
     },
     validationSchema: verifyCode,
   }),
-  connect(mapStateToProps),
+  // connect(mapStateToProps),
   withStyles(s),
 )(VerifyCode);

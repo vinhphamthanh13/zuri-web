@@ -21,20 +21,22 @@
 }
 
 .title {
-  background: var(--c-brand-4);
+  background: var(--c-triad-06);
   padding: var(--size-10);
   font-size: var(--font-size-input);
   font-weight: var(--font-weight-700);
   text-transform: uppercase;
-  color: var(--c-brand-1);
+  color: var(--c-bright);
   border-bottom: var(--size-01) solid var(--c-error);
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .content {
   padding: var(--size-10);
   min-height: var(--modal-content-width);
+  color: var(--c-brand-1);
 }
 
 .cta {

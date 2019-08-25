@@ -1,7 +1,6 @@
 import React from 'react';
 import { bool, string, func } from 'prop-types';
 import { connect } from 'react-redux';
-import { noop } from 'lodash';
 import Modal from 'components/Modal';
 import { findValueByKey } from 'utils/reduceStateProperty';
 import { resetError } from 'actions/common';
@@ -11,9 +10,10 @@ const Error = props => {
 
   return isError ? (
     <Modal
-      title="Thông báo lỗi"
+      title="Thông báo"
       message={errorMessage}
       callback={resetErrorAction}
+      errorIcon
     />
   ) : null;
 };

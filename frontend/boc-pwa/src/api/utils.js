@@ -1,10 +1,5 @@
-// import { get } from 'lodash';
+import { get } from 'lodash';
 import { HTTP_STATUS, CONTENT_TYPE } from 'constants/http';
-//
-// export const getRequestToken = headers => {
-//   const auth = get(headers, 'authorization');
-//   return auth ? auth.replace(/\w+\s(\w+)/, '$1') : '';
-// };
 
 const handleResponse = (response, defaultResponse) => {
   if (response) {
@@ -22,60 +17,67 @@ const handleError = response => {
   if (errors) {
     return errors;
   }
-  return { message: 'Cannot connect to service' };
+  return {
+    status: HTTP_STATUS.INTERNAL_ERROR,
+    data: {
+      message: 'Hiện tại không thể kết nối với máy chủ BOC.',
+      success: false,
+    },
+  };
 };
 
 export const handleRequest = async (reqFunction, args, defaultResponse) => {
   try {
     const result = handleResponse(await reqFunction(...args), defaultResponse);
-    const { status } = result;
-    if (status === HTTP_STATUS.OK) {
+    const status = get(result, 'status');
+    const success = get(result, 'data.success');
+    if (status === HTTP_STATUS.OK && success) {
       return [result, null];
     }
-
     return [null, result];
-  } catch (e) {
-    return [null, handleError(e)];
+  } catch (error) {
+    return [null, handleError(error)];
   }
 };
 
-export const handleNodeServerError = (response, err) => {
-  response.status(500);
+export const handleNodeServerError = (response, error) => {
+  const message = get(error, 'data.message');
+  const success = get(error, 'data.success') || false;
+  const status = get(error, 'status') || HTTP_STATUS.INTERNAL_ERROR;
+  response.status(status);
   response.set('Content-Type', CONTENT_TYPE.JSON);
-  response.send(
-    JSON.stringify({
-      errors: [
-        {
-          code: 'INTERNAL ERROR',
-          message: err.message,
-          severity: 'ERROR',
-        },
-      ],
-    }),
-  );
+  response.send({
+    message,
+    success,
+  });
 };
 
 export const handleNodeServerResponse = (response, result) => {
-  const status =
-    result.status === HTTP_STATUS.UNPROCESSABLE_ENTITY
-      ? HTTP_STATUS.UNAUTHORIZED
-      : result.status;
+  const { status, data } = result;
+  response.status(status);
 
-  if (status) {
-    response.status(status);
-  }
-  if (status === HTTP_STATUS.UNAUTHORIZED) {
+  if (
+    status === HTTP_STATUS.UNAUTHORIZED ||
+    status === HTTP_STATUS.UNPROCESSABLE_ENTITY ||
+    status === HTTP_STATUS.ACCESS_DENIED ||
+    status === HTTP_STATUS.INTERNAL_ERROR
+  ) {
     response.send({
-      errors: [result.data],
+      errors: [
+        {
+          code: HTTP_STATUS.INTERNAL_ERROR,
+          message: data,
+        },
+      ],
     });
     return;
   }
 
-  response.send(result.data);
+  response.send(data);
 };
 
 export const errorStatusMiddleware = (err, req, res) => {
-  const { status = 500, message } = err;
+  const { status = HTTP_STATUS.INTERNAL_ERROR, message } = err;
 
   res.status(status).send({
     message,

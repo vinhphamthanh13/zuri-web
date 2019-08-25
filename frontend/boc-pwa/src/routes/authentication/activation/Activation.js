@@ -13,7 +13,7 @@ import Loading from 'components/Loading';
 import { activation } from 'constants/schemas';
 import { goBack } from 'utils/browser';
 import history from '../../../history';
-import { mapDispatchToProps } from './commonProps';
+import { activationProps } from '../commonProps';
 import s from './Activation.css';
 
 class Activation extends Component {
@@ -26,6 +26,7 @@ class Activation extends Component {
     handleChange: func.isRequired,
     setFieldTouched: func.isRequired,
     handleSubmit: func.isRequired,
+    fetchUsers: func.isRequired,
     // loginPhone: func.isRequired,
   };
 
@@ -55,6 +56,11 @@ class Activation extends Component {
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    const { fetchUsers: fetchUsersAction } = this.props;
+    fetchUsersAction();
   }
 
   componentDidUpdate() {
@@ -87,11 +93,16 @@ class Activation extends Component {
       touched,
     } = this.props;
 
+    const registerState = get(history, 'location.state.register');
+    const headerTitle = registerState
+      ? 'Số điện thoại cửa hàng'
+      : 'đăng nhập cửa hàng';
+
     return (
       <>
         <Loading />
         <div className={s.container}>
-          <Header title="đăng nhập cửa hàng" iconLeft onClickLeft={goBack} />
+          <Header title={headerTitle} iconLeft onClickLeft={goBack} />
           <form onSubmit={handleSubmit}>
             <div className={s.inputs}>
               <Input
@@ -139,7 +150,7 @@ export default compose(
   }),
   connect(
     null,
-    mapDispatchToProps,
+    activationProps.mapDispatchTopProps,
   ),
   withStyles(s),
 )(Activation);
