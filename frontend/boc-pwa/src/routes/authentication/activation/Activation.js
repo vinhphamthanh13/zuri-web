@@ -19,7 +19,6 @@ import s from './Activation.css';
 class Activation extends Component {
   static propTypes = {
     values: objectOf(any).isRequired,
-    setPhoneNumber: func.isRequired,
     errors: objectOf(any),
     touched: objectOf(bool).isRequired,
     isValid: bool.isRequired,
@@ -27,7 +26,6 @@ class Activation extends Component {
     setFieldTouched: func.isRequired,
     handleSubmit: func.isRequired,
     fetchUsers: func.isRequired,
-    // loginPhone: func.isRequired,
   };
 
   static defaultProps = {
@@ -35,23 +33,15 @@ class Activation extends Component {
   };
 
   state = {
-    isSubmitting: false,
-    isValidating: null,
+    getVerifiedCodeStatus: false,
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { isSubmitting, isValidating } = props;
-    const {
-      isSubmitting: cachedIsSubmitting,
-      isValidating: cachedIsValidating,
-    } = state;
-    if (
-      isSubmitting !== cachedIsSubmitting ||
-      isValidating !== cachedIsValidating
-    ) {
+    const { getVerifiedCodeStatus } = props;
+    const { getVerifiedCodeStatus: cachedgetVerifiedCodeStatus } = state;
+    if (getVerifiedCodeStatus !== cachedgetVerifiedCodeStatus) {
       return {
-        isSubmitting,
-        isValidating,
+        getVerifiedCodeStatus,
       };
     }
 
@@ -63,22 +53,15 @@ class Activation extends Component {
     fetchUsersAction();
   }
 
-  componentDidUpdate() {
-    const { setPhoneNumber, values, isValid } = this.props;
-    const { isSubmitting, isValidating } = this.state;
-    const phoneNumber = get(values, 'phoneNumber');
-    const countryCode = get(values, 'countryCode');
+  componentDidUpdate(prevProps) {
+    const { getVerifiedCodeStatus } = prevProps;
+    const { getVerifiedCodeStatus: cachedgetVerifiedCodeStatus } = this.state;
 
-    if (isValid && isSubmitting && isValidating) {
-      const registerPhoneNumber = `${countryCode}${phoneNumber.replace(
-        /^0(\d+)/,
-        '$1',
-      )}`;
-      const encryptPhone = registerPhoneNumber.replace(
-        REGEXP.ENCRYPT_PHONE,
-        (_, p1, p2, p3) => `${p1}${p2.replace(/\d/g, 'x')}${p3}`,
-      );
-      setPhoneNumber(encryptPhone);
+    if (
+      cachedgetVerifiedCodeStatus &&
+      getVerifiedCodeStatus !== cachedgetVerifiedCodeStatus
+    ) {
+      history.push('/verifyCode');
     }
   }
 
@@ -132,7 +115,7 @@ class Activation extends Component {
   }
 }
 
-export default compose(
+const enhancers = [
   withFormik({
     validateOnBlur: true,
     mapPropsToValues: props => ({
@@ -140,17 +123,23 @@ export default compose(
       phoneNumber: '',
     }),
     validationSchema: activation,
-    handleSubmit: (values, { setSubmitting }) => {
-      setSubmitting(true);
-      setTimeout(() => {
-        setSubmitting(false);
-        history.push('/verify-code');
-      }, 1200);
+    handleSubmit: (values, { props: { getVerifiedCode, setPhoneNumber } }) => {
+      const countryCode = get(values, 'countryCode');
+      const sanitizedCode = countryCode.replace(/\+/, '');
+      const phoneNumber = get(values, 'phoneNumber');
+      const registerPhoneNumber = `${phoneNumber.replace(/^(\d+)/, '$1')}`;
+      const encryptPhone = registerPhoneNumber.replace(
+        REGEXP.ENCRYPT_PHONE,
+        (_, p1, p2, p3) => `${p1}${p2.replace(/\d/g, 'x')}${p3}`,
+      );
+      setPhoneNumber(encryptPhone);
+      getVerifiedCode(sanitizedCode, phoneNumber);
     },
   }),
-  connect(
-    null,
-    activationProps.mapDispatchTopProps,
-  ),
   withStyles(s),
-)(Activation);
+];
+
+export default connect(
+  activationProps.mapStateToProps,
+  activationProps.mapDispatchToProps,
+)(compose(...enhancers)(Activation));

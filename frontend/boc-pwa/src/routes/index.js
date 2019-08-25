@@ -29,7 +29,7 @@ const routes = {
         import(/* webpackChunkName: 'activation' */ './authentication/activation'),
     },
     {
-      path: '/verify-code',
+      path: '/verifyCode',
       load: () =>
         import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
     },

@@ -10,7 +10,7 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { verifyCode } from 'constants/schemas';
 import history from '../../../history';
-// import { mapStateToProps } from 'routes/authentication/commonProps';
+import { activationProps } from '../commonProps';
 import s from './VerifyCode.css';
 
 class VerifyCode extends React.Component {
@@ -20,6 +20,8 @@ class VerifyCode extends React.Component {
     handleSubmit: func.isRequired,
     handleChange: func.isRequired,
     isValid: bool.isRequired,
+    touched: objectOf(bool).isRequired,
+    setFieldTouched: func.isRequired,
   };
 
   static defaultProps = {
@@ -44,7 +46,15 @@ class VerifyCode extends React.Component {
   }
 
   render() {
-    const { values, handleChange, handleSubmit, errors, isValid } = this.props;
+    const {
+      values,
+      handleChange,
+      handleSubmit,
+      errors,
+      isValid,
+      touched,
+      setFieldTouched,
+    } = this.props;
     const { phoneNumber } = this.state;
     const submittingCode = get(values, 'verifyCode');
 
@@ -52,8 +62,10 @@ class VerifyCode extends React.Component {
       <div className={s.container}>
         <Header title="Xác nhận mã kích hoạt" />
         <div className={s.textSMS}>
-          Quý khách vui lòng nhập mã xác thực được gởi qua SMS đến số đăng ký:{' '}
-          {phoneNumber}
+          <p>
+            Quý khách vui lòng nhập mã xác thực được gởi đến số điện thoại{' '}
+            <span>{phoneNumber}</span>
+          </p>
         </div>
         <div className={s.verifyCodeWrapper}>
           <form onSubmit={handleSubmit}>
@@ -65,6 +77,8 @@ class VerifyCode extends React.Component {
               value={submittingCode || ''}
               className={s.verifyCode}
               errors={errors}
+              touched={touched}
+              onTouch={setFieldTouched}
             />
             <Button label="Xác thực" type="submit" disabled={!isValid} />
           </form>
@@ -87,6 +101,6 @@ export default compose(
     },
     validationSchema: verifyCode,
   }),
-  // connect(mapStateToProps),
+  connect(activationProps.mapStateToProps),
   withStyles(s),
 )(VerifyCode);

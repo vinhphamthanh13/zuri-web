@@ -1,5 +1,5 @@
 import express from 'express';
-import axios from 'axios';
+import axios from 'axios/index';
 import { get } from 'lodash';
 import { SERVER_URL } from 'api/constant';
 import { NODE_SERVER_URL } from 'constants/api';
@@ -15,7 +15,7 @@ const router = express.Router();
 
 const getUsers = () => axios.get(SERVER_URL.USERS);
 const getVerifiedCode = (countryCode, phoneNumber) =>
-  axios.post(`${SERVER_URL.GET_VERIFIED_CODE}/${countryCode}/${phoneNumber}`);
+  axios.get(`${SERVER_URL.GET_VERIFIED_CODE}/${countryCode}/${phoneNumber}`);
 
 const allUsers = async () => {
   const [result, error] = await handleRequest(getUsers, []);
@@ -47,16 +47,19 @@ router.get('/', async (request, response) => {
   }
 });
 
-router.post(NODE_SERVER_URL.ACTIVATION, async (request, response) => {
-  const { body } = request;
-  const countryCode = get(body, 'countryCode');
-  const phoneNumber = get(body, 'phoneNumber');
-  try {
-    const result = await activation(countryCode, phoneNumber);
-    handleNodeServerResponse(response, result);
-  } catch (error) {
-    handleNodeServerError(response, error);
-  }
-});
+router.get(
+  `${NODE_SERVER_URL.AUTHENTICATION.ACTIVATION}/:countryCode/:phoneNumber`,
+  async (request, response) => {
+    const { params } = request;
+    const countryCode = get(params, 'countryCode');
+    const phoneNumber = get(params, 'phoneNumber');
+    try {
+      const result = await activation(countryCode, phoneNumber);
+      handleNodeServerResponse(response, result);
+    } catch (error) {
+      handleNodeServerError(response, error);
+    }
+  },
+);
 
 export default router;

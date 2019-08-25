@@ -6,8 +6,8 @@ const BASE_URL = config.masterData.url;
 // Java Sever
 export const SERVER_URL = {
   USERS: `${BASE_URL}/users`,
-  GET_VERIFIED_CODE: `${BASE_URL}/user/:countryCode/:phoneNumber`,
-  SET_VERIFIED_CODE: `${BASE_URL}/user/:countryCode/:phoneNumber/:token`,
+  GET_VERIFIED_CODE: `${BASE_URL}/users`,
+  SET_VERIFIED_CODE: `${BASE_URL}/users/:countryCode/:phoneNumber/:token`,
   ACTIVATE_USER_BY_ID: `${BASE_URL}/users/active/:userId`,
   GET_USER_BY_ID: `${BASE_URL}/users/:userId`,
 };

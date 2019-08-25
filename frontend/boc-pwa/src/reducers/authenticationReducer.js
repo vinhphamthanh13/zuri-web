@@ -1,42 +1,42 @@
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage/index';
 import persistReducer from 'redux-persist/lib/persistReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {
+  SET_USERS,
   SET_PHONE_NUMBER,
-  SET_VERIFICATION_CODE,
-  SET_USER_ID,
-} from 'constants/authentication';
+  GET_VERIFIED_CODE,
+} from 'actions/authenticationActions';
 
 const persistConfig = {
   key: 'authentication',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: [],
+  blacklist: ['getVerifiedCodeStatus'],
 };
 
 const initState = {
+  users: [],
   phoneNumber: null,
-  verificationCode: null,
-  userId: null,
+  getVerifiedCodeStatus: null,
 };
 
 const reducer = (state = initState, action) => {
+  if (action.type === SET_USERS) {
+    return {
+      ...state,
+      users: action.payload,
+    };
+  }
   if (action.type === SET_PHONE_NUMBER) {
     return {
       ...state,
       phoneNumber: action.payload,
     };
   }
-  if (action.type === SET_VERIFICATION_CODE) {
+  if (action.type === GET_VERIFIED_CODE) {
     return {
       ...state,
-      verificationCode: action.payload,
-    };
-  }
-  if (action.type === SET_USER_ID) {
-    return {
-      ...state,
-      userId: action.payload,
+      getVerifiedCodeStatus: action.payload,
     };
   }
 

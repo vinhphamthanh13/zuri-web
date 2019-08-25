@@ -1,7 +1,18 @@
-import { setUsers } from 'actions/authenticationActions';
+import {
+  setUsers,
+  setShopPhoneAction,
+  setVerifiedCode,
+} from 'actions/authenticationActions';
 
 export const activationProps = {
-  mapDispatchTopProps: dispatch => ({
+  mapStateToProps: ({ authentication }) => ({
+    phoneNumber: authentication.phoneNumber,
+    getVerifiedCodeStatus: authentication.getVerifiedCodeStatus,
+  }),
+  mapDispatchToProps: dispatch => ({
     fetchUsers: () => dispatch(setUsers()),
+    setPhoneNumber: number => dispatch(setShopPhoneAction(number)),
+    getVerifiedCode: (countryCode, phoneNumber) =>
+      dispatch(setVerifiedCode(countryCode, phoneNumber)),
   }),
 };
