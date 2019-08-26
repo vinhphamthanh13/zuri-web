@@ -8,7 +8,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class PageRequest {
-    private String cuaHangId;
     private Integer page;
     private Integer size;
     private String sort;

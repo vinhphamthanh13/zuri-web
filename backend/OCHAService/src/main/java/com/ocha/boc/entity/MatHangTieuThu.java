@@ -13,11 +13,17 @@ public class MatHangTieuThu {
 
     private String matHangName;
 
-    private String danhMucName;
+    private String danhMucId;
 
     private String bangGiaName;
 
     private int quantity;
 
     private BigDecimal unitPrice;
+
+//    private String giamGiaName;
+//
+//    private BigDecimal giamGiaPercentage;
+//
+//    private BigDecimal giamGiaDiscountAmount;
 }

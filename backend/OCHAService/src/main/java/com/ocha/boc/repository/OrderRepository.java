@@ -2,6 +2,7 @@ package com.ocha.boc.repository;
 
 import com.ocha.boc.entity.Order;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -17,7 +18,7 @@ public interface OrderRepository extends MongoRepository<Order, String> {
 
     Optional<Order> findOrderByTakeAWayOptionCodeAndCuaHangId(String takeAWayCode, String cuaHangId);
 
-    Page<Order> findAll(Pageable pageable);
+    Page<Order> findAllByCuaHangId(Pageable pageable, String cuaHangId);
 
 //    List<Order> findAllOrderByCuaHangId(String cuaHangId);
 

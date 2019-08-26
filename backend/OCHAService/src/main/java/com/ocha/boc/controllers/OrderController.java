@@ -42,21 +42,21 @@ public class OrderController {
         log.info("END: reject order");
         return ResponseEntity.ok(response);
     }
-//
-//    @ApiOperation("Checkout Order")
-//    @PostMapping("/orders/checkout")
-//    public ResponseEntity<OrderResponse> checkoutOrder(@RequestBody OrderCheckoutObjectRequest request) {
-//        log.info("START: checkout order: " + request.getOrderId());
-//        OrderResponse response = orderService.checkoutOrder(request);
-//        log.info("END: checkout order");
-//        return ResponseEntity.ok(response);
-//    }
-//
+
+    @ApiOperation("Checkout Order")
+    @PostMapping("/orders/checkout")
+    public ResponseEntity<OrderResponse> checkoutOrder(@RequestBody OrderCheckoutObjectRequest request) {
+        log.info("START: checkout order: " + request.getOrderId());
+        OrderResponse response = orderService.checkoutOrder(request);
+        log.info("END: checkout order");
+        return ResponseEntity.ok(response);
+    }
+
     @ApiOperation("Get Order By CuaHangId")
-    @PostMapping("/orders")
-    public ResponseEntity<OrderResponse> getOrdersByCuaHangId(@RequestBody PageRequest pageRequest){
+    @PostMapping("/orders/{cuaHangId}")
+    public ResponseEntity<OrderResponse> getOrdersByCuaHangId(@RequestBody PageRequest pageRequest, @PathVariable(value = "cuaHangId") String cuaHangId){
         log.info("START: get orders ");
-        OrderResponse response = orderService.getOrdersByCuaHangId(pageRequest);
+        OrderResponse response = orderService.getOrdersByCuaHangId(pageRequest, cuaHangId);
         log.info("END: get orders by cuaHangId");
         return ResponseEntity.ok(response);
     }
