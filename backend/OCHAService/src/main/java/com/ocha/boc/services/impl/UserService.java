@@ -267,4 +267,20 @@ public class UserService {
         log.warn(message);
         throw new Exception(message);
     }
+
+    public AbstractResponse findUserByPhoneNumber(String phoneNumber) {
+        AbstractResponse response = new AbstractResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.USER_NOT_EXISTED);
+        try {
+            Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
+            if(optUser.isPresent()){
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+            }
+        } catch (Exception e) {
+            log.error("Exception while find user by phone number");
+        }
+        return response;
+    }
 }

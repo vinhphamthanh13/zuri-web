@@ -6,11 +6,13 @@ import com.ocha.boc.request.UserUpdateRequest;
 import com.ocha.boc.response.UserResponse;
 import com.ocha.boc.services.impl.UserService;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -72,6 +74,15 @@ public class UserController {
                                                        @PathVariable(value = "phoneNumber") String phoneNumber,
                                                        @PathVariable(value = "token") String token){
         UserResponse response = userService.verifyUserCode(countryCode, phoneNumber, token);
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "Check User Exist By PhoneNumber")
+    @GetMapping("/users/{phoneNumber}")
+    public ResponseEntity<AbstractResponse> findUserByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber){
+        log.info("START: find user by phone number: " + phoneNumber);
+        AbstractResponse response = userService.findUserByPhoneNumber(phoneNumber);
+        log.info("END: find user by phone number");
         return ResponseEntity.ok(response);
     }
 
