@@ -11,15 +11,13 @@ import com.ocha.boc.request.CuaHangUpdateRequest;
 import com.ocha.boc.response.CuaHangResponse;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -57,21 +55,21 @@ public class CuaHangService {
                     //Update cua hang id on table user
                     cuaHang = cuaHangRepository.findTopByOrderByCreatedDateDesc();
                     String cuaHangId = cuaHang.getId();
-                    User owner = userRepository.findUserByPhone(request.getPhone());
-                    if (owner != null) {
-                        List<CuaHang> listCuaHang = owner.getListCuaHang();
+                    Optional<User> optOwner = userRepository.findUserByPhone(request.getPhone());
+                    if (optOwner.isPresent()) {
+                        List<CuaHang> listCuaHang = optOwner.get().getListCuaHang();
                         listCuaHang.add(cuaHang);
-                        owner.setListCuaHang(listCuaHang);
-                        userRepository.save(owner);
+                        optOwner.get().setListCuaHang(listCuaHang);
+                        userRepository.save(optOwner.get());
                     } else {
                         log.error("Cannot find user by owner phone: ", request.getPhone());
                         response.setMessage(CommonConstants.UPDATE_CUA_HANG_ID_ON_USER_FAIL);
                     }
                     //Check manager Phone exist in the system. If existed then assign cuaHangId to the account, if not
                     //Create new account with phone of the manager.
-                    User manager = userRepository.findUserByPhone(request.getManagerPhone());
-                    if(manager == null){
-                        manager = new User();
+                    Optional<User> optManager = userRepository.findUserByPhone(request.getManagerPhone());
+                    if (!optManager.isPresent()) {
+                        User manager = new User();
                         manager.setPhone(request.getManagerPhone());
                         manager.setEmail(request.getManagerEmail());
                         manager.setName(request.getManagerName());
@@ -79,10 +77,10 @@ public class CuaHangService {
                         manager.setCreatedDate(Instant.now().toString());
                         manager.setRole(UserType.USER);
                     }
-                    List<CuaHang> list = manager.getListCuaHang();
+                    List<CuaHang> list = optManager.get().getListCuaHang();
                     list.add(cuaHang);
-                    manager.setListCuaHang(list);
-                    userRepository.save(manager);
+                    optManager.get().setListCuaHang(list);
+                    userRepository.save(optManager.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new CuaHangDTO(cuaHang));
@@ -133,20 +131,20 @@ public class CuaHangService {
         return isExisted;
     }
 
-    public CuaHangResponse findCuaHangByCuaHangId(String cuaHangId){
+    public CuaHangResponse findCuaHangByCuaHangId(String cuaHangId) {
         CuaHangResponse response = new CuaHangResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CUA_HANG_IS_NOT_EXISTED);
-        try{
-            if(StringUtils.isNotEmpty(cuaHangId)){
+        try {
+            if (StringUtils.isNotEmpty(cuaHangId)) {
                 CuaHang cuaHang = cuaHangRepository.findCuaHangById(cuaHangId);
-                if(cuaHang != null){
+                if (cuaHang != null) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new CuaHangDTO(cuaHang));
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error when findCuaHangByCuaHangId: {}", e);
         }
         return response;
