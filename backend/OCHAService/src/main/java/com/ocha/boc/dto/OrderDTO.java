@@ -4,6 +4,7 @@ import com.ocha.boc.base.AbstractEntity;
 import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
+import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
 import lombok.Getter;
@@ -76,9 +77,20 @@ public class OrderDTO extends AbstractEntity {
 
     private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
 
-    private GiamGia giamGia;
-
     private BigDecimal discountMoney;
+
+    private GiamGiaType giamGiaType;
+
+    private String giamGiaName;
+
+    private BigDecimal giamGiaPercentage;
+
+    private BigDecimal giamGiaDiscountAmount;
+
+    /**
+     * danhMucIsDiscountedId: danh mục được giảm giá với giảm giá type là "GIẢM GIÁ THEO DANH MỤC"
+     */
+    private String danhMucIsDiscountedId;
 
     public OrderDTO(Order order) {
         this.id = order.getId();
@@ -99,7 +111,10 @@ public class OrderDTO extends AbstractEntity {
         this.createdDate = order.getCreatedDate();
         this.lastModifiedDate = order.getLastModifiedDate();
         this.listMatHangTieuThu = order.getListMatHangTieuThu();
-        this.giamGia = order.getGiamGia();
         this.discountMoney = order.getDiscountMoney();
+        this.giamGiaName = order.getGiamGiaName();
+        this.giamGiaType = order.getGiamGiaType();
+        this.giamGiaPercentage = order.getGiamGiaPercentage();
+        this.giamGiaDiscountAmount = order.getGiamGiaDiscountAmount();
     }
 }

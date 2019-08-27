@@ -1,17 +1,14 @@
 package com.ocha.boc.services.impl;
 
 import com.ocha.boc.dto.OrderDTO;
-import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
 import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
+import com.ocha.boc.error.ResourceNotFoundException;
 import com.ocha.boc.repository.OrderRepository;
-import com.ocha.boc.request.OrderCheckoutObjectRequest;
-import com.ocha.boc.request.OrderRejectObjectRequest;
-import com.ocha.boc.request.OrderRequest;
-import com.ocha.boc.request.OrderUpdateRequest;
+import com.ocha.boc.request.*;
 import com.ocha.boc.response.OrderResponse;
 import com.ocha.boc.util.CommonConstants;
 import com.ocha.boc.util.DateUtils;
@@ -19,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,12 +28,10 @@ import java.util.*;
 @Slf4j
 public class OrderService {
 
-    private static Random rand = new Random();
-
     private static final String TOTAL_MONEY = "TOTAL";
-
     private static final String DISCOUNT_MONEY = "DISCOUNT";
-
+    private static final String RESOURCE_NAME = "Order";
+    private static Random rand = new Random();
     @Autowired
     private OrderRepository orderRepository;
 
@@ -43,7 +40,7 @@ public class OrderService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.INITIAL_ORDER_FAIL);
         try {
-            if (request != null) {
+            if (!Objects.isNull(request)) {
                 Order order = new Order();
                 order.setCuaHangId(request.getCuaHangId());
                 order.setWaiterName(request.getWaiterName());
@@ -56,12 +53,10 @@ public class OrderService {
                     if (StringUtils.isNotEmpty(request.getOrderLocation())) {
                         order.setOrderLocation(request.getOrderLocation());
                     }
-                } else if (request.getOrderType().label.equalsIgnoreCase(OrderType.MANG_ĐI.label)) {
-                    String takeAwayCode = generateTakeAWayCode(request.getCuaHangId());
-                    order.setTakeAWayOptionCode(takeAwayCode);
+                } else {
+                    order.setTakeAWayOptionCode(generateTakeAWayCode(request.getCuaHangId()));
                 }
-                BigDecimal tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
-                order.setTotalMoney(tempTotalMoney);
+                order.setTotalMoney(calculateTotalMoney(request.getListMatHangTieuThu()));
                 orderRepository.save(order);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -80,22 +75,19 @@ public class OrderService {
         response.setMessage(CommonConstants.UPDATE_ORDER_FAIL);
         try {
             if (request != null) {
-                Order order = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
-                if (order != null) {
-                    order.setLastModifiedDate(Instant.now().toString());
+                Optional<Order> order = Optional.ofNullable(orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId()).map(orderDb -> {
                     if (StringUtils.isNotEmpty(request.getOrderLocation())) {
-                        order.setOrderLocation(request.getOrderLocation());
+                        orderDb.setOrderLocation(request.getOrderLocation());
                     }
-                    order.setListMatHangTieuThu(request.getListMatHangTieuThu());
-                    BigDecimal tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
-                    order.setTotalMoney(tempTotalMoney);
-                    orderRepository.save(order);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new OrderDTO(order));
-                } else {
-                    response.setMessage(CommonConstants.ORDER_NOT_EXISTED);
-                }
+                    if (CollectionUtils.isNotEmpty(request.getListMatHangTieuThu())) {
+                        orderDb.setListMatHangTieuThu(request.getListMatHangTieuThu());
+                        orderDb.setTotalMoney(calculateTotalMoney(request.getListMatHangTieuThu()));
+                    }
+                    return orderRepository.save(orderDb);
+                }).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, CommonConstants.ORDER_NOT_EXISTED, request)));
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObject(new OrderDTO(order.get()));
             }
         } catch (Exception e) {
             log.error("Error when updateOrderInformation: {}", e);
@@ -109,21 +101,18 @@ public class OrderService {
         response.setMessage(CommonConstants.ORDER_CHECKOUT_FAIL);
         try {
             if (request != null) {
-                Order order = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
-                if (order != null) {
-                    order.setLastModifiedDate(Instant.now().toString());
-                    order.setOrderTimeCheckOut(Instant.now().toString());
-                    order.setOrderStatus(OrderStatus.CANCEL);
-                    order.setListMatHangTieuThu(request.getListMatHangTieuThu());
-                    BigDecimal tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
-                    order.setTotalMoney(tempTotalMoney);
-                    order.setRefunds(tempTotalMoney);
-                    String receiptCode = generateReceiptCode(request.getCuaHangId());
-                    order.setReceiptCode(receiptCode);
-                    orderRepository.save(order);
+                Optional<Order> order = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
+                if (order.isPresent()) {
+                    order.get().setLastModifiedDate(Instant.now().toString());
+                    order.get().setOrderTimeCheckOut(Instant.now().toString());
+                    BigDecimal totalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
+                    order.get().setTotalMoney(totalMoney);
+                    order.get().setRefunds(totalMoney);
+                    order.get().setReceiptCode(generateReceiptCode(request.getCuaHangId()));
+                    orderRepository.save(order.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new OrderDTO(order));
+                    response.setObject(new OrderDTO(order.get()));
                 } else {
                     response.setMessage(CommonConstants.ORDER_NOT_EXISTED);
                 }
@@ -134,38 +123,47 @@ public class OrderService {
         return response;
     }
 
+
     public OrderResponse checkoutOrder(OrderCheckoutObjectRequest request) {
         OrderResponse response = new OrderResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.ORDER_CHECKOUT_FAIL);
-        BigDecimal tempTotalMoney = BigDecimal.ZERO;
+        BigDecimal amountOfAssumption = BigDecimal.ZERO;
         try {
             if (request != null) {
-                Order order = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
-                if (order != null) {
+                Optional<Order> optOrder = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
+                if (optOrder.isPresent()) {
+                    Order order = optOrder.get();
                     order.setOrderStatus(OrderStatus.SUCCESS);
                     order.setLastModifiedDate(Instant.now().toString());
                     order.setOrderTimeCheckOut(Instant.now().toString());
                     order.setListMatHangTieuThu(request.getListMatHangTieuThu());
-                    if (request.getGiamGia() != null) {
-                        Map<String, BigDecimal> typeOrPrice = calculateTotalMoneyWhenOrderWasDiscounted(request.getListMatHangTieuThu(), request.getGiamGia());
-                        for (Map.Entry<String, BigDecimal> entry : typeOrPrice.entrySet()) {
-                            String key = entry.getKey();
-                            BigDecimal value = entry.getValue();
-                            if (key.equalsIgnoreCase(TOTAL_MONEY)) {
-                                order.setTotalMoney(value);
-                                tempTotalMoney = value;
-                            } else if (key.equalsIgnoreCase(DISCOUNT_MONEY)) {
-                                order.setDiscountMoney(value);
+                    if (!request.getGiamGiaType().equals(GiamGiaType.NONE)) {
+                        Map<String, BigDecimal> typeOrPrice = new HashMap<String, BigDecimal>();
+                        if (request.getGiamGiaType().equals(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC)) {
+                            typeOrPrice = calculateTotalWithGiamGiaDanhMucType(request.getListMatHangTieuThu(), request.getDanhMucIsDiscountedId(), request.getGiamGiaPercentage());
+                            order.setGiamGiaPercentage(request.getGiamGiaPercentage());
+                        } else if (request.getGiamGiaType().equals(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG)) {
+                            if (request.getGiamGiaPercentage() != null) {
+                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithPercentage(calculateTotalMoney(request.getListMatHangTieuThu()),
+                                        request.getGiamGiaPercentage());
+                                order.setGiamGiaPercentage(request.getGiamGiaPercentage());
+                            } else if (request.getGiamGiaDiscountAmount() != null) {
+                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithDiscountAmount(calculateTotalMoney(request.getListMatHangTieuThu()),
+                                        request.getGiamGiaDiscountAmount());
+                                order.setGiamGiaDiscountAmount(request.getGiamGiaDiscountAmount());
                             }
                         }
-                        order.setGiamGia(request.getGiamGia());
+                        order.setTotalMoney(typeOrPrice.get(TOTAL_MONEY));
+                        order.setDiscountMoney(typeOrPrice.get(DISCOUNT_MONEY));
+                        order.setGiamGiaName(request.getGiamGiaName());
+                        order.setGiamGiaType(request.getGiamGiaType());
                     } else {
-                        tempTotalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
-                        order.setTotalMoney(tempTotalMoney);
+                        amountOfAssumption = calculateTotalMoney(request.getListMatHangTieuThu());
+                        order.setTotalMoney(amountOfAssumption);
                     }
                     order.setCash(request.getCash());
-                    BigDecimal excessMoney = request.getCash().subtract(tempTotalMoney);
+                    BigDecimal excessMoney = request.getCash().subtract(amountOfAssumption);
                     if (excessMoney.compareTo(BigDecimal.ZERO) != 0) {
                         order.setExcessCash(excessMoney);
                     }
@@ -188,24 +186,22 @@ public class OrderService {
         return response;
     }
 
-    public OrderResponse getOrdersByCuaHangId(String cuaHangId) {
+    public OrderResponse getOrdersByCuaHangId(PageRequest pageRequest, String cuaHangId) {
         OrderResponse response = new OrderResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_ORDERS_BY_CUAHANGID_FAIL);
+        String[] sortSplit = pageRequest.getSort().split(",");
         try {
-            if (StringUtils.isNotEmpty(cuaHangId)) {
-                List<Order> temp = orderRepository.findAllOrderByCuaHangId(cuaHangId);
-                if (CollectionUtils.isNotEmpty(temp)) {
-                    List<OrderDTO> ordersResult = new ArrayList<OrderDTO>();
-                    for (Order order : temp) {
-                        ordersResult.add(new OrderDTO(order));
-                    }
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObjects(ordersResult);
-                    response.setTotalResultCount((long) ordersResult.size());
-                }
+            Page<Order> orders = orderRepository.findAllByCuaHangId(new org.springframework.data.domain.PageRequest(pageRequest.getPage(), pageRequest.getSize(),
+                    (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC)), cuaHangId);
+            List<OrderDTO> ordersResult = new ArrayList<OrderDTO>();
+            for (Order order : orders) {
+                ordersResult.add(new OrderDTO(order));
             }
+            response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setObjects(ordersResult);
+            response.setTotalResultCount((long) ordersResult.size());
         } catch (Exception e) {
             log.error("Error when getOrdersByCuaHangId: {}", e);
         }
@@ -223,60 +219,43 @@ public class OrderService {
     private BigDecimal calculateTotalMoney(List<MatHangTieuThu> listMatHangTieuThu) {
         BigDecimal total = BigDecimal.ZERO;
         for (MatHangTieuThu matHangTieuThu : listMatHangTieuThu) {
-            int quantity = matHangTieuThu.getQuantity();
-            BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
-            total = total.add(price.multiply(BigDecimal.valueOf((double) quantity)));
+            total = total.add(matHangTieuThu.getUnitPrice().multiply(BigDecimal.valueOf((double) matHangTieuThu.getQuantity())));
         }
         return total;
     }
 
-    private Map<String, BigDecimal> calculateTotalMoneyWhenOrderWasDiscounted(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
-        Map<String, BigDecimal> mapOfPriceType = new HashMap<String, BigDecimal>();
-        BigDecimal tempTotal = BigDecimal.ZERO;
-        if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
-            tempTotal = calculateTotalMoney(listMatTieuThu);
-            mapOfPriceType = calculateTotalWithGiamGiaThongThuongType(tempTotal, giamGia);
-        } else if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
-            mapOfPriceType = calculateTotalWithGiamGiaDanhMucType(listMatTieuThu, giamGia);
-        }
-        return mapOfPriceType;
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaThongThuongTypeWithDiscountAmount(BigDecimal amountOfAssumption, BigDecimal discountAmount) {
+        Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
+        BigDecimal total = amountOfAssumption.subtract(discountAmount);
+        results.put(TOTAL_MONEY, total);
+        results.put(DISCOUNT_MONEY, BigDecimal.ZERO);
+        return results;
     }
 
-    private Map<String, BigDecimal> calculateTotalWithGiamGiaThongThuongType(BigDecimal amountOfAssumption, GiamGia giamGia) {
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaThongThuongTypeWithPercentage(BigDecimal amountOfAssumption, BigDecimal percentage) {
         Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
-        BigDecimal total = BigDecimal.ZERO;
-        BigDecimal discountMoney = BigDecimal.ZERO;
-        if (giamGia.getDiscountAmount() != null) {
-            total = amountOfAssumption.subtract(giamGia.getDiscountAmount());
-        } else if (giamGia.getPercentage() != null) {
-            discountMoney = amountOfAssumption.multiply(giamGia.getPercentage().divide(BigDecimal.valueOf(100)));
-            total = amountOfAssumption.subtract(discountMoney);
-        }
+        BigDecimal discountMoney = amountOfAssumption.multiply(percentage.divide(BigDecimal.valueOf(100)));
+        BigDecimal total = amountOfAssumption.subtract(discountMoney);
         results.put(TOTAL_MONEY, total);
         results.put(DISCOUNT_MONEY, discountMoney);
         return results;
     }
 
-    private Map<String, BigDecimal> calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, String danhMucIsDiscountedId, BigDecimal percentage) {
         Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
-        String danhMucId = giamGia.getDanhMucId();
-        BigDecimal percent = giamGia.getPercentage();
         BigDecimal total = BigDecimal.ZERO;
         BigDecimal discountMoney = BigDecimal.ZERO;
         for (MatHangTieuThu matHangTieuThu : listMatTieuThu) {
-            String danhMucIdInMatHang = matHangTieuThu.getMatHang().getDanhMucId();
-            int quantity = matHangTieuThu.getQuantity();
-            BigDecimal price = matHangTieuThu.getBangGia().getLoaiGia().getPrice();
-            if (danhMucId.equalsIgnoreCase(danhMucIdInMatHang)) {
+            if (danhMucIsDiscountedId.equalsIgnoreCase(matHangTieuThu.getDanhMucId())) {
                 //origin price * quantity
-                BigDecimal temp = price.multiply(BigDecimal.valueOf((double) quantity));
+                BigDecimal temp = matHangTieuThu.getUnitPrice().multiply(BigDecimal.valueOf((double) matHangTieuThu.getQuantity()));
                 //calculate discount money: discount money = discount + (temp * percent discount)
-                discountMoney = discountMoney.add(temp.multiply(percent.divide(BigDecimal.valueOf(100))));
+                discountMoney = discountMoney.add(temp.multiply(percentage.divide(BigDecimal.valueOf(100))));
                 //amount of money have to pay = temp - discount money
                 BigDecimal amountOfAssumption = temp.subtract(discountMoney);
                 total = total.add(amountOfAssumption);
             } else {
-                total = total.add(price.multiply(BigDecimal.valueOf((double) quantity)));
+                total = total.add(matHangTieuThu.getUnitPrice().multiply(BigDecimal.valueOf((double) matHangTieuThu.getQuantity())));
             }
         }
         results.put(TOTAL_MONEY, total);
@@ -286,8 +265,8 @@ public class OrderService {
 
     private boolean checkReceiptCodeIsExisted(String receiptCode, String cuaHangId) {
         boolean isExisted = false;
-        Order order = orderRepository.findOrderByReceiptCodeAndCuaHangId(receiptCode, cuaHangId);
-        if (order != null) {
+        Optional<Order> order = orderRepository.findOrderByReceiptCodeAndCuaHangId(receiptCode, cuaHangId);
+        if (order.isPresent()) {
             isExisted = true;
         }
         return isExisted;
@@ -295,8 +274,8 @@ public class OrderService {
 
     private boolean checkTakeAWayCodeIsExisted(String takeAWayCode, String cuaHangId) {
         boolean isExisted = false;
-        Order order = orderRepository.findOrderByTakeAWayOptionCodeAndCuaHangId(takeAWayCode, cuaHangId);
-        if (order != null) {
+        Optional<Order> order = orderRepository.findOrderByTakeAWayOptionCodeAndCuaHangId(takeAWayCode, cuaHangId);
+        if (order.isPresent()) {
             isExisted = true;
         }
         return isExisted;

@@ -1,9 +1,6 @@
 package com.ocha.boc.controllers;
 
-import com.ocha.boc.request.OrderCheckoutObjectRequest;
-import com.ocha.boc.request.OrderRejectObjectRequest;
-import com.ocha.boc.request.OrderRequest;
-import com.ocha.boc.request.OrderUpdateRequest;
+import com.ocha.boc.request.*;
 import com.ocha.boc.response.OrderResponse;
 import com.ocha.boc.services.impl.OrderService;
 import io.swagger.annotations.ApiOperation;
@@ -56,10 +53,10 @@ public class OrderController {
     }
 
     @ApiOperation("Get Order By CuaHangId")
-    @GetMapping("/orders/{cuaHangId}")
-    public ResponseEntity<OrderResponse> getOrdersByCuaHangId(@PathVariable(value = "cuaHangId") String cuaHangId){
-        log.info("START: get orders by cuaHangId: " + cuaHangId);
-        OrderResponse response = orderService.getOrdersByCuaHangId(cuaHangId);
+    @PostMapping("/orders/{cuaHangId}")
+    public ResponseEntity<OrderResponse> getOrdersByCuaHangId(@RequestBody PageRequest pageRequest, @PathVariable(value = "cuaHangId") String cuaHangId){
+        log.info("START: get orders ");
+        OrderResponse response = orderService.getOrdersByCuaHangId(pageRequest, cuaHangId);
         log.info("END: get orders by cuaHangId");
         return ResponseEntity.ok(response);
     }

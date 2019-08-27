@@ -1,6 +1,7 @@
 package com.ocha.boc.entity;
 
 import com.ocha.boc.base.AbstractEntity;
+import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
 import lombok.Getter;
@@ -56,8 +57,6 @@ public class Order extends AbstractEntity {
      */
     private String takeAWayOptionCode;
 
-    private GiamGia giamGia;
-
     private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
 
     private BigDecimal totalMoney;
@@ -86,5 +85,18 @@ public class Order extends AbstractEntity {
      * Discount Money: Tiền được giảm.
      */
     private BigDecimal discountMoney;
+
+    private GiamGiaType giamGiaType;
+
+    private String giamGiaName;
+
+    private BigDecimal giamGiaPercentage;
+
+    private BigDecimal giamGiaDiscountAmount;
+
+    /**
+     * danhMucIsDiscountedId: danh mục được giảm giá với giảm giá type là "GIẢM GIÁ THEO DANH MỤC"
+     */
+    private String danhMucIsDiscountedId;
 
 }
