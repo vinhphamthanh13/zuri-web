@@ -1,7 +1,6 @@
 package com.ocha.boc.services.impl;
 
 import com.ocha.boc.dto.OrderDTO;
-import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
 import com.ocha.boc.enums.GiamGiaType;
@@ -139,11 +138,26 @@ public class OrderService {
                     order.setLastModifiedDate(Instant.now().toString());
                     order.setOrderTimeCheckOut(Instant.now().toString());
                     order.setListMatHangTieuThu(request.getListMatHangTieuThu());
-                    if (request.getGiamGia() != null) {
-                        Map<String, BigDecimal> typeOrPrice = calculateTotalMoneyWhenOrderWasDiscounted(request.getListMatHangTieuThu(), request.getGiamGia());
+                    if (!request.getGiamGiaType().equals(GiamGiaType.NONE)) {
+                        Map<String, BigDecimal> typeOrPrice = new HashMap<String, BigDecimal>();
+                        if (request.getGiamGiaType().equals(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC)) {
+                            typeOrPrice = calculateTotalWithGiamGiaDanhMucType(request.getListMatHangTieuThu(), request.getDanhMucIsDiscountedId(), request.getGiamGiaPercentage());
+                            order.setGiamGiaPercentage(request.getGiamGiaPercentage());
+                        } else if (request.getGiamGiaType().equals(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG)) {
+                            if (request.getGiamGiaPercentage() != null) {
+                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithPercentage(calculateTotalMoney(request.getListMatHangTieuThu()),
+                                        request.getGiamGiaPercentage());
+                                order.setGiamGiaPercentage(request.getGiamGiaPercentage());
+                            } else if (request.getGiamGiaDiscountAmount() != null) {
+                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithDiscountAmount(calculateTotalMoney(request.getListMatHangTieuThu()),
+                                        request.getGiamGiaDiscountAmount());
+                                order.setGiamGiaDiscountAmount(request.getGiamGiaDiscountAmount());
+                            }
+                        }
                         order.setTotalMoney(typeOrPrice.get(TOTAL_MONEY));
                         order.setDiscountMoney(typeOrPrice.get(DISCOUNT_MONEY));
-                        order.setGiamGia(request.getGiamGia());
+                        order.setGiamGiaName(request.getGiamGiaName());
+                        order.setGiamGiaType(request.getGiamGiaType());
                     } else {
                         amountOfAssumption = calculateTotalMoney(request.getListMatHangTieuThu());
                         order.setTotalMoney(amountOfAssumption);
@@ -210,44 +224,33 @@ public class OrderService {
         return total;
     }
 
-
-    private Map<String, BigDecimal> calculateTotalMoneyWhenOrderWasDiscounted(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
-        Map<String, BigDecimal> mapOfPriceType = new HashMap<String, BigDecimal>();
-        BigDecimal tempTotal = BigDecimal.ZERO;
-        if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
-            tempTotal = calculateTotalMoney(listMatTieuThu);
-            mapOfPriceType = calculateTotalWithGiamGiaThongThuongType(tempTotal, giamGia);
-        } else if (giamGia.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
-            mapOfPriceType = calculateTotalWithGiamGiaDanhMucType(listMatTieuThu, giamGia);
-        }
-        return mapOfPriceType;
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaThongThuongTypeWithDiscountAmount(BigDecimal amountOfAssumption, BigDecimal discountAmount) {
+        Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
+        BigDecimal total = amountOfAssumption.subtract(discountAmount);
+        results.put(TOTAL_MONEY, total);
+        results.put(DISCOUNT_MONEY, BigDecimal.ZERO);
+        return results;
     }
 
-    private Map<String, BigDecimal> calculateTotalWithGiamGiaThongThuongType(BigDecimal amountOfAssumption, GiamGia giamGia) {
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaThongThuongTypeWithPercentage(BigDecimal amountOfAssumption, BigDecimal percentage) {
         Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
-        BigDecimal total = BigDecimal.ZERO;
-        BigDecimal discountMoney = BigDecimal.ZERO;
-        if (giamGia.getDiscountAmount() != null) {
-            total = amountOfAssumption.subtract(giamGia.getDiscountAmount());
-        } else if (giamGia.getPercentage() != null) {
-            discountMoney = amountOfAssumption.multiply(giamGia.getPercentage().divide(BigDecimal.valueOf(100)));
-            total = amountOfAssumption.subtract(discountMoney);
-        }
+        BigDecimal discountMoney = amountOfAssumption.multiply(percentage.divide(BigDecimal.valueOf(100)));
+        BigDecimal total = amountOfAssumption.subtract(discountMoney);
         results.put(TOTAL_MONEY, total);
         results.put(DISCOUNT_MONEY, discountMoney);
         return results;
     }
 
-    private Map<String, BigDecimal> calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, GiamGia giamGia) {
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, String danhMucIsDiscountedId, BigDecimal percentage) {
         Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
         BigDecimal total = BigDecimal.ZERO;
         BigDecimal discountMoney = BigDecimal.ZERO;
         for (MatHangTieuThu matHangTieuThu : listMatTieuThu) {
-            if (giamGia.getDanhMucId().equalsIgnoreCase(matHangTieuThu.getDanhMucId())) {
+            if (danhMucIsDiscountedId.equalsIgnoreCase(matHangTieuThu.getDanhMucId())) {
                 //origin price * quantity
                 BigDecimal temp = matHangTieuThu.getUnitPrice().multiply(BigDecimal.valueOf((double) matHangTieuThu.getQuantity()));
                 //calculate discount money: discount money = discount + (temp * percent discount)
-                discountMoney = discountMoney.add(temp.multiply(giamGia.getPercentage().divide(BigDecimal.valueOf(100))));
+                discountMoney = discountMoney.add(temp.multiply(percentage.divide(BigDecimal.valueOf(100))));
                 //amount of money have to pay = temp - discount money
                 BigDecimal amountOfAssumption = temp.subtract(discountMoney);
                 total = total.add(amountOfAssumption);
@@ -269,7 +272,6 @@ public class OrderService {
         return isExisted;
     }
 
-    //
     private boolean checkTakeAWayCodeIsExisted(String takeAWayCode, String cuaHangId) {
         boolean isExisted = false;
         Optional<Order> order = orderRepository.findOrderByTakeAWayOptionCodeAndCuaHangId(takeAWayCode, cuaHangId);

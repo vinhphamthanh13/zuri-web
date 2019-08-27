@@ -77,9 +77,20 @@ public class OrderDTO extends AbstractEntity {
 
     private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
 
-    private GiamGia giamGia;
-
     private BigDecimal discountMoney;
+
+    private GiamGiaType giamGiaType;
+
+    private String giamGiaName;
+
+    private BigDecimal giamGiaPercentage;
+
+    private BigDecimal giamGiaDiscountAmount;
+
+    /**
+     * danhMucIsDiscountedId: danh mục được giảm giá với giảm giá type là "GIẢM GIÁ THEO DANH MỤC"
+     */
+    private String danhMucIsDiscountedId;
 
     public OrderDTO(Order order) {
         this.id = order.getId();
@@ -101,6 +112,9 @@ public class OrderDTO extends AbstractEntity {
         this.lastModifiedDate = order.getLastModifiedDate();
         this.listMatHangTieuThu = order.getListMatHangTieuThu();
         this.discountMoney = order.getDiscountMoney();
-        this.giamGia = order.getGiamGia();
+        this.giamGiaName = order.getGiamGiaName();
+        this.giamGiaType = order.getGiamGiaType();
+        this.giamGiaPercentage = order.getGiamGiaPercentage();
+        this.giamGiaDiscountAmount = order.getGiamGiaDiscountAmount();
     }
 }
