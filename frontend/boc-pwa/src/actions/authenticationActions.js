@@ -1,26 +1,34 @@
 /* eslint-disable no-return-await */
 
+/*
+ * Naming Rule
+ *  1. Request to node server action: nodeActionName
+ *  2. Action consumes request: nodeActionNameApi
+ *  3. Redux action: actionNameAction
+ */
+
 import axios from 'axios';
 import { get } from 'lodash';
 import { NODE_SERVER_URL } from 'constants/api';
 import { handleRequest } from 'api/utils';
 import { LOADING, setLoading, setError } from 'actions/common';
-// import { SET_PHONE_NUMBER, SET_USER_ID } from 'constants/authentication';
+
+const authenticationUrl = NODE_SERVER_URL.AUTHENTICATION.ROOT;
+const activatingPhone = `${authenticationUrl}${
+  NODE_SERVER_URL.AUTHENTICATION.ACTIVATION
+}`;
 
 // Action API to Node Server
 
-const authURL = NODE_SERVER_URL.AUTHENTICATION.ROOT;
-const activatePhone = `${authURL}${NODE_SERVER_URL.AUTHENTICATION.ACTIVATION}`;
-const getUsers = () => axios.get(authURL);
-
-const getVerifiedCode = (countryCode, phoneNumber) =>
-  axios.get(`${activatePhone}/${countryCode}/${phoneNumber}`);
+const nodeUsers = () => axios.get(authenticationUrl);
+const nodeVerificationCode = (countryCode, phoneNumber) =>
+  axios.get(`${activatingPhone}/${countryCode}/${phoneNumber}`);
 
 // Redux constants
 
 export const SET_USERS = 'AUTH.SET_USERS';
 export const SET_PHONE_NUMBER = 'AUTH.SET_PHONE_NUMBER';
-export const GET_VERIFIED_CODE = 'AUTH.SET_VERIFIED_CODE';
+export const GET_VERIFICATION_CODE = 'AUTH.GET_VERIFICATION_CODE';
 
 // Redux action
 
@@ -29,9 +37,9 @@ const setUsersAction = payload => ({
   payload,
 });
 
-export const setUsers = () => async dispatch => {
+export const nodeUsersApi = () => async dispatch => {
   dispatch(setLoading(LOADING.ON));
-  const [result, error] = await handleRequest(getUsers, []);
+  const [result, error] = await handleRequest(nodeUsers, []);
   if (error) {
     const message = get(error, 'data.message');
     dispatch(setError(message));
@@ -41,19 +49,22 @@ export const setUsers = () => async dispatch => {
   dispatch(setLoading(LOADING.OFF));
 };
 
-export const setShopPhoneAction = payload => ({
+export const setPhoneNumberAction = payload => ({
   type: SET_PHONE_NUMBER,
   payload,
 });
 
-const setVerifiedCodeAction = payload => ({
-  type: GET_VERIFIED_CODE,
+export const verificationCodeAction = payload => ({
+  type: GET_VERIFICATION_CODE,
   payload,
 });
 
-export const setVerifiedCode = (countryCode, phoneNumber) => async dispatch => {
+export const nodeVerificationCodeApi = (
+  countryCode,
+  phoneNumber,
+) => async dispatch => {
   dispatch(setLoading(LOADING.ON));
-  const [result, error] = await handleRequest(getVerifiedCode, [
+  const [result, error] = await handleRequest(nodeVerificationCode, [
     countryCode,
     phoneNumber,
   ]);
@@ -61,8 +72,8 @@ export const setVerifiedCode = (countryCode, phoneNumber) => async dispatch => {
     const message = get(error, 'data.message');
     dispatch(setError(message));
   } else {
-    const getVerifiedCodeStatus = get(result, 'data.success');
-    dispatch(setVerifiedCodeAction(getVerifiedCodeStatus));
+    const getVerificationCodeStatus = get(result, 'data.success');
+    dispatch(verificationCodeAction(getVerificationCodeStatus));
   }
   dispatch(setLoading(LOADING.OFF));
 };

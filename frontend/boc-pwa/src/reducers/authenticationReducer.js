@@ -4,20 +4,20 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {
   SET_USERS,
   SET_PHONE_NUMBER,
-  GET_VERIFIED_CODE,
+  GET_VERIFICATION_CODE,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
   key: 'authentication',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: ['getVerifiedCodeStatus'],
+  blacklist: ['verificationCodeStatus'],
 };
 
 const initState = {
   users: [],
   phoneNumber: null,
-  getVerifiedCodeStatus: null,
+  verificationCodeStatus: null,
 };
 
 const reducer = (state = initState, action) => {
@@ -33,10 +33,10 @@ const reducer = (state = initState, action) => {
       phoneNumber: action.payload,
     };
   }
-  if (action.type === GET_VERIFIED_CODE) {
+  if (action.type === GET_VERIFICATION_CODE) {
     return {
       ...state,
-      getVerifiedCodeStatus: action.payload,
+      verificationCodeStatus: action.payload,
     };
   }
 

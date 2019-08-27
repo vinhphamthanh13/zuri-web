@@ -9,7 +9,6 @@ import { withFormik } from 'formik/dist/index';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
-import Loading from 'components/Loading';
 import { activation } from 'constants/schemas';
 import { goBack } from 'utils/browser';
 import history from '../../../history';
@@ -25,7 +24,7 @@ class Activation extends Component {
     handleChange: func.isRequired,
     setFieldTouched: func.isRequired,
     handleSubmit: func.isRequired,
-    fetchUsers: func.isRequired,
+    dispatchUsers: func.isRequired,
   };
 
   static defaultProps = {
@@ -33,15 +32,15 @@ class Activation extends Component {
   };
 
   state = {
-    getVerifiedCodeStatus: false,
+    verificationCodeStatus: false,
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { getVerifiedCodeStatus } = props;
-    const { getVerifiedCodeStatus: cachedgetVerifiedCodeStatus } = state;
-    if (getVerifiedCodeStatus !== cachedgetVerifiedCodeStatus) {
+    const { verificationCodeStatus } = props;
+    const { verificationCodeStatus: cachedverificationCodeStatus } = state;
+    if (verificationCodeStatus !== cachedverificationCodeStatus) {
       return {
-        getVerifiedCodeStatus,
+        verificationCodeStatus,
       };
     }
 
@@ -49,17 +48,17 @@ class Activation extends Component {
   }
 
   componentDidMount() {
-    const { fetchUsers: fetchUsersAction } = this.props;
-    fetchUsersAction();
+    const { dispatchUsers } = this.props;
+    dispatchUsers();
   }
 
   componentDidUpdate(prevProps) {
-    const { getVerifiedCodeStatus } = prevProps;
-    const { getVerifiedCodeStatus: cachedgetVerifiedCodeStatus } = this.state;
+    const { verificationCodeStatus } = prevProps;
+    const { verificationCodeStatus: cachedverificationCodeStatus } = this.state;
 
     if (
-      cachedgetVerifiedCodeStatus &&
-      getVerifiedCodeStatus !== cachedgetVerifiedCodeStatus
+      cachedverificationCodeStatus &&
+      verificationCodeStatus !== cachedverificationCodeStatus
     ) {
       history.push('/verifyCode');
     }
@@ -83,7 +82,6 @@ class Activation extends Component {
 
     return (
       <>
-        <Loading />
         <div className={s.container}>
           <Header title={headerTitle} iconLeft onClickLeft={goBack} />
           <form onSubmit={handleSubmit}>
@@ -123,7 +121,10 @@ const enhancers = [
       phoneNumber: '',
     }),
     validationSchema: activation,
-    handleSubmit: (values, { props: { getVerifiedCode, setPhoneNumber } }) => {
+    handleSubmit: (
+      values,
+      { props: { dispatchVerificationCode, dispatchSetPhoneNumber } },
+    ) => {
       const countryCode = get(values, 'countryCode');
       const sanitizedCode = countryCode.replace(/\+/, '');
       const phoneNumber = get(values, 'phoneNumber');
@@ -132,8 +133,8 @@ const enhancers = [
         REGEXP.ENCRYPT_PHONE,
         (_, p1, p2, p3) => `${p1}${p2.replace(/\d/g, 'x')}${p3}`,
       );
-      setPhoneNumber(encryptPhone);
-      getVerifiedCode(sanitizedCode, phoneNumber);
+      dispatchSetPhoneNumber(encryptPhone);
+      dispatchVerificationCode(sanitizedCode, phoneNumber);
     },
   }),
   withStyles(s),

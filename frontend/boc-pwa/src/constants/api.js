@@ -2,8 +2,10 @@
 
 export const NODE_SERVER_URL = {
   AUTHENTICATION: {
-    ROOT: '/auth',
+    ROOT: '/authentication',
     ACTIVATION: '/activation',
-    VERIFIED_CODE: '/verifiedCode',
+    VERIFICATION: '/verification',
+    CREATING_USER: '/creatingUser',
+    CREATING_STORE: '/creatingStore',
   },
 };

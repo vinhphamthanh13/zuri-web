@@ -1,18 +1,25 @@
 import {
-  setUsers,
-  setShopPhoneAction,
-  setVerifiedCode,
+  nodeUsersApi,
+  setPhoneNumberAction,
+  verificationCodeAction,
+  nodeVerificationCodeApi,
 } from 'actions/authenticationActions';
 
 export const activationProps = {
   mapStateToProps: ({ authentication }) => ({
     phoneNumber: authentication.phoneNumber,
-    getVerifiedCodeStatus: authentication.getVerifiedCodeStatus,
+    verificationCodeStatus: authentication.verificationCodeStatus,
   }),
   mapDispatchToProps: dispatch => ({
-    fetchUsers: () => dispatch(setUsers()),
-    setPhoneNumber: number => dispatch(setShopPhoneAction(number)),
-    getVerifiedCode: (countryCode, phoneNumber) =>
-      dispatch(setVerifiedCode(countryCode, phoneNumber)),
+    dispatchUsers: () => dispatch(nodeUsersApi()),
+    dispatchSetPhoneNumber: number => dispatch(setPhoneNumberAction(number)),
+    dispatchVerificationCode: (countryCode, phoneNumber) =>
+      dispatch(nodeVerificationCodeApi(countryCode, phoneNumber)),
+  }),
+};
+
+export const verifyCodeProps = {
+  mapDispatchToProps: dispatch => ({
+    clearVerificationCodeStatus: () => dispatch(verificationCodeAction(false)),
   }),
 };

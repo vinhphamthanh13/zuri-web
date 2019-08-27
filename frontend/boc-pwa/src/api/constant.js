@@ -1,13 +1,12 @@
 import config from 'config';
 
 const BASE_URL = config.masterData.url;
-// const BASE_URL = 'http://68.183.188.1231:8080';
+const USERS = `${BASE_URL}/users`;
 
 // Java Sever
 export const SERVER_URL = {
-  USERS: `${BASE_URL}/users`,
-  GET_VERIFIED_CODE: `${BASE_URL}/users`,
-  SET_VERIFIED_CODE: `${BASE_URL}/users/:countryCode/:phoneNumber/:token`,
-  ACTIVATE_USER_BY_ID: `${BASE_URL}/users/active/:userId`,
-  GET_USER_BY_ID: `${BASE_URL}/users/:userId`,
+  USERS,
+  VERIFYING_CODE: `${USERS}/:countryCode/:phoneNumber/:token`,
+  ACTIVATE_USER_BY_ID: `${USERS}/active/:userId`,
+  GET_USER_BY_ID: `${USERS}/:userId`,
 };

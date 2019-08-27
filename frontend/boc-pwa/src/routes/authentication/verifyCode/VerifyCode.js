@@ -9,8 +9,9 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { verifyCode } from 'constants/schemas';
+import { goBack } from 'utils/browser';
 import history from '../../../history';
-import { activationProps } from '../commonProps';
+import { verifyCodeProps } from '../commonProps';
 import s from './VerifyCode.css';
 
 class VerifyCode extends React.Component {
@@ -22,6 +23,7 @@ class VerifyCode extends React.Component {
     isValid: bool.isRequired,
     touched: objectOf(bool).isRequired,
     setFieldTouched: func.isRequired,
+    clearVerificationCodeStatus: func.isRequired,
   };
 
   static defaultProps = {
@@ -45,6 +47,12 @@ class VerifyCode extends React.Component {
     return null;
   }
 
+  handleChangePhoneNumber = () => {
+    const { clearVerificationCodeStatus } = this.props;
+    goBack();
+    clearVerificationCodeStatus();
+  };
+
   render() {
     const {
       values,
@@ -60,7 +68,11 @@ class VerifyCode extends React.Component {
 
     return (
       <div className={s.container}>
-        <Header title="Xác nhận mã kích hoạt" />
+        <Header
+          title="Xác nhận mã kích hoạt"
+          iconLeft
+          onClickLeft={this.handleChangePhoneNumber}
+        />
         <div className={s.textSMS}>
           <p>
             Quý khách vui lòng nhập mã xác thực được gởi đến số điện thoại{' '}
@@ -101,6 +113,9 @@ export default compose(
     },
     validationSchema: verifyCode,
   }),
-  connect(activationProps.mapStateToProps),
+  connect(
+    null,
+    verifyCodeProps.mapDispatchToProps,
+  ),
   withStyles(s),
 )(VerifyCode);
