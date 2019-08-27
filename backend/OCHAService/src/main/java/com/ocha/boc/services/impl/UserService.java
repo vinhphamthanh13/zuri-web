@@ -16,12 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -42,28 +42,22 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_USER_FAIL);
         try {
-            boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhone());
-            if(!isVerificationCodeSuccess){
-                response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
-            }else{
-                User user = userRepository.findUserByPhone(request.getPhone());
-                if (user == null) {
-                    user = new User();
-                    user.setPhone(request.getPhone());
-                    user.setActive(Boolean.TRUE);
-                    user.setCreatedDate(Instant.now().toString());
-                    user.setRole(UserType.USER);
-                    userRepository.save(user);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObjectId(user.getId());
-                    UserDTO userDTO = new UserDTO(user);
-                    response.setObject(userDTO);
-                } else {
-                    response.setMessage(CommonConstants.USER_EXISTED);
-                }
+            Optional<User> optUser = userRepository.findUserByPhone(request.getPhone());
+            if (!optUser.isPresent()) {
+                User user = new User();
+                user.setPhone(request.getPhone());
+                user.setActive(Boolean.TRUE);
+                user.setCreatedDate(Instant.now().toString());
+                user.setRole(UserType.USER);
+                userRepository.save(user);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObjectId(user.getId());
+                UserDTO userDTO = new UserDTO(user);
+                response.setObject(userDTO);
+            } else {
+                response.setMessage(CommonConstants.USER_EXISTED);
             }
-
         } catch (Exception e) {
             log.error("Error when newUser: ", e);
         }
@@ -76,9 +70,9 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         try {
             boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhoneNumber());
-            if(!isVerificationCodeSuccess){
+            if (!isVerificationCodeSuccess) {
                 response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
-            }else{
+            } else {
                 User user = checkUserExisted(request.getUserId());
                 if (user != null) {
                     if (StringUtils.isNotEmpty(request.getEmail())) {
@@ -137,11 +131,11 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(userId)) {
-                User user = userRepository.findUserById(userId);
-                if (user != null) {
+                Optional<User> user = userRepository.findUserById(userId);
+                if (user.isPresent()) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new UserDTO(user));
+                    response.setObject(new UserDTO(user.get()));
                 }
             }
         } catch (Exception e) {
@@ -156,11 +150,11 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(userId)) {
-                User user = userRepository.findUserById(userId);
-                if (user != null) {
-                    user.setLastModifiedDate(Instant.now().toString());
-                    user.setActive(Boolean.FALSE);
-                    userRepository.save(user);
+                Optional<User> user = userRepository.findUserById(userId);
+                if (user.isPresent()) {
+                    user.get().setLastModifiedDate(Instant.now().toString());
+                    user.get().setActive(Boolean.FALSE);
+                    userRepository.save(user.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 }
@@ -172,13 +166,13 @@ public class UserService {
     }
 
     private User checkUserExisted(String id) {
-        User user = null;
+        Optional<User> user = null;
         try {
             user = userRepository.findUserById(id);
         } catch (Exception e) {
             log.error("Error when checkUserExisted: ", e);
         }
-        return user;
+        return user.get();
     }
 
     public UserResponse activeUser(String userId) {
@@ -186,14 +180,14 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.USER_IS_NULL);
         try {
-            User user = userRepository.findUserById(userId);
-            if (user != null) {
-                user.setLastModifiedDate(Instant.now().toString());
-                user.setActive(Boolean.TRUE);
-                userRepository.save(user);
+            Optional<User> user = userRepository.findUserById(userId);
+            if (user.isPresent()) {
+                user.get().setLastModifiedDate(Instant.now().toString());
+                user.get().setActive(Boolean.TRUE);
+                userRepository.save(user.get());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObject(new UserDTO(user));
+                response.setObject(new UserDTO(user.get()));
             }
         } catch (Exception e) {
             log.error("Error when activeUser: ", e);
@@ -201,39 +195,37 @@ public class UserService {
         return response;
     }
 
-    public AbstractResponse sendVerificationCode (String countryCode,String phoneNumber){
+    public AbstractResponse sendVerificationCode(String countryCode, String phoneNumber) {
         AbstractResponse respsone = new AbstractResponse();
         respsone.setSuccess(Boolean.FALSE);
         respsone.setMessage(CommonConstants.SEND_VERIFICATION_CODE_FAIL);
-        try{
-            boolean isSendVerificationCodeSuccess = handlingSendVerificationCode(phoneNumber, countryCode);
-            if(isSendVerificationCodeSuccess){
+        try {
+            if (handlingSendVerificationCode(phoneNumber, countryCode)) {
                 respsone.setSuccess(Boolean.TRUE);
                 respsone.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("Error when sendVerificationCode: ", e);
         }
         return respsone;
     }
 
-    public UserResponse verifyUserCode(String countryCode, String phoneNumber, String token){
+    public UserResponse verifyUserCode(String countryCode, String phoneNumber, String token) {
         UserResponse response = new UserResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
-        try{
-            boolean isVerificationCodeSuccess = checkVerificationCode(token, countryCode, phoneNumber);
-            if(isVerificationCodeSuccess){
-                User user = userRepository.findUserByPhone(phoneNumber);
-                if(user != null){
+        try {
+            if (checkVerificationCode(token, countryCode, phoneNumber)) {
+                Optional<User> user = userRepository.findUserByPhone(phoneNumber);
+                if (user.isPresent()) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new UserDTO(user));
-                }else{
+                    response.setObject(new UserDTO(user.get()));
+                } else {
                     response.setMessage(CommonConstants.USER_NOT_EXISTED);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error when verifyUserCode: ", e);
         }
         return response;
@@ -248,10 +240,10 @@ public class UserService {
         Verification verification = authyApiClient
                 .getPhoneVerification()
                 .start(phoneNumber, countryCode, via, params);
-        if(!verification.isOk()) {
+        if (!verification.isOk()) {
             logAndThrow("Error requesting phone verification. " +
                     verification.getMessage());
-        }else{
+        } else {
             isSuccess = true;
         }
         return isSuccess;
@@ -263,9 +255,9 @@ public class UserService {
         Verification verification = authyApiClient
                 .getPhoneVerification()
                 .check(phoneNumber, countryCode, token);
-        if(verification.isOk()){
+        if (verification.isOk()) {
             isSuccess = true;
-        }else{
+        } else {
             logAndThrow("Error verifying token. " + verification.getMessage());
         }
         return isSuccess;

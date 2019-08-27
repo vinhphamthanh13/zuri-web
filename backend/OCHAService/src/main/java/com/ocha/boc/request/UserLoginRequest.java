@@ -15,10 +15,4 @@ public class UserLoginRequest implements Serializable {
 
     @NonNull
     private String phone;
-
-    @NonNull
-    private String verificationCode;
-
-    @NonNull
-    private String countryCode;
 }
