@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 @Slf4j
 public class UserController {
 
@@ -78,8 +79,8 @@ public class UserController {
     }
 
     @ApiOperation(value = "Check User Exist By PhoneNumber")
-    @GetMapping("/users/{phoneNumber}")
-    public ResponseEntity<AbstractResponse> findUserByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber){
+    @GetMapping("/users/checking/{phone}")
+    public ResponseEntity<AbstractResponse> findUserByPhoneNumber(@PathVariable(value = "phone") String phoneNumber){
         log.info("START: find user by phone number: " + phoneNumber);
         AbstractResponse response = userService.findUserByPhoneNumber(phoneNumber);
         log.info("END: find user by phone number");
