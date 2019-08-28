@@ -88,7 +88,9 @@ class Shop extends React.Component {
                   </div>
                   <div className={s.detailItem}>
                     <Place size={20} hexColor={gray} />
-                    <span>{formatStringLength(mockDetail.shopAddress, 69)}</span>
+                    <span>
+                      {formatStringLength(mockDetail.shopAddress, 69)}
+                    </span>
                   </div>
                 </div>
                 <div

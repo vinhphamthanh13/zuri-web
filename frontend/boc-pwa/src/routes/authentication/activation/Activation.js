@@ -15,12 +15,17 @@ import history from '../../../history';
 import { activationProps } from '../commonProps';
 import s from './Activation.css';
 
-const initUserData = {
+const INIT_USER = {
   message: '',
   success: null,
 };
-
-const phoneFieldLabel = 'phoneNumber';
+const LOGIN = false;
+const REGISTER = true;
+const PHONE_FIELD = 'phoneNumber';
+const LOCATION_STATE = 'location.state';
+const LOGIN_MESSAGE = 'Nhập số điện thoại đã đăng ký BOCVN.';
+const REGISTER_MESSAGE =
+  'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.';
 
 class Activation extends Component {
   static propTypes = {
@@ -40,7 +45,7 @@ class Activation extends Component {
 
   static defaultProps = {
     errors: {},
-    existingUser: initUserData,
+    existingUser: INIT_USER,
   };
 
   state = {
@@ -83,27 +88,25 @@ class Activation extends Component {
       getVerificationCodeStatus: cachedgetVerificationCodeStatus,
       existingUser,
     } = this.state;
-    const isRegistering = get(history, 'location.state');
-    const phoneNumber = get(values, phoneFieldLabel);
+    const isRegistering = get(history, LOCATION_STATE);
+    const phoneNumber = get(values, PHONE_FIELD);
     const { success, message } = existingUser;
 
     if (REGEXP.PHONE_NUMBER.test(phoneNumber) && Object.is(success, null)) {
       dispatchExistingUser(phoneNumber);
     }
 
-    if (!isRegistering && Object.is(success, false)) {
-      dispatchError(`${message} Nhập số điện thoại đã đăng ký BOCVN.`);
+    if (!isRegistering && Object.is(success, LOGIN)) {
+      dispatchError(`${message} ${LOGIN_MESSAGE}`);
       this.clearCachedData();
     }
 
-    if (isRegistering && errors[phoneFieldLabel]) {
-      dispatchExistingUserAction(initUserData);
+    if (isRegistering && errors[PHONE_FIELD]) {
+      dispatchExistingUserAction(INIT_USER);
     }
 
-    if (isRegistering && Object.is(success, true)) {
-      dispatchError(
-        'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.',
-      );
+    if (isRegistering && Object.is(success, REGISTER)) {
+      dispatchError(REGISTER_MESSAGE);
       this.clearCachedData();
     }
 
@@ -121,8 +124,8 @@ class Activation extends Component {
 
   clearCachedData = () => {
     const { setFieldValue, dispatchExistingUserAction } = this.props;
-    setFieldValue(phoneFieldLabel, '');
-    dispatchExistingUserAction(initUserData);
+    setFieldValue(PHONE_FIELD, '');
+    dispatchExistingUserAction(INIT_USER);
   };
 
   render() {
@@ -160,7 +163,7 @@ class Activation extends Component {
                 disabled
               />
               <Input
-                name={phoneFieldLabel}
+                name={PHONE_FIELD}
                 type="tel"
                 value={phoneNumber}
                 placeholder="Số điện thoại"
@@ -199,7 +202,7 @@ const enhancers = [
     ) => {
       const countryCode = get(values, 'countryCode');
       const sanitizedCode = countryCode.replace(/\+/, '');
-      const phoneNumber = get(values, phoneFieldLabel);
+      const phoneNumber = get(values, PHONE_FIELD);
       const registerPhoneNumber = `${phoneNumber.replace(/^(\d+)/, '$1')}`;
       const encryptPhone = registerPhoneNumber.replace(
         REGEXP.ENCRYPT_PHONE,

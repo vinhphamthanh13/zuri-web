@@ -1,12 +1,8 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
+import { ROUTER_URL } from 'constants/routerUrl';
 
+const authRoute = ROUTER_URL.AUTHENTICATION;
+const tabsRoute = ROUTER_URL.TABS;
+const setupRoute = ROUTER_URL.SETUP;
 // The top-level (parent) route
 const routes = {
   path: '',
@@ -14,57 +10,57 @@ const routes = {
   // Keep in mind, routes are evaluated in order
   children: [
     {
-      path: '/',
+      path: `${authRoute.LOGIN}`,
       load: () =>
         import(/* webpackChunkName: 'login' */ './authentication/login'),
     },
     {
-      path: '/register',
+      path: `${authRoute.REGISTER}`,
       load: () =>
         import(/* webpackChunkName: 'register' */ './authentication/register'),
     },
     {
-      path: '/activation',
+      path: `${authRoute.ACTIVATION}`,
       load: () =>
         import(/* webpackChunkName: 'activation' */ './authentication/activation'),
     },
     {
-      path: '/verifyCode',
+      path: `${authRoute.VERIFY}`,
       load: () =>
         import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
     },
     {
-      path: '/shops',
+      path: `${authRoute.SHOPS}`,
       load: () =>
         import(/* webpackChunkName: 'shops' */ './authentication/shops'),
     },
     {
-      path: '/home',
+      path: `${tabsRoute.HOME}`,
       load: () => import(/* webpackChunkName: 'home' */ './home'),
     },
     {
-      path: '/report',
+      path: `${tabsRoute.REPORT}`,
       load: () => import(/* webpackChunkName: 'report' */ './report'),
     },
     {
-      path: '/activity',
+      path: `${tabsRoute.ACTIVITY}`,
       load: () => import(/* webpackChunkName: 'activity' */ './activity'),
     },
     // Shop Route and Children
     {
-      path: '/shop',
+      path: `${tabsRoute.SHOP}`,
       load: () => import(/* webpackChunkName: 'shop' */ './shop'),
     },
     {
-      path: '/shop/setup',
+      path: `${setupRoute.SHOP}`,
       load: () => import(/* webpackChunkName: 'shopSetup' */ './shop/setup'),
     },
     {
-      path: '/shop/setup/tax',
+      path: `${setupRoute.TAX}`,
       load: () => import(/* webpackChunkName: 'shopTax' */ './shop/setup/tax'),
     },
     {
-      path: '/shop/goods',
+      path: `${setupRoute.GOODS}`,
       load: () =>
         import(/* webpackChunkName: 'shopGoods' */ './shop/setup/goods'),
     },

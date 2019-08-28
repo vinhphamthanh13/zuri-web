@@ -79,7 +79,7 @@ export const SHOP = {
         {
           ICON: <MonetizationOn size={28} hexColor={triad06} />,
           NAME: 'Thuế',
-          action: () => history.push('/shop/setup/tax'),
+          action: () => history.push('/shop/tax'),
         },
         {
           ICON: <Store size={28} hexColor={triad01} />,
