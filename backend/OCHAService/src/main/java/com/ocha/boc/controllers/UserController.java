@@ -19,12 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "Create new user account")
-    @PostMapping("/users")
-    public ResponseEntity<UserResponse> newUser(@RequestBody UserLoginRequest request) {
-        UserResponse response = userService.newUser(request);
-        return ResponseEntity.ok(response);
-    }
 
     @ApiOperation(value = "Update User")
     @PutMapping("/users")
