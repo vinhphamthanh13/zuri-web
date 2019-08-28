@@ -30,15 +30,6 @@
 
   /* Layout */
 
-  --max-height-iphone4: 480px;
-  --max-height-iphone5: 568px;
-  --max-height-iphone6: 667px;
-  --max-height-iphone6p: 736px;
-  --max-height-iphoneX: 812px;
-  --max-height-iphoneXMR: 896px;
-  --max-height-ipad: 1024px;
-  --max-height-ipad-pro: 1366px;
-  --max-height-android: 640px;
   --min-content-width: 320px;
   --max-content-width: 375px;
 

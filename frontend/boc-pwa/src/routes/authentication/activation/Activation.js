@@ -11,6 +11,8 @@ import Input from 'components/Input';
 import { activation } from 'constants/schemas';
 import { goBack } from 'utils/browser';
 import { REGEXP } from 'constants/common';
+import { ROUTER_URL } from 'constants/routerUrl';
+import { HTTP_STATUS } from 'constants/http';
 import history from '../../../history';
 import { activationProps } from '../commonProps';
 import s from './Activation.css';
@@ -18,6 +20,7 @@ import s from './Activation.css';
 const INIT_USER = {
   message: '',
   success: null,
+  code: HTTP_STATUS.INTERNAL_ERROR,
 };
 const LOGIN = false;
 const REGISTER = true;
@@ -26,6 +29,7 @@ const LOCATION_STATE = 'location.state';
 const LOGIN_MESSAGE = 'Nhập số điện thoại đã đăng ký BOCVN.';
 const REGISTER_MESSAGE =
   'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.';
+const authUrl = ROUTER_URL.AUTHENTICATION;
 
 class Activation extends Component {
   static propTypes = {
@@ -41,30 +45,37 @@ class Activation extends Component {
     existingUser: objectOf(any),
     dispatchError: func.isRequired,
     dispatchExistingUserAction: func.isRequired,
+    creatingUser: bool,
   };
 
   static defaultProps = {
     errors: {},
     existingUser: INIT_USER,
+    creatingUser: null,
   };
 
   state = {
     getVerificationCodeStatus: false,
+    existingUser: INIT_USER,
+    creatingUser: null,
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { getVerificationCodeStatus, existingUser } = props;
+    const { getVerificationCodeStatus, existingUser, creatingUser } = props;
     const {
       getVerificationCodeStatus: cachedgetVerificationCodeStatus,
       existingUser: cachedExistingUser,
+      creatingUser: cachedCreatingUser,
     } = state;
     if (
       getVerificationCodeStatus !== cachedgetVerificationCodeStatus ||
-      existingUser.success !== cachedExistingUser.success
+      existingUser.success !== cachedExistingUser.success ||
+      creatingUser !== cachedCreatingUser
     ) {
       return {
         getVerificationCodeStatus,
         existingUser,
+        creatingUser,
       };
     }
 
@@ -87,16 +98,25 @@ class Activation extends Component {
     const {
       getVerificationCodeStatus: cachedgetVerificationCodeStatus,
       existingUser,
+      creatingUser,
     } = this.state;
     const isRegistering = get(history, LOCATION_STATE);
     const phoneNumber = get(values, PHONE_FIELD);
-    const { success, message } = existingUser;
+    const { code, success, message } = existingUser;
 
     if (REGEXP.PHONE_NUMBER.test(phoneNumber) && Object.is(success, null)) {
       dispatchExistingUser(phoneNumber);
     }
 
-    if (!isRegistering && Object.is(success, LOGIN)) {
+    if (isRegistering && creatingUser) {
+      history.push(authUrl.CREATING_NEW_STORE);
+    }
+
+    if (
+      !isRegistering &&
+      Object.is(success, LOGIN) &&
+      code !== HTTP_STATUS.INTERNAL_ERROR
+    ) {
       dispatchError(`${message} ${LOGIN_MESSAGE}`);
       this.clearCachedData();
     }
@@ -105,7 +125,11 @@ class Activation extends Component {
       dispatchExistingUserAction(INIT_USER);
     }
 
-    if (isRegistering && Object.is(success, REGISTER)) {
+    if (
+      isRegistering &&
+      Object.is(success, REGISTER) &&
+      code !== HTTP_STATUS.INTERNAL_ERROR
+    ) {
       dispatchError(REGISTER_MESSAGE);
       this.clearCachedData();
     }
@@ -114,7 +138,7 @@ class Activation extends Component {
       cachedgetVerificationCodeStatus &&
       getVerificationCodeStatus !== cachedgetVerificationCodeStatus
     ) {
-      history.push('/verifyCode');
+      history.push(authUrl.VERIFY);
     }
   }
 
@@ -144,9 +168,11 @@ class Activation extends Component {
     const headerTitle = registerState
       ? 'Số điện thoại cửa hàng'
       : 'đăng nhập cửa hàng';
+    const code = get(existingUser, 'code');
     const isLoginValid = isValid && !registerState && existingUser.success;
     const isRegisterValid = isValid && !existingUser.success;
-    const isActivatingCode = isLoginValid || isRegisterValid;
+    const isActivatingCode =
+      code !== HTTP_STATUS.INTERNAL_ERROR && (isLoginValid || isRegisterValid);
     const activatingLabel = registerState ? 'Tạo cửa hàng' : 'Lấy mã xác nhận';
 
     return (
@@ -181,6 +207,7 @@ class Activation extends Component {
               disabled={!isActivatingCode}
             />
           </form>
+          {registerState && <div className={s.captcha}>show captcha here</div>}
         </div>
       </>
     );
@@ -198,8 +225,15 @@ const enhancers = [
     validationSchema: activation,
     handleSubmit: (
       values,
-      { props: { dispatchVerificationCode, dispatchSetPhoneNumber } },
+      {
+        props: {
+          dispatchVerificationCode,
+          dispatchSetPhoneNumber,
+          dispatchCreatingUser,
+        },
+      },
     ) => {
+      const registerUser = get(history, 'location.state');
       const countryCode = get(values, 'countryCode');
       const sanitizedCode = countryCode.replace(/\+/, '');
       const phoneNumber = get(values, PHONE_FIELD);
@@ -208,8 +242,12 @@ const enhancers = [
         REGEXP.ENCRYPT_PHONE,
         (_, p1, p2, p3) => `${p1}${p2.replace(/\d/g, 'x')}${p3}`,
       );
-      dispatchSetPhoneNumber(encryptPhone);
-      dispatchVerificationCode(sanitizedCode, phoneNumber);
+      if (registerUser) {
+        dispatchCreatingUser(phoneNumber);
+      } else {
+        dispatchSetPhoneNumber(encryptPhone);
+        dispatchVerificationCode(sanitizedCode, phoneNumber);
+      }
     },
   }),
   withStyles(s),

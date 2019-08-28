@@ -1,10 +1,10 @@
 export const ROUTER_URL = {
   AUTHENTICATION: {
     LOGIN: '/',
-    REGISTER: '/register',
     ACTIVATION: '/activation',
     VERIFY: '/verifyCode',
     SHOPS: '/shops',
+    CREATING_NEW_STORE: '/creatingStore',
   },
   TABS: {
     HOME: '/home',

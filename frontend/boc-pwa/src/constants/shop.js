@@ -19,6 +19,7 @@ import {
   triad06,
   triad08,
 } from 'constants/colors';
+import { setupRoute } from 'routes';
 import history from '../history';
 
 export const SHOP = {
@@ -29,12 +30,12 @@ export const SHOP = {
         {
           ICON: <SettingApps size={36} hexColor={triad01} />,
           NAME: 'Thiết lập',
-          action: () => history.push('/shop/setup'),
+          action: () => history.push(setupRoute.SHOP),
         },
         {
           ICON: <Assignment size={36} hexColor={triad02} />,
           NAME: 'Mặt hàng',
-          action: () => history.push('/shop/goods'),
+          action: () => history.push(setupRoute.GOODS),
         },
         {
           ICON: <ViewStream size={36} hexColor={triad03} />,
@@ -79,7 +80,7 @@ export const SHOP = {
         {
           ICON: <MonetizationOn size={28} hexColor={triad06} />,
           NAME: 'Thuế',
-          action: () => history.push('/shop/tax'),
+          action: () => history.push(setupRoute.TAX),
         },
         {
           ICON: <Store size={28} hexColor={triad01} />,

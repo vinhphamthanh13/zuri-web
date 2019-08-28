@@ -1,5 +1,12 @@
+import { tabsRoute } from 'routes';
+
 export const LAYOUT = {
   MAX_WIDTH: 768,
+};
+export const DATA = {
+  ROOT: 'data',
+  SUCCESS: 'data.success',
+  MESSAGE: 'data.message',
 };
 
 export const REGEXP = {
@@ -150,18 +157,18 @@ export const SHOP_DETAIL = {
 export const TABS = {
   GENERAL: {
     NAME: 'tổng quan',
-    URL: '/home',
+    URL: `${tabsRoute.HOME}`,
   },
   REPORT: {
     NAME: 'báo cáo',
-    URL: '/report',
+    URL: `${tabsRoute.REPORT}`,
   },
   ACTIVITY: {
     NAME: 'hoạt động',
-    URL: '/activity',
+    URL: `${tabsRoute.ACTIVITY}`,
   },
   SHOP: {
     NAME: 'cửa hàng',
-    URL: '/shop',
+    URL: `${tabsRoute.SHOP}`,
   },
 };

@@ -6,6 +6,7 @@ import {
   nodeVerificationCodeApi,
   nodeExistingUserApi,
   existingUserAction,
+  nodeCreatingUserApi,
 } from 'actions/authenticationActions';
 
 export const activationProps = {
@@ -13,6 +14,7 @@ export const activationProps = {
     phoneNumber: authentication.phoneNumber,
     getVerificationCodeStatus: authentication.getVerificationCodeStatus,
     existingUser: authentication.existingUser,
+    creatingUser: authentication.creatingUser,
   }),
   mapDispatchToProps: dispatch => ({
     dispatchError: message => dispatch(setError(message)),
@@ -22,6 +24,7 @@ export const activationProps = {
       dispatch(nodeVerificationCodeApi(countryCode, phoneNumber)),
     dispatchExistingUser: phone => dispatch(nodeExistingUserApi(phone)),
     dispatchExistingUserAction: data => dispatch(existingUserAction(data)),
+    dispatchCreatingUser: phone => dispatch(nodeCreatingUserApi(phone)),
   }),
 };
 

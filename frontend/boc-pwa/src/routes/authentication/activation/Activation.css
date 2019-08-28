@@ -20,12 +20,16 @@
   width: var(--size-64);
   color: var(--c-gray);
   text-align: center;
+  border-right: transparent;
   border-radius: var(--size-radius-standard) 0 0 var(--size-radius-standard);
 }
 
 .phoneNumber {
   width: calc(var(--size-72) * 3.5);
-  border-left: transparent;
   text-align: center;
   border-radius: 0 var(--size-radius-standard) var(--size-radius-standard) 0;
+}
+
+.captcha {
+  color: var(--c-triad-05);
 }

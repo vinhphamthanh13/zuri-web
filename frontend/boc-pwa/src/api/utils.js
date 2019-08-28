@@ -1,10 +1,12 @@
 import { get } from 'lodash';
+import { DATA } from 'constants/common';
 import { HTTP_STATUS, CONTENT_TYPE } from 'constants/http';
 
 const handleResponse = (response, defaultResponse) => {
   if (response) {
     const { status, data } = response;
     return {
+      code: status,
       data,
       status,
     };
@@ -20,7 +22,8 @@ const handleError = response => {
   return {
     status: HTTP_STATUS.INTERNAL_ERROR,
     data: {
-      message: 'Hiện tại không thể kết nối với máy chủ BOC.',
+      code: HTTP_STATUS.INTERNAL_ERROR,
+      message: 'Hiện tại không thể kết nối với máy chủ BOCVN.',
       success: false,
     },
   };
@@ -30,7 +33,7 @@ export const handleRequest = async (reqFunction, args, defaultResponse) => {
   try {
     const result = handleResponse(await reqFunction(...args), defaultResponse);
     const status = get(result, 'status');
-    const success = get(result, 'data.success');
+    const success = get(result, DATA.SUCCESS);
     if (status === HTTP_STATUS.OK && success) {
       return [result, null];
     }
@@ -41,12 +44,13 @@ export const handleRequest = async (reqFunction, args, defaultResponse) => {
 };
 
 export const handleNodeServerError = (response, error) => {
-  const message = get(error, 'data.message');
-  const success = get(error, 'data.success') || false;
+  const message = get(error, DATA.MESSAGE);
+  const success = get(error, DATA.SUCCESS) || false;
   const status = get(error, 'status') || HTTP_STATUS.INTERNAL_ERROR;
   response.status(status);
   response.set('Content-Type', CONTENT_TYPE.JSON);
   response.send({
+    code: status,
     message,
     success,
   });

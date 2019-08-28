@@ -10,13 +10,15 @@
 import axios from 'axios';
 import { get } from 'lodash';
 import { NODE_SERVER_URL } from 'constants/api';
+import { DATA } from 'constants/common';
 import { handleRequest } from 'api/utils';
 import { LOADING, setLoading, setError } from 'actions/common';
+import { HTTP_STATUS } from 'constants/http';
 
 const authRootUrl = NODE_SERVER_URL.AUTHENTICATION.ROOT;
 const authUrl = NODE_SERVER_URL.AUTHENTICATION;
 const activatingPhoneUrl = `${authRootUrl}${authUrl.ACTIVATION}`;
-const verificationCodeUrl = `${authRootUrl}${authUrl.VERIFICATION}`;
+// const verificationCodeUrl = `${authRootUrl}${authUrl.VERIFICATION}`;
 const creatingUserUrl = `${authRootUrl}${authUrl.CREATING_USER}`;
 const existingUserUrl = `${authRootUrl}${authUrl.EXIST_USER}`;
 
@@ -79,7 +81,7 @@ export const nodeUsersApi = () => async dispatch => {
   dispatch(setLoading(LOADING.ON));
   const [result, error] = await handleRequest(nodeUsers, []);
   if (error) {
-    const message = get(error, 'data.message');
+    const message = get(error, DATA.MESSAGE);
     dispatch(setError(message));
   } else {
     dispatch(setUsersAction(result));
@@ -97,10 +99,10 @@ export const nodeVerificationCodeApi = (
     phoneNumber,
   ]);
   if (error) {
-    const message = get(error, 'data.message');
+    const message = get(error, DATA.MESSAGE);
     dispatch(setError(message));
   } else {
-    const getVerificationCodeStatus = get(result, 'data.success');
+    const getVerificationCodeStatus = get(result, DATA.SUCCESS);
     dispatch(getVerificationCodeAction(getVerificationCodeStatus));
   }
   dispatch(setLoading(LOADING.OFF));
@@ -118,23 +120,11 @@ export const nodeVerifiedCodeApi = (
     verifiedCode,
   ]);
   if (error) {
-    const message = get(error, 'data.message');
+    const message = get(error, DATA.MESSAGE);
     dispatch(setError(message));
   } else {
-    const setVerificationCodeStatus = get(result, 'data.success');
+    const setVerificationCodeStatus = get(result, DATA.SUCCESS);
     dispatch(setVerificationCodeAction(setVerificationCodeStatus));
-  }
-  dispatch(setLoading(LOADING.OFF));
-};
-
-export const nodeCreatingUserApi = data => async dispatch => {
-  dispatch(setLoading(LOADING.ON));
-  const [result, error] = await handleRequest(nodeCreatingUser, [data]);
-  if (error) {
-    const message = get(error, 'data.message');
-    dispatch(setError(message));
-  } else {
-    dispatch(creatingUserAction(result));
   }
   dispatch(setLoading(LOADING.OFF));
 };
@@ -142,7 +132,20 @@ export const nodeCreatingUserApi = data => async dispatch => {
 export const nodeExistingUserApi = phone => async dispatch => {
   dispatch(setLoading(LOADING.ON));
   const [result, error] = await handleRequest(nodeExistingUser, [phone]);
-  const data = get(result, 'data') || get(error, 'data');
+  const data = get(result, DATA.ROOT) || get(error, DATA.ROOT);
+  const code = get(data, 'code');
+  if (code === HTTP_STATUS.INTERNAL_ERROR) {
+    const message = get(data, 'message');
+    dispatch(setError(message));
+  }
   dispatch(existingUserAction(data));
+  dispatch(setLoading(LOADING.OFF));
+};
+
+export const nodeCreatingUserApi = phone => async dispatch => {
+  dispatch(setLoading(LOADING.ON));
+  const [result, error] = await handleRequest(nodeCreatingUser, [phone]);
+  const success = get(result, DATA.SUCCESS) || get(error, DATA.SUCCESS);
+  dispatch(creatingUserAction(success));
   dispatch(setLoading(LOADING.OFF));
 };

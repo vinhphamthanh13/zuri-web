@@ -37,6 +37,7 @@ body {
   background-color: var(--c-smoke);
   font-size: var(--font-size-18);
   color: var(--c-bg-brand-3);
+  -webkit-overflow-scrolling: touch;
 }
 
 .layout {

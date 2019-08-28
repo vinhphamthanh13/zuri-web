@@ -15,9 +15,11 @@
 
 .modal {
   border-radius: var(--size-radius-standard);
-  width: var(--max-content-width);
+  max-width: var(--max-content-width);
+  min-width: var(--min-content-width);
   background: var(--c-bg-light);
   overflow: hidden;
+  margin: var(--size-10);
 }
 
 .title {

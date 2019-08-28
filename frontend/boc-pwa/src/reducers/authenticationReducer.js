@@ -6,6 +6,7 @@ import {
   SET_PHONE_NUMBER,
   GET_VERIFICATION_CODE,
   EXISTING_USER,
+  CREATING_USER,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
@@ -20,6 +21,7 @@ const initState = {
   phoneNumber: null,
   getVerificationCodeStatus: null,
   existingUser: { success: null },
+  creatingUser: null,
 };
 
 const reducer = (state = initState, action) => {
@@ -45,6 +47,12 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       existingUser: action.payload,
+    };
+  }
+  if (action.type === CREATING_USER) {
+    return {
+      ...state,
+      creatingUser: action.payload,
     };
   }
 

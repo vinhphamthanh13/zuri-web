@@ -18,7 +18,7 @@ export const goForward = () => {
 };
 
 export const resolveDimension = (width, height) => {
-  if (width === 320 || height === 320) return null;
+  if (width < 321 || height < 321) return null;
   return {
     width: `${width}px`,
     height: width > height && isMobile ? `${width}px` : `${height}px`,

@@ -1,8 +1,9 @@
 import { ROUTER_URL } from 'constants/routerUrl';
 
-const authRoute = ROUTER_URL.AUTHENTICATION;
-const tabsRoute = ROUTER_URL.TABS;
-const setupRoute = ROUTER_URL.SETUP;
+export const authRoute = ROUTER_URL.AUTHENTICATION;
+export const tabsRoute = ROUTER_URL.TABS;
+export const setupRoute = ROUTER_URL.SETUP;
+
 // The top-level (parent) route
 const routes = {
   path: '',
@@ -15,9 +16,9 @@ const routes = {
         import(/* webpackChunkName: 'login' */ './authentication/login'),
     },
     {
-      path: `${authRoute.REGISTER}`,
+      path: `${authRoute.CREATING_NEW_STORE}`,
       load: () =>
-        import(/* webpackChunkName: 'register' */ './authentication/register'),
+        import(/* webpackChunkName: 'registerShop' */ './authentication/registerShop'),
     },
     {
       path: `${authRoute.ACTIVATION}`,
