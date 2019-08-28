@@ -24,12 +24,6 @@
   margin-bottom: var(--size-14);
 }
 
-.login span {
-  text-transform: uppercase;
-  font-weight: var(--font-weight-500);
-  color: var(--c-error);
-}
-
 .policiesAndTerms {
   position: absolute;
   bottom: var(--size-64);

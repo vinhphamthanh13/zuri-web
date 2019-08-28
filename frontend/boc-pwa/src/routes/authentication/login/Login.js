@@ -12,7 +12,9 @@ class Login extends React.Component {
     history.push('/activation');
   };
   redirectRegister = () => {
-    history.push('/register');
+    history.push('/activation', {
+      register: true,
+    });
   };
 
   render() {

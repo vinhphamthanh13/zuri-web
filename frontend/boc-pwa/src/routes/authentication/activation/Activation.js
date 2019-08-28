@@ -64,7 +64,6 @@ class Activation extends Component {
     } = this.state;
     const registerUser = get(history, 'location.state.register');
 
-    console.log('registerUser', registerUser);
     if (REGEXP.PHONE_NUMBER.test(phoneNumber) && !registerUser) {
       dispatchExistingUser(phoneNumber);
     }
@@ -93,8 +92,9 @@ class Activation extends Component {
     const headerTitle = registerState
       ? 'Số điện thoại cửa hàng'
       : 'đăng nhập cửa hàng';
-    const isConfirmed =
-      isValid && ((!registerState && existingUser) || registerState);
+    const isLoginValid = isValid && !registerState && existingUser;
+    const isRegisterValid = false;
+    const isActivatingCode = isLoginValid || isRegisterValid;
 
     return (
       <>
@@ -124,7 +124,7 @@ class Activation extends Component {
             <Button
               label="Lấy Mã Xác Nhận"
               type="submit"
-              disabled={!isConfirmed}
+              disabled={!isActivatingCode}
             />
           </form>
         </div>

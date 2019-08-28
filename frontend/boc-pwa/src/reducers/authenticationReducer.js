@@ -19,7 +19,7 @@ const initState = {
   users: [],
   phoneNumber: null,
   getVerificationCodeStatus: null,
-  existingUser: null,
+  existingUser: false,
 };
 
 const reducer = (state = initState, action) => {

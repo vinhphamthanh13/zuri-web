@@ -17,7 +17,7 @@ export default function configureStore(initialState, helpersConfig) {
     key: 'BOCVN',
     storage,
     stateReconciler: autoMergeLevel2,
-    blacklist: ['common'],
+    blacklist: ['authentication', 'common'],
   };
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);
