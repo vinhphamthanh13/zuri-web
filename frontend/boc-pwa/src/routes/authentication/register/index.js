@@ -1,13 +1,13 @@
 import React from 'react';
 import Layout from 'components/Layout';
-import Register from './Register';
+import RegisterShop from './RegisterShop';
 
 const action = () => ({
-  chunks: ['register'],
-  title: 'Đăng Ký BOCVN',
+  chunks: ['registerShop'],
+  title: 'Tạo cửa hàng',
   component: (
     <Layout>
-      <Register />
+      <RegisterShop />
     </Layout>
   ),
 });

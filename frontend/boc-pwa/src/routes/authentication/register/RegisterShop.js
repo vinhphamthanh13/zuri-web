@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { func, objectOf, any, bool } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Header from 'components/Header';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { withFormik } from 'formik';
@@ -11,9 +11,9 @@ import { register } from 'constants/schemas';
 import { REGISTER } from 'constants/common';
 import BocGreet from 'assets/images/boc_greeting.png';
 import history from '../../../history';
-import s from './Register.css';
+import s from './RegisterShop.css';
 
-class Register extends Component {
+class RegisterShop extends Component {
   static propTypes = {
     handleChange: func.isRequired,
     values: objectOf(any).isRequired,
@@ -58,10 +58,7 @@ class Register extends Component {
   };
 
   render() {
-    const {
-      isValid,
-      values: { policiesAndTerms },
-    } = this.props;
+    const { isValid } = this.props;
 
     return (
       <div className={s.container}>
@@ -78,12 +75,6 @@ class Register extends Component {
             className={s.button}
           />
         </div>
-        {!policiesAndTerms && (
-          <div className={s.login}>
-            Hoặc đã có tài khoản?{' '}
-            <span onClick={this.handleActivation}>Đăng nhập</span>
-          </div>
-        )}
       </div>
     );
   }
@@ -105,4 +96,4 @@ export default compose(
   }),
   connect(null),
   withStyles(s),
-)(Register);
+)(RegisterShop);

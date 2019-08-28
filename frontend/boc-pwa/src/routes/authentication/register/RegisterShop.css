@@ -24,12 +24,6 @@
   margin-bottom: var(--size-14);
 }
 
-.login {
-  margin-top: var(--size-10);
-  color: var(--c-brand-1);
-  font-size: var(--font-size-medium);
-}
-
 .login span {
   text-transform: uppercase;
   font-weight: var(--font-weight-500);
