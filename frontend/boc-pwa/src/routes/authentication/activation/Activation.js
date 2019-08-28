@@ -15,6 +15,13 @@ import history from '../../../history';
 import { activationProps } from '../commonProps';
 import s from './Activation.css';
 
+const initUserData = {
+  message: '',
+  success: null,
+};
+
+const phoneFieldLabel = 'phoneNumber';
+
 class Activation extends Component {
   static propTypes = {
     values: objectOf(any).isRequired,
@@ -22,14 +29,18 @@ class Activation extends Component {
     touched: objectOf(bool).isRequired,
     isValid: bool.isRequired,
     handleChange: func.isRequired,
+    setFieldValue: func.isRequired,
     setFieldTouched: func.isRequired,
     handleSubmit: func.isRequired,
     dispatchExistingUser: func.isRequired,
-    existingUser: bool.isRequired,
+    existingUser: objectOf(any),
+    dispatchError: func.isRequired,
+    dispatchExistingUserAction: func.isRequired,
   };
 
   static defaultProps = {
     errors: {},
+    existingUser: initUserData,
   };
 
   state = {
@@ -37,35 +48,63 @@ class Activation extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { getVerificationCodeStatus, values } = props;
+    const { getVerificationCodeStatus, existingUser } = props;
     const {
       getVerificationCodeStatus: cachedgetVerificationCodeStatus,
-      values: cachedValues,
+      existingUser: cachedExistingUser,
     } = state;
     if (
       getVerificationCodeStatus !== cachedgetVerificationCodeStatus ||
-      values !== cachedValues
+      existingUser.success !== cachedExistingUser.success
     ) {
-      const { phoneNumber } = values;
       return {
         getVerificationCodeStatus,
-        phoneNumber,
+        existingUser,
       };
     }
 
     return null;
   }
 
+  componentDidMount() {
+    this.clearCachedData();
+  }
+
   componentDidUpdate(prevProps) {
-    const { getVerificationCodeStatus, dispatchExistingUser } = prevProps;
+    const {
+      getVerificationCodeStatus,
+      dispatchExistingUser,
+      values,
+      dispatchError,
+      errors,
+      dispatchExistingUserAction,
+    } = prevProps;
     const {
       getVerificationCodeStatus: cachedgetVerificationCodeStatus,
-      phoneNumber,
+      existingUser,
     } = this.state;
-    const registerUser = get(history, 'location.state.register');
+    const isRegistering = get(history, 'location.state');
+    const phoneNumber = get(values, phoneFieldLabel);
+    const { success, message } = existingUser;
 
-    if (REGEXP.PHONE_NUMBER.test(phoneNumber) && !registerUser) {
+    if (REGEXP.PHONE_NUMBER.test(phoneNumber) && Object.is(success, null)) {
       dispatchExistingUser(phoneNumber);
+    }
+
+    if (!isRegistering && Object.is(success, false)) {
+      dispatchError(`${message} Nhập số điện thoại đã đăng ký BOCVN.`);
+      this.clearCachedData();
+    }
+
+    if (isRegistering && errors[phoneFieldLabel]) {
+      dispatchExistingUserAction(initUserData);
+    }
+
+    if (isRegistering && Object.is(success, true)) {
+      dispatchError(
+        'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.',
+      );
+      this.clearCachedData();
     }
 
     if (
@@ -75,6 +114,16 @@ class Activation extends Component {
       history.push('/verifyCode');
     }
   }
+
+  componentWillUnmount() {
+    this.clearCachedData();
+  }
+
+  clearCachedData = () => {
+    const { setFieldValue, dispatchExistingUserAction } = this.props;
+    setFieldValue(phoneFieldLabel, '');
+    dispatchExistingUserAction(initUserData);
+  };
 
   render() {
     const {
@@ -92,9 +141,10 @@ class Activation extends Component {
     const headerTitle = registerState
       ? 'Số điện thoại cửa hàng'
       : 'đăng nhập cửa hàng';
-    const isLoginValid = isValid && !registerState && existingUser;
-    const isRegisterValid = false;
+    const isLoginValid = isValid && !registerState && existingUser.success;
+    const isRegisterValid = isValid && !existingUser.success;
     const isActivatingCode = isLoginValid || isRegisterValid;
+    const activatingLabel = registerState ? 'Tạo cửa hàng' : 'Lấy mã xác nhận';
 
     return (
       <>
@@ -110,7 +160,7 @@ class Activation extends Component {
                 disabled
               />
               <Input
-                name="phoneNumber"
+                name={phoneFieldLabel}
                 type="tel"
                 value={phoneNumber}
                 placeholder="Số điện thoại"
@@ -119,10 +169,11 @@ class Activation extends Component {
                 errors={errors}
                 onTouch={setFieldTouched}
                 touched={touched}
+                disabled={isLoginValid}
               />
             </div>
             <Button
-              label="Lấy Mã Xác Nhận"
+              label={activatingLabel}
               type="submit"
               disabled={!isActivatingCode}
             />
@@ -148,7 +199,7 @@ const enhancers = [
     ) => {
       const countryCode = get(values, 'countryCode');
       const sanitizedCode = countryCode.replace(/\+/, '');
-      const phoneNumber = get(values, 'phoneNumber');
+      const phoneNumber = get(values, phoneFieldLabel);
       const registerPhoneNumber = `${phoneNumber.replace(/^(\d+)/, '$1')}`;
       const encryptPhone = registerPhoneNumber.replace(
         REGEXP.ENCRYPT_PHONE,

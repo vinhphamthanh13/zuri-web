@@ -1,9 +1,11 @@
+import { setError } from 'actions/common';
 import {
   nodeUsersApi,
   setPhoneNumberAction,
   getVerificationCodeAction,
   nodeVerificationCodeApi,
   nodeExistingUserApi,
+  existingUserAction,
 } from 'actions/authenticationActions';
 
 export const activationProps = {
@@ -13,11 +15,13 @@ export const activationProps = {
     existingUser: authentication.existingUser,
   }),
   mapDispatchToProps: dispatch => ({
+    dispatchError: message => dispatch(setError(message)),
     dispatchUsers: () => dispatch(nodeUsersApi()),
     dispatchSetPhoneNumber: number => dispatch(setPhoneNumberAction(number)),
     dispatchVerificationCode: (countryCode, phoneNumber) =>
       dispatch(nodeVerificationCodeApi(countryCode, phoneNumber)),
     dispatchExistingUser: phone => dispatch(nodeExistingUserApi(phone)),
+    dispatchExistingUserAction: data => dispatch(existingUserAction(data)),
   }),
 };
 

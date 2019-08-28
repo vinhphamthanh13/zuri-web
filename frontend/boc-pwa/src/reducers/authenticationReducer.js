@@ -12,14 +12,14 @@ const persistConfig = {
   key: 'authentication',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: ['getVerificationCodeStatus', 'existingUser'],
+  blacklist: ['getVerificationCodeStatus', 'existingUser', 'checkingCount'],
 };
 
 const initState = {
   users: [],
   phoneNumber: null,
   getVerificationCodeStatus: null,
-  existingUser: false,
+  existingUser: { success: null },
 };
 
 const reducer = (state = initState, action) => {

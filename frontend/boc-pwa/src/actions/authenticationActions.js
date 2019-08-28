@@ -68,7 +68,7 @@ export const creatingUserAction = payload => ({
   payload,
 });
 
-const existingUserAction = payload => ({
+export const existingUserAction = payload => ({
   type: EXISTING_USER,
   payload,
 });
@@ -142,13 +142,7 @@ export const nodeCreatingUserApi = data => async dispatch => {
 export const nodeExistingUserApi = phone => async dispatch => {
   dispatch(setLoading(LOADING.ON));
   const [result, error] = await handleRequest(nodeExistingUser, [phone]);
-  if (error) {
-    const message = get(error, 'data.message');
-    dispatch(existingUserAction(false));
-    dispatch(setError(message));
-  } else {
-    const existingUser = get(result, 'data.success');
-    dispatch(existingUserAction(existingUser));
-  }
+  const data = get(result, 'data') || get(error, 'data');
+  dispatch(existingUserAction(data));
   dispatch(setLoading(LOADING.OFF));
 };
