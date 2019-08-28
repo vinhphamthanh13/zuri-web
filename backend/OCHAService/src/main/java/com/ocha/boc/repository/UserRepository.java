@@ -11,6 +11,8 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findUserByPhone(String phone);
 
+    Optional<User> findUserByPhoneAndIsActive(String phone, boolean isActive);
+
     Optional<User> findUserById(String id);
 
     @Query(value = "{'isActive' : true}")
