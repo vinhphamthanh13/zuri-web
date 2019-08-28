@@ -37,33 +37,6 @@ public class UserService {
         this.authyApiClient = authyApiClient;
     }
 
-    public UserResponse newUser(UserLoginRequest request) {
-        UserResponse response = new UserResponse();
-        response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.CREATE_NEW_USER_FAIL);
-        try {
-            Optional<User> optUser = userRepository.findUserByPhone(request.getPhone());
-            if (!optUser.isPresent()) {
-                User user = new User();
-                user.setPhone(request.getPhone());
-                user.setActive(Boolean.TRUE);
-                user.setCreatedDate(Instant.now().toString());
-                user.setRole(UserType.USER);
-                userRepository.save(user);
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObjectId(user.getId());
-                UserDTO userDTO = new UserDTO(user);
-                response.setObject(userDTO);
-            } else {
-                response.setMessage(CommonConstants.USER_EXISTED);
-            }
-        } catch (Exception e) {
-            log.error("Error when newUser: ", e);
-        }
-        return response;
-    }
-
     public UserResponse updateUserInformation(UserUpdateRequest request) {
         UserResponse response = new UserResponse();
         response.setMessage(CommonConstants.UPDATE_USER_FAIL);
