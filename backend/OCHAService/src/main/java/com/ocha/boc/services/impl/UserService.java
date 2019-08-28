@@ -283,4 +283,21 @@ public class UserService {
         }
         return response;
     }
+
+    public AbstractResponse deleteUserByPhoneNumber(String phoneNumber){
+        AbstractResponse response = new AbstractResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.USER_NOT_EXISTED);
+        try {
+            Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
+            if(optUser.isPresent()){
+                userRepository.delete(optUser.get());
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+            }
+        } catch (Exception e) {
+            log.error("Exception while delete user by phone number");
+        }
+        return response;
+    }
 }

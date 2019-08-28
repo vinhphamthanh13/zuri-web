@@ -87,4 +87,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @ApiOperation(value = "Delete User By PhoneNumber (Test only)")
+    @DeleteMapping("/users/{phoneNumber}/delete")
+    public ResponseEntity<AbstractResponse> deleteUserByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber){
+        log.info("START: delete user with phone number: " + phoneNumber);
+        AbstractResponse response = userService.deleteUserByPhoneNumber(phoneNumber);
+        log.info("END: delete user with phone number");
+        return ResponseEntity.ok(response);
+    }
+
 }
