@@ -94,7 +94,7 @@ export default compose(
     mapPropsToValues: () => ({
       userName: 'BOC',
       shopName: 'BOCVN',
-      shopAddress: '01, đường số 1, Bình Trị Đông B,',
+      shopAddress: '01 đường số 34, Bình Trị Đông B, Bình Tân, TP.HCM',
       businessType: 'Quán Cao Cấp',
       categoryType: 'Coffee',
       userEmail: 'bocvn2020@gmail.com',

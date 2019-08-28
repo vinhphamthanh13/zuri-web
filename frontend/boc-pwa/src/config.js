@@ -57,7 +57,7 @@ module.exports = {
   },
 
   masterData: {
-    url: process.env.MASTER_DATA_URL || 'http://68.183.188.123:8080',
+    url: process.env.MASTER_DATA_URL || 'http://68.183.188.123:8080/api',
     apikey: process.env.API_KEY || '485cafb9a6804461b3c6e440fe568c6e',
   },
 

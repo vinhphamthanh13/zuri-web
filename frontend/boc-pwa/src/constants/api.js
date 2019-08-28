@@ -7,5 +7,6 @@ export const NODE_SERVER_URL = {
     VERIFICATION: '/verification',
     CREATING_USER: '/creatingUser',
     CREATING_STORE: '/creatingStore',
+    EXIST_USER: '/whatIs',
   },
 };

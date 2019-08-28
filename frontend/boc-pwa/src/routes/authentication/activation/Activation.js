@@ -1,4 +1,3 @@
-import { REGEXP } from 'constants/common';
 import React, { Component } from 'react';
 import { func, objectOf, any, bool } from 'prop-types';
 import { get } from 'lodash';
@@ -11,6 +10,7 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { activation } from 'constants/schemas';
 import { goBack } from 'utils/browser';
+import { REGEXP } from 'constants/common';
 import history from '../../../history';
 import { activationProps } from '../commonProps';
 import s from './Activation.css';
@@ -24,7 +24,8 @@ class Activation extends Component {
     handleChange: func.isRequired,
     setFieldTouched: func.isRequired,
     handleSubmit: func.isRequired,
-    dispatchUsers: func.isRequired,
+    dispatchExistingUser: func.isRequired,
+    existingUser: bool.isRequired,
   };
 
   static defaultProps = {
@@ -32,33 +33,45 @@ class Activation extends Component {
   };
 
   state = {
-    verificationCodeStatus: false,
+    getVerificationCodeStatus: false,
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { verificationCodeStatus } = props;
-    const { verificationCodeStatus: cachedverificationCodeStatus } = state;
-    if (verificationCodeStatus !== cachedverificationCodeStatus) {
+    const { getVerificationCodeStatus, values } = props;
+    const {
+      getVerificationCodeStatus: cachedgetVerificationCodeStatus,
+      values: cachedValues,
+    } = state;
+    if (
+      getVerificationCodeStatus !== cachedgetVerificationCodeStatus ||
+      values !== cachedValues
+    ) {
+      const { phoneNumber } = values;
       return {
-        verificationCodeStatus,
+        getVerificationCodeStatus,
+        phoneNumber,
       };
     }
 
     return null;
   }
 
-  componentDidMount() {
-    const { dispatchUsers } = this.props;
-    dispatchUsers();
-  }
-
   componentDidUpdate(prevProps) {
-    const { verificationCodeStatus } = prevProps;
-    const { verificationCodeStatus: cachedverificationCodeStatus } = this.state;
+    const { getVerificationCodeStatus, dispatchExistingUser } = prevProps;
+    const {
+      getVerificationCodeStatus: cachedgetVerificationCodeStatus,
+      phoneNumber,
+    } = this.state;
+    const registerUser = get(history, 'location.state.register');
+
+    console.log('registerUser', registerUser);
+    if (REGEXP.PHONE_NUMBER.test(phoneNumber) && !registerUser) {
+      dispatchExistingUser(phoneNumber);
+    }
 
     if (
-      cachedverificationCodeStatus &&
-      verificationCodeStatus !== cachedverificationCodeStatus
+      cachedgetVerificationCodeStatus &&
+      getVerificationCodeStatus !== cachedgetVerificationCodeStatus
     ) {
       history.push('/verifyCode');
     }
@@ -73,12 +86,15 @@ class Activation extends Component {
       isValid,
       setFieldTouched,
       touched,
+      existingUser,
     } = this.props;
 
     const registerState = get(history, 'location.state.register');
     const headerTitle = registerState
       ? 'Số điện thoại cửa hàng'
       : 'đăng nhập cửa hàng';
+    const isConfirmed =
+      isValid && ((!registerState && existingUser) || registerState);
 
     return (
       <>
@@ -105,7 +121,11 @@ class Activation extends Component {
                 touched={touched}
               />
             </div>
-            <Button label="Lấy Mã Xác Nhận" type="submit" disabled={!isValid} />
+            <Button
+              label="Lấy Mã Xác Nhận"
+              type="submit"
+              disabled={!isConfirmed}
+            />
           </form>
         </div>
       </>
@@ -116,6 +136,7 @@ class Activation extends Component {
 const enhancers = [
   withFormik({
     validateOnBlur: true,
+    isInitialValid: false,
     mapPropsToValues: props => ({
       countryCode: props.code,
       phoneNumber: '',

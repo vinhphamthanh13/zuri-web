@@ -3,9 +3,9 @@ export const LAYOUT = {
 };
 
 export const REGEXP = {
-  PHONE_NUMBER: /^0\d{9,10}$/,
+  PHONE_NUMBER: /^0\d{9}$/,
   COUNTRY_CODE: /^\+\d{2,3}$/,
-  VERIFY_CODE: /^\d{6}$/,
+  VERIFY_CODE: /^\d{4}$/,
   ENCRYPT_PHONE: /([\w+]{4})(\d+)(\d{2})$/,
   TAX_NUMBER: /\d{9,12}/,
   EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

@@ -18,7 +18,7 @@
 
 .countryCode {
   width: var(--size-64);
-  color: var(--c-bg-brand-3);
+  color: var(--c-gray);
   text-align: center;
   border-radius: var(--size-radius-standard) 0 0 var(--size-radius-standard);
 }

@@ -5,19 +5,21 @@ import {
   SET_USERS,
   SET_PHONE_NUMBER,
   GET_VERIFICATION_CODE,
+  EXISTING_USER,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
   key: 'authentication',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: ['verificationCodeStatus'],
+  blacklist: ['getVerificationCodeStatus', 'existingUser'],
 };
 
 const initState = {
   users: [],
   phoneNumber: null,
-  verificationCodeStatus: null,
+  getVerificationCodeStatus: null,
+  existingUser: null,
 };
 
 const reducer = (state = initState, action) => {
@@ -36,7 +38,13 @@ const reducer = (state = initState, action) => {
   if (action.type === GET_VERIFICATION_CODE) {
     return {
       ...state,
-      verificationCodeStatus: action.payload,
+      getVerificationCodeStatus: action.payload,
+    };
+  }
+  if (action.type === EXISTING_USER) {
+    return {
+      ...state,
+      existingUser: action.payload,
     };
   }
 

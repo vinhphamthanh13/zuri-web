@@ -6,7 +6,6 @@ const USERS = `${BASE_URL}/users`;
 // Java Sever
 export const SERVER_URL = {
   USERS,
-  VERIFYING_CODE: `${USERS}/:countryCode/:phoneNumber/:token`,
-  ACTIVATE_USER_BY_ID: `${USERS}/active/:userId`,
-  GET_USER_BY_ID: `${USERS}/:userId`,
+  VERIFICATION_CODE: `${USERS}/:countryCode/:phoneNumber/:token`,
+  CHECKING_USER: `${USERS}/checking`,
 };

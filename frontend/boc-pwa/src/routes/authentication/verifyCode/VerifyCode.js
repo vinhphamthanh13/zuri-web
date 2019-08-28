@@ -114,7 +114,7 @@ export default compose(
     validationSchema: verifyCode,
   }),
   connect(
-    null,
+    verifyCodeProps.mapStateToProps,
     verifyCodeProps.mapDispatchToProps,
   ),
   withStyles(s),

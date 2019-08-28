@@ -4,7 +4,7 @@ import Login from './Login';
 
 const action = () => ({
   chunks: ['login'],
-  title: 'Đăng Nhập',
+  title: 'Welcome BOCVN',
   component: (
     <Layout>
       <Login />
