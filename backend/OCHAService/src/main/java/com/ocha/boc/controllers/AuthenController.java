@@ -14,9 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
+
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthenController {
 
 
@@ -47,16 +48,16 @@ public class AuthenController {
 
     @ApiOperation(value = "Send OTP")
     @PostMapping("/users/sendOTP")
-    public ResponseEntity<AbstractResponse> sendOTP(@RequestBody SendOTPRequest request){
-        log.info("START: Sending OTP to phone number: "+ request.getPhoneNumber());
+    public ResponseEntity<AbstractResponse> sendOTP(@RequestBody SendOTPRequest request) {
+        log.info("START: Sending OTP to phone number: " + request.getPhoneNumber());
         AbstractResponse response = authService.sendOTP(request);
-        log.info("END: Sending OTP to phone number" );
+        log.info("END: Sending OTP to phone number");
         return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "Verify OTP")
     @PostMapping("/users/verifyOTP")
-    public ResponseEntity<JwtAuthenticationResponse> verifyOTP(@RequestBody OTPRequest request){
+    public ResponseEntity<JwtAuthenticationResponse> verifyOTP(@RequestBody OTPRequest request) {
         log.info("START: Verify OTP for phone number: " + request.getPhoneNumber());
         JwtAuthenticationResponse response = authService.verifyOTP(request);
         log.info("END: Verify OTP");

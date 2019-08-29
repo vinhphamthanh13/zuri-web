@@ -68,7 +68,7 @@ public class AuthService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.LOGIN_FAIL);
         try {
-            if(!Objects.isNull(request)){
+            if (!Objects.isNull(request)) {
                 if (checkVerificationCode(request.getOptCode(), request.getCountryCode(), request.getPhoneNumber())) {
                     String jwt = tokenProvider.generateToken(request.getPhoneNumber());
                     userRepository.findUserByPhoneAndIsActive(request.getPhoneNumber(), true).map(user -> {
