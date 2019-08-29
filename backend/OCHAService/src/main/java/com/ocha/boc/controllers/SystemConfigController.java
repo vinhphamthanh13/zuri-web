@@ -5,12 +5,15 @@ import com.ocha.boc.request.GiayInRequest;
 import com.ocha.boc.response.SystemConfigurationResponse;
 import com.ocha.boc.services.impl.SystemConfigService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 @Slf4j
 public class SystemConfigController {
 
@@ -44,9 +47,10 @@ public class SystemConfigController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Get all information about Danh Muc San Pham")
+    @ApiOperation(value = "Get all information about Danh Muc San Pham", authorizations = {@Authorization(value = "Bearer")})
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/system/danh-muc-san-pham")
-    public ResponseEntity<AbstractResponse> getAllInformationAboutDanhMucSanPham(){
+    public ResponseEntity<AbstractResponse> getAllInformationAboutDanhMucSanPham() {
         log.info("START: Get all information about Danh Muc San Pham");
         AbstractResponse response = systemConfigService.getAllInformationAboutDanhMucSanPham();
         log.info("END: get all information about Danh Muc San Pham");
@@ -55,7 +59,7 @@ public class SystemConfigController {
 
     @ApiOperation("Get all information about Mo Hinh Kinh Doanh")
     @GetMapping("/system/mo-hinh-kinh-doanh")
-    public ResponseEntity<AbstractResponse> getAllInformationAboutMoHinhKinhDoanh(){
+    public ResponseEntity<AbstractResponse> getAllInformationAboutMoHinhKinhDoanh() {
         log.info("START: Get all information about Mo Hinh Kinh Doanh");
         AbstractResponse response = systemConfigService.getAllInformationAboutMoHinhKinhDoanh();
         log.info("END: Get all information about Mo Hinh Kinh Doanh");

@@ -10,7 +10,6 @@ import com.ocha.boc.services.impl.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +24,6 @@ public class AuthenController {
     private AuthService authService;
 
 
-    @Value("${app.debug}")
-    private boolean debug;
-
     @ApiOperation(value = "register new user account")
     @PostMapping("/users")
     public ResponseEntity<UserResponse> register(@RequestBody UserLoginRequest request) {
@@ -39,7 +35,7 @@ public class AuthenController {
 
     @ApiOperation(value = "login")
     @PostMapping("/users/login")
-    public ResponseEntity<JwtAuthenticationResponse> login(@RequestParam OTPRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody OTPRequest request) {
         log.info("START: login API");
         JwtAuthenticationResponse response = authService.login(request);
         log.info("END: login API");

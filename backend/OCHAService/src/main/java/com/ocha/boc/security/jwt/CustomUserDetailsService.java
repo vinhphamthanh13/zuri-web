@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * @author AnhLH
- */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

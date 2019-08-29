@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.ocha.boc.cors.CorsFilter;
+//import com.ocha.boc.cors.CorsFilter;
 import com.ocha.boc.entity.DanhMucSanPham;
 import com.ocha.boc.entity.MoHinhKinhDoanh;
 import com.ocha.boc.repository.DanhMucSanPhamRepository;
@@ -68,11 +68,6 @@ public class OchaApplication extends SpringBootServletInitializer {
         SpringApplication.run(OchaApplication.class, args);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        return new FilterRegistrationBean(new CorsFilter());
-    }
 
     @Bean
     public RestTemplate restTemplate() {
@@ -114,8 +109,8 @@ public class OchaApplication extends SpringBootServletInitializer {
         }
     }
 
-    private void initDanhMucSanPham(MongoDatabase db){
-        try{
+    private void initDanhMucSanPham(MongoDatabase db) {
+        try {
             boolean isExisted = checkExistsCollectionName(db, danhMucSanPhamTableName);
             if (!isExisted) {
                 List<DanhMucSanPham> danhMucSanPhamList;
@@ -131,7 +126,7 @@ public class OchaApplication extends SpringBootServletInitializer {
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Exception while init Danh Muc San Pham: ", e);
         }
     }

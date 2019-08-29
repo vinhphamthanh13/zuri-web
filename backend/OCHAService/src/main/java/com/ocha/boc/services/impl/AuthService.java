@@ -31,6 +31,7 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private AuthyApiClient authyApiClient;
 
     @Autowired
@@ -109,7 +110,7 @@ public class AuthService {
         } catch (Exception e) {
             log.error("Exception while sending OTP: ", e);
         }
-        return null;
+        return response;
     }
 
     public JwtAuthenticationResponse verifyOTP(OTPRequest request) {
@@ -144,8 +145,7 @@ public class AuthService {
         String via = "sms";
         Params params = new Params();
         params.setAttribute("locale", "vi");
-        Verification verification = authyApiClient
-                .getPhoneVerification()
+        Verification verification = authyApiClient.getPhoneVerification()
                 .start(phoneNumber, countryCode, via, params);
         if (!verification.isOk()) {
             logAndThrow("Error requesting phone verification. " +
@@ -168,8 +168,6 @@ public class AuthService {
                 .check(phoneNumber, countryCode, token);
         if (verification.isOk()) {
             isSuccess = true;
-        } else {
-            logAndThrow("Error verifying token. " + verification.getMessage());
         }
         return isSuccess;
     }
