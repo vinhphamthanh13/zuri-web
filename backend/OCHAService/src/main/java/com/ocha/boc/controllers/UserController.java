@@ -56,21 +56,21 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Send Verification Code")
-    @GetMapping("/users/{countryCode}/{phoneNumber}")
-    public ResponseEntity<AbstractResponse> sendVerificationCode(@PathVariable(value = "countryCode") String countryCode,@PathVariable(value = "phoneNumber") String phoneNumber){
-        AbstractResponse response = userService.sendVerificationCode(countryCode,phoneNumber);
-        return ResponseEntity.ok(response);
-    }
-
-    @ApiOperation(value="Verify User Code")
-    @GetMapping("/users/{countryCode}/{phoneNumber}/{token}")
-    public ResponseEntity<UserResponse> verifyUserCode(@PathVariable(value = "countryCode") String countryCode,
-                                                       @PathVariable(value = "phoneNumber") String phoneNumber,
-                                                       @PathVariable(value = "token") String token){
-        UserResponse response = userService.verifyUserCode(countryCode, phoneNumber, token);
-        return ResponseEntity.ok(response);
-    }
+//    @ApiOperation(value = "Send Verification Code")
+//    @GetMapping("/users/{countryCode}/{phoneNumber}")
+//    public ResponseEntity<AbstractResponse> sendVerificationCode(@PathVariable(value = "countryCode") String countryCode,@PathVariable(value = "phoneNumber") String phoneNumber){
+//        AbstractResponse response = userService.sendVerificationCode(countryCode,phoneNumber);
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @ApiOperation(value="Verify User Code")
+//    @GetMapping("/users/{countryCode}/{phoneNumber}/{token}")
+//    public ResponseEntity<UserResponse> verifyUserCode(@PathVariable(value = "countryCode") String countryCode,
+//                                                       @PathVariable(value = "phoneNumber") String phoneNumber,
+//                                                       @PathVariable(value = "token") String token){
+//        UserResponse response = userService.verifyUserCode(countryCode, phoneNumber, token);
+//        return ResponseEntity.ok(response);
+//    }
 
     @ApiOperation(value = "Check User Exist By PhoneNumber")
     @GetMapping("/users/checking/{phone}")
