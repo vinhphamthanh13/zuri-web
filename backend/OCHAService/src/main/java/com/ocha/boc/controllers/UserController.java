@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "Update User", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Update User")
     @PutMapping("/users")
     public ResponseEntity<UserResponse> updateUserInformation(@RequestBody UserUpdateRequest request) {
         UserResponse response = userService.updateUserInformation(request);
@@ -33,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Get list Users", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Get list Users")
     @GetMapping("/users")
     public ResponseEntity<UserResponse> getAllUsers() {
         UserResponse response = userService.getAllUser();
@@ -41,14 +41,14 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "Deactive user by userId", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Deactive user by userId")
     @DeleteMapping("/users/deactive/{userId}")
     public ResponseEntity<AbstractResponse> deActiveUser(@PathVariable String userId) {
         AbstractResponse response = userService.deActiveUser(userId);
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Active User By UserId", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Active User By UserId")
     @PutMapping("/users/active/{userId}")
     public ResponseEntity<UserResponse> activeUser(@PathVariable String userId) {
         UserResponse response = userService.activeUser(userId);
@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Delete User By PhoneNumber (Test only)", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Delete User By PhoneNumber (Test only)")
     @DeleteMapping("/users/{phoneNumber}/delete")
     public ResponseEntity<AbstractResponse> deleteUserByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber) {
         log.info("START: delete user with phone number: " + phoneNumber);
