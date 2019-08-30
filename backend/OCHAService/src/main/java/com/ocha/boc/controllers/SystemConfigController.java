@@ -57,7 +57,8 @@ public class SystemConfigController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Get all information about Mo Hinh Kinh Doanh")
+    @ApiOperation(value = "Get all information about Mo Hinh Kinh Doanh" , authorizations = {@Authorization(value = "Bearer")})
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/system/mo-hinh-kinh-doanh")
     public ResponseEntity<AbstractResponse> getAllInformationAboutMoHinhKinhDoanh() {
         log.info("START: Get all information about Mo Hinh Kinh Doanh");

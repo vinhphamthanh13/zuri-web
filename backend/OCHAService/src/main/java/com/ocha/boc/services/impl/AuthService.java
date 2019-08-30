@@ -18,6 +18,11 @@ import com.ocha.boc.security.jwt.JwtTokenProvider;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -35,7 +40,15 @@ public class AuthService {
     private AuthyApiClient authyApiClient;
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
     private JwtTokenProvider tokenProvider;
+
+    @Value(value = "${base64.secret}")
+    private String baseSecretKey;
+
+
 
     public UserResponse register(UserLoginRequest request) {
         UserResponse response = new UserResponse();
@@ -71,18 +84,19 @@ public class AuthService {
         try {
             if (!Objects.isNull(request)) {
                 if (checkVerificationCode(request.getOptCode(), request.getCountryCode(), request.getPhoneNumber())) {
+//                    Authentication authentication = new UsernamePasswordAuthenticationToken(
+//                            request.getPhoneNumber(), baseSecretKey);
+//                    SecurityContextHolder.getContext().setAuthentication(authentication);
                     String jwt = tokenProvider.generateToken(request.getPhoneNumber());
-                    userRepository.findUserByPhoneAndIsActive(request.getPhoneNumber(), true).map(user -> {
-                        user.setLastModifiedDate(Instant.now().toString());
-                        return userRepository.save(user);
-                    }).orElseThrow(
-                            () -> new ResourceNotFoundException("User", CommonConstants.USER_NOT_EXISTED, request.getPhoneNumber()));
                     Optional<User> optUser = userRepository.findUserByPhoneAndIsActive(request.getPhoneNumber(), true);
                     if (optUser.isPresent()) {
                         if (optUser.get().isActive() == true) {
+                            optUser.get().setLastModifiedDate(Instant.now().toString());
+                            userRepository.save(optUser.get());
                             response.setSuccess(Boolean.TRUE);
                             response.setAccessToken(jwt);
                             response.setObject(new UserDTO(optUser.get()));
+                            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                         } else {
                             response.setMessage(CommonConstants.ACCOUNT_IS_NOT_ACTIVE);
                         }

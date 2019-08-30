@@ -6,12 +6,13 @@ import com.ocha.boc.request.MatHangUpdateRequest;
 import com.ocha.boc.response.MatHangResponse;
 import com.ocha.boc.services.impl.MatHangService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
 public class MatHangController {
 
     @Autowired
@@ -39,8 +40,9 @@ public class MatHangController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Get All Mat Hang")
+    @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/mat-hang")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MatHangResponse> getAllMatHang(@RequestParam String cuaHangId) {
         MatHangResponse response = matHangService.getAllMatHang(cuaHangId);
         return ResponseEntity.ok(response);

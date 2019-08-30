@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-//import com.ocha.boc.cors.CorsFilter;
 import com.ocha.boc.entity.DanhMucSanPham;
 import com.ocha.boc.entity.MoHinhKinhDoanh;
 import com.ocha.boc.repository.DanhMucSanPhamRepository;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
@@ -26,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.util.List;
+
+//import com.ocha.boc.cors.CorsFilter;
 
 /**
  * @author robert

@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class UserController {
 
 
     @ApiOperation(value = "Update User")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/users")
     public ResponseEntity<UserResponse> updateUserInformation(@RequestBody UserUpdateRequest request) {
         UserResponse response = userService.updateUserInformation(request);
@@ -28,6 +30,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "Find User By Id")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/users/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
         UserResponse response = userService.getUserById(id);
@@ -36,6 +39,7 @@ public class UserController {
 
     @ApiOperation(value = "Get list Users")
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserResponse> getAllUsers() {
         UserResponse response = userService.getAllUser();
         return ResponseEntity.ok(response);
@@ -44,6 +48,7 @@ public class UserController {
 
     @ApiOperation(value = "Deactive user by userId")
     @DeleteMapping("/users/deactive/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AbstractResponse> deActiveUser(@PathVariable String userId) {
         AbstractResponse response = userService.deActiveUser(userId);
         return ResponseEntity.ok(response);
@@ -56,24 +61,10 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-//    @ApiOperation(value = "Send Verification Code")
-//    @GetMapping("/users/{countryCode}/{phoneNumber}")
-//    public ResponseEntity<AbstractResponse> sendVerificationCode(@PathVariable(value = "countryCode") String countryCode,@PathVariable(value = "phoneNumber") String phoneNumber){
-//        AbstractResponse response = userService.sendVerificationCode(countryCode,phoneNumber);
-//        return ResponseEntity.ok(response);
-//    }
-//
-//    @ApiOperation(value="Verify User Code")
-//    @GetMapping("/users/{countryCode}/{phoneNumber}/{token}")
-//    public ResponseEntity<UserResponse> verifyUserCode(@PathVariable(value = "countryCode") String countryCode,
-//                                                       @PathVariable(value = "phoneNumber") String phoneNumber,
-//                                                       @PathVariable(value = "token") String token){
-//        UserResponse response = userService.verifyUserCode(countryCode, phoneNumber, token);
-//        return ResponseEntity.ok(response);
-//    }
 
     @ApiOperation(value = "Check User Exist By PhoneNumber")
     @GetMapping("/users/checking/{phone}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AbstractResponse> findUserByPhoneNumber(@PathVariable(value = "phone") String phoneNumber){
         log.info("START: find user by phone number: " + phoneNumber);
         AbstractResponse response = userService.findUserByPhoneNumber(phoneNumber);

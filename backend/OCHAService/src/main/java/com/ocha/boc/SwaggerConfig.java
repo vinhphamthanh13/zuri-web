@@ -6,9 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableSwagger2
@@ -20,7 +23,13 @@ public class SwaggerConfig {
           .apis(RequestHandlerSelectors.any())              
           .paths(PathSelectors.any())                          
           .build()
-          .apiInfo(metaData());
+                .apiInfo(metaData())
+                .securitySchemes(Arrays.asList(apiKey()));
+    }
+
+
+    private ApiKey apiKey() {
+        return new ApiKey("Bearer", "Authorization", "header"); //`apiKey` is the name of the APIKey, `Authorization` is the key in the request header
     }
 
     private ApiInfo metaData() {
