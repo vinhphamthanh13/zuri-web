@@ -6,6 +6,7 @@ import com.ocha.boc.request.GiamGiaUpdateRequest;
 import com.ocha.boc.response.GiamGiaResponse;
 import com.ocha.boc.services.impl.GiamGiaService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class GiamGiaController {
     @Autowired
     private GiamGiaService giamGiaService;
 
-    @ApiOperation("Create New Giam Gia")
+    @ApiOperation(value = "Create New Giam Gia", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/giam-gia")
     public ResponseEntity<GiamGiaResponse> createNewGiamGia(@RequestBody GiamGiaRequest request) {
         log.info("START: create new giam gia");
@@ -28,7 +29,7 @@ public class GiamGiaController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Delete Giam Gia By GiamGiaId")
+    @ApiOperation(value = "Delete Giam Gia By GiamGiaId", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/giam-gia/{giamGiaId}")
     public ResponseEntity<AbstractResponse> deleteGiamGiaByGiamGiaId(@PathVariable(value = "giamGiaId") String giamGiaId) {
         log.info("START: delete giam gia by id: " + giamGiaId);
@@ -37,7 +38,7 @@ public class GiamGiaController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Update Giam Gia")
+    @ApiOperation(value = "Update Giam Gia", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/giam-gia")
     public ResponseEntity<GiamGiaResponse> updateGiamGiaByGiamGiaId(@RequestBody GiamGiaUpdateRequest request) {
         log.info("START: update giam gia");

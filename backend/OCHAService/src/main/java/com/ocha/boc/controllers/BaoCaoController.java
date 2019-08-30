@@ -4,9 +4,11 @@ import com.ocha.boc.request.AbstractBaoCaoRequest;
 import com.ocha.boc.response.*;
 import com.ocha.boc.services.impl.BaoCaoService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,8 +19,9 @@ public class BaoCaoController {
     @Autowired
     private BaoCaoService baoCaoService;
 
-    @ApiOperation("Doanh Thu Tổng Quan")
+    @ApiOperation(value = "Doanh Thu Tổng Quan", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/doanh-thu-tong-quan")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuan(@RequestParam(value = "cuaHangId") String cuaHangId) {
         log.info("START: get current doanh thu tong quan");
         DoanhThuTongQuanResponse response = baoCaoService.getDoanhThuTongQuan(cuaHangId);
@@ -27,8 +30,9 @@ public class BaoCaoController {
     }
 
 
-    @ApiOperation("Get Doanh Thu Tong Quan In Range Date")
+    @ApiOperation(value = "Get Doanh Thu Tong Quan In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/doanh-thu-tong-quan")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<DoanhThuTongQuanResponse> getDoanhThuTongQuanInRangeDate(@RequestBody AbstractBaoCaoRequest request) {
         log.info("START: get doanh thu tong quan from: " + request.getFromDate() + " to: " + request.getToDate());
         DoanhThuTongQuanResponse response = baoCaoService.getDoanhThuTongQuanInRangeDate(request);
@@ -37,8 +41,9 @@ public class BaoCaoController {
     }
 
 
-    @ApiOperation("Doanh Thu Theo Danh Mục")
+    @ApiOperation(value = "Doanh Thu Theo Danh Mục", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/doanh-thu-theo-danh-muc")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<DoanhThuTheoDanhMucResponse> getDoanhThuTheoDanhMuc(@RequestParam(value = "cuaHangId") String cuaHangId,
                                                                               @RequestParam(value = "currentDate") String currentDate) {
         log.info("START: get current doanh thu theo danh muc");
@@ -48,8 +53,9 @@ public class BaoCaoController {
     }
 
 
-    @ApiOperation("Doanh Thu Theo Danh Mục In Range Date ")
+    @ApiOperation(value = "Doanh Thu Theo Danh Mục In Range Date ", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/doanh-thu-theo-danh-muc")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<DoanhThuTheoDanhMucResponse> getDoanhThuTheoDanhMucInRangeDate(@RequestBody AbstractBaoCaoRequest request) {
         log.info("START: get doanh thu theo danh muc from: " + request.getFromDate() + " to: " + request.getToDate());
         DoanhThuTheoDanhMucResponse response = baoCaoService.getDoanhThuTheoDanhMucInRangeDate(request);
@@ -58,11 +64,11 @@ public class BaoCaoController {
     }
 
 
-
-    @ApiOperation("Mặt Hàng Bán Chạy")
+    @ApiOperation(value = "Mặt Hàng Bán Chạy", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/mat-hang-ban-chay")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MatHangBanChayResponse> getMatHangBanChay(@RequestParam(value = "cuaHangId") String cuaHangId,
-                                                                    @RequestParam(value = "currentDate") String currentDate){
+                                                                    @RequestParam(value = "currentDate") String currentDate) {
         log.info("START: get current mat hang ban chay");
         MatHangBanChayResponse response = baoCaoService.getMatHangBanChay(cuaHangId, currentDate);
         log.info("END: get current mat hang ban chay");
@@ -70,9 +76,10 @@ public class BaoCaoController {
     }
 
 
-    @ApiOperation("Mặt Hàng Bán Chạy In Range Date")
+    @ApiOperation(value = "Mặt Hàng Bán Chạy In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/mat-hang-ban-chay")
-    public ResponseEntity<MatHangBanChayResponse> getMatHangBanChayInRangeDate(@RequestBody AbstractBaoCaoRequest request){
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<MatHangBanChayResponse> getMatHangBanChayInRangeDate(@RequestBody AbstractBaoCaoRequest request) {
         log.info("START: get mat hang ban chay from: " + request.getFromDate() + " to: " + request.getToDate());
         MatHangBanChayResponse response = baoCaoService.getMatHangBanChayInRangeDate(request);
         log.info("END: get mat hang ban chay in range date");
@@ -80,19 +87,21 @@ public class BaoCaoController {
     }
 
 
-    @ApiOperation("Báo Cáo Giảm Giá")
+    @ApiOperation(value = "Báo Cáo Giảm Giá", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/bao-cao-giam-gia")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGia(@RequestParam(value = "cuaHangId") String cuaHangId,
-                                                                  @RequestParam(value = "currentDate") String currentDate){
+                                                                  @RequestParam(value = "currentDate") String currentDate) {
         log.info("START: get current bao cao giam gia");
         BaoCaoGiamGiaResponse response = baoCaoService.getBaoCaoGiamGia(cuaHangId, currentDate);
         log.info("END: get current bao cao giam gia");
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Báo Cáo Giảm Giá In Range Date")
+    @ApiOperation(value = "Báo Cáo Giảm Giá In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/bao-cao-giam-gia")
-    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGiaInRangeDate(@RequestBody AbstractBaoCaoRequest request){
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGiaInRangeDate(@RequestBody AbstractBaoCaoRequest request) {
         log.info("START: get bao cao giam gia from: " + request.getFromDate() + " to: " + request.getToDate());
         BaoCaoGiamGiaResponse response = baoCaoService.getBaoCaoGiamGiaInRangeDate(request);
         log.info("END: get bao cao giam gia in range date");
@@ -100,8 +109,9 @@ public class BaoCaoController {
     }
 
 
-    @ApiOperation("Báo Cáo Doanh Thu Theo Nhân Viên")
+    @ApiOperation(value = "Báo Cáo Doanh Thu Theo Nhân Viên", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/doanh-thu-theo-nhan-vien")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<DoanhThuTheoNhanVienResponse> getBaoCaoDoanhThuTheoNhanVien(@RequestParam(value = "cuaHangId") String cuaHangId,
                                                                                       @RequestParam(value = "currentDate") String currentDate) {
         log.info("START: get current bao cao doanh thu theo nhan vien");
@@ -110,8 +120,9 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation("Báo Cáo Doanh Thu Theo Nhân Viên In Range Date")
+    @ApiOperation(value = "Báo Cáo Doanh Thu Theo Nhân Viên In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/doanh-thu-theo-nhan-vien")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<DoanhThuTheoNhanVienResponse> getBaoCaoDoanhThuTheoNhanVienInRangeDate(@RequestBody AbstractBaoCaoRequest request) {
         log.info("START: get doanh thu theo nhan vien from: " + request.getFromDate() + " to: " + request.getToDate());
         DoanhThuTheoNhanVienResponse response = baoCaoService.getBaoCaoDoanhThuTheoNhanVienInRangeDate(request);

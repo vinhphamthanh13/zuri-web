@@ -1,14 +1,11 @@
 package com.ocha.boc.services.impl;
 
 import com.authy.AuthyApiClient;
-import com.authy.api.Params;
 import com.authy.api.Verification;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.entity.User;
-import com.ocha.boc.enums.UserType;
 import com.ocha.boc.repository.UserRepository;
-import com.ocha.boc.request.UserLoginRequest;
 import com.ocha.boc.request.UserUpdateRequest;
 import com.ocha.boc.response.UserResponse;
 import com.ocha.boc.util.CommonConstants;
@@ -35,33 +32,6 @@ public class UserService {
     @Autowired
     public UserService(AuthyApiClient authyApiClient) {
         this.authyApiClient = authyApiClient;
-    }
-
-    public UserResponse newUser(UserLoginRequest request) {
-        UserResponse response = new UserResponse();
-        response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.CREATE_NEW_USER_FAIL);
-        try {
-            Optional<User> optUser = userRepository.findUserByPhone(request.getPhone());
-            if (!optUser.isPresent()) {
-                User user = new User();
-                user.setPhone(request.getPhone());
-                user.setActive(Boolean.TRUE);
-                user.setCreatedDate(Instant.now().toString());
-                user.setRole(UserType.USER);
-                userRepository.save(user);
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObjectId(user.getId());
-                UserDTO userDTO = new UserDTO(user);
-                response.setObject(userDTO);
-            } else {
-                response.setMessage(CommonConstants.USER_EXISTED);
-            }
-        } catch (Exception e) {
-            log.error("Error when newUser: ", e);
-        }
-        return response;
     }
 
     public UserResponse updateUserInformation(UserUpdateRequest request) {
@@ -194,61 +164,6 @@ public class UserService {
         }
         return response;
     }
-
-    public AbstractResponse sendVerificationCode(String countryCode, String phoneNumber) {
-        AbstractResponse respsone = new AbstractResponse();
-        respsone.setSuccess(Boolean.FALSE);
-        respsone.setMessage(CommonConstants.SEND_VERIFICATION_CODE_FAIL);
-        try {
-            if (handlingSendVerificationCode(phoneNumber, countryCode)) {
-                respsone.setSuccess(Boolean.TRUE);
-                respsone.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            }
-        } catch (Exception e) {
-            log.error("Error when sendVerificationCode: ", e);
-        }
-        return respsone;
-    }
-
-    public UserResponse verifyUserCode(String countryCode, String phoneNumber, String token) {
-        UserResponse response = new UserResponse();
-        response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
-        try {
-            if (checkVerificationCode(token, countryCode, phoneNumber)) {
-                Optional<User> user = userRepository.findUserByPhone(phoneNumber);
-                if (user.isPresent()) {
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new UserDTO(user.get()));
-                } else {
-                    response.setMessage(CommonConstants.USER_NOT_EXISTED);
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error when verifyUserCode: ", e);
-        }
-        return response;
-    }
-
-
-    private boolean handlingSendVerificationCode(String phoneNumber, String countryCode) throws Exception {
-        boolean isSuccess = false;
-        String via = "sms";
-        Params params = new Params();
-        params.setAttribute("locale", "vi");
-        Verification verification = authyApiClient
-                .getPhoneVerification()
-                .start(phoneNumber, countryCode, via, params);
-        if (!verification.isOk()) {
-            logAndThrow("Error requesting phone verification. " +
-                    verification.getMessage());
-        } else {
-            isSuccess = true;
-        }
-        return isSuccess;
-    }
-
 
     private boolean checkVerificationCode(String token, String countryCode, String phoneNumber) throws Exception {
         boolean isSuccess = false;

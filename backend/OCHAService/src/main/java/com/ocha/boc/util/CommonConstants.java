@@ -76,6 +76,10 @@ public class CommonConstants {
 
     public static final String USER_NOT_EXISTED                         = "Người dùng không tồn tại trong hệ thống !";
 
+    public static final String LOGIN_FAIL                               = "Không thể đăng nhập vào hệ thống !";
+
+    public static final String ACCOUNT_IS_NOT_ACTIVE                    = "Tài khoản chưa được kích hoạt. Không thể đăng nhập";
+
     /**
      * Cửa Hàng Error:
      */
