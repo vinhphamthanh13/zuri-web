@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,56 +35,55 @@ public class CuaHangService {
         response.setMessage(CommonConstants.CREATE_NEW_CUA_HANG_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            if (request != null) {
-                boolean isExisted = checkInforCuaHangIsExisted(request.getPhone());
-                if (!isExisted) {
-                    CuaHang cuaHang = new CuaHang();
-                    cuaHang.setCuaHangName(request.getCuaHangName());
-                    cuaHang.setPhone(request.getPhone());
-                    cuaHang.setManagerName(request.getManagerName());
-                    cuaHang.setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
-                    cuaHang.setDanhMucMatHangType(request.getDanhMucMatHangType());
-                    cuaHang.setManagerPhone(request.getManagerPhone());
-                    cuaHang.setCreatedDate(Instant.now().toString());
-                    if (StringUtils.isNotEmpty(request.getAddress())) {
+            if (!Objects.isNull(request)) {
+                if (StringUtils.isNotEmpty(request.getAddress()) && StringUtils.isNotEmpty(request.getCuaHangName())) {
+                    if (!checkInforCuaHangIsExisted(request.getAddress(), request.getCuaHangName())) {
+                        CuaHang cuaHang = new CuaHang();
+                        cuaHang.setCuaHangName(request.getCuaHangName());
+                        cuaHang.setPhone(request.getPhone());
+                        cuaHang.setManagerName(request.getManagerName());
+                        cuaHang.setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
+                        cuaHang.setDanhMucMatHangType(request.getDanhMucMatHangType());
+                        cuaHang.setManagerPhone(request.getManagerPhone());
+                        cuaHang.setCreatedDate(Instant.now().toString());
                         cuaHang.setAddress(request.getAddress());
+                        if (StringUtils.isNotEmpty(request.getManagerEmail())) {
+                            cuaHang.setManagerEmail(request.getManagerEmail());
+                        }
+                        cuaHangRepository.save(cuaHang);
+                        //Update cua hang id on table user
+                        cuaHang = cuaHangRepository.findTopByOrderByCreatedDateDesc();
+                        Optional<User> optOwner = userRepository.findUserByPhone(request.getPhone());
+                        if (optOwner.isPresent()) {
+                            List<CuaHang> listCuaHang = optOwner.get().getListCuaHang();
+                            listCuaHang.add(cuaHang);
+                            optOwner.get().setListCuaHang(listCuaHang);
+                            optOwner.get().setRole(UserType.ADMIN);
+                            userRepository.save(optOwner.get());
+                        } else {
+                            log.error("Cannot find user by owner phone: ", request.getPhone());
+                            response.setMessage(CommonConstants.UPDATE_CUA_HANG_ID_ON_USER_FAIL);
+                        }
+                        //Check manager Phone exist in the system. If existed then assign cuaHangId to the account, if not
+                        //Create new account with phone of the manager.
+                        Optional<User> optManager = userRepository.findUserByPhone(request.getManagerPhone());
+                        if (!optManager.isPresent()) {
+                            User manager = new User();
+                            manager.setPhone(request.getManagerPhone());
+                            manager.setEmail(request.getManagerEmail());
+                            manager.setName(request.getManagerName());
+                            manager.setActive(Boolean.TRUE);
+                            manager.setCreatedDate(Instant.now().toString());
+                            manager.setRole(UserType.USER);
+                        }
+                        List<CuaHang> list = optManager.get().getListCuaHang();
+                        list.add(cuaHang);
+                        optManager.get().setListCuaHang(list);
+                        userRepository.save(optManager.get());
+                        response.setSuccess(Boolean.TRUE);
+                        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                        response.setObject(new CuaHangDTO(cuaHang));
                     }
-                    if (StringUtils.isNotEmpty(request.getManagerEmail())) {
-                        cuaHang.setManagerEmail(request.getManagerEmail());
-                    }
-                    cuaHangRepository.save(cuaHang);
-                    //Update cua hang id on table user
-                    cuaHang = cuaHangRepository.findTopByOrderByCreatedDateDesc();
-                    String cuaHangId = cuaHang.getId();
-                    Optional<User> optOwner = userRepository.findUserByPhone(request.getPhone());
-                    if (optOwner.isPresent()) {
-                        List<CuaHang> listCuaHang = optOwner.get().getListCuaHang();
-                        listCuaHang.add(cuaHang);
-                        optOwner.get().setListCuaHang(listCuaHang);
-                        userRepository.save(optOwner.get());
-                    } else {
-                        log.error("Cannot find user by owner phone: ", request.getPhone());
-                        response.setMessage(CommonConstants.UPDATE_CUA_HANG_ID_ON_USER_FAIL);
-                    }
-                    //Check manager Phone exist in the system. If existed then assign cuaHangId to the account, if not
-                    //Create new account with phone of the manager.
-                    Optional<User> optManager = userRepository.findUserByPhone(request.getManagerPhone());
-                    if (!optManager.isPresent()) {
-                        User manager = new User();
-                        manager.setPhone(request.getManagerPhone());
-                        manager.setEmail(request.getManagerEmail());
-                        manager.setName(request.getManagerName());
-                        manager.setActive(Boolean.TRUE);
-                        manager.setCreatedDate(Instant.now().toString());
-                        manager.setRole(UserType.USER);
-                    }
-                    List<CuaHang> list = optManager.get().getListCuaHang();
-                    list.add(cuaHang);
-                    optManager.get().setListCuaHang(list);
-                    userRepository.save(optManager.get());
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new CuaHangDTO(cuaHang));
                 }
             }
         } catch (Exception e) {
@@ -122,10 +122,10 @@ public class CuaHangService {
     }
 
 
-    private boolean checkInforCuaHangIsExisted(String phone) {
+    private boolean checkInforCuaHangIsExisted(String location, String cuaHangName) {
         boolean isExisted = false;
-        CuaHang cuaHang = cuaHangRepository.findCuaHangByPhone(phone);
-        if (cuaHang != null) {
+        Optional<CuaHang> optCuaHang = cuaHangRepository.findCuaHangByAddressAndCuaHangName(location, cuaHangName);
+        if (optCuaHang.isPresent()) {
             isExisted = true;
         }
         return isExisted;

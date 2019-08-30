@@ -23,7 +23,6 @@ public class CuaHangController {
 
     @ApiOperation(value = "Create new Cua Hang", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/cua-hang")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CuaHangResponse> createCuaHang(@RequestBody CuaHangRequest request) {
         log.info("START: create new cua hang");
         CuaHangResponse response = cuaHangService.createCuaHang(request);
