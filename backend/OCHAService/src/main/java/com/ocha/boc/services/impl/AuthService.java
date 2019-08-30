@@ -7,7 +7,6 @@ import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.entity.User;
 import com.ocha.boc.enums.UserType;
-import com.ocha.boc.error.ResourceNotFoundException;
 import com.ocha.boc.repository.UserRepository;
 import com.ocha.boc.request.OTPRequest;
 import com.ocha.boc.request.SendOTPRequest;
@@ -21,9 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
