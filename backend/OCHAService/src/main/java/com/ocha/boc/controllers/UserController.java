@@ -9,7 +9,6 @@ import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +20,6 @@ public class UserController {
     private UserService userService;
 
     @ApiOperation(value = "Update User", authorizations = {@Authorization(value = "Bearer")})
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/users")
     public ResponseEntity<UserResponse> updateUserInformation(@RequestBody UserUpdateRequest request) {
         UserResponse response = userService.updateUserInformation(request);
@@ -29,7 +27,6 @@ public class UserController {
     }
 
     @ApiOperation(value = "Find User By Id")
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/users/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
         UserResponse response = userService.getUserById(id);
@@ -38,7 +35,6 @@ public class UserController {
 
     @ApiOperation(value = "Get list Users", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserResponse> getAllUsers() {
         UserResponse response = userService.getAllUser();
         return ResponseEntity.ok(response);
@@ -47,7 +43,6 @@ public class UserController {
 
     @ApiOperation(value = "Deactive user by userId", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/users/deactive/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AbstractResponse> deActiveUser(@PathVariable String userId) {
         AbstractResponse response = userService.deActiveUser(userId);
         return ResponseEntity.ok(response);
@@ -55,16 +50,14 @@ public class UserController {
 
     @ApiOperation(value = "Active User By UserId", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/users/active/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserResponse> activeUser(@PathVariable String userId) {
         UserResponse response = userService.activeUser(userId);
         return ResponseEntity.ok(response);
     }
 
 
-    @ApiOperation(value = "Check User Exist By PhoneNumber", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Check User Exist By PhoneNumber")
     @GetMapping("/users/checking/{phone}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AbstractResponse> findUserByPhoneNumber(@PathVariable(value = "phone") String phoneNumber) {
         log.info("START: find user by phone number: " + phoneNumber);
         AbstractResponse response = userService.findUserByPhoneNumber(phoneNumber);
@@ -74,7 +67,6 @@ public class UserController {
 
     @ApiOperation(value = "Delete User By PhoneNumber (Test only)", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/users/{phoneNumber}/delete")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AbstractResponse> deleteUserByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber) {
         log.info("START: delete user with phone number: " + phoneNumber);
         AbstractResponse response = userService.deleteUserByPhoneNumber(phoneNumber);
