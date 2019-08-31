@@ -15,6 +15,7 @@ import com.ocha.boc.response.JwtAuthenticationResponse;
 import com.ocha.boc.response.UserResponse;
 import com.ocha.boc.security.jwt.JwtTokenProvider;
 import com.ocha.boc.util.CommonConstants;
+import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -56,7 +56,7 @@ public class AuthService {
                     User user = new User();
                     user.setPhone(request.getPhone());
                     user.setActive(Boolean.FALSE);
-                    user.setCreatedDate(Instant.now().toString());
+                    user.setCreatedDate(DateUtils.getCurrentDateAndTime());
                     user.setRole(UserType.USER);
                     userRepository.save(user);
                     response.setSuccess(Boolean.TRUE);
@@ -86,7 +86,7 @@ public class AuthService {
                         Optional<User> optUser = userRepository.findUserByPhoneAndIsActive(request.getPhoneNumber(), true);
                         if (optUser.isPresent()) {
                             if (optUser.get().isActive() == true) {
-                                optUser.get().setLastModifiedDate(Instant.now().toString());
+                                optUser.get().setLastLoginTime(DateUtils.getCurrentDateAndTime());
                                 userRepository.save(optUser.get());
                                 response.setSuccess(Boolean.TRUE);
                                 response.setAccessToken(jwt);

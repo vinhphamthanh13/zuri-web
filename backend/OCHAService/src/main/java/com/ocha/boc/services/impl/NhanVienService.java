@@ -7,15 +7,16 @@ import com.ocha.boc.repository.NhanVienRepository;
 import com.ocha.boc.request.NhanVienRequest;
 import com.ocha.boc.response.NhanVienResponse;
 import com.ocha.boc.util.CommonConstants;
+import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -29,17 +30,17 @@ public class NhanVienService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_NHAN_VIEN_FAIL);
         try {
-            NhanVien nhanVien = nhanVienRepository.findNhanVienByUsername(request.getUsername());
-            if (nhanVien != null) {
+            Optional<NhanVien> optNhanVien = nhanVienRepository.findNhanVienByUsername(request.getUsername());
+            if (optNhanVien.isPresent()) {
                 response.setMessage(CommonConstants.USERNAME_EXISTED);
             } else {
-                nhanVien = new NhanVien();
+                NhanVien nhanVien = new NhanVien();
                 nhanVien.setCuaHangId(request.getCuaHangId());
                 nhanVien.setFullName(request.getFullName());
                 nhanVien.setNhanVienType(request.getNhanVienType());
                 nhanVien.setPassword(request.getPassword());
                 nhanVien.setUsername(request.getUsername());
-                nhanVien.setCreatedDate(Instant.now().toString());
+                nhanVien.setCreatedDate(DateUtils.getCurrentDateAndTime());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setObject(new NhanVienDTO(nhanVien));
@@ -84,12 +85,12 @@ public class NhanVienService {
         response.setMessage(CommonConstants.DELETE_NHAN_VIEN_BY_NHAN_VIEN_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(nhanVienId)) {
-                NhanVien nhanVien = nhanVienRepository.findNhanVienById(nhanVienId);
-                if (nhanVien != null) {
-                    nhanVienRepository.delete(nhanVien);
+                Optional<NhanVien> optNhanVien = nhanVienRepository.findNhanVienById(nhanVienId);
+                if (optNhanVien.isPresent()) {
+                    nhanVienRepository.delete(optNhanVien.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                }else{
+                } else {
                     response.setMessage(CommonConstants.NHAN_VIEN_IS_NOT_EXISTED);
                 }
             }

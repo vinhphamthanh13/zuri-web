@@ -8,15 +8,17 @@ import com.ocha.boc.request.DanhMucRequest;
 import com.ocha.boc.request.DanhMucUpdateRequest;
 import com.ocha.boc.response.DanhMucResponse;
 import com.ocha.boc.util.CommonConstants;
+import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -28,20 +30,19 @@ public class DanhMucService {
     private DanhMucRepository danhMucRepository;
 
 
-
     public DanhMucResponse createNewDanhMuc(DanhMucRequest request) {
         DanhMucResponse response = new DanhMucResponse();
         try {
             response.setMessage(CommonConstants.CREATE_NEW_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
-            if (request != null) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByName(request.getName());
-                if (danhMuc == null) {
-                    danhMuc = new DanhMuc();
+            if (!Objects.isNull(request)) {
+                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByName(request.getName());
+                if (!optDanhMuc.isPresent()) {
+                    DanhMuc danhMuc = new DanhMuc();
                     //Find max DanhMucId Value
-                    DanhMuc temp = danhMucRepository.findTopByOrderByDanhMucIdDesc();
-                    if (temp != null) {
-                        int danhMucIdMaxValue = Integer.parseInt(temp.getDanhMucId());
+                    Optional<DanhMuc> temp = danhMucRepository.findTopByOrderByDanhMucIdDesc();
+                    if (temp.isPresent()) {
+                        int danhMucIdMaxValue = Integer.parseInt(temp.get().getDanhMucId());
                         danhMuc.setDanhMucId(Integer.toString(danhMucIdMaxValue + 1));
                     } else {
                         //init first record in DB
@@ -50,12 +51,12 @@ public class DanhMucService {
                     danhMuc.setCuaHangId(request.getCuaHangId());
                     danhMuc.setAbbreviations(request.getAbbreviations());
                     danhMuc.setName(request.getName());
-                    danhMuc.setCreatedDate(Instant.now().toString());
+                    danhMuc.setCreatedDate(DateUtils.getCurrentDateAndTime());
                     danhMucRepository.save(danhMuc);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new DanhMucDTO(danhMuc));
-                }else{
+                } else {
                     response.setMessage(CommonConstants.DANH_MUC_IS_EXISTED);
                 }
             }
@@ -71,22 +72,22 @@ public class DanhMucService {
             response.setMessage(CommonConstants.UPDATE_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (request != null) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(), request.getCuaHangId());
-                if (danhMuc != null) {
-                    if(StringUtils.isNotEmpty(request.getCuaHangId())){
-                        danhMuc.setCuaHangId(request.getCuaHangId());
+                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(), request.getCuaHangId());
+                if (optDanhMuc.isPresent()) {
+                    if (StringUtils.isNotEmpty(request.getCuaHangId())) {
+                        optDanhMuc.get().setCuaHangId(request.getCuaHangId());
                     }
                     if (StringUtils.isNotEmpty(request.getAbbreviations())) {
-                        danhMuc.setAbbreviations(request.getAbbreviations());
+                        optDanhMuc.get().setAbbreviations(request.getAbbreviations());
                     }
                     if (StringUtils.isNotEmpty(request.getName())) {
-                        danhMuc.setName(request.getName());
+                        optDanhMuc.get().setName(request.getName());
                     }
-                    danhMuc.setLastModifiedDate(Instant.now().toString());
-                    danhMucRepository.save(danhMuc);
+                    optDanhMuc.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+                    danhMucRepository.save(optDanhMuc.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new DanhMucDTO(danhMuc));
+                    response.setObject(new DanhMucDTO(optDanhMuc.get()));
                 } else {
                     response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
                 }
@@ -103,11 +104,11 @@ public class DanhMucService {
             response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
-                if (danhMuc != null) {
+                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
+                if (optDanhMuc.isPresent()) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new DanhMucDTO(danhMuc));
+                    response.setObject(new DanhMucDTO(optDanhMuc.get()));
                 }
             }
         } catch (Exception e) {
@@ -145,9 +146,9 @@ public class DanhMucService {
             response.setMessage(CommonConstants.DELETE_DANH_MUC_BY_DANH_MUC_ID_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
-                if (danhMuc != null) {
-                    danhMucRepository.delete(danhMuc);
+                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
+                if (optDanhMuc.isPresent()) {
+                    danhMucRepository.delete(optDanhMuc.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 } else {

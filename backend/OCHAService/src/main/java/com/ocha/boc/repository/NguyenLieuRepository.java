@@ -3,9 +3,11 @@ package com.ocha.boc.repository;
 import com.ocha.boc.entity.NguyenLieu;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Optional;
+
 public interface NguyenLieuRepository extends MongoRepository<NguyenLieu, String> {
 
-    NguyenLieu findNguyenLieuByName(String name);
+    Optional<NguyenLieu> findNguyenLieuByName(String name);
 
-    NguyenLieu findNguyenLieuById(String id);
+    Optional<NguyenLieu> findNguyenLieuById(String id);
 }

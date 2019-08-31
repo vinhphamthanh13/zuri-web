@@ -9,12 +9,14 @@ import com.ocha.boc.request.GiamGiaRequest;
 import com.ocha.boc.request.GiamGiaUpdateRequest;
 import com.ocha.boc.response.GiamGiaResponse;
 import com.ocha.boc.util.CommonConstants;
+import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -28,7 +30,7 @@ public class GiamGiaService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_GIAM_GIA_FAIL);
         try {
-            if (request != null) {
+            if (!Objects.isNull(request)) {
                 GiamGia giamGia = new GiamGia();
                 giamGia.setCuaHangId(request.getCuaHangId());
                 giamGia.setName(request.getName());
@@ -41,7 +43,7 @@ public class GiamGiaService {
                 if (request.getPercentage() != null) {
                     giamGia.setPercentage(request.getPercentage());
                 }
-                giamGia.setCreatedDate(Instant.now().toString());
+                giamGia.setCreatedDate(DateUtils.getCurrentDateAndTime());
                 giamGia.setGiamGiaType(request.getGiamGiaType());
                 giamGiaRepository.save(giamGia);
                 response.setSuccess(Boolean.TRUE);
@@ -60,9 +62,9 @@ public class GiamGiaService {
         response.setMessage(CommonConstants.DELETE_GIAM_GIA_BY_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(giamGiaId)) {
-                GiamGia giamGia = giamGiaRepository.findGiamGiaById(giamGiaId);
-                if (giamGia != null) {
-                    giamGiaRepository.delete(giamGia);
+                Optional<GiamGia> optGiamGia = giamGiaRepository.findGiamGiaById(giamGiaId);
+                if (optGiamGia.isPresent()) {
+                    giamGiaRepository.delete(optGiamGia.get());
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
                 }
@@ -80,34 +82,34 @@ public class GiamGiaService {
         try {
             if (request != null) {
                 if (StringUtils.isNotEmpty(request.getGiamGiaId())) {
-                    GiamGia giamGia = giamGiaRepository.findGiamGiaById(request.getGiamGiaId());
-                    if (giamGia != null) {
-                        giamGia.setName(request.getName());
-                        giamGia.setLastModifiedDate(Instant.now().toString());
-                        if (request.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label.toString())) {
+                    Optional<GiamGia> optGiamGia = giamGiaRepository.findGiamGiaById(request.getGiamGiaId());
+                    if (optGiamGia.isPresent()) {
+                        optGiamGia.get().setName(request.getName());
+                        optGiamGia.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+                        if (request.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
                             if (request.getPercentage() != null) {
-                                giamGia.setPercentage(request.getPercentage());
+                                optGiamGia.get().setPercentage(request.getPercentage());
                             }
                             if (StringUtils.isNotEmpty(request.getDanhMucId())) {
-                                giamGia.setDanhMucId(request.getDanhMucId());
+                                optGiamGia.get().setDanhMucId(request.getDanhMucId());
                             }
 
-                        } else if (request.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label.toString())) {
+                        } else if (request.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
                             if (request.getPercentage() != null) {
-                                giamGia.setPercentage(request.getPercentage());
-                                giamGia.setDiscountAmount(null);
+                                optGiamGia.get().setPercentage(request.getPercentage());
+                                optGiamGia.get().setDiscountAmount(null);
                             }
                             if (request.getDiscountAmount() != null) {
-                                giamGia.setDiscountAmount(request.getDiscountAmount());
-                                giamGia.setPercentage(null);
+                                optGiamGia.get().setDiscountAmount(request.getDiscountAmount());
+                                optGiamGia.get().setPercentage(null);
                             }
                         }
 
-                        giamGia.setGiamGiaType(request.getGiamGiaType());
+                        optGiamGia.get().setGiamGiaType(request.getGiamGiaType());
                         response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                         response.setSuccess(Boolean.TRUE);
-                        response.setObject(new GiamGiaDTO(giamGia));
-                        giamGiaRepository.save(giamGia);
+                        response.setObject(new GiamGiaDTO(optGiamGia.get()));
+                        giamGiaRepository.save(optGiamGia.get());
                     }
                 }
             }

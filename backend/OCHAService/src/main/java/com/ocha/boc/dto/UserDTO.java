@@ -28,6 +28,8 @@ public class UserDTO extends AbstractEntity {
 
     private List<CuaHang> listCuaHang;
 
+    private String lastLoginTime;
+
     public UserDTO(User user) {
         this.phone = user.getPhone();
         this.email = user.getEmail();
@@ -39,6 +41,7 @@ public class UserDTO extends AbstractEntity {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.listCuaHang = user.getListCuaHang();
+        this.lastLoginTime = user.getLastLoginTime();
     }
 
 }

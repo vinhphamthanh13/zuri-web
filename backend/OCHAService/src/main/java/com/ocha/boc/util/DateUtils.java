@@ -264,6 +264,12 @@ public class DateUtils {
         return result;
     }
 
+    public static String getCurrentDateAndTime(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date).toString();
+    }
+
     public static void main(String[] args) throws Exception {
     }
 }

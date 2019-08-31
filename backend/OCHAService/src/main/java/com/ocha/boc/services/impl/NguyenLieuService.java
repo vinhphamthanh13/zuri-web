@@ -7,14 +7,15 @@ import com.ocha.boc.repository.NguyenLieuRepository;
 import com.ocha.boc.request.NguyenLieuRequest;
 import com.ocha.boc.response.NguyenLieuResponse;
 import com.ocha.boc.util.CommonConstants;
+import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -28,15 +29,15 @@ public class NguyenLieuService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_NGUYEN_LIEU_FAIL);
         try {
-            NguyenLieu nguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
-            if (nguyenLieu != null) {
+            Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
+            if (optNguyenLieu.isPresent()) {
                 response.setMessage(CommonConstants.NGUYEN_LIEU_EXISTED);
                 log.error("Error when create new NguyenLieu: This Nguyen Lieu is existed in the system");
             } else {
-                nguyenLieu = new NguyenLieu();
+                NguyenLieu nguyenLieu = new NguyenLieu();
                 nguyenLieu.setAbbreviations(request.getAbbreviations());
                 nguyenLieu.setName(request.getName());
-                nguyenLieu.setCreatedDate(Instant.now().toString());
+                nguyenLieu.setCreatedDate(DateUtils.getCurrentDateAndTime());
                 nguyenLieuRepository.save(nguyenLieu);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
@@ -53,19 +54,19 @@ public class NguyenLieuService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.UPDATE_NGUYEN_LIEU_FAIL);
         try {
-            NguyenLieu nguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
-            if (nguyenLieu != null) {
+            Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
+            if (optNguyenLieu.isPresent()) {
                 if (StringUtils.isNotEmpty(request.getAbbreviations())) {
-                    nguyenLieu.setAbbreviations(request.getAbbreviations());
+                    optNguyenLieu.get().setAbbreviations(request.getAbbreviations());
                 }
                 if (StringUtils.isNotEmpty(request.getName())) {
-                    nguyenLieu.setName(request.getName());
+                    optNguyenLieu.get().setName(request.getName());
                 }
-                nguyenLieu.setLastModifiedDate(Instant.now().toString());
+                optNguyenLieu.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObject(new NguyenLieuDTO(nguyenLieu));
-                nguyenLieuRepository.save(nguyenLieu);
+                response.setObject(new NguyenLieuDTO(optNguyenLieu.get()));
+                nguyenLieuRepository.save(optNguyenLieu.get());
             } else {
                 response.setMessage(CommonConstants.NGUYEN_LIEU_IS_NULL);
                 log.error("Error while updateNguyenLieuInformation: This Nguyen Lieu is not existed in the system");
@@ -82,11 +83,11 @@ public class NguyenLieuService {
         response.setMessage(CommonConstants.NGUYEN_LIEU_IS_NULL);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                NguyenLieu nguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
-                if (nguyenLieu != null) {
+                Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
+                if (optNguyenLieu.isPresent()) {
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new NguyenLieuDTO(nguyenLieu));
+                    response.setObject(new NguyenLieuDTO(optNguyenLieu.get()));
                 }
             }
         } catch (Exception e) {
@@ -122,9 +123,9 @@ public class NguyenLieuService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.DELETE_NGUYEN_LIEU_BY_NGUYEN_LIEU_ID_FAIL);
         try {
-            NguyenLieu nguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
-            if (nguyenLieu != null) {
-                nguyenLieuRepository.delete(nguyenLieu);
+            Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
+            if (optNguyenLieu.isPresent()) {
+                nguyenLieuRepository.delete(optNguyenLieu.get());
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
             } else {

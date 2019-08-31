@@ -75,7 +75,8 @@ public class OrderService {
         response.setMessage(CommonConstants.UPDATE_ORDER_FAIL);
         try {
             if (request != null) {
-                Optional<Order> order = Optional.ofNullable(orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId()).map(orderDb -> {
+                Optional<Order> order = Optional.ofNullable(orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(),
+                        request.getCuaHangId()).map(orderDb -> {
                     if (StringUtils.isNotEmpty(request.getOrderLocation())) {
                         orderDb.setOrderLocation(request.getOrderLocation());
                     }
@@ -83,6 +84,7 @@ public class OrderService {
                         orderDb.setListMatHangTieuThu(request.getListMatHangTieuThu());
                         orderDb.setTotalMoney(calculateTotalMoney(request.getListMatHangTieuThu()));
                     }
+                    orderDb.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     return orderRepository.save(orderDb);
                 }).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, CommonConstants.ORDER_NOT_EXISTED, request)));
                 response.setSuccess(Boolean.TRUE);
@@ -100,10 +102,10 @@ public class OrderService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.ORDER_CHECKOUT_FAIL);
         try {
-            if (request != null) {
+            if (!Objects.isNull(request)) {
                 Optional<Order> order = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
                 if (order.isPresent()) {
-                    order.get().setLastModifiedDate(Instant.now().toString());
+                    order.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     order.get().setOrderTimeCheckOut(Instant.now().toString());
                     BigDecimal totalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
                     order.get().setTotalMoney(totalMoney);
@@ -130,12 +132,12 @@ public class OrderService {
         response.setMessage(CommonConstants.ORDER_CHECKOUT_FAIL);
         BigDecimal amountOfAssumption = BigDecimal.ZERO;
         try {
-            if (request != null) {
+            if (!Objects.isNull(request)) {
                 Optional<Order> optOrder = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
                 if (optOrder.isPresent()) {
                     Order order = optOrder.get();
                     order.setOrderStatus(OrderStatus.SUCCESS);
-                    order.setLastModifiedDate(Instant.now().toString());
+                    order.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     order.setOrderTimeCheckOut(Instant.now().toString());
                     order.setListMatHangTieuThu(request.getListMatHangTieuThu());
                     if (!request.getGiamGiaType().equals(GiamGiaType.NONE)) {

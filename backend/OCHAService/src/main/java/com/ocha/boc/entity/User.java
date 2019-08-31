@@ -36,6 +36,8 @@ public class User extends AbstractEntity {
 
     private List<CuaHang> listCuaHang = new ArrayList<>();
 
+    private String lastLoginTime;
+
     public User() {
 
     }
