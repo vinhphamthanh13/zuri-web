@@ -31,5 +31,5 @@
 }
 
 .captcha {
-  color: var(--c-triad-05);
+  margin: var(--size-24) auto;
 }

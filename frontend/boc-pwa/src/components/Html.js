@@ -112,7 +112,6 @@ class Html extends React.Component {
               dangerouslySetInnerHTML={{ __html: style.cssText }}
             />
           ))}
-          <script src="https://sdk.accountkit.com/en_US/sdk.js" />
         </head>
         <body>
           <div id="app" dangerouslySetInnerHTML={{ __html: children }} />
@@ -120,39 +119,19 @@ class Html extends React.Component {
             dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }}
           />
           {scripts.map(script => <script key={script} src={script} />)}
-          {config.analytics.googleTrackingId && (
-            <script
-              dangerouslySetInnerHTML={{
-                __html:
-                  'window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;' +
-                  `ga('create','${
-                    config.analytics.googleTrackingId
-                  }','auto');ga('send','pageview')`,
-              }}
-            />
-          )}
-          {config.analytics.googleTrackingId && (
-            <script
-              src="https://www.google-analytics.com/analytics.js"
-              async
-              defer
-            />
-          )}
-          <script
-            type="text/javascript"
-            src={`${threatMetrix.scriptLink}?${params}`}
-          />
           <noscript>
+            {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
             <iframe
-              title="threatMetrix"
               style={{
-                width: 100,
-                height: 100,
-                border: 0,
-                position: 'absolute',
-                top: -5000,
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
               }}
-              src={`${threatMetrix.embedLink}?${params}`}
+              src="http://www.bocvietnam.com/"
             />
           </noscript>
           <input id="sessionID" value={app.sessionID} type="hidden" />

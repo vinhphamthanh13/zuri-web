@@ -22,11 +22,12 @@ const router = express.Router();
 const serverUsers = () => axios.get(SERVER_URL.USERS);
 const serverVerificationCode = (countryCode, phoneNumber) =>
   axios.get(`${SERVER_URL.USERS}/${countryCode}/${phoneNumber}`);
-const serverCreatingUser = body => axios.post(SERVER_URL.USERS, body);
-const serverExistingUser = phone => {
-  console.log(`${SERVER_URL.CHECKING_USER}/${phone}`);
-  return axios.get(`${SERVER_URL.CHECKING_USER}/${phone}`);
-}
+const serverExistingUser = phone =>
+  axios.get(`${SERVER_URL.CHECKING_USER}/${phone}`);
+const serverCreatingUser = phone => {
+  const body = { phone };
+  return axios.post(SERVER_URL.USERS, body);
+};
 
 // Consuming actions
 const serverUsersApi = async () => {
@@ -34,7 +35,6 @@ const serverUsersApi = async () => {
   if (error) return error;
   return result;
 };
-
 const serverVerificationCodeApi = async (countryCode, phoneNumber) => {
   const [result, error] = await handleRequest(serverVerificationCode, [
     countryCode,
@@ -43,15 +43,13 @@ const serverVerificationCodeApi = async (countryCode, phoneNumber) => {
   if (error) return error;
   return result;
 };
-
-const serverCreatingUserApi = async phone => {
-  const [result, error] = await handleRequest(serverCreatingUser, [{ phone }]);
+const serverExistingUserApi = async phone => {
+  const [result, error] = await handleRequest(serverExistingUser, [phone]);
   if (error) return error;
   return result;
 };
-
-const serverExistingUserApi = async phone => {
-  const [result, error] = await handleRequest(serverExistingUser, [phone]);
+const serverCreatingUserApi = async phone => {
+  const [result, error] = await handleRequest(serverCreatingUser, [{ phone }]);
   if (error) return error;
   return result;
 };
@@ -94,6 +92,21 @@ router.get(
   },
 );
 
+router.get(
+  `${NODE_SERVER_URL.AUTHENTICATION.EXIST_USER}/:phone`,
+  async (request, response) => {
+    const {
+      params: { phone },
+    } = request;
+    try {
+      const result = await serverExistingUserApi(phone);
+      handleNodeServerResponse(response, result);
+    } catch (error) {
+      handleNodeServerError(response, error);
+    }
+  },
+);
+
 /*
  * Create new user
  */
@@ -105,21 +118,6 @@ router.post(
     const phone = get(body, 'phoneNumber');
     try {
       const result = await serverCreatingUserApi(phone);
-      handleNodeServerResponse(response, result);
-    } catch (error) {
-      handleNodeServerError(response, error);
-    }
-  },
-);
-
-router.get(
-  `${NODE_SERVER_URL.AUTHENTICATION.EXIST_USER}/:phone`,
-  async (request, response) => {
-    const {
-      params: { phone },
-    } = request;
-    try {
-      const result = await serverExistingUserApi(phone);
       handleNodeServerResponse(response, result);
     } catch (error) {
       handleNodeServerError(response, error);

@@ -5,9 +5,9 @@ import { HTTP_STATUS, CONTENT_TYPE } from 'constants/http';
 const handleResponse = (response, defaultResponse) => {
   if (response) {
     const { status, data } = response;
+    const dataCode = { ...data, code: status };
     return {
-      code: status,
-      data,
+      data: dataCode,
       status,
     };
   }
@@ -23,7 +23,8 @@ const handleError = response => {
     status: HTTP_STATUS.INTERNAL_ERROR,
     data: {
       code: HTTP_STATUS.INTERNAL_ERROR,
-      message: 'Hiện tại không thể kết nối với máy chủ BOCVN.',
+      message:
+        'Kết nối với máy chủ BOCVN không thực hiện được. Vui lòng thử lại sau!',
       success: false,
     },
   };

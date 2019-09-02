@@ -62,7 +62,7 @@ class RegisterShop extends Component {
 
     return (
       <div className={s.container}>
-        <Header title="Tạo cửa hàng" />
+        <Header title="Tạo cửa hàng" iconLeft />
         <div className={s.greetingLogo}>
           <img src={BocGreet} alt="Boc Greeting" width="100%" />
         </div>
@@ -75,6 +75,9 @@ class RegisterShop extends Component {
             className={s.button}
           />
         </div>
+        <a href="#" className={s.readingPolicies}>
+          Chính sách và điều khoản của BOCVN
+        </a>
       </div>
     );
   }

@@ -1,16 +1,23 @@
+/* eslint-disable no-undef */
+
 import React, { Component } from 'react';
 import { func, objectOf, any, bool } from 'prop-types';
 import { get } from 'lodash';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Recaptcha from 'react-recaptcha';
 import { withFormik } from 'formik/dist/index';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { activation } from 'constants/schemas';
-import { goBack } from 'utils/browser';
-import { REGEXP } from 'constants/common';
+import { goBack, injectGoogleCaptchaScript } from 'utils/browser';
+import {
+  REGEXP,
+  GOOGLE_CAPTCHA_SITE_KEY,
+  G_CAPTCHA_ID,
+} from 'constants/common';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { HTTP_STATUS } from 'constants/http';
 import history from '../../../history';
@@ -26,7 +33,7 @@ const LOGIN = false;
 const REGISTER = true;
 const PHONE_FIELD = 'phoneNumber';
 const LOCATION_STATE = 'location.state';
-const LOGIN_MESSAGE = 'Nhập số điện thoại đã đăng ký BOCVN.';
+const LOGIN_MESSAGE = 'Hãy nhập số điện thoại đã đăng ký BOCVN.';
 const REGISTER_MESSAGE =
   'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.';
 const authUrl = ROUTER_URL.AUTHENTICATION;
@@ -37,15 +44,15 @@ class Activation extends Component {
     errors: objectOf(any),
     touched: objectOf(bool).isRequired,
     isValid: bool.isRequired,
+    creatingUser: bool,
     handleChange: func.isRequired,
     setFieldValue: func.isRequired,
     setFieldTouched: func.isRequired,
     handleSubmit: func.isRequired,
-    dispatchExistingUser: func.isRequired,
     existingUser: objectOf(any),
+    dispatchExistingUser: func.isRequired,
     dispatchError: func.isRequired,
     dispatchExistingUserAction: func.isRequired,
-    creatingUser: bool,
   };
 
   static defaultProps = {
@@ -54,11 +61,17 @@ class Activation extends Component {
     creatingUser: null,
   };
 
-  state = {
-    getVerificationCodeStatus: false,
-    existingUser: INIT_USER,
-    creatingUser: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      getVerificationCodeStatus: false,
+      existingUser: INIT_USER,
+      creatingUser: null,
+      gCaptchaStatus: true,
+    };
+    this.recaptchaRef = React.createRef();
+    injectGoogleCaptchaScript(document, 'script', G_CAPTCHA_ID);
+  }
 
   static getDerivedStateFromProps(props, state) {
     const { getVerificationCodeStatus, existingUser, creatingUser } = props;
@@ -89,8 +102,6 @@ class Activation extends Component {
   componentDidUpdate(prevProps) {
     const {
       getVerificationCodeStatus,
-      dispatchExistingUser,
-      values,
       dispatchError,
       errors,
       dispatchExistingUserAction,
@@ -101,12 +112,7 @@ class Activation extends Component {
       creatingUser,
     } = this.state;
     const isRegistering = get(history, LOCATION_STATE);
-    const phoneNumber = get(values, PHONE_FIELD);
     const { code, success, message } = existingUser;
-
-    if (REGEXP.PHONE_NUMBER.test(phoneNumber) && Object.is(success, null)) {
-      dispatchExistingUser(phoneNumber);
-    }
 
     if (isRegistering && creatingUser) {
       history.push(authUrl.CREATING_NEW_STORE);
@@ -152,6 +158,28 @@ class Activation extends Component {
     dispatchExistingUserAction(INIT_USER);
   };
 
+  handleLoadCaptcha = () => {
+    console.log('handle loading captcha');
+  };
+
+  handleVerifyCaptcha = response => {
+    const { dispatchExistingUser, values } = this.props;
+    const phoneNumber = get(values, PHONE_FIELD);
+    this.handleCaptchaStatus(true);
+    if (response) dispatchExistingUser(phoneNumber);
+  };
+
+  handleExpiredCaptcha = () => {
+    this.handleCaptchaStatus(false);
+  };
+
+  handleCaptchaStatus = value => {
+    this.setState({
+      gCaptchaStatus: value,
+    });
+  };
+
+
   render() {
     const {
       values: { countryCode, phoneNumber },
@@ -163,6 +191,7 @@ class Activation extends Component {
       touched,
       existingUser,
     } = this.props;
+    const { gCaptchaStatus } = this.state;
 
     const registerState = get(history, 'location.state.register');
     const headerTitle = registerState
@@ -172,7 +201,9 @@ class Activation extends Component {
     const isLoginValid = isValid && !registerState && existingUser.success;
     const isRegisterValid = isValid && !existingUser.success;
     const isActivatingCode =
-      code !== HTTP_STATUS.INTERNAL_ERROR && (isLoginValid || isRegisterValid);
+      code !== HTTP_STATUS.INTERNAL_ERROR &&
+      (isLoginValid || isRegisterValid) &&
+      gCaptchaStatus;
     const activatingLabel = registerState ? 'Tạo cửa hàng' : 'Lấy mã xác nhận';
 
     return (
@@ -207,7 +238,19 @@ class Activation extends Component {
               disabled={!isActivatingCode}
             />
           </form>
-          {registerState && <div className={s.captcha}>show captcha here</div>}
+          {isValid && (
+            <div className={s.captcha}>
+              <Recaptcha
+                ref={this.recaptchaRef}
+                sitekey={GOOGLE_CAPTCHA_SITE_KEY}
+                render="explicit"
+                onloadCallback={this.handleLoadCaptcha}
+                verifyCallback={this.handleVerifyCaptcha}
+                expiredCallback={this.handleExpiredCaptcha}
+                hl="vi"
+              />
+            </div>
+          )}
         </div>
       </>
     );

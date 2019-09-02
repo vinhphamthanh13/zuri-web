@@ -1,5 +1,12 @@
 import { tabsRoute } from 'routes';
 
+export const G_CAPTCHA_ID = 'recaptcha-id';
+export const GOOGLE_CAPTCHA_SECRET_KEY =
+  '6Lc7J7YUAAAAABG41he8PrwxewS8ZzOAMZfok9XG';
+export const GOOGLE_CAPTCHA_SITE_KEY =
+  '6Lc7J7YUAAAAAOqthWot8Dz1k7io8lX3Hw1Qlvfh';
+export const GOOGLE_CAPTCHA_SCRIPT = 'https://www.google.com/recaptcha/api.js';
+
 export const LAYOUT = {
   MAX_WIDTH: 768,
 };
@@ -7,6 +14,7 @@ export const DATA = {
   ROOT: 'data',
   SUCCESS: 'data.success',
   MESSAGE: 'data.message',
+  CODE: 'data.code',
 };
 
 export const REGEXP = {

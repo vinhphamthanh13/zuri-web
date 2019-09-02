@@ -1,4 +1,5 @@
 import { isMobile } from 'react-device-detect';
+import { GOOGLE_CAPTCHA_SCRIPT } from 'constants/common';
 import history from '../history';
 
 export const hasGetUserMedia = () =>
@@ -23,4 +24,13 @@ export const resolveDimension = (width, height) => {
     width: `${width}px`,
     height: width > height && isMobile ? `${width}px` : `${height}px`,
   };
+};
+
+export const injectGoogleCaptchaScript = (d, scr, id) => {
+  if (d.getElementById(id)) return;
+  const gCaptcha = d.getElementsByTagName(scr)[0];
+  const script = d.createElement(scr);
+  script.id = id;
+  script.src = GOOGLE_CAPTCHA_SCRIPT;
+  gCaptcha.parentNode.insertBefore(script, gCaptcha);
 };

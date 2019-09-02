@@ -13,7 +13,12 @@ const persistConfig = {
   key: 'authentication',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: ['getVerificationCodeStatus', 'existingUser', 'checkingCount'],
+  blacklist: [
+    'getVerificationCodeStatus',
+    'existingUser',
+    'checkingCount',
+    'creatingUser',
+  ],
 };
 
 const initState = {

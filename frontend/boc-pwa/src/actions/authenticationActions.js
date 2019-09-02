@@ -49,27 +49,22 @@ const setUsersAction = payload => ({
   type: SET_USERS,
   payload,
 });
-
 export const setPhoneNumberAction = payload => ({
   type: SET_PHONE_NUMBER,
   payload,
 });
-
 export const getVerificationCodeAction = payload => ({
   type: GET_VERIFICATION_CODE,
   payload,
 });
-
 export const setVerificationCodeAction = payload => ({
   type: SET_VERIFICATION_CODE,
   payload,
 });
-
 export const creatingUserAction = payload => ({
   type: CREATING_USER,
   payload,
 });
-
 export const existingUserAction = payload => ({
   type: EXISTING_USER,
   payload,
@@ -144,8 +139,16 @@ export const nodeExistingUserApi = phone => async dispatch => {
 
 export const nodeCreatingUserApi = phone => async dispatch => {
   dispatch(setLoading(LOADING.ON));
-  const [result, error] = await handleRequest(nodeCreatingUser, [phone]);
+  const data = { phone };
+  const [result, error] = await handleRequest(nodeCreatingUser, [data]);
+  const code = get(result, DATA.CODE) || get(error, DATA.CODE);
   const success = get(result, DATA.SUCCESS) || get(error, DATA.SUCCESS);
+  console.log('crating user', error);
+  console.log('code', code);
+  if (code === HTTP_STATUS.INTERNAL_ERROR) {
+    const message = get(result, DATA.MESSAGE) || get(error, DATA.MESSAGE);
+    dispatch(setError(message));
+  }
   dispatch(creatingUserAction(success));
   dispatch(setLoading(LOADING.OFF));
 };
