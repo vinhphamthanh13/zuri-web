@@ -17,6 +17,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Update User Information
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Update User")
     @PutMapping("/users")
     public ResponseEntity<UserResponse> updateUserInformation(@RequestBody UserUpdateRequest request) {
@@ -24,6 +30,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Find User By Id
+     *
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "Find User By Id")
     @GetMapping("/users/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
@@ -31,6 +43,11 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Get List Users
+     *
+     * @return
+     */
     @ApiOperation(value = "Get list Users")
     @GetMapping("/users")
     public ResponseEntity<UserResponse> getAllUsers() {
@@ -38,7 +55,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Deactive By UserId
+     *
+     * @param userId
+     * @return
+     */
     @ApiOperation(value = "Deactive user by userId")
     @DeleteMapping("/users/deactive/{userId}")
     public ResponseEntity<AbstractResponse> deActiveUser(@PathVariable String userId) {
@@ -46,6 +68,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Active By UserId
+     *
+     * @param userId
+     * @return
+     */
     @ApiOperation(value = "Active User By UserId")
     @PutMapping("/users/active/{userId}")
     public ResponseEntity<UserResponse> activeUser(@PathVariable String userId) {
@@ -53,6 +81,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Check User Exist By PhoneNumber
+     *
+     * @param phoneNumber
+     * @return
+     */
 
     @ApiOperation(value = "Check User Exist By PhoneNumber")
     @GetMapping("/users/checking/{phone}")

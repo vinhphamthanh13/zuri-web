@@ -18,6 +18,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    /**
+     * Initial Order
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Initial Order", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/orders")
     public ResponseEntity<OrderResponse> initialOrder(@RequestBody OrderRequest request) {
@@ -27,6 +33,12 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Update Order Information
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Update Order Information", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/orders")
     public ResponseEntity<OrderResponse> updateOrderInformation(@RequestBody OrderUpdateRequest request) {
@@ -36,6 +48,12 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Reject Order
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Cancel Order", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/orders/reject")
     public ResponseEntity<OrderResponse> rejectOrder(@RequestBody OrderRejectObjectRequest request) {
@@ -45,6 +63,12 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Checkout Order
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Checkout Order", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/orders/checkout")
     public ResponseEntity<OrderResponse> checkoutOrder(@RequestBody OrderCheckoutObjectRequest request) {
@@ -54,6 +78,13 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Get Orders By CuaHangId
+     *
+     * @param pageRequest
+     * @param cuaHangId
+     * @return
+     */
     @ApiOperation(value = "Get Order By CuaHangId", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/orders/{cuaHangId}")
     public ResponseEntity<OrderResponse> getOrdersByCuaHangId(@RequestBody PageRequest pageRequest, @PathVariable(value = "cuaHangId") String cuaHangId) {

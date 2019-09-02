@@ -20,6 +20,12 @@ public class GiamGiaController {
     @Autowired
     private GiamGiaService giamGiaService;
 
+    /**
+     * Create new Giam Gia
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Create New Giam Gia", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/giam-gia")
     public ResponseEntity<GiamGiaResponse> createNewGiamGia(@RequestBody GiamGiaRequest request) {
@@ -29,6 +35,12 @@ public class GiamGiaController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * delete Giam Gia By Id
+     *
+     * @param giamGiaId
+     * @return
+     */
     @ApiOperation(value = "Delete Giam Gia By GiamGiaId", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/giam-gia/{giamGiaId}")
     public ResponseEntity<AbstractResponse> deleteGiamGiaByGiamGiaId(@PathVariable(value = "giamGiaId") String giamGiaId) {
@@ -38,6 +50,12 @@ public class GiamGiaController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Update Giam Gia Information
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Update Giam Gia", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/giam-gia")
     public ResponseEntity<GiamGiaResponse> updateGiamGiaByGiamGiaId(@RequestBody GiamGiaUpdateRequest request) {

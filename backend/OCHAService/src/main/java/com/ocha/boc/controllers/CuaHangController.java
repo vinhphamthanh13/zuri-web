@@ -4,7 +4,6 @@ import com.ocha.boc.request.CuaHangRequest;
 import com.ocha.boc.request.CuaHangUpdateRequest;
 import com.ocha.boc.response.CuaHangResponse;
 import com.ocha.boc.services.impl.CuaHangService;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +20,12 @@ public class CuaHangController {
     @Autowired
     private CuaHangService cuaHangService;
 
+    /**
+     * Create new Cua Hang
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Create new Cua Hang", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/cua-hang")
     public ResponseEntity<CuaHangResponse> createCuaHang(@RequestBody CuaHangRequest request) {
@@ -30,6 +35,12 @@ public class CuaHangController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Update Cua Hang Information
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Update Cua Hang Information", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/cua-hang")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -40,6 +51,12 @@ public class CuaHangController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Find Cua Hang Information by CuaHangId
+     *
+     * @param cuaHangId
+     * @return
+     */
     @ApiOperation(value = "Find Cua Hang Information by CuaHangId", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/cua-hang/{cuaHangId}")
     @PreAuthorize("hasAuthority('ADMIN')")

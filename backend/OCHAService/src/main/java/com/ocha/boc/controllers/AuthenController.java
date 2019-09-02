@@ -11,7 +11,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -23,7 +26,12 @@ public class AuthenController {
     @Autowired
     private AuthService authService;
 
-
+    /**
+     * Register new user account
+     *
+     * @param request
+     * @return UserResponse
+     */
     @ApiOperation(value = "register new user account")
     @PostMapping("/users")
     public ResponseEntity<UserResponse> register(@RequestBody UserLoginRequest request) {
@@ -33,6 +41,12 @@ public class AuthenController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Login API
+     *
+     * @param request
+     * @return JwtAuthenticationResponse
+     */
     @ApiOperation(value = "login")
     @PostMapping("/users/login")
     public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody OTPRequest request) {
@@ -42,6 +56,12 @@ public class AuthenController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * This API will be used to send OTP code to phone number that was given on request body
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Send OTP")
     @PostMapping("/users/sendOTP")
     public ResponseEntity<AbstractResponse> sendOTP(@RequestBody SendOTPRequest request) {
@@ -51,6 +71,12 @@ public class AuthenController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * This API will be used to verify OTP code
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Verify OTP")
     @PostMapping("/users/verifyOTP")
     public ResponseEntity<JwtAuthenticationResponse> verifyOTP(@RequestBody OTPRequest request) {

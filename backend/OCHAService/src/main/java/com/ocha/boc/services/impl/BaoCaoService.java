@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Service
@@ -44,8 +41,8 @@ public class BaoCaoService {
         response.setMessage(CommonConstants.GET_DOANH_THU_TONG_QUAN_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                String currentDate = DateUtils.getCurrentDate();
-                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(currentDate, cuaHangId);
+                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndCuaHangId(DateUtils.getCurrentDate(),
+                                                                                            cuaHangId);
                 if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(cuaHangId);
                     analysisDoanhThuTongQuan(orders, response);
@@ -62,10 +59,9 @@ public class BaoCaoService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.GET_DOANH_THU_TONG_QUAN_IN_RANGE_DATE_FAIL);
         try {
-            if (request != null) {
-                String fromDate = request.getFromDate();
-                String toDate = request.getToDate();
-                List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(), fromDate, toDate);
+            if (!Objects.isNull(request)) {
+                List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getCuaHangId(),
+                                                                            request.getFromDate(), request.getToDate());
                 if (CollectionUtils.isNotEmpty(orders)) {
                     response.setCuaHangId(request.getCuaHangId());
                     analysisDoanhThuTongQuan(orders, response);
@@ -162,10 +158,10 @@ public class BaoCaoService {
                 List<MatHangTieuThu> listMatHangTieuThu = order.getListMatHangTieuThu();
                 for (MatHangTieuThu temp : listMatHangTieuThu) {
                     String matHangName = temp.getMatHangName() + " (" + temp.getBangGiaName() + ") ";
-                    DanhMuc danhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(temp.getDanhMucId(), order.getCuaHangId());
-                    if (danhMuc != null) {
+                    Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(temp.getDanhMucId(), order.getCuaHangId());
+                    if (optDanhMuc.isPresent()) {
                         //Check danh muc existed List<DanhMucBanChay>
-                        if (!checkDanhMucExistInListDanhMucBanChay(listDanhMucBanChay, danhMuc)) {
+                        if (!checkDanhMucExistInListDanhMucBanChay(listDanhMucBanChay, optDanhMuc.get())) {
                             DanhMucBanChay danhMucBanChay = new DanhMucBanChay();
                             List<MatHangBanChay> listMatHangBanChay = new ArrayList<MatHangBanChay>();
                             MatHangBanChay matHangBanChay = new MatHangBanChay();
@@ -176,12 +172,12 @@ public class BaoCaoService {
                             Map<String, BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListMatHangBanChay(listMatHangBanChay);
                             danhMucBanChay.setTotalPrice(totalPriceAndQuantity.get(TOTAL_PRICE));
                             danhMucBanChay.setTotalQuantity(totalPriceAndQuantity.get(QUANTITY).intValue());
-                            danhMucBanChay.setDanhMucName(danhMuc.getName());
+                            danhMucBanChay.setDanhMucName(optDanhMuc.get().getName());
                             danhMucBanChay.setListMatHangBanChay(listMatHangBanChay);
                             listDanhMucBanChay.add(danhMucBanChay);
                         } else {
                             int index = IntStream.range(0, listDanhMucBanChay.size()).filter(i ->
-                                    danhMuc.getName().equalsIgnoreCase(listDanhMucBanChay.get(i).getDanhMucName())).findFirst().getAsInt();
+                                    optDanhMuc.get().getName().equalsIgnoreCase(listDanhMucBanChay.get(i).getDanhMucName())).findFirst().getAsInt();
                             List<MatHangBanChay> listMatHangBanChay = listDanhMucBanChay.get(index).getListMatHangBanChay();
                             boolean isMatHangBanChayExisted = checkMatHangBanChayExist(listMatHangBanChay, matHangName);
                             if (isMatHangBanChayExisted) {

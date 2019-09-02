@@ -19,6 +19,12 @@ public class BaoCaoController {
     @Autowired
     private BaoCaoService baoCaoService;
 
+    /**
+     * Report current Doanh Thu Tong Quan
+     *
+     * @param cuaHangId
+     * @return
+     */
     @ApiOperation(value = "Doanh Thu Tổng Quan", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/doanh-thu-tong-quan")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -29,7 +35,12 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Report Doanh Thu Tong Quan between two days
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Get Doanh Thu Tong Quan In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/doanh-thu-tong-quan")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -40,7 +51,13 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Report current Doanh Thu Theo Danh Muc
+     *
+     * @param cuaHangId
+     * @param currentDate
+     * @return
+     */
     @ApiOperation(value = "Doanh Thu Theo Danh Mục", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/doanh-thu-theo-danh-muc")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -52,7 +69,12 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Report Doanh Thu Theo Danh Muc between two days
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Doanh Thu Theo Danh Mục In Range Date ", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/doanh-thu-theo-danh-muc")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -63,7 +85,13 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Report current Mat Hang Ban Chay
+     *
+     * @param cuaHangId
+     * @param currentDate
+     * @return
+     */
     @ApiOperation(value = "Mặt Hàng Bán Chạy", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/mat-hang-ban-chay")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -75,7 +103,12 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Report Mat Hang Ban Chay between two days
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Mặt Hàng Bán Chạy In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/mat-hang-ban-chay")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -87,6 +120,13 @@ public class BaoCaoController {
     }
 
 
+    /**
+     * Report current Giam Gia
+     *
+     * @param cuaHangId
+     * @param currentDate
+     * @return
+     */
     @ApiOperation(value = "Báo Cáo Giảm Giá", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/bao-cao-giam-gia")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -98,6 +138,12 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Report Giam Gia between two days
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Báo Cáo Giảm Giá In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/bao-cao-giam-gia")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -108,7 +154,13 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Report Doanh Thu Theo Nhan Vien
+     *
+     * @param cuaHangId
+     * @param currentDate
+     * @return
+     */
     @ApiOperation(value = "Báo Cáo Doanh Thu Theo Nhân Viên", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/doanh-thu-theo-nhan-vien")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -120,6 +172,12 @@ public class BaoCaoController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Report Doanh Thu Theo Nhan Viet between two days
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Báo Cáo Doanh Thu Theo Nhân Viên In Range Date", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/doanh-thu-theo-nhan-vien")
     @PreAuthorize("hasAuthority('ADMIN')")

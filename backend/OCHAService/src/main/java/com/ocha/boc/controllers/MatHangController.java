@@ -18,6 +18,12 @@ public class MatHangController {
     @Autowired
     private MatHangService matHangService;
 
+    /**
+     * Create new Mat Hang
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Create new Mat Hang", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/mat-hang")
     public ResponseEntity<MatHangResponse> createNewMatHang(@RequestBody MatHangRequest request) {
@@ -25,7 +31,12 @@ public class MatHangController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Update Mat Hang Infor
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Update Mat Hang", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/mat-hang")
     public ResponseEntity<MatHangResponse> updateMatHangInfor(@RequestBody MatHangUpdateRequest request) {
@@ -33,6 +44,13 @@ public class MatHangController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Find Mat Hang By Id
+     *
+     * @param cuaHangId
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "Find Mat Hang By Id", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/mat-hang/{cuaHangId}/{id}")
     public ResponseEntity<MatHangResponse> findMatHangById(@PathVariable("cuaHangId") String cuaHangId, @PathVariable("id") String id) {
@@ -40,6 +58,12 @@ public class MatHangController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Get All Mat Hang
+     *
+     * @param cuaHangId
+     * @return
+     */
     @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/mat-hang")
     public ResponseEntity<MatHangResponse> getAllMatHang(@RequestParam String cuaHangId) {
@@ -47,6 +71,13 @@ public class MatHangController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Delete Mat Hang By Id
+     *
+     * @param cuaHangId
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "Delete Mat Hang By Id", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/mat-hang/{cuaHangId}/{id}")
     public ResponseEntity<AbstractResponse> deleteMatHangById(@PathVariable("cuaHangId") String cuaHangId, @PathVariable("id") String id) {

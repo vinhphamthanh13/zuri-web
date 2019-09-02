@@ -19,27 +19,45 @@ public class NhanVienController {
     @Autowired
     private NhanVienService nhanVienService;
 
+    /**
+     * Create New Nhan Vien
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Create new Nhan Vien", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/nhan-vien")
-    public ResponseEntity<NhanVienResponse> createNewNhanVien(@RequestBody NhanVienRequest request){
+    public ResponseEntity<NhanVienResponse> createNewNhanVien(@RequestBody NhanVienRequest request) {
         log.info("START: create new nhan vien");
         NhanVienResponse response = nhanVienService.createNewNhanVien(request);
         log.info("END: create new nhan vien");
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Get List Nhan Vien By Cua Hang Id
+     *
+     * @param cuaHangId
+     * @return
+     */
     @ApiOperation(value = "Get List Nhan Vien By Cua Hang Id", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/nhan-vien/{cuaHangId}")
-    public ResponseEntity<NhanVienResponse> getListNhanVienByCuaHangId(@PathVariable(value = "cuaHangId") String cuaHangId){
+    public ResponseEntity<NhanVienResponse> getListNhanVienByCuaHangId(@PathVariable(value = "cuaHangId") String cuaHangId) {
         log.info("START: get list nhan vien by cuaHangId: " + cuaHangId);
         NhanVienResponse response = nhanVienService.getListNhanVienByCuaHangId(cuaHangId);
         log.info("END: get list nhan vien by cuaHangId");
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Delete Nhan Vien By Nhan Vien Id
+     *
+     * @param nhanVienId
+     * @return
+     */
     @ApiOperation(value = "Delete Nhan Vien", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/nhan-vien/{nhanVienId}")
-    public ResponseEntity<AbstractResponse> deleteNhanVienByNhanVienId(@PathVariable(value = "nhanVienId") String nhanVienId){
+    public ResponseEntity<AbstractResponse> deleteNhanVienByNhanVienId(@PathVariable(value = "nhanVienId") String nhanVienId) {
         log.info("START: Delete Nhan Vien: " + nhanVienId);
         AbstractResponse response = nhanVienService.deleteNhanVienByNhanVienId(nhanVienId);
         log.info("END: Delete Nhan Vien: " + nhanVienId);

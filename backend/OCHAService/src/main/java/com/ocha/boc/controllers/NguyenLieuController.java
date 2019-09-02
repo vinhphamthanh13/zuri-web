@@ -17,6 +17,12 @@ public class NguyenLieuController {
     @Autowired
     private NguyenLieuService nguyenLieuService;
 
+    /**
+     * Create New Nguyen Lieu
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "Create new Nguyen Lieu", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/nguyen-lieu")
     public ResponseEntity<NguyenLieuResponse> newNguyenLieu(@RequestBody NguyenLieuRequest request) {
@@ -24,6 +30,12 @@ public class NguyenLieuController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Update Nguyen Lieu Information
+     *
+     * @param request
+     * @return
+     */
     @ApiOperation(value = "update NguyenLieu information", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/nguyen-lieu")
     public ResponseEntity<NguyenLieuResponse> updateNguyenLieuInformation(@RequestBody NguyenLieuRequest request) {
@@ -31,6 +43,12 @@ public class NguyenLieuController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Find Nguyen Lieu By Id
+     *
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "Find NguyenLieu by Id", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/nguyen-lieu/{id}")
     public ResponseEntity<NguyenLieuResponse> findNguyenLieuById(@PathVariable String id) {
@@ -38,6 +56,11 @@ public class NguyenLieuController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Get All Nguyen Lieu
+     *
+     * @return
+     */
     @ApiOperation(value = "Get all Nguyen Lieu", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/nguyen-lieu")
     public ResponseEntity<NguyenLieuResponse> getAllNguyenLieu() {
@@ -45,6 +68,12 @@ public class NguyenLieuController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Delete Nguyen Lieu By Id
+     *
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "Delete Nguyen Lieu By Id", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/nguyen-lieu/{id}")
     public ResponseEntity<AbstractResponse> deleteNguyenLieuById(@PathVariable String id) {
