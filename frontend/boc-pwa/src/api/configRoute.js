@@ -1,4 +1,4 @@
-import { NODE_SERVER_URL } from 'constants/api';
+import { NODE_SERVER_URL } from 'actions/api';
 import userController from './authenticationApi';
 
 export default app => {

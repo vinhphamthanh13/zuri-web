@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { func, objectOf, any, bool } from 'prop-types';
+import { func, objectOf, any, bool, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Header from 'components/Header';
+import Modal from 'components/Modal';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Button from 'components/Button';
 import Input from 'components/Input';
@@ -24,15 +25,31 @@ class RegisterShop extends Component {
     setFieldTouched: func.isRequired,
     dispatchExistingUserAction: func.isRequired,
     dispatchCreatingUserAction: func.isRequired,
+    creatingUser: bool,
+    phoneNumber: string.isRequired,
+  };
+
+  static defaultProps = {
+    creatingUser: false,
+  };
+
+  state = {
+    creatingUserPopup: true,
   };
 
   componentDidMount() {
     this.unblockNavigation = blockNavigation(
-      'Bạn có muốn thoát khỏi đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa khi thoát chương trình!',
+      'Bạn có muốn thoát khỏi đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!',
     );
   }
 
   componentWillUnmount() {
+    const {
+      dispatchExistingUserAction,
+      dispatchCreatingUserAction,
+    } = this.props;
+    dispatchExistingUserAction(INIT_USER);
+    dispatchCreatingUserAction(false);
     this.unblockNavigation();
   }
 
@@ -72,38 +89,47 @@ class RegisterShop extends Component {
     ));
   };
 
+  handleCloseCreatingUserPopup = () =>
+    this.setState({ creatingUserPopup: false });
+
   handleGoBack = () => {
-    const {
-      dispatchExistingUserAction,
-      dispatchCreatingUserAction,
-    } = this.props;
-    dispatchExistingUserAction(INIT_USER);
-    dispatchCreatingUserAction(false);
-    goBack(true, 'Thoát khỏi chương trình!');
-  };
+
+  }
 
   render() {
-    const { isValid } = this.props;
+    const { isValid, creatingUser, phoneNumber } = this.props;
+    const { creatingUserPopup } = this.state;
+    const popUpCongratulation = creatingUser && creatingUserPopup;
 
     return (
-      <div className={s.container}>
-        <Header title="Tạo cửa hàng" iconLeft onClickLeft={this.handleGoBack} />
-        <div className={s.greetingLogo}>
-          <img src={BocGreet} alt="Boc Greeting" width="100%" />
-        </div>
-        <div className={s.register}>
-          <form>{this.createForm()}</form>
-          <Button
-            onClick={this.handleActivation}
-            label="Tiếp theo"
-            disabled={!isValid}
-            className={s.button}
+      <>
+        {popUpCongratulation && (
+          <Modal
+            title="Tạo tài khoản thành công!"
+            message={`Bạn đã tạo tài khoản thành công với số điện thoại ${phoneNumber}. Hãy tạo cửa hàng cho bạn.`}
+            successIcon
+            callback={this.handleCloseCreatingUserPopup}
           />
+        )}
+        <div className={s.container}>
+          <Header title="Tạo cửa hàng" iconLeft onClickLeft={goBack} />
+          <div className={s.greetingLogo}>
+            <img src={BocGreet} alt="Boc Greeting" width="100%" />
+          </div>
+          <div className={s.register}>
+            <form>{this.createForm()}</form>
+            <Button
+              onClick={this.handleActivation}
+              label="Tiếp theo"
+              disabled={!isValid}
+              className={s.button}
+            />
+          </div>
+          <a href="#" className={s.readingPolicies}>
+            Chính sách và điều khoản của BOCVN
+          </a>
         </div>
-        <a href="#" className={s.readingPolicies}>
-          Chính sách và điều khoản của BOCVN
-        </a>
-      </div>
+      </>
     );
   }
 }
@@ -123,7 +149,7 @@ export default compose(
     validationSchema: register,
   }),
   connect(
-    null,
+    creatingStoreProps.mapStateToProps,
     creatingStoreProps.mapDispatchToProps,
   ),
   withStyles(s),

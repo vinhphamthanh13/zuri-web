@@ -40,6 +40,10 @@ export const verifyCodeProps = {
 };
 
 export const creatingStoreProps = {
+  mapStateToProps: ({ authentication }) => ({
+    phoneNumber: authentication.phoneNumber,
+    creatingUser: authentication.creatingUser,
+  }),
   mapDispatchToProps: dispatch => ({
     dispatchExistingUserAction: data => dispatch(existingUserAction(data)),
     dispatchCreatingUserAction: value => dispatch(creatingUserAction(value)),

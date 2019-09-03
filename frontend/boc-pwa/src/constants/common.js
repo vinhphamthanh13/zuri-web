@@ -21,7 +21,6 @@ export const DATA = {
   MESSAGE: 'data.message',
   CODE: 'data.code',
 };
-
 export const INIT_USER = {
   message: '',
   success: null,
@@ -79,7 +78,6 @@ export const REGISTER = {
     VALUE: 'policiesAndTerms',
   },
 };
-
 export const TAX = {
   CO_NAME: {
     LABEL: 'Tên công ty:',
@@ -109,7 +107,6 @@ export const TAX = {
     PLACEHOLDER: 'Nhập số đăng ký',
   },
 };
-
 export const SHOP_DETAIL = {
   CATEGORY: {
     BUSINESS: {
@@ -176,7 +173,6 @@ export const SHOP_DETAIL = {
     },
   },
 };
-
 export const TABS = {
   GENERAL: {
     NAME: 'tổng quan',

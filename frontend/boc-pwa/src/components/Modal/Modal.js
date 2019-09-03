@@ -7,10 +7,13 @@ import s from './Modal.css';
 
 const Modal = props => {
   const { errorIcon, successIcon, title, message, callback } = props;
+  const titleBackground = successIcon
+    ? `${s.title} ${s.titleSuccess}`
+    : s.title;
   return (
     <div className={s.overlay}>
       <div className={s.modal}>
-        <div className={s.title}>
+        <div className={titleBackground}>
           {errorIcon && <ErrorOutline />}
           {successIcon && <CheckCircleOutline />}
           <div>{title}</div>

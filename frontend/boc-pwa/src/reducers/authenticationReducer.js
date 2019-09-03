@@ -39,7 +39,8 @@ const reducer = (state = initState, action) => {
   if (action.type === SET_PHONE_NUMBER) {
     return {
       ...state,
-      phoneNumber: action.payload,
+      phoneNumber: action.payload.phoneNumber,
+      countryCode: action.payload.countryCode,
     };
   }
   if (action.type === GET_VERIFICATION_CODE) {

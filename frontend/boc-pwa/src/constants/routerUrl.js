@@ -1,3 +1,7 @@
+export const NAVIGATION_URL = {
+  ACTIVATION: '/activation',
+};
+
 export const ROUTER_URL = {
   AUTHENTICATION: {
     LOGIN: '/',

@@ -277,8 +277,15 @@ const enhancers = [
       );
       if (registerUser) {
         dispatchCreatingUser(phoneNumber);
+        dispatchSetPhoneNumber({
+          countryCode: sanitizedCode,
+          phoneNumber: encryptPhone,
+        });
       } else {
-        dispatchSetPhoneNumber(encryptPhone);
+        dispatchSetPhoneNumber({
+          countryCode: sanitizedCode,
+          phoneNumber: encryptPhone,
+        });
         dispatchVerificationCode(sanitizedCode, phoneNumber);
       }
     },

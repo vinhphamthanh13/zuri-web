@@ -8,7 +8,7 @@ import express from 'express';
 import axios from 'axios/index';
 import { get } from 'lodash';
 import { SERVER_URL } from 'api/constant';
-import { NODE_SERVER_URL } from 'constants/api';
+import { NODE_SERVER_URL } from 'actions/api';
 import {
   handleNodeServerResponse,
   handleNodeServerError,

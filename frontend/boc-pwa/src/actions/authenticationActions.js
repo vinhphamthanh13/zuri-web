@@ -9,7 +9,7 @@
 
 import axios from 'axios';
 import { get } from 'lodash';
-import { NODE_SERVER_URL } from 'constants/api';
+import { NODE_SERVER_URL } from 'actions/api';
 import { DATA } from 'constants/common';
 import { handleRequest } from 'api/utils';
 import { LOADING, setLoading, setError } from 'actions/common';

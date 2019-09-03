@@ -23,16 +23,21 @@
 }
 
 .title {
-  background: var(--c-triad-06);
   padding: var(--size-10);
   font-size: var(--font-size-input);
   font-weight: var(--font-weight-700);
   text-transform: uppercase;
   color: var(--c-bright);
+  background: var(--c-triad-06);
   border-bottom: var(--size-01) solid var(--c-error);
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.titleSuccess {
+  background: var(--c-success);
+  border-bottom: var(--c-mint);
 }
 
 .content {
