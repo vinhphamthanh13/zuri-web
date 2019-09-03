@@ -33,7 +33,7 @@ An action _MUST_
 
 An action _MAY_
 
-- have an `error` property. (`true` → `payload` _should be instance of `Error`_)
+- have an `error` property. (`true` → `payload` _should be instance of `Modal`_)
   If `error` has any other value besides `true`, the action _MUST NOT_ be interpreted as an error.
 - have a `payload` property. (_any, object is reccomended_)
 - have a `meta` property. (_any_)
@@ -50,14 +50,14 @@ An action _MUST NOT_ include properties other than `type`, `payload`, `error`, a
 {
   type: ADD_TODO,
   payload: {
-    text: 'Contribute to Home Credit.',
+    text: 'Contribute to Activity Credit.',
   },
 }
-// Error action example:
+// Modal action example:
 {
   type: 'ADD_TODO',
   error: true,
-  payload: new Error('Database Error'),
+  payload: new Modal('Database Modal'),
 }
 ```
 

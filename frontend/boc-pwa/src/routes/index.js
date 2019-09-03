@@ -1,11 +1,8 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
+import { ROUTER_URL } from 'constants/routerUrl';
+
+export const authRoute = ROUTER_URL.AUTHENTICATION;
+export const tabsRoute = ROUTER_URL.TABS;
+export const setupRoute = ROUTER_URL.SETUP;
 
 // The top-level (parent) route
 const routes = {
@@ -14,9 +11,75 @@ const routes = {
   // Keep in mind, routes are evaluated in order
   children: [
     {
-      path: '/',
-      load: () => import(/* webpackChunkName: 'login' */ './login'),
+      path: `${authRoute.LOGIN}`,
+      load: () =>
+        import(/* webpackChunkName: 'login' */ './authentication/login'),
     },
+    {
+      path: `${authRoute.CREATING_NEW_STORE}`,
+      load: () =>
+        import(/* webpackChunkName: 'registerShop' */ './authentication/registerShop'),
+    },
+    {
+      path: `${authRoute.ACTIVATION}`,
+      load: () =>
+        import(/* webpackChunkName: 'activation' */ './authentication/activation'),
+    },
+    {
+      path: `${authRoute.VERIFY}`,
+      load: () =>
+        import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
+    },
+    {
+      path: `${authRoute.SHOPS}`,
+      load: () =>
+        import(/* webpackChunkName: 'shops' */ './authentication/shops'),
+    },
+    {
+      path: `${tabsRoute.HOME}`,
+      load: () => import(/* webpackChunkName: 'home' */ './home'),
+    },
+    {
+      path: `${tabsRoute.REPORT}`,
+      load: () => import(/* webpackChunkName: 'report' */ './report'),
+    },
+    {
+      path: `${tabsRoute.ACTIVITY}`,
+      load: () => import(/* webpackChunkName: 'activity' */ './activity'),
+    },
+    // Shop Route and Children
+    {
+      path: `${tabsRoute.SHOP}`,
+      load: () => import(/* webpackChunkName: 'shop' */ './shop'),
+    },
+    {
+      path: `${setupRoute.SHOP}`,
+      load: () => import(/* webpackChunkName: 'shopSetup' */ './shop/setup'),
+    },
+    {
+      path: `${setupRoute.TAX}`,
+      load: () => import(/* webpackChunkName: 'shopTax' */ './shop/setup/tax'),
+    },
+    {
+      path: `${setupRoute.GOODS}`,
+      load: () =>
+        import(/* webpackChunkName: 'shopGoods' */ './shop/setup/goods'),
+    },
+    // {
+    //   path: '/shop/setup/openedOrder',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupOpenedOrder' */ './shop/setup/openOrder'),
+    // },
+    // {
+    //   path: '/shop/setup/printer',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupPrinter' */ './shop/setup/printer'),
+    // },
+    // {
+    //   path: '/shop/setup/shopInfo',
+    //   load: () =>
+    //     import(/* webpackChunkName: 'shopSetupPrinter' */ './shop/setup/shopInfo'),
+    // },
     // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
     {
       path: '(.*)',

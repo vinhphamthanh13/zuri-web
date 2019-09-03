@@ -1,7 +1,7 @@
 /**
  * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -59,10 +59,46 @@ class Html extends React.Component {
           {scripts.map(script => (
             <link key={script} rel="preload" href={script} as="script" />
           ))}
-          <link rel="manifest" href="/site.webmanifest" />
-          <link rel="apple-touch-icon" href="/icon.png" />
+          <link rel="manifest" href="/site.manifest" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+          <meta name="apple-mobile-web-app-title" content="BOCVN" />
           <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_48.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_96.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_144.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_192.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_256.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_384.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="../../public/images/boc_logo_512.png"
+          />
+          <meta
+            name="msapplication-TileImage"
+            content="../../public/images/boc_logo_48.png"
+          />
+          <meta name="msapplication-TileColor" content="#fff" />
+          <meta name="theme-color" content="#00AEEF" />
+          <link
+            href="https://fonts.googleapis.com/css?family=Roboto:400,500,500i&display=swap&subset=vietnamese"
             rel="stylesheet"
           />
           <link
@@ -82,42 +118,20 @@ class Html extends React.Component {
           <script
             dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }}
           />
-          {scripts.map(script => (
-            <script key={script} src={script} />
-          ))}
-          {config.analytics.googleTrackingId && (
-            <script
-              dangerouslySetInnerHTML={{
-                __html:
-                  'window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;' +
-                  `ga('create','${
-                    config.analytics.googleTrackingId
-                  }','auto');ga('send','pageview')`,
-              }}
-            />
-          )}
-          {config.analytics.googleTrackingId && (
-            <script
-              src="https://www.google-analytics.com/analytics.js"
-              async
-              defer
-            />
-          )}
-          <script
-            type="text/javascript"
-            src={`${threatMetrix.scriptLink}?${params}`}
-          />
+          {scripts.map(script => <script key={script} src={script} />)}
           <noscript>
+            {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
             <iframe
-              title="threatMetrix"
               style={{
-                width: 100,
-                height: 100,
-                border: 0,
-                position: 'absolute',
-                top: -5000,
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
               }}
-              src={`${threatMetrix.embedLink}?${params}`}
+              src="http://www.bocvietnam.com/"
             />
           </noscript>
           <input id="sessionID" value={app.sessionID} type="hidden" />

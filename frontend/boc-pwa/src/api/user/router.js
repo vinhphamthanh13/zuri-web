@@ -1,6 +1,6 @@
 import express from 'express';
 import UserService from './UserService';
-import { resultHandle, errorHandle } from '../utils';
+import { handleNodeServerResponse, handleNodeServerError } from '../utils';
 
 const router = express.Router();
 
@@ -11,9 +11,9 @@ router.post('/auth', async (req, res) => {
 
   try {
     const result = await UserService.login(username, password);
-    resultHandle(res, result);
+    handleNodeServerResponse(res, result);
   } catch (err) {
-    errorHandle(res, err);
+    handleNodeServerError(res, err);
   }
 });
 

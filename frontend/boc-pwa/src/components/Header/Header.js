@@ -1,58 +1,44 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { string, func, bool } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import classnames from 'classnames';
+import { noop } from 'lodash';
+import { ArrowBack, ArrowForward } from 'constants/svg';
 import s from './Header.css';
-import Link from '../Link';
-import logoUrl from './logo-inverse.png';
 
-class Header extends React.Component {
+class Header extends Component {
   static propTypes = {
-    hiddenXs: PropTypes.bool,
+    title: string.isRequired,
+    icon: bool,
+    iconLeft: bool,
+    onClick: func,
+    onClickLeft: func,
+    gutter: bool,
   };
 
   static defaultProps = {
-    hiddenXs: false,
-  };
-
-  constructor() {
-    super();
-    this.state = {
-      mobileMenuClosed: true,
-    };
-
-    this.mobileMenuContainer = React.createRef();
-  }
-
-  closeMobileMenu = () => {
-    this.setState({ mobileMenuClosed: true });
-  };
-
-  handleHamburgerBtnClick = () => {
-    this.setState({ mobileMenuClosed: !this.state.mobileMenuClosed });
+    onClick: noop,
+    onClickLeft: noop,
+    icon: false,
+    iconLeft: false,
+    gutter: false,
   };
 
   render() {
-    const rootClasses = classnames(s.root, {
-      [s.hiddenXs]: this.props.hiddenXs,
-    });
-
+    const { title, onClick, onClickLeft, icon, iconLeft, gutter } = this.props;
+    const headerStyle = gutter ? `${s.container} ${s.gutter}` : s.container;
     return (
-      <div className={rootClasses}>
-        <div className={s.logo}>
-          <Link to="/">
-            <img src={logoUrl} height="40" alt="Homecredit" />
-          </Link>
-        </div>
+      <div className={headerStyle}>
+        {iconLeft && (
+          <div className={`${s.button} ${s.left}`} onClick={onClickLeft}>
+            <ArrowBack size={20} />
+          </div>
+        )}
+        {title}
+        {icon && (
+          <div className={`${s.button} ${s.right}`} onClick={onClick}>
+            <ArrowForward size={20} />
+          </div>
+        )}
       </div>
     );
   }

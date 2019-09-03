@@ -1,0 +1,22 @@
+@import '../../../../components/variables.css';
+
+.container {
+  width: 100%;
+  position: relative;
+  color: var(--c-brand-1);
+}
+
+.search {
+  width: 100%;
+}
+
+.input {
+  margin: unset !important;
+}
+
+.goodsCta {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: var(--size-16);
+}

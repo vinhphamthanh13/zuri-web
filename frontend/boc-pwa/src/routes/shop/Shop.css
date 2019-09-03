@@ -1,0 +1,100 @@
+@import '../../components/variables.css';
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  color: var(--c-brand-1);
+}
+
+.content {
+  overflow: auto;
+  width: 100%;
+}
+
+.shopInfo {
+  margin: var(--size-12) auto;
+  color: var(--c-brand-1);
+  display: flex;
+  align-items: center;
+  height: calc(var(--size-86) * 1.2);
+  padding: 0 var(--size-18) var(--size-10) 0;
+  background-size: cover;
+  position: relative;
+}
+
+.shopIcon {
+  color: var(--c-brand-2);
+  margin: auto var(--size-14);
+  padding: var(--size-06);
+  background: var(--c-bg-light);
+  border-radius: var(--size-radius-standard);
+}
+
+.shopDetail {
+  color: var(--c-success);
+}
+
+.title {
+  color: var(--c-brand-1);
+  font-weight: var(--font-weight-700);
+  letter-spacing: var(--size-01);
+}
+
+.detailItem {
+  color: var(--c-gray);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-300);
+}
+
+.viewDetail {
+  position: absolute;
+  right: var(--size-08);
+  top: var(--size-06);
+}
+
+.shopCategory {
+  width: 100%;
+  background: var(--c-bright);
+  margin: var(--size-08) auto;
+}
+
+.category {
+  padding: var(--size-10) var(--size-12);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-500);
+  color: var(--c-title);
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.item {
+  width: 25%;
+  height: var(--size-standard-cell-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: var(--size-08) var(--size-12);
+  cursor: pointer;
+  background-color: var(--c-bright);
+}
+
+.item:hover {
+  font-weight: var(--font-weight-500);
+}
+
+.icon {
+  border: var(--size-01) solid var(--c-triad-05);
+  border-radius: 50%;
+}
+
+.label {
+  font-size: var(--font-size-small);
+}

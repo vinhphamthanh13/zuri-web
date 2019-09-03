@@ -1,7 +1,12 @@
 import config from 'config';
 import { CONTENT_TYPE } from 'constants/http';
 import { ACL_API } from 'api/constant';
-import { resultHandle, errorHandle, handleRequest, fetchApi } from '../utils';
+import {
+  handleNodeServerResponse,
+  handleNodeServerError,
+  handleRequest,
+  fetchApi,
+} from '../utils';
 
 const getContract = async id => {
   let result;
@@ -34,8 +39,8 @@ export default async (req, res) => {
 
   try {
     const contract = await getContract(id);
-    resultHandle(res, contract);
+    handleNodeServerResponse(res, contract);
   } catch (err) {
-    errorHandle(res, err);
+    handleNodeServerError(res, err);
   }
 };

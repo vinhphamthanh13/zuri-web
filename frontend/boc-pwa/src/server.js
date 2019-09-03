@@ -1,7 +1,7 @@
 /**
  * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -35,8 +35,6 @@ import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unr
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
-import UserService from './api/user/UserService';
-import { initNodeStorage, initApplication } from './initApplication';
 
 import configRoute from './api/configRoute';
 
@@ -257,35 +255,18 @@ server.use((err, req, res, next) => {
 
 server.use(express.static('.well-known'));
 
-initNodeStorage()
-  .then(initApplication)
-  .then(dbs => {
-    if (!dbs) {
-      console.info('Cannot make connection to db');
-    } else {
-      const userService = new UserService(dbs.acl);
-      userService.checkAndAddingAdminUser().then(() => {
-        console.info('check and init user successfully.');
-      });
-    }
-    //
-    // Launch the server
-    // -----------------------------------------------------------------------------
-    if (!module.hot) {
-      server.listen(config.port, () => {
-        console.info(
-          `The server is running at http://localhost:${config.port}/`,
-        );
-      });
-    }
-
-    //
-    // Hot Module Replacement
-    // -----------------------------------------------------------------------------
-    if (module.hot) {
-      server.hot = module.hot;
-      module.hot.accept('./router');
-    }
+if (!module.hot) {
+  server.listen(config.port, () => {
+    console.info(`The server is running at http://localhost:${config.port}/`);
   });
+}
+
+//
+// Hot Module Replacement
+// -----------------------------------------------------------------------------
+if (module.hot) {
+  server.hot = module.hot;
+  module.hot.accept('./router');
+}
 
 export default server;

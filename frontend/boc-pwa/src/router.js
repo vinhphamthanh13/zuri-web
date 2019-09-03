@@ -1,7 +1,7 @@
 /**
  * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -17,10 +17,11 @@ export default new UniversalRouter(routes, {
         .load()
         .then(action => {
           if (typeof action.default === 'function') {
-            return action.default(context, params)
+            return action.default(context, params);
           }
+          return null;
         })
-        .catch(error => console.log('Loading Error::', error));
+        .catch(error => console.error('Loading Error::', error));
     }
     if (typeof context.route.action === 'function') {
       return context.route.action(context, params);

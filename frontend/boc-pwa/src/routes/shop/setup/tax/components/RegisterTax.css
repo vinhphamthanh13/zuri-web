@@ -1,0 +1,40 @@
+@import '../../../../../components/variables.css';
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: var(--c-smoke);
+}
+
+.register {
+  position: relative;
+  text-align: center;
+  padding: var(--size-10);
+}
+
+.formTitle {
+  font-size: var(--font-size-input);
+  font-weight: var(--font-weight-500);
+  color: var(--c-brand-1);
+  border-bottom: var(--size-01) solid var(--c-brand-1);
+  margin-bottom: var(--size-28);
+  padding-bottom: var(--size-08);
+}
+
+.warning {
+  font-size: var(--font-size-medium);
+  color: var(--c-gray);
+  font-weight: var(--font-weight-300);
+  margin: var(--size-08) auto 0;
+}
+
+.registerCta {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
