@@ -1,21 +1,40 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 @import '../../components/variables.css';
 
-.root {
-  padding-left: 20px;
-  padding-right: 20px;
+.unSupport {
+  font-family: var(--font-family-base);
+  padding: var(--size-30) var(--size-16) 0;
+  color: var(--c-triad-01);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.container {
-  margin: 0 auto;
-  padding: 0 0 40px;
-  max-width: var(--max-content-width);
+.logo {
+  width: var(--home-logo-width);
+  height: var(--home-logo-width);
+  display: flex;
+  justify-content: center;
+}
+
+.notFound {
+  margin: var(--size-32) auto;
+  font-size: var(--font-size-44);
+  color: var(--c-triad-08);
+  font-weight: var(--font-weight-700);
+  text-decoration: underline;
+}
+
+.copyRight {
+  width: var(--home-brand-width);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: var(--size-18);
+}
+
+.copyRight span {
+  padding-right: var(--size-10);
 }

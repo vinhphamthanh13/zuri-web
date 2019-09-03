@@ -33,3 +33,9 @@
   background: var(--c-bg-light);
   cursor: not-allowed;
 }
+
+.icon {
+  width: auto;
+  height: auto;
+  padding: var(--size-10);
+}

@@ -12,6 +12,7 @@ class Button extends Component {
     onClick: func,
     children: node,
     type: string,
+    icon: bool,
   };
 
   static defaultProps = {
@@ -20,14 +21,17 @@ class Button extends Component {
     onClick: noop,
     children: null,
     type: '',
+    icon: false,
   };
 
   render() {
-    const { label, className, onClick, disabled, type } = this.props;
+    const { label, className, onClick, disabled, type, icon } = this.props;
+    let buttonStyle = disabled
+      ? `${s.button} ${className} ${s.buttonDisabled}`
+      : `${s.button} ${className}`;
+    buttonStyle = icon ? `${buttonStyle} ${s.icon}` : buttonStyle;
     const props = {
-      className: disabled
-        ? `${s.button} ${className} ${s.buttonDisabled}`
-        : `${s.button} ${className}`,
+      className: buttonStyle,
       onClick: disabled ? noop : onClick,
       type: disabled ? 'button' : type,
     };
@@ -35,7 +39,7 @@ class Button extends Component {
     return (
       <button {...props}>
         {this.props.children}
-        <span className={s.label}>{label}</span>
+        {!icon && <span className={s.label}>{label}</span>}
       </button>
     );
   }

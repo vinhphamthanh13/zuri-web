@@ -59,6 +59,7 @@ body {
 
 .logo {
   width: var(--home-logo-width);
+  height: var(--home-logo-width);
   display: flex;
   justify-content: center;
 }
