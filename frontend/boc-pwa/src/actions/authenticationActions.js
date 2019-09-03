@@ -143,8 +143,6 @@ export const nodeCreatingUserApi = phone => async dispatch => {
   const [result, error] = await handleRequest(nodeCreatingUser, [data]);
   const code = get(result, DATA.CODE) || get(error, DATA.CODE);
   const success = get(result, DATA.SUCCESS) || get(error, DATA.SUCCESS);
-  console.log('crating user', error);
-  console.log('code', code);
   if (code === HTTP_STATUS.INTERNAL_ERROR) {
     const message = get(result, DATA.MESSAGE) || get(error, DATA.MESSAGE);
     dispatch(setError(message));

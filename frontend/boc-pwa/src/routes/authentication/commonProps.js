@@ -7,6 +7,7 @@ import {
   nodeExistingUserApi,
   existingUserAction,
   nodeCreatingUserApi,
+  creatingUserAction,
 } from 'actions/authenticationActions';
 
 export const activationProps = {
@@ -35,5 +36,12 @@ export const verifyCodeProps = {
   mapDispatchToProps: dispatch => ({
     clearVerificationCodeStatus: () =>
       dispatch(getVerificationCodeAction(false)),
+  }),
+};
+
+export const creatingStoreProps = {
+  mapDispatchToProps: dispatch => ({
+    dispatchExistingUserAction: data => dispatch(existingUserAction(data)),
+    dispatchCreatingUserAction: value => dispatch(creatingUserAction(value)),
   }),
 };

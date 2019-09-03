@@ -8,8 +8,10 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { withFormik } from 'formik';
 import { register } from 'constants/schemas';
-import { REGISTER } from 'constants/common';
+import { REGISTER, INIT_USER } from 'constants/common';
+import { goBack } from 'utils/browser';
 import BocGreet from 'assets/images/boc_greeting.png';
+import { creatingStoreProps } from '../commonProps';
 import history from '../../../history';
 import s from './RegisterShop.css';
 
@@ -21,6 +23,8 @@ class RegisterShop extends Component {
     isValid: bool.isRequired,
     touched: objectOf(bool).isRequired,
     setFieldTouched: func.isRequired,
+    dispatchExistingUserAction: func.isRequired,
+    dispatchCreatingUserAction: func.isRequired,
   };
 
   handleActivation = () => {
@@ -57,12 +61,22 @@ class RegisterShop extends Component {
     ));
   };
 
+  handleGoBack = () => {
+    const {
+      dispatchExistingUserAction,
+      dispatchCreatingUserAction,
+    } = this.props;
+    dispatchExistingUserAction(INIT_USER);
+    dispatchCreatingUserAction(false);
+    goBack(true, 'Thoát khỏi chương trình!');
+  };
+
   render() {
     const { isValid } = this.props;
 
     return (
       <div className={s.container}>
-        <Header title="Tạo cửa hàng" iconLeft />
+        <Header title="Tạo cửa hàng" iconLeft onClickLeft={this.handleGoBack} />
         <div className={s.greetingLogo}>
           <img src={BocGreet} alt="Boc Greeting" width="100%" />
         </div>
@@ -97,6 +111,9 @@ export default compose(
     validateOnBlur: true,
     validationSchema: register,
   }),
-  connect(null),
+  connect(
+    null,
+    creatingStoreProps.mapDispatchToProps,
+  ),
   withStyles(s),
 )(RegisterShop);

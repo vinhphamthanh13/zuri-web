@@ -24,10 +24,7 @@ const serverVerificationCode = (countryCode, phoneNumber) =>
   axios.get(`${SERVER_URL.USERS}/${countryCode}/${phoneNumber}`);
 const serverExistingUser = phone =>
   axios.get(`${SERVER_URL.CHECKING_USER}/${phone}`);
-const serverCreatingUser = phone => {
-  const body = { phone };
-  return axios.post(SERVER_URL.USERS, body);
-};
+const serverCreatingUser = body => axios.post(SERVER_URL.AUTH, body);
 
 // Consuming actions
 const serverUsersApi = async () => {
@@ -49,7 +46,7 @@ const serverExistingUserApi = async phone => {
   return result;
 };
 const serverCreatingUserApi = async phone => {
-  const [result, error] = await handleRequest(serverCreatingUser, [{ phone }]);
+  const [result, error] = await handleRequest(serverCreatingUser, [phone]);
   if (error) return error;
   return result;
 };
@@ -115,9 +112,8 @@ router.post(
   NODE_SERVER_URL.AUTHENTICATION.CREATING_USER,
   async (request, response) => {
     const { body } = request;
-    const phone = get(body, 'phoneNumber');
     try {
-      const result = await serverCreatingUserApi(phone);
+      const result = await serverCreatingUserApi(body);
       handleNodeServerResponse(response, result);
     } catch (error) {
       handleNodeServerError(response, error);

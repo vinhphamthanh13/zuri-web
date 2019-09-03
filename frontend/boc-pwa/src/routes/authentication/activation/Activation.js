@@ -17,6 +17,7 @@ import {
   REGEXP,
   GOOGLE_CAPTCHA_SITE_KEY,
   G_CAPTCHA_ID,
+  INIT_USER,
 } from 'constants/common';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { HTTP_STATUS } from 'constants/http';
@@ -24,11 +25,6 @@ import history from '../../../history';
 import { activationProps } from '../commonProps';
 import s from './Activation.css';
 
-const INIT_USER = {
-  message: '',
-  success: null,
-  code: HTTP_STATUS.INTERNAL_ERROR,
-};
 const LOGIN = false;
 const REGISTER = true;
 const PHONE_FIELD = 'phoneNumber';
@@ -158,10 +154,6 @@ class Activation extends Component {
     dispatchExistingUserAction(INIT_USER);
   };
 
-  handleLoadCaptcha = () => {
-    console.log('handle loading captcha');
-  };
-
   handleVerifyCaptcha = response => {
     const { dispatchExistingUser, values } = this.props;
     const phoneNumber = get(values, PHONE_FIELD);
@@ -178,7 +170,6 @@ class Activation extends Component {
       gCaptchaStatus: value,
     });
   };
-
 
   render() {
     const {
@@ -244,7 +235,6 @@ class Activation extends Component {
                 ref={this.recaptchaRef}
                 sitekey={GOOGLE_CAPTCHA_SITE_KEY}
                 render="explicit"
-                onloadCallback={this.handleLoadCaptcha}
                 verifyCallback={this.handleVerifyCaptcha}
                 expiredCallback={this.handleExpiredCaptcha}
                 hl="vi"

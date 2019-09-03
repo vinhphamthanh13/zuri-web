@@ -1,3 +1,4 @@
+import { HTTP_STATUS } from 'constants/http';
 import { tabsRoute } from 'routes';
 
 export const G_CAPTCHA_ID = 'recaptcha-id';
@@ -7,15 +8,27 @@ export const GOOGLE_CAPTCHA_SITE_KEY =
   '6Lc7J7YUAAAAAOqthWot8Dz1k7io8lX3Hw1Qlvfh';
 export const GOOGLE_CAPTCHA_SCRIPT = 'https://www.google.com/recaptcha/api.js';
 
+// Layout
 export const LAYOUT = {
   MAX_WIDTH: 768,
 };
+
+// Processing data
+
 export const DATA = {
   ROOT: 'data',
   SUCCESS: 'data.success',
   MESSAGE: 'data.message',
   CODE: 'data.code',
 };
+
+export const INIT_USER = {
+  message: '',
+  success: null,
+  code: HTTP_STATUS.INTERNAL_ERROR,
+};
+
+// Regular expression
 
 export const REGEXP = {
   PHONE_NUMBER: /^0\d{9}$/,
@@ -25,6 +38,8 @@ export const REGEXP = {
   TAX_NUMBER: /\d{9,12}/,
   EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 };
+
+// Tabs and Page
 
 export const REGISTER = {
   USER_NAME: {

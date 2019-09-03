@@ -14,6 +14,8 @@ export const goBack = () => {
   history.goBack();
 };
 
+export const blockNavigation = message => history.block(message);
+
 export const goForward = () => {
   history.goForward();
 };
