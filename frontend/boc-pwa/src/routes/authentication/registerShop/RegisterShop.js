@@ -9,10 +9,9 @@ import Input from 'components/Input';
 import { withFormik } from 'formik';
 import { register } from 'constants/schemas';
 import { REGISTER, INIT_USER } from 'constants/common';
-import { goBack } from 'utils/browser';
+import { goBack, blockNavigation, navigateTo } from 'utils/browser';
 import BocGreet from 'assets/images/boc_greeting.png';
 import { creatingStoreProps } from '../commonProps';
-import history from '../../../history';
 import s from './RegisterShop.css';
 
 class RegisterShop extends Component {
@@ -27,11 +26,23 @@ class RegisterShop extends Component {
     dispatchCreatingUserAction: func.isRequired,
   };
 
+  componentDidMount() {
+    this.unblockNavigation = blockNavigation(
+      'Bạn có muốn thoát khỏi đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa khi thoát chương trình!',
+    );
+  }
+
+  componentWillUnmount() {
+    this.unblockNavigation();
+  }
+
+  unblockNavigation = null;
+
   handleActivation = () => {
     const {
       values: { policiesAndTerms },
     } = this.props;
-    history.push('/activation', { register: policiesAndTerms });
+    navigateTo('/activation', { register: policiesAndTerms });
   };
 
   createForm = () => {

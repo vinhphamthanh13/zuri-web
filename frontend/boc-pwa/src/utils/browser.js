@@ -13,9 +13,11 @@ export const hasGetUserMedia = () =>
 export const goBack = () => {
   history.goBack();
 };
-
+export const navigateTo = (url, state) => {
+  if (typeof state === 'object') return history.push(url, { ...state });
+  return history.push(url);
+};
 export const blockNavigation = message => history.block(message);
-
 export const goForward = () => {
   history.goForward();
 };
