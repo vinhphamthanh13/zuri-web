@@ -4,7 +4,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {
   SET_USERS,
   SET_PHONE_NUMBER,
-  GET_VERIFICATION_CODE,
+  SENDING_OTP,
   EXISTING_USER,
   CREATING_USER,
 } from 'actions/authenticationActions';
@@ -43,7 +43,7 @@ const reducer = (state = initState, action) => {
       countryCode: action.payload.countryCode,
     };
   }
-  if (action.type === GET_VERIFICATION_CODE) {
+  if (action.type === SENDING_OTP) {
     return {
       ...state,
       getVerificationCodeStatus: action.payload,

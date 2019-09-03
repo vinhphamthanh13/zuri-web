@@ -12,6 +12,7 @@ export const GOOGLE_CAPTCHA_SCRIPT = 'https://www.google.com/recaptcha/api.js';
 export const LAYOUT = {
   MAX_WIDTH: 768,
 };
+export const HEADER_TABS_HEIGHT = 90;
 
 // Processing data
 

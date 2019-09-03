@@ -23,7 +23,7 @@ class VerifyCode extends React.Component {
     isValid: bool.isRequired,
     touched: objectOf(bool).isRequired,
     setFieldTouched: func.isRequired,
-    clearVerificationCodeStatus: func.isRequired,
+    clearOTPStatus: func.isRequired,
   };
 
   static defaultProps = {
@@ -48,9 +48,9 @@ class VerifyCode extends React.Component {
   }
 
   handleChangePhoneNumber = () => {
-    const { clearVerificationCodeStatus } = this.props;
+    const { clearOTPStatus } = this.props;
     goBack();
-    clearVerificationCodeStatus();
+    clearOTPStatus();
   };
 
   render() {

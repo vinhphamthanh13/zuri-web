@@ -32,7 +32,7 @@ const LOCATION_STATE = 'location.state';
 const LOGIN_MESSAGE = 'Hãy nhập số điện thoại đã đăng ký BOCVN.';
 const REGISTER_MESSAGE =
   'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.';
-const authUrl = ROUTER_URL.AUTHENTICATION;
+const authUrl = ROUTER_URL.AUTH;
 
 class Activation extends Component {
   static propTypes = {
@@ -260,7 +260,7 @@ const enhancers = [
       values,
       {
         props: {
-          dispatchVerificationCode,
+          dispatchSendOTP,
           dispatchSetPhoneNumber,
           dispatchCreatingUser,
         },
@@ -286,7 +286,7 @@ const enhancers = [
           countryCode: sanitizedCode,
           phoneNumber: encryptPhone,
         });
-        dispatchVerificationCode(sanitizedCode, phoneNumber);
+        dispatchSendOTP(sanitizedCode, phoneNumber);
       }
     },
   }),

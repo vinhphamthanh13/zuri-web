@@ -39,7 +39,7 @@ class RegisterShop extends Component {
 
   componentDidMount() {
     this.unblockNavigation = blockNavigation(
-      'Bạn có muốn thoát khỏi đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!',
+      'Bạn có muốn hủy đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!',
     );
   }
 
@@ -92,10 +92,6 @@ class RegisterShop extends Component {
   handleCloseCreatingUserPopup = () =>
     this.setState({ creatingUserPopup: false });
 
-  handleGoBack = () => {
-
-  }
-
   render() {
     const { isValid, creatingUser, phoneNumber } = this.props;
     const { creatingUserPopup } = this.state;
@@ -125,9 +121,6 @@ class RegisterShop extends Component {
               className={s.button}
             />
           </div>
-          <a href="#" className={s.readingPolicies}>
-            Chính sách và điều khoản của BOCVN
-          </a>
         </div>
       </>
     );

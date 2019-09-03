@@ -1,6 +1,6 @@
-import { NODE_SERVER_URL } from 'actions/api';
-import userController from './authenticationApi';
+import { NODE_SERVER_URL } from 'actions/constants';
+import authController from './authenticationApi';
 
 export default app => {
-  app.use(NODE_SERVER_URL.AUTHENTICATION.ROOT, userController);
+  app.use(NODE_SERVER_URL.AUTH.ROOT, authController);
 };

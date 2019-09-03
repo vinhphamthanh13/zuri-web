@@ -2,8 +2,8 @@ import { setError } from 'actions/common';
 import {
   nodeUsersApi,
   setPhoneNumberAction,
-  getVerificationCodeAction,
-  nodeVerificationCodeApi,
+  sendingOTPAction,
+  nodeSendingOTPApi,
   nodeExistingUserApi,
   existingUserAction,
   nodeCreatingUserApi,
@@ -21,8 +21,8 @@ export const activationProps = {
     dispatchError: message => dispatch(setError(message)),
     dispatchUsers: () => dispatch(nodeUsersApi()),
     dispatchSetPhoneNumber: number => dispatch(setPhoneNumberAction(number)),
-    dispatchVerificationCode: (countryCode, phoneNumber) =>
-      dispatch(nodeVerificationCodeApi(countryCode, phoneNumber)),
+    dispatchSendOTP: (countryCode, phoneNumber) =>
+      dispatch(nodeSendingOTPApi(countryCode, phoneNumber)),
     dispatchExistingUser: phone => dispatch(nodeExistingUserApi(phone)),
     dispatchExistingUserAction: data => dispatch(existingUserAction(data)),
     dispatchCreatingUser: phone => dispatch(nodeCreatingUserApi(phone)),
@@ -34,8 +34,7 @@ export const verifyCodeProps = {
     phoneNumber: authentication.phoneNumber,
   }),
   mapDispatchToProps: dispatch => ({
-    clearVerificationCodeStatus: () =>
-      dispatch(getVerificationCodeAction(false)),
+    clearOTPStatus: () => dispatch(sendingOTPAction(false)),
   }),
 };
 

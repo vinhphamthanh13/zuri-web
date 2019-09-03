@@ -3,7 +3,7 @@ export const NAVIGATION_URL = {
 };
 
 export const ROUTER_URL = {
-  AUTHENTICATION: {
+  AUTH: {
     LOGIN: '/',
     ACTIVATION: '/activation',
     VERIFY: '/verifyCode',

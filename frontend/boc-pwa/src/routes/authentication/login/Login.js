@@ -41,7 +41,7 @@ class Login extends React.Component {
           Hoặc chưa có tài khoản?{' '}
           <span onClick={this.handleRegister}>Đăng ký</span>
         </div>
-        <div className={s.copyRight}>Bản quyền thuộc về BOCVN@2019</div>
+        <div className={s.copyRight}>Bản quyền thuộc về BOCVN@2020</div>
       </div>
     );
   }

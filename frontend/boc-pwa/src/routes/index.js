@@ -1,6 +1,6 @@
 import { ROUTER_URL } from 'constants/routerUrl';
 
-export const authRoute = ROUTER_URL.AUTHENTICATION;
+export const authRoute = ROUTER_URL.AUTH;
 export const tabsRoute = ROUTER_URL.TABS;
 export const setupRoute = ROUTER_URL.SETUP;
 
