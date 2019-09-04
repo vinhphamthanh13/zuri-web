@@ -12,7 +12,7 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { activation } from 'constants/schemas';
-import { goBack, injectGoogleCaptchaScript } from 'utils/browser';
+import { goBack, navigateTo, injectGoogleCaptchaScript } from 'utils/browser';
 import {
   REGEXP,
   GOOGLE_CAPTCHA_SITE_KEY,
@@ -60,7 +60,7 @@ class Activation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      getVerificationCodeStatus: false,
+      sendingOTPStatus: false,
       existingUser: INIT_USER,
       creatingUser: null,
       gCaptchaStatus: true,
@@ -70,19 +70,19 @@ class Activation extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { getVerificationCodeStatus, existingUser, creatingUser } = props;
+    const { sendingOTPStatus, existingUser, creatingUser } = props;
     const {
-      getVerificationCodeStatus: cachedgetVerificationCodeStatus,
+      sendingOTPStatus: cachedSendingOTPStatus,
       existingUser: cachedExistingUser,
       creatingUser: cachedCreatingUser,
     } = state;
     if (
-      getVerificationCodeStatus !== cachedgetVerificationCodeStatus ||
+      sendingOTPStatus !== cachedSendingOTPStatus ||
       existingUser.success !== cachedExistingUser.success ||
       creatingUser !== cachedCreatingUser
     ) {
       return {
-        getVerificationCodeStatus,
+        sendingOTPStatus,
         existingUser,
         creatingUser,
       };
@@ -97,13 +97,13 @@ class Activation extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      getVerificationCodeStatus,
+      sendingOTPStatus,
       dispatchError,
       errors,
       dispatchExistingUserAction,
     } = prevProps;
     const {
-      getVerificationCodeStatus: cachedgetVerificationCodeStatus,
+      sendingOTPStatus: cachedSendingOTPStatus,
       existingUser,
       creatingUser,
     } = this.state;
@@ -111,9 +111,22 @@ class Activation extends Component {
     const { code, success, message } = existingUser;
 
     if (isRegistering && creatingUser) {
-      history.push(authUrl.CREATING_NEW_STORE);
+      navigateTo(authUrl.CREATING_NEW_STORE);
     }
 
+    if (isRegistering && errors[PHONE_FIELD]) {
+      dispatchExistingUserAction(INIT_USER);
+    }
+    // Creating account with registered phone will prompt error
+    if (
+      isRegistering &&
+      Object.is(success, REGISTER) &&
+      code !== HTTP_STATUS.INTERNAL_ERROR
+    ) {
+      dispatchError(REGISTER_MESSAGE);
+      this.clearCachedData();
+    }
+    // Login with un-registered phone will prompt error
     if (
       !isRegistering &&
       Object.is(success, LOGIN) &&
@@ -123,24 +136,9 @@ class Activation extends Component {
       this.clearCachedData();
     }
 
-    if (isRegistering && errors[PHONE_FIELD]) {
-      dispatchExistingUserAction(INIT_USER);
-    }
-
-    if (
-      isRegistering &&
-      Object.is(success, REGISTER) &&
-      code !== HTTP_STATUS.INTERNAL_ERROR
-    ) {
-      dispatchError(REGISTER_MESSAGE);
-      this.clearCachedData();
-    }
-
-    if (
-      cachedgetVerificationCodeStatus &&
-      getVerificationCodeStatus !== cachedgetVerificationCodeStatus
-    ) {
-      history.push(authUrl.VERIFY);
+    // Redirect to verify OTP
+    if (cachedSendingOTPStatus && sendingOTPStatus !== cachedSendingOTPStatus) {
+      navigateTo(authUrl.VERIFY);
     }
   }
 
@@ -279,12 +277,14 @@ const enhancers = [
         dispatchCreatingUser(phoneNumber);
         dispatchSetPhoneNumber({
           countryCode: sanitizedCode,
-          phoneNumber: encryptPhone,
+          phoneNumber,
+          encryptPhone,
         });
       } else {
         dispatchSetPhoneNumber({
           countryCode: sanitizedCode,
-          phoneNumber: encryptPhone,
+          phoneNumber,
+          encryptPhone,
         });
         dispatchSendOTP(sanitizedCode, phoneNumber);
       }

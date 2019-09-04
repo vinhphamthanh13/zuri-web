@@ -7,28 +7,28 @@
 
 import axios from 'axios';
 import { get } from 'lodash';
-import { NODE_SERVER_URL } from 'actions/constants';
+import { NODE_SERVER_URL, PROXY_AUTH } from 'actions/constants';
 import { DATA } from 'constants/common';
 import { handleRequest } from 'api/utils';
 import { LOADING, setLoading, setError } from 'actions/common';
 import { HTTP_STATUS } from 'constants/http';
 
-const authRootUrl = NODE_SERVER_URL.AUTH.ROOT;
-const authUrl = NODE_SERVER_URL.AUTH;
-const sendingOTPUrl = `${authRootUrl}${authUrl.SENDING_OTP}`;
-const verifyingOTPUrl = `${authRootUrl}${authUrl.VERIFY_OTP}`;
-const creatingUserUrl = `${authRootUrl}${authUrl.CREATING_USER}`;
-const existingUserUrl = `${authRootUrl}${authUrl.EXISTING_USER}`;
-
 // Action API to Node Server
 
-const nodeUsers = () => axios.get(authUrl);
 const nodeSendingOTP = (countryCode, phoneNumber) =>
-  axios.get(`${sendingOTPUrl}/${countryCode}/${phoneNumber}`);
+  axios.get(
+    `${PROXY_AUTH}${NODE_SERVER_URL.SENDING_OTP}/${countryCode}/${phoneNumber}`,
+  );
 const nodeVerifyingOTP = (countryCode, phoneNumber, otpCode) =>
-  axios.get(`${verifyingOTPUrl}/${countryCode}/${phoneNumber}/${otpCode}`);
-const nodeCreatingUser = data => axios.post(creatingUserUrl, data);
-const nodeExistingUser = phone => axios.get(`${existingUserUrl}/${phone}`);
+  axios.get(
+    `${PROXY_AUTH}${
+      NODE_SERVER_URL.VERIFYING_OTP
+    }/${countryCode}/${phoneNumber}/${otpCode}`,
+  );
+const nodeCreatingUser = data =>
+  axios.post(`${PROXY_AUTH}${NODE_SERVER_URL.CREATING_USER}`, data);
+const nodeExistingUser = phone =>
+  axios.get(`${PROXY_AUTH}${NODE_SERVER_URL.EXISTING_USER}/${phone}`);
 
 // Redux constants
 
@@ -41,10 +41,6 @@ export const EXISTING_USER = 'AUTH.EXISTING_USER';
 
 // Redux action
 
-const setUsersAction = payload => ({
-  type: SET_USERS,
-  payload,
-});
 export const setPhoneNumberAction = payload => ({
   type: SET_PHONE_NUMBER,
   payload,
@@ -81,17 +77,7 @@ export const nodeCreatingUserApi = phone => async dispatch => {
   dispatch(creatingUserAction(success));
   dispatch(setLoading(LOADING.OFF));
 };
-export const nodeUsersApi = () => async dispatch => {
-  dispatch(setLoading(LOADING.ON));
-  const [result, error] = await handleRequest(nodeUsers, []);
-  if (error) {
-    const message = get(error, DATA.MESSAGE);
-    dispatch(setError(message));
-  } else {
-    dispatch(setUsersAction(result));
-  }
-  dispatch(setLoading(LOADING.OFF));
-};
+
 export const nodeSendingOTPApi = (
   countryCode,
   phoneNumber,

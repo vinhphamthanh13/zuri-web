@@ -5,6 +5,7 @@ import {
   SET_USERS,
   SET_PHONE_NUMBER,
   SENDING_OTP,
+  VERIFYING_OTP,
   EXISTING_USER,
   CREATING_USER,
 } from 'actions/authenticationActions';
@@ -14,7 +15,7 @@ const persistConfig = {
   storage,
   stateReconciler: autoMergeLevel2,
   blacklist: [
-    'getVerificationCodeStatus',
+    'sendingOTPStatus',
     'existingUser',
     'checkingCount',
     'creatingUser',
@@ -24,7 +25,10 @@ const persistConfig = {
 const initState = {
   users: [],
   phoneNumber: null,
-  getVerificationCodeStatus: null,
+  countryCode: null,
+  encryptPhone: null,
+  sendingOTPStatus: null,
+  verifyingOTPStatus: null,
   existingUser: { success: null },
   creatingUser: null,
 };
@@ -40,13 +44,20 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       phoneNumber: action.payload.phoneNumber,
+      encryptPhone: action.payload.encryptPhone,
       countryCode: action.payload.countryCode,
     };
   }
   if (action.type === SENDING_OTP) {
     return {
       ...state,
-      getVerificationCodeStatus: action.payload,
+      sendingOTPStatus: action.payload,
+    };
+  }
+  if (action.type === VERIFYING_OTP) {
+    return {
+      ...state,
+      verifyingOTPStatus: action.payload,
     };
   }
   if (action.type === EXISTING_USER) {

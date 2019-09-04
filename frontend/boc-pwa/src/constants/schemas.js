@@ -64,7 +64,7 @@ export const registerTax = Yup.object().shape({
   }),
 });
 
-export const verifyCode = Yup.object().shape({
+export const otpCode = Yup.object().shape({
   verifyCode: Yup.string()
     .required('* Nhập mã xác minh')
     .matches(REGEXP.VERIFY_CODE, { message: '* Mã xác minh không hợp lệ' }),

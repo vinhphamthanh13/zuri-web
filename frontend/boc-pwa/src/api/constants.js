@@ -5,6 +5,8 @@ const BASE_URL = config.masterData.url;
 
 const USERS = `${BASE_URL}/users`;
 const AUTH_USERS = `${BASE_URL}/auth/users`;
+export const SEND_OTP_PARAMS = '/:countryCode/:phoneNumber';
+export const VERIFY_OTP_PARAMS = `${SEND_OTP_PARAMS}/:otpCode`;
 
 // Java Sever
 export const SERVER_SITE_URL = {

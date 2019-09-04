@@ -1,9 +1,9 @@
 import { setError } from 'actions/common';
 import {
-  nodeUsersApi,
   setPhoneNumberAction,
   sendingOTPAction,
   nodeSendingOTPApi,
+  nodeVerifyingOTPApi,
   nodeExistingUserApi,
   existingUserAction,
   nodeCreatingUserApi,
@@ -13,13 +13,13 @@ import {
 export const activationProps = {
   mapStateToProps: ({ authentication }) => ({
     phoneNumber: authentication.phoneNumber,
+    encryptPhone: authentication.encryptPhone,
     getVerificationCodeStatus: authentication.getVerificationCodeStatus,
     existingUser: authentication.existingUser,
     creatingUser: authentication.creatingUser,
   }),
   mapDispatchToProps: dispatch => ({
     dispatchError: message => dispatch(setError(message)),
-    dispatchUsers: () => dispatch(nodeUsersApi()),
     dispatchSetPhoneNumber: number => dispatch(setPhoneNumberAction(number)),
     dispatchSendOTP: (countryCode, phoneNumber) =>
       dispatch(nodeSendingOTPApi(countryCode, phoneNumber)),
@@ -31,10 +31,15 @@ export const activationProps = {
 
 export const verifyCodeProps = {
   mapStateToProps: ({ authentication }) => ({
+    countryCode: authentication.countryCode,
     phoneNumber: authentication.phoneNumber,
+    encryptPhone: authentication.encryptPhone,
+    verifyingOTPStatus: authentication.verifyingOTPStatus,
   }),
   mapDispatchToProps: dispatch => ({
     clearOTPStatus: () => dispatch(sendingOTPAction(false)),
+    dispatchVerifyOTPCode: (countryCode, phoneNumber, otpCode) =>
+      dispatch(nodeVerifyingOTPApi(countryCode, phoneNumber, otpCode)),
   }),
 };
 

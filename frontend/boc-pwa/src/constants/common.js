@@ -8,6 +8,9 @@ export const GOOGLE_CAPTCHA_SITE_KEY =
   '6Lc7J7YUAAAAAOqthWot8Dz1k7io8lX3Hw1Qlvfh';
 export const GOOGLE_CAPTCHA_SCRIPT = 'https://www.google.com/recaptcha/api.js';
 
+/* Navigation */
+export const BLOCKING_NAV_MESSAGE =
+  'Bạn có muốn hủy đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!';
 // Layout
 export const LAYOUT = {
   MAX_WIDTH: 768,

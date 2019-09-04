@@ -8,9 +8,10 @@ import { withFormik } from 'formik';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
-import { verifyCode } from 'constants/schemas';
-import { goBack } from 'utils/browser';
-import history from '../../../history';
+import { otpCode } from 'constants/schemas';
+import { BLOCKING_NAV_MESSAGE } from 'constants/common';
+import { NAVIGATION_URL } from 'constants/routerUrl';
+import { goBack, navigateTo, blockNavigation } from 'utils/browser';
 import { verifyCodeProps } from '../commonProps';
 import s from './VerifyCode.css';
 
@@ -31,21 +32,53 @@ class VerifyCode extends React.Component {
   };
 
   state = {
-    phoneNumber: null,
+    encryptPhone: null,
+    verifyingOTPStatus: null,
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { phoneNumber } = props;
-    const { phoneNumber: cachedPhoneNumber } = state;
+    const { phoneNumber, encryptPhone, verifyingOTPStatus } = props;
+    const {
+      phoneNumber: cachedPhoneNumber,
+      verifyingOTPStatus: cachedVerifyingOTPStatus,
+      encryptPhone: cachedEncryptPhone,
+    } = state;
 
-    if (phoneNumber !== cachedPhoneNumber) {
+    if (
+      phoneNumber !== cachedPhoneNumber ||
+      verifyingOTPStatus !== cachedVerifyingOTPStatus ||
+      encryptPhone !== cachedEncryptPhone
+    ) {
       return {
         phoneNumber,
+        verifyingOTPStatus,
+        encryptPhone,
       };
     }
 
     return null;
   }
+
+  componentDidMount() {
+    this.unblockNavigation = blockNavigation(BLOCKING_NAV_MESSAGE);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { verifyingOTPStatus } = prevProps;
+    const { verifyingOTPStatus: cachedVerifyingOTPStatus } = this.state;
+    if (
+      cachedVerifyingOTPStatus &&
+      cachedVerifyingOTPStatus !== verifyingOTPStatus
+    ) {
+      navigateTo(NAVIGATION_URL.TABS.HOME);
+    }
+  }
+
+  componentWillUnmount() {
+    this.unblockNavigation();
+  }
+
+  unblockNavigation = null;
 
   handleChangePhoneNumber = () => {
     const { clearOTPStatus } = this.props;
@@ -63,7 +96,7 @@ class VerifyCode extends React.Component {
       touched,
       setFieldTouched,
     } = this.props;
-    const { phoneNumber } = this.state;
+    const { encryptPhone } = this.state;
     const submittingCode = get(values, 'verifyCode');
 
     return (
@@ -76,7 +109,7 @@ class VerifyCode extends React.Component {
         <div className={s.textSMS}>
           <p>
             Quý khách vui lòng nhập mã xác thực được gởi đến số điện thoại{' '}
-            <span>{phoneNumber}</span>
+            <span>{encryptPhone}</span>
           </p>
         </div>
         <div className={s.verifyCodeWrapper}>
@@ -100,22 +133,20 @@ class VerifyCode extends React.Component {
   }
 }
 
-export default compose(
+const enhancers = [
   withFormik({
     isInitialValid: false,
-    handleSubmit: (values, { setSubmitting }) => {
-      const code = get(values, 'verifyCode');
-      setSubmitting(true);
-      setTimeout(() => {
-        setSubmitting(false);
-        history.push('/home');
-      }, 1000);
+    handleSubmit: (
+      { verifyCode },
+      { props: { dispatchVerifyOTPCode, countryCode, phoneNumber } },
+    ) => {
+      dispatchVerifyOTPCode(countryCode, phoneNumber, verifyCode);
     },
-    validationSchema: verifyCode,
+    validationSchema: otpCode,
   }),
-  connect(
-    verifyCodeProps.mapStateToProps,
-    verifyCodeProps.mapDispatchToProps,
-  ),
   withStyles(s),
-)(VerifyCode);
+];
+export default connect(
+  verifyCodeProps.mapStateToProps,
+  verifyCodeProps.mapDispatchToProps,
+)(compose(...enhancers)(VerifyCode));

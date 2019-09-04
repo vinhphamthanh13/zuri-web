@@ -1,6 +1,6 @@
-import { NODE_SERVER_URL } from 'actions/constants';
+import { PROXY_AUTH } from 'actions/constants';
 import authController from './authenticationApi';
 
 export default app => {
-  app.use(NODE_SERVER_URL.AUTH.ROOT, authController);
+  app.use(PROXY_AUTH, authController);
 };

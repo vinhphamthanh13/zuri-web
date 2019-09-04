@@ -9,7 +9,7 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { withFormik } from 'formik';
 import { register } from 'constants/schemas';
-import { REGISTER, INIT_USER } from 'constants/common';
+import { REGISTER, INIT_USER, BLOCKING_NAV_MESSAGE } from 'constants/common';
 import { goBack, blockNavigation, navigateTo } from 'utils/browser';
 import BocGreet from 'assets/images/boc_greeting.png';
 import { creatingStoreProps } from '../commonProps';
@@ -38,9 +38,7 @@ class RegisterShop extends Component {
   };
 
   componentDidMount() {
-    this.unblockNavigation = blockNavigation(
-      'Bạn có muốn hủy đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!',
-    );
+    this.unblockNavigation = blockNavigation(BLOCKING_NAV_MESSAGE);
   }
 
   componentWillUnmount() {

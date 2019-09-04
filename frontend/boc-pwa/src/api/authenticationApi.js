@@ -6,7 +6,11 @@
 
 import express from 'express';
 import axios from 'axios/index';
-import { SERVER_SITE_URL } from 'api/constants';
+import {
+  SERVER_SITE_URL,
+  SEND_OTP_PARAMS,
+  VERIFY_OTP_PARAMS,
+} from 'api/constants';
 import { NODE_SERVER_URL } from 'actions/constants';
 import {
   handleNodeServerResponse,
@@ -16,22 +20,17 @@ import {
 
 const router = express.Router();
 
-// Request server
+/* Request server */
 
 const serverCreatingUser = body =>
   axios.post(SERVER_SITE_URL.CREATING_USER, body);
 const serverSendOTP = data => axios.post(SERVER_SITE_URL.SENDING_OTP, data);
 const serverVerifyOTP = data => axios.post(SERVER_SITE_URL.VERIFYING_OTP, data);
-const serverUsers = () => axios.get(SERVER_SITE_URL.USERS);
 const serverExistingUser = phone =>
   axios.get(`${SERVER_SITE_URL.CHECKING_USER}/${phone}`);
 
-// Consuming actions
-const serverUsersApi = async () => {
-  const [result, error] = await handleRequest(serverUsers, []);
-  if (error) return error;
-  return result;
-};
+/* Consuming actions */
+
 const serverSendOTPApi = async data => {
   const [result, error] = await handleRequest(serverSendOTP, [data]);
   if (error) return error;
@@ -53,13 +52,11 @@ const serverCreatingUserApi = async phone => {
   return result;
 };
 
-// Routing
+/* ***************
+// PROXY ROUTING
+***************** */
 
-/*
- * Create new user
- */
-
-router.post(NODE_SERVER_URL.AUTH.CREATING_USER, async (request, response) => {
+router.post(NODE_SERVER_URL.CREATING_USER, async (request, response) => {
   const { body } = request;
   try {
     const result = await serverCreatingUserApi(body);
@@ -69,55 +66,48 @@ router.post(NODE_SERVER_URL.AUTH.CREATING_USER, async (request, response) => {
   }
 });
 
-/*
- * Get/verify Send OTP
- */
-
-router.get(`${NODE_SERVER_URL.AUTH.SENDING_OTP}`, async (request, response) => {
-  const {
-    params: { countryCode, phoneNumber },
-  } = request;
-  const body = {
-    countryCode,
-    phoneNumber,
-  };
-  try {
-    const result = await serverSendOTPApi(body);
-    handleNodeServerResponse(response, result);
-  } catch (error) {
-    handleNodeServerError(response, error);
-  }
-});
-
-router.post(`${NODE_SERVER_URL.AUTH.VERIFY_OTP}`, async (request, response) => {
-  const { body } = request;
-  try {
-    const result = await serverVerifyOTPApi(body);
-    handleNodeServerResponse(response, result);
-  } catch (error) {
-    handleNodeServerError(response, error);
-  }
-});
-
-/*
- * Get all users
- */
-
-router.get('/', async (request, response) => {
-  try {
-    const [result, error] = await handleRequest(serverUsersApi, []);
-    if (error) {
-      handleNodeServerError(response, error);
-    } else {
+router.get(
+  `${NODE_SERVER_URL.SENDING_OTP}${SEND_OTP_PARAMS}`,
+  async (request, response) => {
+    const {
+      params: { countryCode, phoneNumber },
+    } = request;
+    const body = {
+      countryCode,
+      phoneNumber,
+    };
+    try {
+      const result = await serverSendOTPApi(body);
       handleNodeServerResponse(response, result);
+    } catch (error) {
+      handleNodeServerError(response, error);
     }
-  } catch (error) {
-    handleNodeServerError(response, error);
-  }
-});
+  },
+);
 
 router.get(
-  `${NODE_SERVER_URL.AUTH.EXISTING_USER}/:phone`,
+  `${NODE_SERVER_URL.VERIFYING_OTP}${VERIFY_OTP_PARAMS}`,
+  async (request, response) => {
+    const {
+      params: { countryCode, phoneNumber, otpCode },
+    } = request;
+    const body = {
+      countryCode,
+      phoneNumber,
+      optCode: otpCode,
+    };
+
+    try {
+      const result = await serverVerifyOTPApi(body);
+      handleNodeServerResponse(response, result);
+    } catch (error) {
+      handleNodeServerError(response, error);
+    }
+  },
+);
+
+router.get(
+  `${NODE_SERVER_URL.EXISTING_USER}/:phone`,
   async (request, response) => {
     const {
       params: { phone },
