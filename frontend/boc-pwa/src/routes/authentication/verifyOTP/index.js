@@ -1,13 +1,13 @@
 import React from 'react';
 import Layout from 'components/Layout';
-import VerifyCode from './VerifyCode';
+import VerifyOTP from 'routes/authentication/verifyOTP/VerifyOTP';
 
 const action = () => ({
-  chunks: ['verifyCode'],
+  chunks: ['verifyOTP'],
   title: 'Mã Kích Hoạt',
   component: (
     <Layout>
-      <VerifyCode />
+      <VerifyOTP />
     </Layout>
   ),
 });

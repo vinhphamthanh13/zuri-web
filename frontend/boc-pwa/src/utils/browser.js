@@ -1,4 +1,5 @@
 import { isMobile } from 'react-device-detect';
+import { get } from 'lodash';
 import { GOOGLE_CAPTCHA_SCRIPT } from 'constants/common';
 import history from '../history';
 
@@ -21,7 +22,7 @@ export const blockNavigation = message => history.block(message);
 export const goForward = () => {
   history.goForward();
 };
-
+export const getLocationState = key => get(history, `location.state.${key}`);
 export const resolveDimension = (width, height) => {
   if (width < 321 || height < 321) return null;
   return {

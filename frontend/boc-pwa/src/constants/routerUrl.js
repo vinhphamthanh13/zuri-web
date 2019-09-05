@@ -1,14 +1,10 @@
-export const NAVIGATION_URL = {
-  ACTIVATION: '/activation',
-};
-
 export const ROUTER_URL = {
   AUTH: {
     LOGIN: '/',
     ACTIVATION: '/activation',
-    VERIFY: '/verifyCode',
+    VERIFYING_OTP: '/verifyOTP',
     SHOPS: '/shops',
-    CREATING_NEW_STORE: '/creatingStore',
+    CREATING_STORE: '/creatingStore',
   },
   TABS: {
     HOME: '/home',

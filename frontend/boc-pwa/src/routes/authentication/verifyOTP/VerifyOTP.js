@@ -10,12 +10,17 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { otpCode } from 'constants/schemas';
 import { BLOCKING_NAV_MESSAGE } from 'constants/common';
-import { NAVIGATION_URL } from 'constants/routerUrl';
-import { goBack, navigateTo, blockNavigation } from 'utils/browser';
+import { ROUTER_URL } from 'constants/routerUrl';
+import {
+  goBack,
+  navigateTo,
+  blockNavigation,
+  getLocationState,
+} from 'utils/browser';
 import { verifyCodeProps } from '../commonProps';
-import s from './VerifyCode.css';
+import s from './VerifyOTP.css';
 
-class VerifyCode extends React.Component {
+class VerifyOTP extends React.Component {
   static propTypes = {
     errors: objectOf(string),
     values: objectOf(any).isRequired,
@@ -25,6 +30,7 @@ class VerifyCode extends React.Component {
     touched: objectOf(bool).isRequired,
     setFieldTouched: func.isRequired,
     clearOTPStatus: func.isRequired,
+    dispatchCreatingStore: func.isRequired,
   };
 
   static defaultProps = {
@@ -34,25 +40,34 @@ class VerifyCode extends React.Component {
   state = {
     encryptPhone: null,
     verifyingOTPStatus: null,
+    creatingStoreStatus: null,
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { phoneNumber, encryptPhone, verifyingOTPStatus } = props;
+    const {
+      phoneNumber,
+      encryptPhone,
+      verifyingOTPStatus,
+      creatingStoreStatus,
+    } = props;
     const {
       phoneNumber: cachedPhoneNumber,
       verifyingOTPStatus: cachedVerifyingOTPStatus,
       encryptPhone: cachedEncryptPhone,
+      creatingStoreStatus: cachedCreatingStoreStatus,
     } = state;
 
     if (
       phoneNumber !== cachedPhoneNumber ||
       verifyingOTPStatus !== cachedVerifyingOTPStatus ||
-      encryptPhone !== cachedEncryptPhone
+      encryptPhone !== cachedEncryptPhone ||
+      creatingStoreStatus !== cachedCreatingStoreStatus
     ) {
       return {
         phoneNumber,
         verifyingOTPStatus,
         encryptPhone,
+        creatingStoreStatus,
       };
     }
 
@@ -64,13 +79,31 @@ class VerifyCode extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { verifyingOTPStatus } = prevProps;
-    const { verifyingOTPStatus: cachedVerifyingOTPStatus } = this.state;
+    const {
+      verifyingOTPStatus,
+      storeInfo,
+      accessToken,
+      dispatchCreatingStore,
+    } = prevProps;
+    const {
+      verifyingOTPStatus: cachedVerifyingOTPStatus,
+      creatingStoreStatus,
+    } = this.state;
     if (
       cachedVerifyingOTPStatus &&
       cachedVerifyingOTPStatus !== verifyingOTPStatus
     ) {
-      navigateTo(NAVIGATION_URL.TABS.HOME);
+      if (!getLocationState('creatingStore')) {
+        navigateTo(ROUTER_URL.TABS.HOME);
+      } else if (
+        getLocationState('creatingStore') &&
+        Object.is(creatingStoreStatus, null)
+      ) {
+        dispatchCreatingStore(storeInfo, accessToken);
+      }
+    }
+    if (creatingStoreStatus) {
+      navigateTo(ROUTER_URL.TABS.HOME);
     }
   }
 
@@ -102,13 +135,13 @@ class VerifyCode extends React.Component {
     return (
       <div className={s.container}>
         <Header
-          title="Xác nhận mã kích hoạt"
+          title="Xác thực mã kích hoạt"
           iconLeft
           onClickLeft={this.handleChangePhoneNumber}
         />
         <div className={s.textSMS}>
           <p>
-            Quý khách vui lòng nhập mã xác thực được gởi đến số điện thoại{' '}
+            Vui lòng kiểm tra và nhập mã xác thực được gởi đến số điện thoại{' '}
             <span>{encryptPhone}</span>
           </p>
         </div>
@@ -117,7 +150,7 @@ class VerifyCode extends React.Component {
             <Input
               name="verifyCode"
               type="tel"
-              placeholder="Mã xác thực"
+              placeholder="Mã kích hoạt"
               onChange={handleChange}
               value={submittingCode || ''}
               className={s.verifyCode}
@@ -149,4 +182,4 @@ const enhancers = [
 export default connect(
   verifyCodeProps.mapStateToProps,
   verifyCodeProps.mapDispatchToProps,
-)(compose(...enhancers)(VerifyCode));
+)(compose(...enhancers)(VerifyOTP));

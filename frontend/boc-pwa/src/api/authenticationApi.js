@@ -6,16 +6,17 @@
 
 import express from 'express';
 import axios from 'axios/index';
+import { SERVER_SITE_URL } from 'api/constants';
 import {
-  SERVER_SITE_URL,
+  NODE_SERVER_URL,
   SEND_OTP_PARAMS,
   VERIFY_OTP_PARAMS,
-} from 'api/constants';
-import { NODE_SERVER_URL } from 'actions/constants';
+} from 'actions/constants';
 import {
   handleNodeServerResponse,
   handleNodeServerError,
   handleRequest,
+  createHeaders,
 } from 'api/utils';
 
 const router = express.Router();
@@ -28,7 +29,8 @@ const serverSendOTP = data => axios.post(SERVER_SITE_URL.SENDING_OTP, data);
 const serverVerifyOTP = data => axios.post(SERVER_SITE_URL.VERIFYING_OTP, data);
 const serverExistingUser = phone =>
   axios.get(`${SERVER_SITE_URL.CHECKING_USER}/${phone}`);
-
+const serverCreatingStore = (data, token) =>
+  axios.post(SERVER_SITE_URL.CREATING_STORE, data, createHeaders(token));
 /* Consuming actions */
 
 const serverSendOTPApi = async data => {
@@ -48,6 +50,15 @@ const serverExistingUserApi = async phone => {
 };
 const serverCreatingUserApi = async phone => {
   const [result, error] = await handleRequest(serverCreatingUser, [phone]);
+  if (error) return error;
+  return result;
+};
+
+const serverCreatingStoreApi = async (data, token) => {
+  const [result, error] = await handleRequest(serverCreatingStore, [
+    data,
+    token,
+  ]);
   if (error) return error;
   return result;
 };
@@ -120,5 +131,18 @@ router.get(
     }
   },
 );
+
+router.post(NODE_SERVER_URL.CREATING_USER, async (request, response) => {
+  const {
+    body: { data, token },
+  } = request;
+  // TODO: transform data
+  try {
+    const result = await serverCreatingStoreApi(data, token);
+    handleNodeServerResponse(response, result);
+  } catch (error) {
+    handleNodeServerError(response, error);
+  }
+});
 
 export default router;

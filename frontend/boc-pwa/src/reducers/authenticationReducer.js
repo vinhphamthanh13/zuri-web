@@ -8,6 +8,8 @@ import {
   VERIFYING_OTP,
   EXISTING_USER,
   CREATING_USER,
+  CREATING_STORE_INFO,
+  CREATING_STORE,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
@@ -29,8 +31,11 @@ const initState = {
   encryptPhone: null,
   sendingOTPStatus: null,
   verifyingOTPStatus: null,
+  accessToken: null,
   existingUser: { success: null },
   creatingUser: null,
+  creatingStoreStatus: null,
+  storeInfo: {},
 };
 
 const reducer = (state = initState, action) => {
@@ -57,7 +62,7 @@ const reducer = (state = initState, action) => {
   if (action.type === VERIFYING_OTP) {
     return {
       ...state,
-      verifyingOTPStatus: action.payload,
+      ...action.payload, // verifyingOTPStatus, accessToken
     };
   }
   if (action.type === EXISTING_USER) {
@@ -70,6 +75,18 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       creatingUser: action.payload,
+    };
+  }
+  if (action.type === CREATING_STORE_INFO) {
+    return {
+      ...state,
+      storeInfo: action.payload,
+    };
+  }
+  if (action.type === CREATING_STORE) {
+    return {
+      ...state,
+      ...action.payload, // creatingStoreStatus, storeInfo
     };
   }
 

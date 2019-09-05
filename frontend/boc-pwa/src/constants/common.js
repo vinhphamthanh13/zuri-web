@@ -24,6 +24,8 @@ export const DATA = {
   SUCCESS: 'data.success',
   MESSAGE: 'data.message',
   CODE: 'data.code',
+  TOKEN: 'data.accessToken',
+  OBJECTS: 'data.objects',
 };
 export const INIT_USER = {
   message: '',

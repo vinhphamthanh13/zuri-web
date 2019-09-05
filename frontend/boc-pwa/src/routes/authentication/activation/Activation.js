@@ -12,7 +12,12 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { activation } from 'constants/schemas';
-import { goBack, navigateTo, injectGoogleCaptchaScript } from 'utils/browser';
+import {
+  goBack,
+  navigateTo,
+  injectGoogleCaptchaScript,
+  getLocationState,
+} from 'utils/browser';
 import {
   REGEXP,
   GOOGLE_CAPTCHA_SITE_KEY,
@@ -21,18 +26,15 @@ import {
 } from 'constants/common';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { HTTP_STATUS } from 'constants/http';
-import history from '../../../history';
 import { activationProps } from '../commonProps';
 import s from './Activation.css';
 
 const LOGIN = false;
 const REGISTER = true;
 const PHONE_FIELD = 'phoneNumber';
-const LOCATION_STATE = 'location.state';
 const LOGIN_MESSAGE = 'Hãy nhập số điện thoại đã đăng ký BOCVN.';
 const REGISTER_MESSAGE =
   'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.';
-const authUrl = ROUTER_URL.AUTH;
 
 class Activation extends Component {
   static propTypes = {
@@ -107,11 +109,11 @@ class Activation extends Component {
       existingUser,
       creatingUser,
     } = this.state;
-    const isRegistering = get(history, LOCATION_STATE);
+    const isRegistering = getLocationState('register');
     const { code, success, message } = existingUser;
 
     if (isRegistering && creatingUser) {
-      navigateTo(authUrl.CREATING_NEW_STORE);
+      navigateTo(ROUTER_URL.AUTH.CREATING_STORE);
     }
 
     if (isRegistering && errors[PHONE_FIELD]) {
@@ -138,7 +140,7 @@ class Activation extends Component {
 
     // Redirect to verify OTP
     if (cachedSendingOTPStatus && sendingOTPStatus !== cachedSendingOTPStatus) {
-      navigateTo(authUrl.VERIFY);
+      navigateTo(ROUTER_URL.VERIFYING_OTP);
     }
   }
 
@@ -182,7 +184,7 @@ class Activation extends Component {
     } = this.props;
     const { gCaptchaStatus } = this.state;
 
-    const registerState = get(history, 'location.state.register');
+    const registerState = getLocationState('register');
     const headerTitle = registerState
       ? 'Số điện thoại cửa hàng'
       : 'đăng nhập cửa hàng';
@@ -264,7 +266,7 @@ const enhancers = [
         },
       },
     ) => {
-      const registerUser = get(history, 'location.state');
+      const registerUser = getLocationState('register');
       const countryCode = get(values, 'countryCode');
       const sanitizedCode = countryCode.replace(/\+/, '');
       const phoneNumber = get(values, PHONE_FIELD);

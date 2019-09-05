@@ -16,7 +16,7 @@ const routes = {
         import(/* webpackChunkName: 'login' */ './authentication/login'),
     },
     {
-      path: `${authRoute.CREATING_NEW_STORE}`,
+      path: `${authRoute.CREATING_STORE}`,
       load: () =>
         import(/* webpackChunkName: 'registerShop' */ './authentication/registerShop'),
     },
@@ -26,9 +26,9 @@ const routes = {
         import(/* webpackChunkName: 'activation' */ './authentication/activation'),
     },
     {
-      path: `${authRoute.VERIFY}`,
+      path: `${authRoute.VERIFYING_OTP}`,
       load: () =>
-        import(/* webpackChunkName: 'verifyCode' */ './authentication/verifyCode'),
+        import(/* webpackChunkName: 'verifyOTP' */ './authentication/verifyOTP'),
     },
     {
       path: `${authRoute.SHOPS}`,
