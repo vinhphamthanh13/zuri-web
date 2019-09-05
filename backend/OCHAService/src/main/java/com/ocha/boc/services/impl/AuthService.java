@@ -80,8 +80,8 @@ public class AuthService {
         response.setMessage(CommonConstants.LOGIN_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                if (StringUtils.isNotEmpty(request.getCountryCode()) && StringUtils.isNotEmpty(request.getOptCode()) && StringUtils.isNotEmpty(request.getPhoneNumber())) {
-                    if (checkVerificationCode(request.getOptCode(), request.getCountryCode(), request.getPhoneNumber())) {
+                if (StringUtils.isNotEmpty(request.getCountryCode()) && StringUtils.isNotEmpty(request.getOtpCode()) && StringUtils.isNotEmpty(request.getPhoneNumber())) {
+                    if (checkVerificationCode(request.getOtpCode(), request.getCountryCode(), request.getPhoneNumber())) {
                         String jwt = tokenProvider.generateToken(request.getPhoneNumber());
                         Optional<User> optUser = userRepository.findUserByPhoneAndIsActive(request.getPhoneNumber(), true);
                         if (optUser.isPresent()) {
@@ -130,8 +130,8 @@ public class AuthService {
         response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                if (StringUtils.isNotEmpty(request.getCountryCode()) && StringUtils.isNotEmpty(request.getOptCode()) && StringUtils.isNotEmpty(request.getPhoneNumber())) {
-                    if (checkVerificationCode(request.getOptCode(), request.getCountryCode(), request.getPhoneNumber())) {
+                if (StringUtils.isNotEmpty(request.getCountryCode()) && StringUtils.isNotEmpty(request.getOtpCode()) && StringUtils.isNotEmpty(request.getPhoneNumber())) {
+                    if (checkVerificationCode(request.getOtpCode(), request.getCountryCode(), request.getPhoneNumber())) {
                         Optional<User> optUser = userRepository.findUserByPhone(request.getPhoneNumber());
                         if (optUser.isPresent()) {
                             String jwt = tokenProvider.generateToken(request.getPhoneNumber());
