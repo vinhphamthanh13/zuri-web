@@ -1,0 +1,73 @@
+@import '../../../components/variables.css';
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(147, 226, 255, 1) 100%);
+}
+
+.welcome {
+  color: var(--c-brand-3);
+  text-align: center;
+}
+
+.logo {
+  margin: var(--size-64) auto;
+  width: var(--home-logo-width);
+}
+
+.title {
+  margin: var(--size-12) 0 var(--size-36);
+}
+
+.brand {
+  width: var(--home-brand-width);
+  margin: var(--size-14);
+}
+
+.greeting {
+  color: var(--c-brand-1);
+  font-size: var(--font-size-16);
+}
+
+.login {
+  display: flex;
+  position: absolute;
+  bottom: calc(var(--size-78) * 1.3);
+}
+
+.button {
+  color: var(--c-text-bright);
+  background: var(--c-brand-1);
+}
+
+.register {
+  position: absolute;
+  color: var(--c-brand-2);
+  font-size: var(--font-size-14);
+  bottom: var(--size-64);
+}
+
+.register span {
+  text-transform: uppercase;
+  font-weight: var(--font-weight-500);
+  cursor: pointer;
+  color: var(--c-error);
+}
+
+.register span:hover {
+  font-weight: var(--font-weight-500);
+}
+
+.copyRight {
+  position: absolute;
+  bottom: var(--size-12);
+  color: var(--c-brand-1);
+  font-size: var(--font-size-12);
+  text-align: center;
+}

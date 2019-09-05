@@ -1,5 +1,13 @@
 import config from 'config';
 
-export const ACL_API = `${config.api.javaAPI}/v1.0/acl`;
-export const ACL_SALE_APP = `${config.api.javaAPI}/v1.0/saleapp`;
-export const ACL_PARTNER = `${config.api.javaAPI}/v1.0/partner`;
+const BASE_URL = config.masterData.url;
+const USERS = `${BASE_URL}/users`;
+const AUTH = `${BASE_URL}/auth/users`;
+
+// Java Sever
+export const SERVER_URL = {
+  AUTH,
+  USERS,
+  VERIFICATION_CODE: `${USERS}/:countryCode/:phoneNumber/:token`,
+  CHECKING_USER: `${USERS}/checking`,
+};

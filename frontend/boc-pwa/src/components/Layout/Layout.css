@@ -1,19 +1,18 @@
 /**
- * Home Credit (https://www.homecredit.vn/)
+ * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present HomeCredit, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-@import 'normalize.css';
 @import '../variables.css';
 
 /*
  * normalize.css is imported in JS file.
  * If you import external CSS file from your internal CSS
- * then it will be inlined and processed with CSS modules.
+ * then it will be in-lined and processed with CSS modules.
  */
 
 /*
@@ -30,35 +29,52 @@ html {
 
 body {
   font-family: var(--font-family-base);
-  line-height: 1.375;
-
-  /* ~22px */
-  color: var(--c-text-dark);
-  font-weight: 400;
+  line-height: var(--line-height-base);
+  font-weight: var(--font-weight-400);
   margin: 0;
   height: 100%;
   -webkit-tap-highlight-color: transparent;
-  background-color: var(--c-ui-light);
-
-  & > div {
-    height: 100%;
-
-    & > div {
-      height: 100%;
-    }
-  }
+  background-color: var(--c-smoke);
+  font-size: var(--font-size-18);
+  color: var(--c-bg-brand-3);
+  -webkit-overflow-scrolling: touch;
 }
 
 .layout {
-  background-color: white;
+  position: relative;
+  background-color: var(--c-smoke);
+  max-width: var(--size-pos-width);
+  margin: 0 auto;
 }
 
-.fullHeight {
-  height: 100%;
+.unSupport {
+  padding: var(--size-30) var(--size-16) 0;
+  color: var(--c-triad-01);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.fullWidth {
-  max-width: initial;
+.logo {
+  width: var(--home-logo-width);
+  height: var(--home-logo-width);
+  display: flex;
+  justify-content: center;
+}
+
+.copyRight {
+  width: var(--home-brand-width);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: var(--size-18);
+}
+
+.copyRight span {
+  padding-right: var(--size-10);
 }
 
 *,
@@ -68,7 +84,7 @@ body {
 }
 
 a {
-  color: #0074c2;
+  color: var(--c-triad-04);
 }
 
 /*
@@ -80,19 +96,18 @@ a {
  */
 
 ::-moz-selection {
-  background: #b3d4fc;
+  background: var(--c-brand-4);
   text-shadow: none;
 }
 
 ::selection {
-  background: #b3d4fc;
+  background: var(--c-brand-4);
   text-shadow: none;
 }
 
 :root {
   --displayMessageSupport: block;
   --displayMainContent: none;
-  --header-height: 72px;
 }
 
 /*
@@ -101,28 +116,18 @@ a {
 
 hr {
   display: block;
-  height: 1px;
+  height: var(--size-01);
   border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
+  border-top: var(--size-01) solid var(--c-gray);
+  margin: 1rem 0;
   padding: 0;
 }
 
 /*
- * Remove the gap between audio, canvas, iframes,
+ * Remove the gap between audio, canvas, i-frames,
  * images, videos and the bottom of their containers:
  * https://github.com/h5bp/html5-boilerplate/issues/440
  */
-
-.mobile {
-  display: var(--displayMainContent);
-  height: 100%;
-}
-
-.desktop {
-  display: var(--displayMessageSupport);
-  height: calc(100% - var(--header-height));
-}
 
 audio,
 canvas,
@@ -144,7 +149,7 @@ fieldset {
 }
 
 /*
- * Allow only vertical resizing of textareas.
+ * Allow only vertical resizing of text-areas.
  */
 
 textarea {
@@ -153,7 +158,7 @@ textarea {
 
 /*
  * Print styles
- * Inlined to avoid the additional HTTP request:
+ * In-lined to avoid the additional HTTP request:
  * http://www.phpied.com/delay-loading-your-print-css/
  * ========================================================================== */
 
@@ -162,7 +167,7 @@ textarea {
   *::before,
   *::after {
     background: transparent !important;
-    color: #000 !important;
+    color: var(--c-dark) !important;
 
     /* Black prints faster: http://www.sanbeiji.com/archives/953 */
     box-shadow: none !important;
@@ -194,7 +199,7 @@ textarea {
 
   pre,
   blockquote {
-    border: 1px solid #999;
+    border: 1px solid var(--c-gray);
     page-break-inside: avoid;
   }
 
@@ -226,21 +231,5 @@ textarea {
   h2,
   h3 {
     page-break-after: avoid;
-  }
-}
-
-@media (--sm) {
-  :root {
-    --displayMessageSupport: none;
-    --displayMainContent: block;
-  }
-
-  body {
-    background-color: var(--c-ui-lighter);
-  }
-
-  .layout {
-    background-color: var(--c-ui-lighter);
-    width: initial;
   }
 }

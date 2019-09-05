@@ -1,12 +1,3 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 /* @flow */
 
 type Fetch = (url: string, options: ?any) => Promise<any>;

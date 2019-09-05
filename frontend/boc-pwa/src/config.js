@@ -1,7 +1,7 @@
 /**
  * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -19,9 +19,9 @@ module.exports = {
   // default locale is the first one
   locales: [
     /* @intl-code-template '${lang}-${COUNTRY}', */
-    'en-US',
-    'cs-CZ',
     'vi-VN',
+    'cs-CZ',
+    'en-US',
     /* @intl-code-template-end */
   ],
 
@@ -57,7 +57,7 @@ module.exports = {
   },
 
   masterData: {
-    url: process.env.MASTER_DATA_URL || 'http://10.19.175.40:8000/master-data',
+    url: process.env.MASTER_DATA_URL || 'http://68.183.188.123:8080/api',
     apikey: process.env.API_KEY || '485cafb9a6804461b3c6e440fe568c6e',
   },
 
@@ -87,7 +87,8 @@ module.exports = {
     jwt: { secret: process.env.JWT_SECRET || 'http://www.bocvietnam.com' },
     userAuth: {
       jwtSecret:
-        process.env.CUSTOMER_JWT_SECRET || 'http://www.bocvietnam.com ACL@2019 for customer',
+        process.env.CUSTOMER_JWT_SECRET ||
+        'http://www.bocvietnam.com ACL@2019 for customer',
       tokenExpiresHours: 720,
       jwtOptions: {
         expiresIn: '30d',
@@ -100,7 +101,8 @@ module.exports = {
         'bf841dabe78bf2986a6291c02fb69123',
       hashSalt: process.env.INTERNAL_HASH_SALT || 'sHDbwWfL5gzJ5Cyk',
       jwtSecret:
-        process.env.INTERNAL_JWT_SECRET || 'http://www.bocvietnam.com Online ACL@2019',
+        process.env.INTERNAL_JWT_SECRET ||
+        'http://www.bocvietnam.com Online ACL@2019',
       tokenExpiresHours: 24,
       jwtOptions: {
         expiresIn: '24h',
@@ -108,21 +110,6 @@ module.exports = {
     },
     internalApiKey:
       process.env.INTERNAL_API_KEY || '9d59dc9bf300f17fecf22df34e6262d7',
-
-    // oapi: {
-    //   loginUrl:
-    //     process.env.LOGIN_URL ||
-    //     'http://openapi.vn01p.vn.nonprod:8000/authentication/v1/partner',
-    //   url: process.env.OPEN_API_URL || 'http://openapi.vn01p.vn.nonprod:8000',
-    //   clientId: process.env.CLIENT_ID || 'ee73d89fd4af46f7b2c3d8e9647a2672',
-    //   clientSecret:
-    //     process.env.CLIENT_SECRECT || '27b0794e8a244e51bf2295657417fa2c',
-    //   userName: process.env.OPEN_API_USERNAME || 'wUkQsEXzoT',
-    //   password: process.env.OPEN_API_PASSWORD || 'Qwer1234',
-    //   authToken:
-    //     process.env.OPEN_API_AUTH_TOKEN ||
-    //     'T3BlbkFwaV9QYXJ0bmVyOk9wZW5BcGlfUGFydG5lcg==',
-    // },
 
     oapi: {
       loginUrl:

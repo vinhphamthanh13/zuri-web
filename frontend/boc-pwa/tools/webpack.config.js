@@ -1,7 +1,7 @@
 /**
  * BOC VN (http://www.bocvietnam.com/)
  *
- * Copyright © 2018-present BOCVN, LLC. All rights reserved.
+ * Copyright © 2019-present BOCVN, LLC. All rights reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -17,9 +17,6 @@ import dotenv from 'dotenv';
 import overrideRules from './lib/overrideRules';
 import pkg from '../package.json';
 
-const globalVariable = dotenv.config({
-  path: path.resolve(__dirname, '..', '.env'),
-});
 const ROOT_DIR = path.resolve(__dirname, '..');
 const resolvePath = (...args) => path.resolve(ROOT_DIR, ...args);
 const SRC_DIR = resolvePath('src');
@@ -44,6 +41,14 @@ const staticAssetName = isDebug
 const minimizeCssOptions = {
   discardComments: { removeAll: true },
 };
+
+//
+// Inject Global Variable for Front-End from environment configurations
+//
+
+const processEnv = dotenv.config({
+  path: path.resolve(__dirname, '..', '.env'),
+}).parsed;
 
 //
 // Common configuration chunk to be used for both
@@ -312,9 +317,15 @@ const clientConfig = {
     // Define free variables
     // https://webpack.js.org/plugins/define-plugin/
     new webpack.DefinePlugin({
-      'process.env.BROWSER': true,
+      'process.env': {
+        BROWSER: true,
+        FACEBOOK: {
+          appId: JSON.stringify(processEnv.FB_APP_ID),
+          appSecret: JSON.stringify(processEnv.FB_APP_SECRET),
+          akApiVersion: JSON.stringify(processEnv.FB_AK_API_VERSION),
+        },
+      },
       __DEV__: isDebug,
-      'process.env.JAVA_API': JSON.stringify(globalVariable.parsed.JAVA_API),
     }),
 
     // Emit a file with assets paths
