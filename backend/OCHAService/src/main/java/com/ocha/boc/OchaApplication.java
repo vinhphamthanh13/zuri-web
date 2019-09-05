@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.ocha.boc;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,8 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.util.List;
-
-//import com.ocha.boc.cors.CorsFilter;
 
 /**
  * @author robert

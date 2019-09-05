@@ -72,7 +72,7 @@ public class CommonConstants {
 
     public static final String SEND_VERIFICATION_CODE_FAIL              = "Lỗi trong quá trình gửi mã xác thực.";
 
-    public static final String VERIFICATION_CODE_FAIL                   = "Mã xác thực sai.";
+    public static final String VERIFICATION_CODE_FAIL                   = "Mã xác thực không đúng hoặc đã hết hạn. Vui lòng đăng nhập lại";
 
     public static final String USER_NOT_EXISTED                         = "Người dùng không tồn tại trong hệ thống !";
 

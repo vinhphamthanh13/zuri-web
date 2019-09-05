@@ -13,7 +13,7 @@ public class OTPRequest implements Serializable {
 
     private String phoneNumber;
 
-    private String optCode;
+    private String otpCode;
 
     private String countryCode;
 }
