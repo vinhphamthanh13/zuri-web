@@ -10,6 +10,7 @@ import {
   CREATING_USER,
   CREATING_STORE_INFO,
   CREATING_STORE,
+  CREATING_STORE_PROGRESS,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
@@ -35,6 +36,7 @@ const initState = {
   existingUser: { success: null },
   creatingUser: null,
   creatingStoreStatus: null,
+  creatingStoreProgress: null,
   storeInfo: {},
 };
 
@@ -87,6 +89,12 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       ...action.payload, // creatingStoreStatus, storeInfo
+    };
+  }
+  if (action.type === CREATING_STORE_PROGRESS) {
+    return {
+      ...state,
+      creatingStoreProgress: action.payload,
     };
   }
 

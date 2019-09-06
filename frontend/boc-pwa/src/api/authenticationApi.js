@@ -31,6 +31,7 @@ const serverExistingUser = phone =>
   axios.get(`${SERVER_SITE_URL.CHECKING_USER}/${phone}`);
 const serverCreatingStore = (data, token) =>
   axios.post(SERVER_SITE_URL.CREATING_STORE, data, createHeaders(token));
+
 /* Consuming actions */
 
 const serverSendOTPApi = async data => {
@@ -105,7 +106,7 @@ router.get(
     const body = {
       countryCode,
       phoneNumber,
-      optCode: otpCode,
+      otpCode,
     };
 
     try {
@@ -132,13 +133,22 @@ router.get(
   },
 );
 
-router.post(NODE_SERVER_URL.CREATING_USER, async (request, response) => {
+router.post(NODE_SERVER_URL.CREATING_STORE, async (request, response) => {
   const {
     body: { data, token },
   } = request;
-  // TODO: transform data
+  const creatingStoreData = {
+    address: data.shopAddress,
+    cuaHangName: data.shopName,
+    danhMucMatHangType: data.categoryType,
+    managerEmail: data.userEmail,
+    managerName: data.userName,
+    managerPhone: data.phoneNumber,
+    moHinhKinhDoanhType: data.businessType,
+    phone: data.phoneNumber,
+  };
   try {
-    const result = await serverCreatingStoreApi(data, token);
+    const result = await serverCreatingStoreApi(creatingStoreData, token);
     handleNodeServerResponse(response, result);
   } catch (error) {
     handleNodeServerError(response, error);

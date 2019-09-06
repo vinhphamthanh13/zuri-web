@@ -9,8 +9,12 @@ export const GOOGLE_CAPTCHA_SITE_KEY =
 export const GOOGLE_CAPTCHA_SCRIPT = 'https://www.google.com/recaptcha/api.js';
 
 /* Navigation */
-export const BLOCKING_NAV_MESSAGE =
+export const LS_REGISTER = 'registerUser';
+export const LS_CREATING_STORE = 'creatingStore';
+export const BLOCKING_STORE_MESSAGE =
   'Bạn có muốn hủy đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!';
+export const BLOCKING_OTP_MESSAGE =
+  'Bạn có muốn hủy xác thực OTP? Bạn sẽ cần gởi lại mã xác thực OTP mới nếu quay lại!';
 // Layout
 export const LAYOUT = {
   MAX_WIDTH: 768,
@@ -25,6 +29,7 @@ export const DATA = {
   MESSAGE: 'data.message',
   CODE: 'data.code',
   TOKEN: 'data.accessToken',
+  OBJECT: 'data.object',
   OBJECTS: 'data.objects',
 };
 export const INIT_USER = {

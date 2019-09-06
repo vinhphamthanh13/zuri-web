@@ -10,7 +10,12 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { withFormik } from 'formik';
 import { register } from 'constants/schemas';
-import { REGISTER, INIT_USER, BLOCKING_NAV_MESSAGE } from 'constants/common';
+import {
+  REGISTER,
+  INIT_USER,
+  BLOCKING_STORE_MESSAGE,
+  LS_CREATING_STORE,
+} from 'constants/common';
 import { goBack, blockNavigation, navigateTo } from 'utils/browser';
 import BocGreet from 'assets/images/boc_greeting.png';
 import { activationProps } from '../commonProps';
@@ -52,7 +57,7 @@ class RegisterShop extends Component {
     return null;
   }
   componentDidMount() {
-    this.unblockNavigation = blockNavigation(BLOCKING_NAV_MESSAGE);
+    this.unblockNavigation = blockNavigation(BLOCKING_STORE_MESSAGE);
   }
 
   componentDidUpdate(prevProps) {
@@ -60,7 +65,8 @@ class RegisterShop extends Component {
     const { sendingOTPStatus: cachedSendingOTPStatus } = this.state;
 
     if (cachedSendingOTPStatus && cachedSendingOTPStatus !== sendingOTPStatus) {
-      navigateTo(ROUTER_URL.AUTH.VERIFYING_OTP, { creatingStore: true });
+      this.unblockNavigation();
+      navigateTo(ROUTER_URL.AUTH.VERIFYING_OTP, { [LS_CREATING_STORE]: true });
     }
   }
 
@@ -168,7 +174,7 @@ const enhancers = [
       },
     ) => {
       if (countryCode && phoneNumber) dispatchSendOTP(countryCode, phoneNumber);
-      dispatchCreatingStoreInfo(values);
+      dispatchCreatingStoreInfo({ ...values, phoneNumber });
     },
   }),
   withStyles(s),

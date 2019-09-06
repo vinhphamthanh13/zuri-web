@@ -9,14 +9,13 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { otpCode } from 'constants/schemas';
-import { BLOCKING_NAV_MESSAGE } from 'constants/common';
-import { ROUTER_URL } from 'constants/routerUrl';
 import {
-  goBack,
-  navigateTo,
-  blockNavigation,
-  getLocationState,
-} from 'utils/browser';
+  BLOCKING_OTP_MESSAGE,
+  BLOCKING_STORE_MESSAGE,
+  LS_CREATING_STORE,
+} from 'constants/common';
+import { ROUTER_URL } from 'constants/routerUrl';
+import { navigateTo, blockNavigation, getLocationState } from 'utils/browser';
 import { verifyCodeProps } from '../commonProps';
 import s from './VerifyOTP.css';
 
@@ -41,6 +40,8 @@ class VerifyOTP extends React.Component {
     encryptPhone: null,
     verifyingOTPStatus: null,
     creatingStoreStatus: null,
+    creatingStoreProgress: null,
+    accessToken: null,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -49,25 +50,33 @@ class VerifyOTP extends React.Component {
       encryptPhone,
       verifyingOTPStatus,
       creatingStoreStatus,
+      creatingStoreProgress,
+      accessToken,
     } = props;
     const {
       phoneNumber: cachedPhoneNumber,
       verifyingOTPStatus: cachedVerifyingOTPStatus,
       encryptPhone: cachedEncryptPhone,
       creatingStoreStatus: cachedCreatingStoreStatus,
+      creatingStoreProgress: cachedCreatingStoreProgress,
+      accessToken: cachedAccessToken,
     } = state;
 
     if (
       phoneNumber !== cachedPhoneNumber ||
       verifyingOTPStatus !== cachedVerifyingOTPStatus ||
       encryptPhone !== cachedEncryptPhone ||
-      creatingStoreStatus !== cachedCreatingStoreStatus
+      creatingStoreStatus !== cachedCreatingStoreStatus ||
+      creatingStoreProgress !== cachedCreatingStoreProgress ||
+      accessToken !== cachedAccessToken
     ) {
       return {
         phoneNumber,
         verifyingOTPStatus,
         encryptPhone,
         creatingStoreStatus,
+        creatingStoreProgress,
+        accessToken,
       };
     }
 
@@ -75,35 +84,38 @@ class VerifyOTP extends React.Component {
   }
 
   componentDidMount() {
-    this.unblockNavigation = blockNavigation(BLOCKING_NAV_MESSAGE);
+    const warning = getLocationState(LS_CREATING_STORE)
+      ? BLOCKING_STORE_MESSAGE
+      : BLOCKING_OTP_MESSAGE;
+    this.unblockNavigation = blockNavigation(warning);
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      verifyingOTPStatus,
-      storeInfo,
-      accessToken,
-      dispatchCreatingStore,
-    } = prevProps;
+    const { verifyingOTPStatus, storeInfo, dispatchCreatingStore } = prevProps;
     const {
       verifyingOTPStatus: cachedVerifyingOTPStatus,
       creatingStoreStatus,
+      creatingStoreProgress,
+      accessToken,
     } = this.state;
+    const isCreatingStore = getLocationState(LS_CREATING_STORE);
+
+    if (accessToken) {
+      this.unblockNavigation();
+      navigateTo(ROUTER_URL.AUTH.SHOPS);
+    }
     if (
       cachedVerifyingOTPStatus &&
       cachedVerifyingOTPStatus !== verifyingOTPStatus
     ) {
-      if (!getLocationState('creatingStore')) {
-        navigateTo(ROUTER_URL.TABS.HOME);
-      } else if (
-        getLocationState('creatingStore') &&
-        Object.is(creatingStoreStatus, null)
+      if (
+        isCreatingStore &&
+        accessToken &&
+        Object.is(creatingStoreStatus, null) &&
+        Object.is(creatingStoreProgress, null)
       ) {
         dispatchCreatingStore(storeInfo, accessToken);
       }
-    }
-    if (creatingStoreStatus) {
-      navigateTo(ROUTER_URL.TABS.HOME);
     }
   }
 
@@ -115,7 +127,7 @@ class VerifyOTP extends React.Component {
 
   handleChangePhoneNumber = () => {
     const { clearOTPStatus } = this.props;
-    goBack();
+    navigateTo(ROUTER_URL.AUTH.ACTIVATION);
     clearOTPStatus();
   };
 
@@ -169,6 +181,9 @@ class VerifyOTP extends React.Component {
 const enhancers = [
   withFormik({
     isInitialValid: false,
+    mapPropsToValues: () => ({
+      verifyCode: '',
+    }),
     handleSubmit: (
       { verifyCode },
       { props: { dispatchVerifyOTPCode, countryCode, phoneNumber } },

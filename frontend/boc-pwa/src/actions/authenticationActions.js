@@ -41,6 +41,7 @@ export const CREATING_USER = 'AUTH.CREATING_USER';
 export const EXISTING_USER = 'AUTH.EXISTING_USER';
 export const CREATING_STORE = 'AUTH.CREATING_STORE';
 export const CREATING_STORE_INFO = 'AUTH.CREATING_STORE_INFO';
+export const CREATING_STORE_PROGRESS = 'AUTH.CREATING_STORE_PROGRESS';
 
 // Redux action
 
@@ -70,6 +71,10 @@ export const creatingStoreInfoAction = payload => ({
 });
 export const creatingStoreAction = payload => ({
   type: CREATING_STORE,
+  payload,
+});
+export const creatingStoreProgressAction = payload => ({
+  type: CREATING_STORE_PROGRESS,
   payload,
 });
 
@@ -123,9 +128,12 @@ export const nodeVerifyingOTPApi = (
     const message = get(error, DATA.MESSAGE);
     dispatch(setError(message));
   } else {
-    const verifyOTPStatus = get(result, DATA.SUCCESS);
+    const verifyingOTPStatus = get(result, DATA.SUCCESS);
     const accessToken = get(result, DATA.TOKEN);
-    dispatch(verifyingOTPAction({ verifyOTPStatus, accessToken }));
+    const userDetail = get(result, DATA.OBJECT);
+    dispatch(
+      verifyingOTPAction({ verifyingOTPStatus, accessToken, userDetail }),
+    );
   }
   dispatch(setLoading(LOADING.OFF));
 };
@@ -145,13 +153,14 @@ export const nodeExistingUserApi = phone => async dispatch => {
 
 export const nodeCreatingStoreApi = (data, token) => async dispatch => {
   dispatch(setLoading(LOADING.ON));
+  dispatch(creatingStoreProgressAction(true));
   const [result, error] = await handleRequest(nodeCreatingStore, [data, token]);
   if (error) {
     const message = get(error, 'data.message');
     dispatch(setError(message));
   } else {
     const creatingStoreStatus = get(result, DATA.SUCCESS);
-    const storeInfo = get(result, DATA.OBJECTS);
+    const storeInfo = get(result, DATA.OBJECT);
     dispatch(creatingStoreAction({ creatingStoreStatus, storeInfo }));
   }
   dispatch(setLoading(LOADING.OFF));

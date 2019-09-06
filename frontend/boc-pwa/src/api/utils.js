@@ -6,7 +6,7 @@ export const createHeaders = token => ({
   headers: {
     'Content-Type': CONTENT_TYPE.JSON,
     Accept: CONTENT_TYPE.JSON,
-    Authentication: token ? `Bearer ${token}` : null,
+    Authorization: token ? `Bearer ${token}` : null,
   },
 });
 

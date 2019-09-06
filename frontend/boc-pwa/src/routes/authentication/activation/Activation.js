@@ -23,6 +23,7 @@ import {
   GOOGLE_CAPTCHA_SITE_KEY,
   G_CAPTCHA_ID,
   INIT_USER,
+  LS_REGISTER,
 } from 'constants/common';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { HTTP_STATUS } from 'constants/http';
@@ -98,18 +99,9 @@ class Activation extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      sendingOTPStatus,
-      dispatchError,
-      errors,
-      dispatchExistingUserAction,
-    } = prevProps;
-    const {
-      sendingOTPStatus: cachedSendingOTPStatus,
-      existingUser,
-      creatingUser,
-    } = this.state;
-    const isRegistering = getLocationState('register');
+    const { dispatchError, errors, dispatchExistingUserAction } = prevProps;
+    const { sendingOTPStatus, existingUser, creatingUser } = this.state;
+    const isRegistering = getLocationState(LS_REGISTER);
     const { code, success, message } = existingUser;
 
     if (isRegistering && creatingUser) {
@@ -139,8 +131,8 @@ class Activation extends Component {
     }
 
     // Redirect to verify OTP
-    if (cachedSendingOTPStatus && sendingOTPStatus !== cachedSendingOTPStatus) {
-      navigateTo(ROUTER_URL.VERIFYING_OTP);
+    if (sendingOTPStatus) {
+      navigateTo(ROUTER_URL.AUTH.VERIFYING_OTP);
     }
   }
 
@@ -184,7 +176,7 @@ class Activation extends Component {
     } = this.props;
     const { gCaptchaStatus } = this.state;
 
-    const registerState = getLocationState('register');
+    const registerState = getLocationState(LS_REGISTER);
     const headerTitle = registerState
       ? 'Số điện thoại cửa hàng'
       : 'đăng nhập cửa hàng';
@@ -266,7 +258,7 @@ const enhancers = [
         },
       },
     ) => {
-      const registerUser = getLocationState('register');
+      const registerUser = getLocationState(LS_REGISTER);
       const countryCode = get(values, 'countryCode');
       const sanitizedCode = countryCode.replace(/\+/, '');
       const phoneNumber = get(values, PHONE_FIELD);

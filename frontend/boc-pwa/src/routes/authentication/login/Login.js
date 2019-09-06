@@ -5,6 +5,7 @@ import BocGreet from 'assets/images/boc_greeting.png';
 import { HowToReg } from 'constants/svg';
 import Button from 'components/Button';
 import { ROUTER_URL } from 'constants/routerUrl';
+import { LS_REGISTER } from 'constants/common';
 import { navigateTo } from 'utils/browser';
 import s from './Login.css';
 
@@ -14,7 +15,7 @@ class Login extends React.Component {
   };
   handleRegister = () => {
     navigateTo(ROUTER_URL.AUTH.ACTIVATION, {
-      register: true,
+      [LS_REGISTER]: true,
     });
   };
 
