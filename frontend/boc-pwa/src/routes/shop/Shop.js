@@ -10,7 +10,7 @@ import Header from 'components/Header';
 import { SHOP } from 'constants/shop';
 import { gray } from 'constants/colors';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
-import { LAYOUT } from 'constants/common';
+import { LAYOUT, HEADER_TABS_HEIGHT } from 'constants/common';
 import { formatStringLength } from 'utils/string';
 import { resolveDimension } from 'utils/browser';
 import ShopDetail from './components/ShopDetail';
@@ -62,7 +62,7 @@ class Shop extends React.Component {
     const { isOpenShopDetail } = this.state;
     const maxWidth =
       windowWidth > LAYOUT.MAX_WIDTH ? LAYOUT.MAX_WIDTH : windowWidth;
-    const height = windowHeight - 90;
+    const height = windowHeight - HEADER_TABS_HEIGHT;
 
     return (
       <>

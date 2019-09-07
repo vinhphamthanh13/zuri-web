@@ -1,51 +1,47 @@
 import { setError } from 'actions/common';
 import {
-  nodeUsersApi,
   setPhoneNumberAction,
-  getVerificationCodeAction,
-  nodeVerificationCodeApi,
+  sendingOTPAction,
+  nodeSendingOTPApi,
+  nodeVerifyingOTPApi,
   nodeExistingUserApi,
   existingUserAction,
   nodeCreatingUserApi,
+  creatingStoreInfoAction,
   creatingUserAction,
+  verifyingOTPAction,
+  nodeCreatingStoreApi,
 } from 'actions/authenticationActions';
 
 export const activationProps = {
   mapStateToProps: ({ authentication }) => ({
-    phoneNumber: authentication.phoneNumber,
-    getVerificationCodeStatus: authentication.getVerificationCodeStatus,
-    existingUser: authentication.existingUser,
-    creatingUser: authentication.creatingUser,
+    ...authentication,
   }),
   mapDispatchToProps: dispatch => ({
     dispatchError: message => dispatch(setError(message)),
-    dispatchUsers: () => dispatch(nodeUsersApi()),
     dispatchSetPhoneNumber: number => dispatch(setPhoneNumberAction(number)),
-    dispatchVerificationCode: (countryCode, phoneNumber) =>
-      dispatch(nodeVerificationCodeApi(countryCode, phoneNumber)),
+    dispatchSendOTP: (countryCode, phoneNumber) =>
+      dispatch(nodeSendingOTPApi(countryCode, phoneNumber)),
     dispatchExistingUser: phone => dispatch(nodeExistingUserApi(phone)),
     dispatchExistingUserAction: data => dispatch(existingUserAction(data)),
     dispatchCreatingUser: phone => dispatch(nodeCreatingUserApi(phone)),
+    dispatchCreatingStoreInfo: data => dispatch(creatingStoreInfoAction(data)),
+    dispatchCreatingUserAction: value => dispatch(creatingUserAction(value)),
   }),
 };
 
 export const verifyCodeProps = {
   mapStateToProps: ({ authentication }) => ({
-    phoneNumber: authentication.phoneNumber,
+    ...authentication,
   }),
   mapDispatchToProps: dispatch => ({
-    clearVerificationCodeStatus: () =>
-      dispatch(getVerificationCodeAction(false)),
-  }),
-};
-
-export const creatingStoreProps = {
-  mapStateToProps: ({ authentication }) => ({
-    phoneNumber: authentication.phoneNumber,
-    creatingUser: authentication.creatingUser,
-  }),
-  mapDispatchToProps: dispatch => ({
-    dispatchExistingUserAction: data => dispatch(existingUserAction(data)),
-    dispatchCreatingUserAction: value => dispatch(creatingUserAction(value)),
+    clearOTPStatus: () => {
+      dispatch(sendingOTPAction(false));
+      dispatch(verifyingOTPAction(false));
+    },
+    dispatchVerifyOTPCode: (countryCode, phoneNumber, otpCode) =>
+      dispatch(nodeVerifyingOTPApi(countryCode, phoneNumber, otpCode)),
+    dispatchCreatingStore: (data, token) =>
+      dispatch(nodeCreatingStoreApi(data, token)),
   }),
 };

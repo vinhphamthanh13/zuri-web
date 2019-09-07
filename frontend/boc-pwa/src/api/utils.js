@@ -2,6 +2,14 @@ import { get } from 'lodash';
 import { DATA } from 'constants/common';
 import { HTTP_STATUS, CONTENT_TYPE } from 'constants/http';
 
+export const createHeaders = token => ({
+  headers: {
+    'Content-Type': CONTENT_TYPE.JSON,
+    Accept: CONTENT_TYPE.JSON,
+    Authorization: token ? `Bearer ${token}` : null,
+  },
+});
+
 const handleResponse = (response, defaultResponse) => {
   if (response) {
     const { status, data } = response;

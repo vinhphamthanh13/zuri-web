@@ -12,27 +12,30 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { activation } from 'constants/schemas';
-import { goBack, injectGoogleCaptchaScript } from 'utils/browser';
+import {
+  goBack,
+  navigateTo,
+  injectGoogleCaptchaScript,
+  getLocationState,
+} from 'utils/browser';
 import {
   REGEXP,
   GOOGLE_CAPTCHA_SITE_KEY,
   G_CAPTCHA_ID,
   INIT_USER,
+  LS_REGISTER,
 } from 'constants/common';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { HTTP_STATUS } from 'constants/http';
-import history from '../../../history';
 import { activationProps } from '../commonProps';
 import s from './Activation.css';
 
 const LOGIN = false;
 const REGISTER = true;
 const PHONE_FIELD = 'phoneNumber';
-const LOCATION_STATE = 'location.state';
 const LOGIN_MESSAGE = 'Hãy nhập số điện thoại đã đăng ký BOCVN.';
 const REGISTER_MESSAGE =
   'Bạn đã đăng ký cửa hàng trên hệ thống BOCVN. Hãy nhập số điện thoại chưa được đăng ký.';
-const authUrl = ROUTER_URL.AUTHENTICATION;
 
 class Activation extends Component {
   static propTypes = {
@@ -60,7 +63,7 @@ class Activation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      getVerificationCodeStatus: false,
+      sendingOTPStatus: false,
       existingUser: INIT_USER,
       creatingUser: null,
       gCaptchaStatus: true,
@@ -70,19 +73,19 @@ class Activation extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { getVerificationCodeStatus, existingUser, creatingUser } = props;
+    const { sendingOTPStatus, existingUser, creatingUser } = props;
     const {
-      getVerificationCodeStatus: cachedgetVerificationCodeStatus,
+      sendingOTPStatus: cachedSendingOTPStatus,
       existingUser: cachedExistingUser,
       creatingUser: cachedCreatingUser,
     } = state;
     if (
-      getVerificationCodeStatus !== cachedgetVerificationCodeStatus ||
+      sendingOTPStatus !== cachedSendingOTPStatus ||
       existingUser.success !== cachedExistingUser.success ||
       creatingUser !== cachedCreatingUser
     ) {
       return {
-        getVerificationCodeStatus,
+        sendingOTPStatus,
         existingUser,
         creatingUser,
       };
@@ -96,24 +99,28 @@ class Activation extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      getVerificationCodeStatus,
-      dispatchError,
-      errors,
-      dispatchExistingUserAction,
-    } = prevProps;
-    const {
-      getVerificationCodeStatus: cachedgetVerificationCodeStatus,
-      existingUser,
-      creatingUser,
-    } = this.state;
-    const isRegistering = get(history, LOCATION_STATE);
+    const { dispatchError, errors, dispatchExistingUserAction } = prevProps;
+    const { sendingOTPStatus, existingUser, creatingUser } = this.state;
+    const isRegistering = getLocationState(LS_REGISTER);
     const { code, success, message } = existingUser;
 
     if (isRegistering && creatingUser) {
-      history.push(authUrl.CREATING_NEW_STORE);
+      navigateTo(ROUTER_URL.AUTH.CREATING_STORE);
     }
 
+    if (isRegistering && errors[PHONE_FIELD]) {
+      dispatchExistingUserAction(INIT_USER);
+    }
+    // Creating account with registered phone will prompt error
+    if (
+      isRegistering &&
+      Object.is(success, REGISTER) &&
+      code !== HTTP_STATUS.INTERNAL_ERROR
+    ) {
+      dispatchError(REGISTER_MESSAGE);
+      this.clearCachedData();
+    }
+    // Login with un-registered phone will prompt error
     if (
       !isRegistering &&
       Object.is(success, LOGIN) &&
@@ -123,24 +130,9 @@ class Activation extends Component {
       this.clearCachedData();
     }
 
-    if (isRegistering && errors[PHONE_FIELD]) {
-      dispatchExistingUserAction(INIT_USER);
-    }
-
-    if (
-      isRegistering &&
-      Object.is(success, REGISTER) &&
-      code !== HTTP_STATUS.INTERNAL_ERROR
-    ) {
-      dispatchError(REGISTER_MESSAGE);
-      this.clearCachedData();
-    }
-
-    if (
-      cachedgetVerificationCodeStatus &&
-      getVerificationCodeStatus !== cachedgetVerificationCodeStatus
-    ) {
-      history.push(authUrl.VERIFY);
+    // Redirect to verify OTP
+    if (sendingOTPStatus) {
+      navigateTo(ROUTER_URL.AUTH.VERIFYING_OTP);
     }
   }
 
@@ -184,7 +176,7 @@ class Activation extends Component {
     } = this.props;
     const { gCaptchaStatus } = this.state;
 
-    const registerState = get(history, 'location.state.register');
+    const registerState = getLocationState(LS_REGISTER);
     const headerTitle = registerState
       ? 'Số điện thoại cửa hàng'
       : 'đăng nhập cửa hàng';
@@ -260,13 +252,13 @@ const enhancers = [
       values,
       {
         props: {
-          dispatchVerificationCode,
+          dispatchSendOTP,
           dispatchSetPhoneNumber,
           dispatchCreatingUser,
         },
       },
     ) => {
-      const registerUser = get(history, 'location.state');
+      const registerUser = getLocationState(LS_REGISTER);
       const countryCode = get(values, 'countryCode');
       const sanitizedCode = countryCode.replace(/\+/, '');
       const phoneNumber = get(values, PHONE_FIELD);
@@ -279,14 +271,16 @@ const enhancers = [
         dispatchCreatingUser(phoneNumber);
         dispatchSetPhoneNumber({
           countryCode: sanitizedCode,
-          phoneNumber: encryptPhone,
+          phoneNumber,
+          encryptPhone,
         });
       } else {
         dispatchSetPhoneNumber({
           countryCode: sanitizedCode,
-          phoneNumber: encryptPhone,
+          phoneNumber,
+          encryptPhone,
         });
-        dispatchVerificationCode(sanitizedCode, phoneNumber);
+        dispatchSendOTP(sanitizedCode, phoneNumber);
       }
     },
   }),

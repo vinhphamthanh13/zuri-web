@@ -4,7 +4,7 @@ import user from './user';
 import runtime from './runtime';
 import intl from './intl';
 
-import common from './common';
+import common from './commonReducer';
 
 export default combineReducers({
   user,

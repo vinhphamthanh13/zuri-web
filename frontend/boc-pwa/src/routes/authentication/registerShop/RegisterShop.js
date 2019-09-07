@@ -1,3 +1,4 @@
+import { ROUTER_URL } from 'constants/routerUrl';
 import React, { Component } from 'react';
 import { func, objectOf, any, bool, string } from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,10 +10,15 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { withFormik } from 'formik';
 import { register } from 'constants/schemas';
-import { REGISTER, INIT_USER } from 'constants/common';
+import {
+  REGISTER,
+  INIT_USER,
+  BLOCKING_STORE_MESSAGE,
+  LS_CREATING_STORE,
+} from 'constants/common';
 import { goBack, blockNavigation, navigateTo } from 'utils/browser';
 import BocGreet from 'assets/images/boc_greeting.png';
-import { creatingStoreProps } from '../commonProps';
+import { activationProps } from '../commonProps';
 import s from './RegisterShop.css';
 
 class RegisterShop extends Component {
@@ -27,6 +33,7 @@ class RegisterShop extends Component {
     dispatchCreatingUserAction: func.isRequired,
     creatingUser: bool,
     phoneNumber: string.isRequired,
+    handleSubmit: func.isRequired,
   };
 
   static defaultProps = {
@@ -37,10 +44,30 @@ class RegisterShop extends Component {
     creatingUserPopup: true,
   };
 
+  static getDerivedStateFromProps(props, state) {
+    const { sendingOTPStatus } = props;
+    const { sendingOTPStatus: cachedSendingOTPStatus } = state;
+
+    if (sendingOTPStatus !== cachedSendingOTPStatus) {
+      return {
+        sendingOTPStatus,
+      };
+    }
+
+    return null;
+  }
   componentDidMount() {
-    this.unblockNavigation = blockNavigation(
-      'Bạn có muốn thoát khỏi đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!',
-    );
+    this.unblockNavigation = blockNavigation(BLOCKING_STORE_MESSAGE);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { sendingOTPStatus } = prevProps;
+    const { sendingOTPStatus: cachedSendingOTPStatus } = this.state;
+
+    if (cachedSendingOTPStatus && cachedSendingOTPStatus !== sendingOTPStatus) {
+      this.unblockNavigation();
+      navigateTo(ROUTER_URL.AUTH.VERIFYING_OTP, { [LS_CREATING_STORE]: true });
+    }
   }
 
   componentWillUnmount() {
@@ -54,13 +81,6 @@ class RegisterShop extends Component {
   }
 
   unblockNavigation = null;
-
-  handleActivation = () => {
-    const {
-      values: { policiesAndTerms },
-    } = this.props;
-    navigateTo('/activation', { register: policiesAndTerms });
-  };
 
   createForm = () => {
     const {
@@ -92,12 +112,8 @@ class RegisterShop extends Component {
   handleCloseCreatingUserPopup = () =>
     this.setState({ creatingUserPopup: false });
 
-  handleGoBack = () => {
-
-  }
-
   render() {
-    const { isValid, creatingUser, phoneNumber } = this.props;
+    const { isValid, creatingUser, phoneNumber, handleSubmit } = this.props;
     const { creatingUserPopup } = this.state;
     const popUpCongratulation = creatingUser && creatingUserPopup;
 
@@ -106,7 +122,7 @@ class RegisterShop extends Component {
         {popUpCongratulation && (
           <Modal
             title="Tạo tài khoản thành công!"
-            message={`Bạn đã tạo tài khoản thành công với số điện thoại ${phoneNumber}. Hãy tạo cửa hàng cho bạn.`}
+            message={`Bạn đã tạo tài khoản thành công trên hệ thống BOCVN với số điện thoại ${phoneNumber}. Hãy tạo cửa hàng cho bạn.`}
             successIcon
             callback={this.handleCloseCreatingUserPopup}
           />
@@ -117,24 +133,23 @@ class RegisterShop extends Component {
             <img src={BocGreet} alt="Boc Greeting" width="100%" />
           </div>
           <div className={s.register}>
-            <form>{this.createForm()}</form>
-            <Button
-              onClick={this.handleActivation}
-              label="Tiếp theo"
-              disabled={!isValid}
-              className={s.button}
-            />
+            <form onSubmit={handleSubmit}>
+              {this.createForm()}
+              <Button
+                type="submit"
+                label="Tiếp theo"
+                disabled={!isValid}
+                className={s.button}
+              />
+            </form>
           </div>
-          <a href="#" className={s.readingPolicies}>
-            Chính sách và điều khoản của BOCVN
-          </a>
         </div>
       </>
     );
   }
 }
 
-export default compose(
+const enhancers = [
   withFormik({
     mapPropsToValues: () => ({
       userName: 'BOC',
@@ -147,10 +162,25 @@ export default compose(
     }),
     validateOnBlur: true,
     validationSchema: register,
+    handleSubmit: (
+      values,
+      {
+        props: {
+          countryCode,
+          phoneNumber,
+          dispatchSendOTP,
+          dispatchCreatingStoreInfo,
+        },
+      },
+    ) => {
+      if (countryCode && phoneNumber) dispatchSendOTP(countryCode, phoneNumber);
+      dispatchCreatingStoreInfo({ ...values, phoneNumber });
+    },
   }),
-  connect(
-    creatingStoreProps.mapStateToProps,
-    creatingStoreProps.mapDispatchToProps,
-  ),
   withStyles(s),
-)(RegisterShop);
+];
+
+export default connect(
+  activationProps.mapStateToProps,
+  activationProps.mapDispatchToProps,
+)(compose(...enhancers)(RegisterShop));

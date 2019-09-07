@@ -8,7 +8,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(147, 226, 255, 1) 100%);
+  background: whitesmoke;
 }
 
 .textSMS {
@@ -22,7 +22,7 @@
 
 .textSMS span {
   font-weight: var(--font-weight-500);
-  color: var(--c-triad-08);
+  color: var(--c-triad-06);
 }
 
 .verifyCodeWrapper {

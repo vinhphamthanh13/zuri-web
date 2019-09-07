@@ -3,9 +3,20 @@ import moment from 'moment';
 import Header from 'components/Header';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import BocTabs from 'components/BocTabs';
+import { blockNavigation } from 'utils/browser';
 import s from './Home.css';
 
 class Home extends React.Component {
+  componentDidMount() {
+    this.unblockNavigation = blockNavigation();
+  }
+
+  componentWillUnmount() {
+    this.unblockNavigation();
+  }
+
+  unblockNavigation = null;
+
   render() {
     return (
       <div className={s.container}>

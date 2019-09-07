@@ -6,7 +6,7 @@ import s from './Button.css';
 
 class Button extends Component {
   static propTypes = {
-    label: string.isRequired,
+    label: string,
     className: string,
     disabled: bool,
     onClick: func,
@@ -16,6 +16,7 @@ class Button extends Component {
   };
 
   static defaultProps = {
+    label: '',
     className: '',
     disabled: false,
     onClick: noop,

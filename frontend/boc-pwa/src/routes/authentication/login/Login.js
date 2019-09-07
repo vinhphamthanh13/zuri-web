@@ -4,17 +4,18 @@ import BocLogo from 'assets/images/welcome_boc.png';
 import BocGreet from 'assets/images/boc_greeting.png';
 import { HowToReg } from 'constants/svg';
 import Button from 'components/Button';
-import { NAVIGATION_URL } from 'constants/routerUrl';
+import { ROUTER_URL } from 'constants/routerUrl';
+import { LS_REGISTER } from 'constants/common';
 import { navigateTo } from 'utils/browser';
 import s from './Login.css';
 
 class Login extends React.Component {
   handleActivation = () => {
-    navigateTo(NAVIGATION_URL.ACTIVATION);
+    navigateTo(ROUTER_URL.AUTH.ACTIVATION);
   };
   handleRegister = () => {
-    navigateTo(NAVIGATION_URL.ACTIVATION, {
-      register: true,
+    navigateTo(ROUTER_URL.AUTH.ACTIVATION, {
+      [LS_REGISTER]: true,
     });
   };
 
@@ -41,7 +42,7 @@ class Login extends React.Component {
           Hoặc chưa có tài khoản?{' '}
           <span onClick={this.handleRegister}>Đăng ký</span>
         </div>
-        <div className={s.copyRight}>Bản quyền thuộc về BOCVN@2019</div>
+        <div className={s.copyRight}>Bản quyền thuộc về BOCVN@2020</div>
       </div>
     );
   }

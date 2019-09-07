@@ -4,9 +4,13 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {
   SET_USERS,
   SET_PHONE_NUMBER,
-  GET_VERIFICATION_CODE,
+  SENDING_OTP,
+  VERIFYING_OTP,
   EXISTING_USER,
   CREATING_USER,
+  CREATING_STORE_INFO,
+  CREATING_STORE,
+  CREATING_STORE_PROGRESS,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
@@ -14,7 +18,7 @@ const persistConfig = {
   storage,
   stateReconciler: autoMergeLevel2,
   blacklist: [
-    'getVerificationCodeStatus',
+    'sendingOTPStatus',
     'existingUser',
     'checkingCount',
     'creatingUser',
@@ -24,9 +28,16 @@ const persistConfig = {
 const initState = {
   users: [],
   phoneNumber: null,
-  getVerificationCodeStatus: null,
+  countryCode: null,
+  encryptPhone: null,
+  sendingOTPStatus: null,
+  verifyingOTPStatus: null,
+  accessToken: null,
   existingUser: { success: null },
   creatingUser: null,
+  creatingStoreStatus: null,
+  creatingStoreProgress: null,
+  storeInfo: {},
 };
 
 const reducer = (state = initState, action) => {
@@ -40,13 +51,20 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       phoneNumber: action.payload.phoneNumber,
+      encryptPhone: action.payload.encryptPhone,
       countryCode: action.payload.countryCode,
     };
   }
-  if (action.type === GET_VERIFICATION_CODE) {
+  if (action.type === SENDING_OTP) {
     return {
       ...state,
-      getVerificationCodeStatus: action.payload,
+      sendingOTPStatus: action.payload,
+    };
+  }
+  if (action.type === VERIFYING_OTP) {
+    return {
+      ...state,
+      ...action.payload, // verifyingOTPStatus, accessToken
     };
   }
   if (action.type === EXISTING_USER) {
@@ -59,6 +77,24 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       creatingUser: action.payload,
+    };
+  }
+  if (action.type === CREATING_STORE_INFO) {
+    return {
+      ...state,
+      storeInfo: action.payload,
+    };
+  }
+  if (action.type === CREATING_STORE) {
+    return {
+      ...state,
+      ...action.payload, // creatingStoreStatus, storeInfo
+    };
+  }
+  if (action.type === CREATING_STORE_PROGRESS) {
+    return {
+      ...state,
+      creatingStoreProgress: action.payload,
     };
   }
 
