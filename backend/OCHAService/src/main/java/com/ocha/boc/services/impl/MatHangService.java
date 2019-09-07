@@ -62,8 +62,9 @@ public class MatHangService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(request.getId())) {
-                Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(request.getId(), request.getCuaHangId());
-                if (optMatHang.isPresent()) {
+                if (matHangRepository.existsByIdAndCuaHangId(request.getId(), request.getCuaHangId())) {
+                    Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(request.getId(),
+                            request.getCuaHangId());
                     optMatHang.get().setName(request.getName());
                     if (CollectionUtils.isNotEmpty(request.getListBangGia())) {
                         optMatHang.get().setListBangGia(request.getListBangGia());
@@ -92,8 +93,8 @@ public class MatHangService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId);
-                if (optMatHang.isPresent()) {
+                if (matHangRepository.existsByIdAndCuaHangId(id, cuaHangId)) {
+                    Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new MathangDTO(optMatHang.get()));
@@ -134,8 +135,8 @@ public class MatHangService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId);
-                if (optMatHang.isPresent()) {
+                if (matHangRepository.existsByIdAndCuaHangId(id, cuaHangId)) {
+                    Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId);
                     matHangRepository.delete(optMatHang.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -150,16 +151,7 @@ public class MatHangService {
     }
 
     private boolean checkMatHangExisted(String name, String cuaHangId) {
-        boolean isExisted = false;
-        try {
-            Optional<MatHang> optMatHang = matHangRepository.findMatHangByNameAndCuaHangId(name, cuaHangId);
-            if (optMatHang.isPresent()) {
-                isExisted = true;
-            }
-        } catch (Exception e) {
-            log.error("Error when checkMatHangExisted: {}", e);
-        }
-        return isExisted;
+        return matHangRepository.existsByNameAndCuaHangId(name, cuaHangId);
     }
 
 }

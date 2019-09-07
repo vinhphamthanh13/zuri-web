@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface GiamGiaRepository extends MongoRepository<GiamGia, String> {
 
     Optional<GiamGia> findGiamGiaById(String giamGiaId);
+
+    boolean existsById(String giamGiaId);
 }

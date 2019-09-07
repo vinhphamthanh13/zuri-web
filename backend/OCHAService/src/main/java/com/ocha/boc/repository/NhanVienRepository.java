@@ -13,4 +13,8 @@ public interface NhanVienRepository extends MongoRepository<NhanVien, String> {
     List<NhanVien> findAllByCuaHangId(String cuaHangId);
 
     Optional<NhanVien> findNhanVienById(String nhanVienId);
+
+    boolean existsByUsername(String username);
+
+    boolean existsById(String nhanVienId);
 }

@@ -13,4 +13,8 @@ public interface MatHangRepository extends MongoRepository<MatHang, String > {
     Optional<MatHang> findMatHangByIdAndCuaHangId(String id, String cuaHangId);
 
     List<MatHang> findAllByCuaHangId(String cuaHangId);
+
+    boolean existsByNameAndCuaHangId(String name, String cuaHangId);
+
+    boolean existsByIdAndCuaHangId(String id, String cuaHangId);
 }

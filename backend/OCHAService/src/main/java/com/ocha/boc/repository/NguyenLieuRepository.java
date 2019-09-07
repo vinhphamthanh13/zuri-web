@@ -10,4 +10,8 @@ public interface NguyenLieuRepository extends MongoRepository<NguyenLieu, String
     Optional<NguyenLieu> findNguyenLieuByName(String name);
 
     Optional<NguyenLieu> findNguyenLieuById(String id);
+
+    boolean existsByName(String name);
+
+    boolean existsById(String id);
 }

@@ -29,8 +29,7 @@ public class NguyenLieuService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_NGUYEN_LIEU_FAIL);
         try {
-            Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
-            if (optNguyenLieu.isPresent()) {
+            if (nguyenLieuRepository.existsByName(request.getName())) {
                 response.setMessage(CommonConstants.NGUYEN_LIEU_EXISTED);
                 log.error("Error when create new NguyenLieu: This Nguyen Lieu is existed in the system");
             } else {
@@ -54,8 +53,8 @@ public class NguyenLieuService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.UPDATE_NGUYEN_LIEU_FAIL);
         try {
-            Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
-            if (optNguyenLieu.isPresent()) {
+            if (nguyenLieuRepository.existsByName(request.getName())) {
+                Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
                 if (StringUtils.isNotEmpty(request.getAbbreviations())) {
                     optNguyenLieu.get().setAbbreviations(request.getAbbreviations());
                 }
@@ -83,8 +82,8 @@ public class NguyenLieuService {
         response.setMessage(CommonConstants.NGUYEN_LIEU_IS_NULL);
         try {
             if (StringUtils.isNotEmpty(id)) {
-                Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
-                if (optNguyenLieu.isPresent()) {
+                if (nguyenLieuRepository.existsById(id)) {
+                    Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new NguyenLieuDTO(optNguyenLieu.get()));
@@ -123,8 +122,8 @@ public class NguyenLieuService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.DELETE_NGUYEN_LIEU_BY_NGUYEN_LIEU_ID_FAIL);
         try {
-            Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
-            if (optNguyenLieu.isPresent()) {
+            if (nguyenLieuRepository.existsById(id)) {
+                Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
                 nguyenLieuRepository.delete(optNguyenLieu.get());
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);

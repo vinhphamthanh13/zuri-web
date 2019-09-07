@@ -15,4 +15,8 @@ public interface DanhMucRepository extends MongoRepository<DanhMuc, String> {
     Optional<DanhMuc> findTopByOrderByDanhMucIdDesc();
 
     List<DanhMuc> findAllByCuaHangId(String cuaHangId);
+
+    boolean existsByName(String name);
+
+    boolean existsByDanhMucIdAndCuaHangId(String danhMucId, String cuaHangId);
 }

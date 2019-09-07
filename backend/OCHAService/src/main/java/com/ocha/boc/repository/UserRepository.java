@@ -15,6 +15,10 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findUserById(String id);
 
+    boolean existsById(String id);
+
+    boolean existsByPhone(String phone);
+
     @Query(value = "{'isActive' : true}")
     List<User> getListUserActiveIsTrue();
 }

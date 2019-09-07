@@ -62,8 +62,8 @@ public class GiamGiaService {
         response.setMessage(CommonConstants.DELETE_GIAM_GIA_BY_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(giamGiaId)) {
-                Optional<GiamGia> optGiamGia = giamGiaRepository.findGiamGiaById(giamGiaId);
-                if (optGiamGia.isPresent()) {
+                if (giamGiaRepository.existsById(giamGiaId)) {
+                    Optional<GiamGia> optGiamGia = giamGiaRepository.findGiamGiaById(giamGiaId);
                     giamGiaRepository.delete(optGiamGia.get());
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
@@ -82,8 +82,8 @@ public class GiamGiaService {
         try {
             if (request != null) {
                 if (StringUtils.isNotEmpty(request.getGiamGiaId())) {
-                    Optional<GiamGia> optGiamGia = giamGiaRepository.findGiamGiaById(request.getGiamGiaId());
-                    if (optGiamGia.isPresent()) {
+                    if (giamGiaRepository.existsById(request.getGiamGiaId())) {
+                        Optional<GiamGia> optGiamGia = giamGiaRepository.findGiamGiaById(request.getGiamGiaId());
                         optGiamGia.get().setName(request.getName());
                         optGiamGia.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                         if (request.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
@@ -93,7 +93,6 @@ public class GiamGiaService {
                             if (StringUtils.isNotEmpty(request.getDanhMucId())) {
                                 optGiamGia.get().setDanhMucId(request.getDanhMucId());
                             }
-
                         } else if (request.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
                             if (request.getPercentage() != null) {
                                 optGiamGia.get().setPercentage(request.getPercentage());
@@ -104,7 +103,6 @@ public class GiamGiaService {
                                 optGiamGia.get().setPercentage(null);
                             }
                         }
-
                         optGiamGia.get().setGiamGiaType(request.getGiamGiaType());
                         response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                         response.setSuccess(Boolean.TRUE);

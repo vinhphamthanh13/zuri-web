@@ -30,8 +30,7 @@ public class NhanVienService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_NHAN_VIEN_FAIL);
         try {
-            Optional<NhanVien> optNhanVien = nhanVienRepository.findNhanVienByUsername(request.getUsername());
-            if (optNhanVien.isPresent()) {
+            if (nhanVienRepository.existsByUsername(request.getUsername())) {
                 response.setMessage(CommonConstants.USERNAME_EXISTED);
             } else {
                 NhanVien nhanVien = new NhanVien();
@@ -85,8 +84,8 @@ public class NhanVienService {
         response.setMessage(CommonConstants.DELETE_NHAN_VIEN_BY_NHAN_VIEN_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(nhanVienId)) {
-                Optional<NhanVien> optNhanVien = nhanVienRepository.findNhanVienById(nhanVienId);
-                if (optNhanVien.isPresent()) {
+                if (nhanVienRepository.existsById(nhanVienId)) {
+                    Optional<NhanVien> optNhanVien = nhanVienRepository.findNhanVienById(nhanVienId);
                     nhanVienRepository.delete(optNhanVien.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);

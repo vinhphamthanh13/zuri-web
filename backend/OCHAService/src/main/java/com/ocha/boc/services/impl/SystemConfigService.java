@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 @Service
@@ -62,7 +63,7 @@ public class SystemConfigService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_GIAY_IN_INFORMATION_FAIL);
         try {
-            if (request != null) {
+            if (!Objects.isNull(request)) {
                 GiayIn giayIn = new GiayIn();
                 giayIn.setDescription(request.getDescription());
                 giayIn.setPrice(request.getPrice());

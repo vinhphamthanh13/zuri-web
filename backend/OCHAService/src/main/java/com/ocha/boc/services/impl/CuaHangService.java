@@ -100,19 +100,19 @@ public class CuaHangService {
         try {
             if (!Objects.isNull(request)) {
                 if (StringUtils.isNotEmpty(request.getId())) {
-                    CuaHang cuaHang = cuaHangRepository.findCuaHangById(request.getId());
-                    if (!Objects.isNull(cuaHang)) {
+                    if (cuaHangRepository.existsById(request.getId())) {
+                        Optional<CuaHang> optCuaHang = cuaHangRepository.findCuaHangById(request.getId());
                         if (StringUtils.isNotEmpty(request.getAddress())) {
-                            cuaHang.setAddress(request.getAddress());
+                            optCuaHang.get().setAddress(request.getAddress());
                         }
                         if (StringUtils.isNotEmpty(request.getManagerEmail())) {
-                            cuaHang.setManagerEmail(request.getManagerEmail());
+                            optCuaHang.get().setManagerEmail(request.getManagerEmail());
                         }
                         if (StringUtils.isNotEmpty(request.getMoHinhKinhDoanhType())) {
-                            cuaHang.setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
+                            optCuaHang.get().setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
                         }
-                        cuaHang.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                        cuaHangRepository.save(cuaHang);
+                        optCuaHang.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+                        cuaHangRepository.save(optCuaHang.get());
                     }
                 }
             }
@@ -124,12 +124,7 @@ public class CuaHangService {
 
 
     private boolean checkInforCuaHangIsExisted(String location, String cuaHangName) {
-        boolean isExisted = false;
-        Optional<CuaHang> optCuaHang = cuaHangRepository.findCuaHangByAddressAndCuaHangName(location, cuaHangName);
-        if (optCuaHang.isPresent()) {
-            isExisted = true;
-        }
-        return isExisted;
+        return cuaHangRepository.existsByAddressAndCuaHangName(location, cuaHangName);
     }
 
     public CuaHangResponse findCuaHangByCuaHangId(String cuaHangId) {
@@ -138,11 +133,11 @@ public class CuaHangService {
         response.setMessage(CommonConstants.CUA_HANG_IS_NOT_EXISTED);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
-                CuaHang cuaHang = cuaHangRepository.findCuaHangById(cuaHangId);
-                if (cuaHang != null) {
+                if (cuaHangRepository.existsById(cuaHangId)) {
+                    Optional<CuaHang> optCuaHang = cuaHangRepository.findCuaHangById(cuaHangId);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new CuaHangDTO(cuaHang));
+                    response.setObject(new CuaHangDTO(optCuaHang.get()));
                 }
             }
         } catch (Exception e) {

@@ -36,8 +36,7 @@ public class DanhMucService {
             response.setMessage(CommonConstants.CREATE_NEW_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (!Objects.isNull(request)) {
-                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByName(request.getName());
-                if (!optDanhMuc.isPresent()) {
+                if (!danhMucRepository.existsByName(request.getName())) {
                     DanhMuc danhMuc = new DanhMuc();
                     //Find max DanhMucId Value
                     Optional<DanhMuc> temp = danhMucRepository.findTopByOrderByDanhMucIdDesc();
@@ -72,8 +71,9 @@ public class DanhMucService {
             response.setMessage(CommonConstants.UPDATE_DANH_MUC_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (request != null) {
-                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(), request.getCuaHangId());
-                if (optDanhMuc.isPresent()) {
+                if (danhMucRepository.existsByDanhMucIdAndCuaHangId(request.getDanhMucId(), request.getCuaHangId())) {
+                    Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(),
+                            request.getCuaHangId());
                     if (StringUtils.isNotEmpty(request.getCuaHangId())) {
                         optDanhMuc.get().setCuaHangId(request.getCuaHangId());
                     }
@@ -104,8 +104,8 @@ public class DanhMucService {
             response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
-                if (optDanhMuc.isPresent()) {
+                if (danhMucRepository.existsByDanhMucIdAndCuaHangId(id, cuaHangId)) {
+                    Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new DanhMucDTO(optDanhMuc.get()));
@@ -146,8 +146,8 @@ public class DanhMucService {
             response.setMessage(CommonConstants.DELETE_DANH_MUC_BY_DANH_MUC_ID_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
-                if (optDanhMuc.isPresent()) {
+                if (danhMucRepository.existsByDanhMucIdAndCuaHangId(id, cuaHangId)) {
+                    Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
                     danhMucRepository.delete(optDanhMuc.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);

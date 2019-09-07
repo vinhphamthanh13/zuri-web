@@ -43,25 +43,25 @@ public class UserService {
             if (!isVerificationCodeSuccess) {
                 response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
             } else {
-                User user = checkUserExisted(request.getUserId());
-                if (user != null) {
+                if (checkUserExisted(request.getUserId())) {
+                    Optional<User> user = userRepository.findUserById(request.getUserId());
                     if (StringUtils.isNotEmpty(request.getEmail())) {
-                        user.setEmail(request.getEmail());
+                        user.get().setEmail(request.getEmail());
                     }
                     if (StringUtils.isNotEmpty(request.getName())) {
-                        user.setName(request.getName());
+                        user.get().setName(request.getName());
                     }
                     if (StringUtils.isNotEmpty(request.getPhoto())) {
-                        user.setPhoto(request.getPhoto());
+                        user.get().setPhoto(request.getPhoto());
                     }
                     if (StringUtils.isNotEmpty(request.getRole().toString())) {
-                        user.setRole(request.getRole());
+                        user.get().setRole(request.getRole());
                     }
-                    user.setLastModifiedDate(Instant.now().toString());
-                    userRepository.save(user);
+                    user.get().setLastModifiedDate(Instant.now().toString());
+                    userRepository.save(user.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new UserDTO(user));
+                    response.setObject(new UserDTO(user.get()));
                 } else {
                     response.setMessage(CommonConstants.USER_IS_NULL);
                 }
@@ -135,14 +135,8 @@ public class UserService {
         return response;
     }
 
-    private User checkUserExisted(String id) {
-        Optional<User> user = null;
-        try {
-            user = userRepository.findUserById(id);
-        } catch (Exception e) {
-            log.error("Error when checkUserExisted: ", e);
-        }
-        return user.get();
+    private boolean checkUserExisted(String id) {
+        return userRepository.existsById(id);
     }
 
     public UserResponse activeUser(String userId) {
@@ -189,7 +183,7 @@ public class UserService {
         response.setMessage(CommonConstants.USER_NOT_EXISTED);
         try {
             Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
-            if(optUser.isPresent()){
+            if (optUser.isPresent()) {
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
             }
@@ -199,13 +193,13 @@ public class UserService {
         return response;
     }
 
-    public AbstractResponse deleteUserByPhoneNumber(String phoneNumber){
+    public AbstractResponse deleteUserByPhoneNumber(String phoneNumber) {
         AbstractResponse response = new AbstractResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.USER_NOT_EXISTED);
         try {
             Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
-            if(optUser.isPresent()){
+            if (optUser.isPresent()) {
                 userRepository.delete(optUser.get());
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
