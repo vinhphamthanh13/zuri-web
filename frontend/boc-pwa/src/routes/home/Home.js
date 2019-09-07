@@ -4,18 +4,18 @@ import Header from 'components/Header';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import BocTabs from 'components/BocTabs';
 import { blockNavigation } from 'utils/browser';
+import { BLOCKING_TABS_MESSAGE } from 'constants/common';
 import s from './Home.css';
 
 class Home extends React.Component {
-  componentDidMount() {
-    this.unblockNavigation = blockNavigation();
+  constructor(props) {
+    super(props);
+    this.unblockNavigation = blockNavigation(BLOCKING_TABS_MESSAGE);
   }
 
   componentWillUnmount() {
     this.unblockNavigation();
   }
-
-  unblockNavigation = null;
 
   render() {
     return (
@@ -101,7 +101,7 @@ class Home extends React.Component {
             <div className={s.date}>7 ngày gần nhất</div>
           </div>
         </div>
-        <BocTabs activeIndex={0} />
+        <BocTabs activeIndex={0} unblockNavigation={this.unblockNavigation} />
       </div>
     );
   }

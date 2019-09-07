@@ -5,12 +5,13 @@ import {
   FilterVintage,
 } from 'constants/svg';
 import React, { Component } from 'react';
-import { number } from 'prop-types';
+import { number, func } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { noop } from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { TABS } from 'constants/common';
 import { brand01, brand03 } from 'constants/colors';
-import history from '../../history';
+import { navigateTo } from 'utils/browser';
 import s from './BocTabs.css';
 
 const TabIcons = [TrackChanges, ShowChart, BubbleChart, FilterVintage];
@@ -18,10 +19,17 @@ const TabIcons = [TrackChanges, ShowChart, BubbleChart, FilterVintage];
 class BocTabs extends Component {
   static propTypes = {
     activeIndex: number.isRequired,
+    unblockNavigation: func,
+  };
+
+  static defaultProps = {
+    unblockNavigation: noop,
   };
 
   handleTabClick = url => () => {
-    history.push(url);
+    const { unblockNavigation } = this.props;
+    unblockNavigation();
+    navigateTo(url);
   };
 
   render() {

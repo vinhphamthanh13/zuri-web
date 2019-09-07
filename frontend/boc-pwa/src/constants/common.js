@@ -15,6 +15,9 @@ export const BLOCKING_STORE_MESSAGE =
   'Bạn có muốn hủy đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!';
 export const BLOCKING_OTP_MESSAGE =
   'Bạn có muốn hủy xác thực OTP? Bạn sẽ cần gởi lại mã xác thực OTP mới nếu quay lại!';
+export const BLOCKING_TABS_MESSAGE =
+  'Bạn có muốn thoát khỏi chương trình. Bạn sẽ cần đăng nhập lại để truy cập dữ liệu hiện hành.';
+
 // Layout
 export const LAYOUT = {
   MAX_WIDTH: 768,
