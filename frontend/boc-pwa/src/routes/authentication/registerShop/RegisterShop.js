@@ -16,7 +16,7 @@ import {
   BLOCKING_STORE_MESSAGE,
   LS_CREATING_STORE,
 } from 'constants/common';
-import { goBack, blockNavigation, navigateTo } from 'utils/browser';
+import { blockNavigation, navigateTo } from 'utils/browser';
 import BocGreet from 'assets/images/boc_greeting.png';
 import { activationProps } from '../commonProps';
 import s from './RegisterShop.css';
@@ -127,8 +127,7 @@ class RegisterShop extends Component {
             callback={this.handleCloseCreatingUserPopup}
           />
         )}
-        <div className={s.container}>
-          <Header title="Tạo cửa hàng" iconLeft onClickLeft={goBack} />
+        <div className={s.content}>
           <div className={s.greetingLogo}>
             <img src={BocGreet} alt="Boc Greeting" width="100%" />
           </div>
@@ -143,6 +142,9 @@ class RegisterShop extends Component {
               />
             </form>
           </div>
+        </div>
+        <div className={s.readingPolicies}>
+          <a href="#">Chính sách và điều khoản BOCVN</a>
         </div>
       </>
     );

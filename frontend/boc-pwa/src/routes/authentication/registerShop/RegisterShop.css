@@ -1,9 +1,7 @@
 @import '../../../components/variables.css';
 
-.container {
+.content {
   width: 100%;
-  height: 100%;
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,7 +33,7 @@
 
 .policiesAndTerms input[type=checkbox]:checked {
   color: var(--c-triad-06) !important;
-  background: red !important;
+  background: var(--c-triad-03);
 }
 
 .button {
@@ -43,7 +41,9 @@
 }
 
 .readingPolicies {
+  text-align: center;
+  width: 100%;
   color: var(--c-triad-06);
-  margin: var(--size-18) auto var(--size-10);
   font-size: var(--font-size-14);
+  margin: var(--size-18) auto;
 }

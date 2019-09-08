@@ -8,12 +8,10 @@ import { compose } from 'redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Recaptcha from 'react-recaptcha';
 import { withFormik } from 'formik/dist/index';
-import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { activation } from 'constants/schemas';
 import {
-  goBack,
   navigateTo,
   injectGoogleCaptchaScript,
   getLocationState,
@@ -177,9 +175,6 @@ class Activation extends Component {
     const { gCaptchaStatus } = this.state;
 
     const registerState = getLocationState(LS_REGISTER);
-    const headerTitle = registerState
-      ? 'Số điện thoại cửa hàng'
-      : 'đăng nhập cửa hàng';
     const code = get(existingUser, 'code');
     const isLoginValid = isValid && !registerState && existingUser.success;
     const isRegisterValid = isValid && !existingUser.success;
@@ -192,7 +187,6 @@ class Activation extends Component {
     return (
       <>
         <div className={s.container}>
-          <Header title={headerTitle} iconLeft onClickLeft={goBack} />
           <form onSubmit={handleSubmit}>
             <div className={s.inputs}>
               <Input

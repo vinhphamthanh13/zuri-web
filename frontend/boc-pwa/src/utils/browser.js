@@ -1,6 +1,11 @@
 import { isMobile } from 'react-device-detect';
 import { get } from 'lodash';
-import { GOOGLE_CAPTCHA_SCRIPT } from 'constants/common';
+import {
+  GOOGLE_CAPTCHA_SCRIPT,
+  HEADER_HEIGHT,
+  HEADER_HEIGHT_GUTTER,
+  TABS_HEIGHT,
+} from 'constants/common';
 import history from '../history';
 
 export const hasGetUserMedia = () =>
@@ -29,6 +34,19 @@ export const resolveDimension = (width, height) => {
     width: `${width}px`,
     height: width > height && isMobile ? `${width}px` : `${height}px`,
   };
+};
+
+export const resolveContentHOffset = (gutter, tab) => {
+  if (gutter && tab) {
+    return HEADER_HEIGHT_GUTTER + TABS_HEIGHT;
+  }
+  if (gutter && !tab) {
+    return HEADER_HEIGHT_GUTTER;
+  }
+  if (!gutter && tab) {
+    return HEADER_HEIGHT + TABS_HEIGHT;
+  }
+  return HEADER_HEIGHT;
 };
 
 export const injectGoogleCaptchaScript = (d, scr, id) => {

@@ -5,8 +5,8 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { isIE, isEdge } from 'react-device-detect';
 import windowSize from 'react-window-size';
 import Header from 'components/Header';
-import { LAYOUT, HEADER_TABS_HEIGHT } from 'constants/common';
-import { resolveDimension } from 'utils/browser';
+import { LAYOUT } from 'constants/common';
+import { resolveDimension, resolveContentHOffset } from 'utils/browser';
 import logo from 'assets/images/welcome_boc.png';
 import brand from 'assets/images/boc_greeting.png';
 import s from './Layout.css';
@@ -18,22 +18,32 @@ class Layout extends React.Component {
     windowHeight: number.isRequired,
     headerProps: objectOf(any),
     isTab: bool,
+    headerOff: bool,
   };
 
   static defaultProps = {
     headerProps: {},
     isTab: false,
+    headerOff: false,
   };
 
   render() {
-    const { windowWidth, windowHeight, headerProps, isTab } = this.props;
+    const {
+      windowWidth,
+      windowHeight,
+      headerProps,
+      headerProps: { gutter },
+      isTab,
+      headerOff,
+    } = this.props;
     const dimension = resolveDimension(windowWidth, windowHeight);
+    const contentOffset = resolveContentHOffset(gutter, isTab);
     const maxContentWidth =
       windowWidth > LAYOUT.MAX_WIDTH ? LAYOUT.MAX_WIDTH : windowWidth;
-    const maxContentHeight = windowHeight - HEADER_TABS_HEIGHT;
+    const maxContentHeight = windowHeight - contentOffset;
     const contentProps = {
       className: s.content,
-      style: isTab ? resolveDimension(maxContentWidth, maxContentHeight) : null,
+      style: resolveDimension(maxContentWidth, maxContentHeight),
     };
 
     return isIE || isEdge || !resolveDimension(windowWidth, windowHeight) ? (
@@ -53,7 +63,7 @@ class Layout extends React.Component {
       </div>
     ) : (
       <div style={dimension} className={s.layout}>
-        <Header {...headerProps} />
+        {!headerOff && <Header {...headerProps} />}
         <div {...contentProps}>{this.props.children}</div>
       </div>
     );

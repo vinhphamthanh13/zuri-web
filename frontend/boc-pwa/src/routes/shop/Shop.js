@@ -1,6 +1,5 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { number } from 'prop-types';
 import { compose } from 'redux';
 import windowSize from 'react-window-size';
 import uuidv1 from 'uuid/v1';
@@ -19,11 +18,6 @@ const mockDetail = {
 };
 
 class Shop extends React.Component {
-  static propTypes = {
-    windowWidth: number.isRequired,
-    windowHeight: number.isRequired,
-  };
-
   state = {
     isOpenShopDetail: false,
   };

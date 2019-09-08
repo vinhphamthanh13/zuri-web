@@ -35,6 +35,6 @@
 }
 
 .activeTab div {
-  color: var(--c-text-bright);
-  font-weight: var(--font-weight-500);
+  color: var(--c-brand-1);
+  font-weight: var(--font-weight-600);
 }

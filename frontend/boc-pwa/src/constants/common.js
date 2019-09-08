@@ -24,7 +24,9 @@ export const BLOCKING_LAYOUT_MESSAGE = 'Bạn có muốn thoát khỏi ứng d�
 export const LAYOUT = {
   MAX_WIDTH: 768,
 };
-export const HEADER_TABS_HEIGHT = 90;
+export const HEADER_HEIGHT = 50;
+export const HEADER_HEIGHT_GUTTER = 34;
+export const TABS_HEIGHT = 56;
 
 // Processing data
 

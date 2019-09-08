@@ -6,7 +6,7 @@ const action = () => ({
   chunks: ['login'],
   title: 'Welcome BOCVN',
   component: (
-    <Layout>
+    <Layout headerOff>
       <Login />
     </Layout>
   ),

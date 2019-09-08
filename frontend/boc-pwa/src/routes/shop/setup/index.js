@@ -1,22 +1,28 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 import React from 'react';
 import Layout from 'components/Layout';
+import { ROUTER_URL } from 'constants/routerUrl';
+import { navigateTo } from 'utils/browser';
 import Setup from './Setup';
+
+const title = 'Thiết lặp cửa hàng';
+
+const onClickLeft = () => {
+  navigateTo(ROUTER_URL.TABS.SHOP);
+};
+
+const headerProps = {
+  title,
+  gutter: true,
+  iconLeft: true,
+  onClickLeft,
+};
 
 async function action() {
   return {
-    title: 'Thiết lập cửa hàng',
+    title,
     chunks: ['shopSetup'],
     component: (
-      <Layout>
+      <Layout headerProps={headerProps}>
         <Setup />
       </Layout>
     ),
