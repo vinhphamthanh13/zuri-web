@@ -35,7 +35,6 @@ export const resolveDimension = (width, height) => {
     height: width > height && isMobile ? `${width}px` : `${height}px`,
   };
 };
-
 export const resolveContentHOffset = (gutter, tab) => {
   if (gutter && tab) {
     return HEADER_HEIGHT_GUTTER + TABS_HEIGHT;
@@ -48,7 +47,8 @@ export const resolveContentHOffset = (gutter, tab) => {
   }
   return HEADER_HEIGHT;
 };
-
+export const resolveStringLength = (string, length) =>
+  string.toString().length > length ? `${string.substr(0, length)}...` : string;
 export const injectGoogleCaptchaScript = (d, scr, id) => {
   if (d.getElementById(id)) return;
   const gCaptcha = d.getElementsByTagName(scr)[0];

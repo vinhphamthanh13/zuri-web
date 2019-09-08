@@ -120,16 +120,12 @@ class VerifyOTP extends React.Component {
   }
 
   componentWillUnmount() {
+    const { clearOTPStatus } = this.props;
+    clearOTPStatus();
     this.unblockNavigation();
   }
 
   unblockNavigation = null;
-
-  handleChangePhoneNumber = () => {
-    const { clearOTPStatus } = this.props;
-    navigateTo(ROUTER_URL.AUTH.ACTIVATION);
-    clearOTPStatus();
-  };
 
   render() {
     const {
@@ -145,12 +141,7 @@ class VerifyOTP extends React.Component {
     const submittingCode = get(values, 'verifyCode');
 
     return (
-      <div className={s.container}>
-        <Header
-          title="Xác thực mã kích hoạt"
-          iconLeft
-          onClickLeft={this.handleChangePhoneNumber}
-        />
+      <>
         <div className={s.textSMS}>
           <p>
             Vui lòng kiểm tra và nhập mã xác thực được gởi đến số điện thoại{' '}
@@ -173,7 +164,7 @@ class VerifyOTP extends React.Component {
             <Button label="Xác thực" type="submit" disabled={!isValid} />
           </form>
         </div>
-      </div>
+      </>
     );
   }
 }

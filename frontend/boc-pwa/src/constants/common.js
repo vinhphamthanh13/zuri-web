@@ -12,10 +12,11 @@ export const GOOGLE_CAPTCHA_SCRIPT = 'https://www.google.com/recaptcha/api.js';
 /* Navigation */
 export const LS_REGISTER = 'registerUser';
 export const LS_CREATING_STORE = 'creatingStore';
+export const LS_SHOP_ID = 'shopId';
 export const BLOCKING_STORE_MESSAGE =
   'Bạn có muốn hủy đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!';
 export const BLOCKING_OTP_MESSAGE =
-  'Bạn có muốn hủy xác thực OTP? Bạn sẽ cần gởi lại mã xác thực OTP mới nếu quay lại!';
+  'Bạn có muốn hủy kích hoạt OTP? Bạn sẽ cần gởi lại mã xác thực OTP mới nếu quay lại!';
 export const BLOCKING_TABS_MESSAGE =
   'Bạn có muốn thoát khỏi chương trình. Bạn sẽ cần đăng nhập lại để truy cập dữ liệu hiện hành.';
 export const BLOCKING_LAYOUT_MESSAGE = 'Bạn có muốn thoát khỏi ứng dụng?';
@@ -28,8 +29,11 @@ export const HEADER_HEIGHT = 50;
 export const HEADER_HEIGHT_GUTTER = 34;
 export const TABS_HEIGHT = 56;
 
-// Processing data
+// CTA
+export const EDIT = 'Chỉnh sửa';
+export const START = 'Bắt đầu';
 
+// Processing data
 export const DATA = {
   ROOT: 'data',
   SUCCESS: 'data.success',
@@ -46,7 +50,6 @@ export const INIT_USER = {
 };
 
 // Regular expression
-
 export const REGEXP = {
   PHONE_NUMBER: /^0\d{9}$/,
   COUNTRY_CODE: /^\+\d{2,3}$/,
@@ -57,7 +60,6 @@ export const REGEXP = {
 };
 
 // Tabs and Page
-
 export const REGISTER = {
   USER_NAME: {
     LABEL: 'Tên quản lý',

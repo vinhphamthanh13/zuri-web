@@ -3,11 +3,16 @@ import Layout from 'components/Layout';
 import Shops from './Shops';
 
 async function action() {
+  const title = 'Danh sách cửa hàng';
+  const headerProps = {
+    title,
+  };
+
   return {
-    title: 'Danh sách cửa hàng',
+    title,
     chunks: ['shops'],
     component: (
-      <Layout>
+      <Layout headerProps={headerProps}>
         <Shops />
       </Layout>
     ),

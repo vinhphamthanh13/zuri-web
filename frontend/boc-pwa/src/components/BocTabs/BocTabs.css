@@ -2,7 +2,7 @@
 
 .toolBar {
   width: 100%;
-  height: var(--size-56);
+  height: var(--size-tabs-wrapper-height);
   display: flex;
   justify-content: center;
   position: absolute;

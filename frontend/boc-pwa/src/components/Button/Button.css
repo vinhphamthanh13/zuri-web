@@ -10,8 +10,8 @@
   justify-content: center;
   cursor: pointer;
   box-sizing: border-box;
-  background: linear-gradient(to bottom, var(--c-brand-1), var(--c-brand-3));
   color: var(--c-text-lighter);
+  background: linear-gradient(to bottom, var(--c-brand-1), var(--c-brand-3));
 }
 
 .button:hover {

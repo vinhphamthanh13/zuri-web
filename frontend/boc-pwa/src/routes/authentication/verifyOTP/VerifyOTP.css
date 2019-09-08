@@ -1,16 +1,5 @@
 @import '../../../components/variables.css';
 
-.container {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background: whitesmoke;
-}
-
 .textSMS {
   margin: 0 var(--size-24);
   display: flex;
@@ -26,7 +15,11 @@
 }
 
 .verifyCodeWrapper {
-  margin-bottom: var(--size-padding);
+  margin: 0 var(--size-padding);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .verifyCode {

@@ -6,6 +6,8 @@ import uuidv1 from 'uuid/v1';
 import { chunk } from 'lodash';
 import { SHOP } from 'constants/shop';
 import { gray } from 'constants/colors';
+import { getLocationState } from 'utils/browser';
+import { LS_SHOP_ID } from 'constants/common';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
 import { formatStringLength } from 'utils/string';
 import ShopDetail from './components/ShopDetail';
@@ -21,6 +23,12 @@ class Shop extends React.Component {
   state = {
     isOpenShopDetail: false,
   };
+
+  componentDidMount() {
+    const shopId = getLocationState(LS_SHOP_ID);
+    console.log('get shop id', shopId);
+  }
+
 
   handleShowShopDetail = value => () => {
     this.setState({
