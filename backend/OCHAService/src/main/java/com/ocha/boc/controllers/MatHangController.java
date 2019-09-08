@@ -56,11 +56,13 @@ public class MatHangController {
         Optional<MatHang> matHangOptional = Optional
                 .ofNullable(matHangService.updateMatHangInfor(request));
         if (matHangOptional.isPresent()) {
-            response.setObject(new MathangDTO(matHangOptional.get()));
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
-        } else {
-            response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
+            if (!matHangOptional.get().checkObjectEmptyData()) {
+                response.setObject(new MathangDTO(matHangOptional.get()));
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+            } else {
+                response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
+            }
         }
         log.info("[END]: update Mat Hang");
         return ResponseEntity.ok(response);
@@ -82,11 +84,13 @@ public class MatHangController {
         response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
         response.setSuccess(Boolean.FALSE);
         Optional<MatHang> matHangOptional = Optional
-                .ofNullable(matHangService.findMatHangById(id, cuaHangId));
+                .ofNullable(matHangService.findMatHangById(cuaHangId, id));
         if (matHangOptional.isPresent()) {
-            response.setObject(new MathangDTO(matHangOptional.get()));
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
+            if (!matHangOptional.get().checkObjectEmptyData()) {
+                response.setObject(new MathangDTO(matHangOptional.get()));
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+            }
         }
         log.info("[END]: find Mat Hang by Id");
         return ResponseEntity.ok(response);

@@ -59,44 +59,26 @@ public class MatHangService {
         return response;
     }
 
-    @CachePut(value = "mathang", key = "{#request.Id, #request.cuaHangId}")
+    @CachePut(value = "mathang", key = "{#request.cuaHangId, #request.Id}")
     public MatHang updateMatHangInfor(MatHangUpdateRequest request) {
-        try {
-            if (StringUtils.isNotEmpty(request.getId())) {
-                if (matHangRepository.existsByIdAndCuaHangId(request.getId(), request.getCuaHangId())) {
-                    Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(request.getId(),
-                            request.getCuaHangId());
-                    optMatHang.get().setName(request.getName());
-                    if (CollectionUtils.isNotEmpty(request.getListBangGia())) {
-                        optMatHang.get().setListBangGia(request.getListBangGia());
-                    }
-                    if (StringUtils.isNotEmpty(request.getDanhMucId())) {
-                        optMatHang.get().setDanhMucId(request.getDanhMucId());
-                    }
-                    optMatHang.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                    matHangRepository.save(optMatHang.get());
-                    return optMatHang.get();
-                }
+        return matHangRepository.findMatHangByIdAndCuaHangId(request.getId(), request.getCuaHangId()).map(matHang -> {
+            if(StringUtils.isNotEmpty(request.getName())){
+                matHang.setName(request.getName());
             }
-        } catch (Exception e) {
-            log.error("Error when updateMatHangInfor: {}", e);
-        }
-        return null;
+            if (CollectionUtils.isNotEmpty(request.getListBangGia())) {
+                matHang.setListBangGia(request.getListBangGia());
+            }
+            if (StringUtils.isNotEmpty(request.getDanhMucId())) {
+                matHang.setDanhMucId(request.getDanhMucId());
+            }
+            matHang.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+            return matHangRepository.save(matHang);
+        }).orElse(new MatHang());
     }
 
     @Cacheable(value = "mathang", key = "{#cuaHangId,#id}")
     public MatHang findMatHangById(String cuaHangId, String id) {
-        try {
-            if (StringUtils.isNotEmpty(id)) {
-                if (matHangRepository.existsByIdAndCuaHangId(id, cuaHangId)) {
-                    Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId);
-                    return optMatHang.get();
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error when findDanhMucById: {}", e);
-        }
-        return null;
+        return matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId).orElse(new MatHang());
     }
 
     public MatHangResponse getAllMatHang(String cuaHangId) {

@@ -7,11 +7,13 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @ToString
 @Document(collection = NhanVien.COLLECTION_NAME)
-public class NhanVien {
+public class NhanVien implements Serializable {
 
     public static final String COLLECTION_NAME = "nhanvien";
 

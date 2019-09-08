@@ -68,46 +68,27 @@ public class DanhMucService {
         return response;
     }
 
-    @CachePut(value = "danhmuc", key = "{#request.danhMucId, #request.cuaHangId}")
+    @CachePut(value = "danhmuc", key = "{#request.cuaHangId, #request.danhMucId}")
     public DanhMuc updateDanhMuc(DanhMucUpdateRequest request) {
-        try {
-            if (!Objects.isNull(request)) {
-                if (danhMucRepository.existsByDanhMucIdAndCuaHangId(request.getDanhMucId(), request.getCuaHangId())) {
-                    Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(),
-                            request.getCuaHangId());
-                    if (StringUtils.isNotEmpty(request.getCuaHangId())) {
-                        optDanhMuc.get().setCuaHangId(request.getCuaHangId());
-                    }
-                    if (StringUtils.isNotEmpty(request.getAbbreviations())) {
-                        optDanhMuc.get().setAbbreviations(request.getAbbreviations());
-                    }
-                    if (StringUtils.isNotEmpty(request.getName())) {
-                        optDanhMuc.get().setName(request.getName());
-                    }
-                    optDanhMuc.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                    danhMucRepository.save(optDanhMuc.get());
-                    return optDanhMuc.get();
-                }
+        return danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(),
+                            request.getCuaHangId()).map(danhMuc -> {
+            if (StringUtils.isNotEmpty(request.getCuaHangId())) {
+                danhMuc.setCuaHangId(request.getCuaHangId());
             }
-        } catch (Exception e) {
-            log.error("Error when updateDanhMuc: {}", e);
-        }
-        return null;
+            if (StringUtils.isNotEmpty(request.getAbbreviations())) {
+                danhMuc.setAbbreviations(request.getAbbreviations());
+            }
+            if (StringUtils.isNotEmpty(request.getName())) {
+                danhMuc.setName(request.getName());
+            }
+            danhMuc.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+            return danhMucRepository.save(danhMuc);
+        }).orElse(new DanhMuc());
     }
 
     @Cacheable(value = "danhmuc", key = "{#cuaHangId,#id}")
     public DanhMuc findDanhMucByDanhMucId(String id, String cuaHangId) {
-        try {
-            if (StringUtils.isNotEmpty(id)) {
-                if (danhMucRepository.existsByDanhMucIdAndCuaHangId(id, cuaHangId)) {
-                    Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
-                    return optDanhMuc.get();
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error when findDanhMucById: {}", e);
-        }
-        return null;
+        return danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId).orElse(new DanhMuc());
     }
 
     public DanhMucResponse getAllDanhMuc(String cuaHangId) {
