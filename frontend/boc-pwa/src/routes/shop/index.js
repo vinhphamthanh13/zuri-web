@@ -5,6 +5,7 @@ import Shop from './Shop';
 
 const headerProps = {
   title: 'Cửa hàng của tôi',
+  gutter: true,
 };
 
 async function action() {

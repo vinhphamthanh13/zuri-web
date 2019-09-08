@@ -1,4 +1,5 @@
 import { HTTP_STATUS } from 'constants/http';
+import { BubbleChart, ShowChart, Store, TrackChanges } from 'constants/svg';
 import { tabsRoute } from 'routes';
 
 export const G_CAPTCHA_ID = 'recaptcha-id';
@@ -17,6 +18,7 @@ export const BLOCKING_OTP_MESSAGE =
   'Bạn có muốn hủy xác thực OTP? Bạn sẽ cần gởi lại mã xác thực OTP mới nếu quay lại!';
 export const BLOCKING_TABS_MESSAGE =
   'Bạn có muốn thoát khỏi chương trình. Bạn sẽ cần đăng nhập lại để truy cập dữ liệu hiện hành.';
+export const BLOCKING_LAYOUT_MESSAGE = 'Bạn có muốn thoát khỏi ứng dụng?';
 
 // Layout
 export const LAYOUT = {
@@ -205,3 +207,4 @@ export const TABS = {
     URL: `${tabsRoute.SHOP}`,
   },
 };
+export const TABICONS = [TrackChanges, ShowChart, BubbleChart, Store];

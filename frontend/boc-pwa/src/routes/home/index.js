@@ -10,7 +10,7 @@ const headerProps = {
 
 async function action() {
   return {
-    title: 'Trang Chính',
+    title: 'Tổng quan cửa hàng',
     chunks: ['home'],
     component: (
       <Layout headerProps={headerProps} isTab>

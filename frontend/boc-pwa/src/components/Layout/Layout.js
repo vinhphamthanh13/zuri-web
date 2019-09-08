@@ -6,9 +6,9 @@ import { isIE, isEdge } from 'react-device-detect';
 import windowSize from 'react-window-size';
 import Header from 'components/Header';
 import { LAYOUT, HEADER_TABS_HEIGHT } from 'constants/common';
+import { resolveDimension } from 'utils/browser';
 import logo from 'assets/images/welcome_boc.png';
 import brand from 'assets/images/boc_greeting.png';
-import { resolveDimension } from 'utils/browser';
 import s from './Layout.css';
 
 class Layout extends React.Component {

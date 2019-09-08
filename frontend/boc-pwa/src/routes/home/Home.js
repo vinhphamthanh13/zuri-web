@@ -1,20 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { blockNavigation } from 'utils/browser';
-import { BLOCKING_TABS_MESSAGE } from 'constants/common';
 import s from './Home.css';
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.unblockNavigation = blockNavigation(BLOCKING_TABS_MESSAGE);
-  }
-
-  componentWillUnmount() {
-    this.unblockNavigation();
-  }
-
   render() {
     return (
       <>

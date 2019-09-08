@@ -30,7 +30,7 @@
 }
 
 .activeTab {
-  background: linear-gradient(to top, var(--c-brand-1), var(--c-bright));
+  background: linear-gradient(to bottom right, var(--c-brand-2), var(--c-bright));
   border-bottom: 1px solid var(--c-smoke);
 }
 
