@@ -5,14 +5,10 @@ import { compose } from 'redux';
 import windowSize from 'react-window-size';
 import uuidv1 from 'uuid/v1';
 import { chunk } from 'lodash';
-import BocTabs from 'components/BocTabs';
-import Header from 'components/Header';
 import { SHOP } from 'constants/shop';
 import { gray } from 'constants/colors';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
-import { LAYOUT, HEADER_TABS_HEIGHT } from 'constants/common';
 import { formatStringLength } from 'utils/string';
-import { resolveDimension } from 'utils/browser';
 import ShopDetail from './components/ShopDetail';
 import s from './Shop.css';
 
@@ -58,22 +54,14 @@ class Shop extends React.Component {
     ));
 
   render() {
-    const { windowWidth, windowHeight } = this.props;
     const { isOpenShopDetail } = this.state;
-    const maxWidth =
-      windowWidth > LAYOUT.MAX_WIDTH ? LAYOUT.MAX_WIDTH : windowWidth;
-    const height = windowHeight - HEADER_TABS_HEIGHT;
 
     return (
       <>
         {isOpenShopDetail && <ShopDetail onClose={this.handleShowShopDetail} />}
         {!isOpenShopDetail && (
-          <div className={s.container}>
-            <Header title="Cửa hàng của tôi" gutter />
-            <div
-              className={s.content}
-              style={resolveDimension(maxWidth, height)}
-            >
+          <>
+            <>
               <div className={s.shopInfo}>
                 <div className={s.shopIcon}>
                   <Store size={72} hexColor={gray} />
@@ -101,9 +89,8 @@ class Shop extends React.Component {
                 </div>
               </div>
               {this.createMenu()}
-            </div>
-            <BocTabs activeIndex={3} />
-          </div>
+            </>
+          </>
         )}
       </>
     );

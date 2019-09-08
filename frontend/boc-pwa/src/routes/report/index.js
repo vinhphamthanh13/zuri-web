@@ -1,23 +1,21 @@
-/**
- * BOC VN (http://www.bocvietnam.com/)
- *
- * Copyright © 2019-present BOCVN, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
+import BocTabs from 'components/BocTabs';
 import React from 'react';
 import Layout from 'components/Layout';
 import Report from './Report';
+
+const headerProps = {
+  title: 'Báo cáo',
+  gutter: true,
+};
 
 async function action(context, params) {
   return {
     title: 'Báo Cáo',
     chunks: ['report'],
     component: (
-      <Layout>
+      <Layout headerProps={headerProps} isTab>
         <Report params={params} />
+        <BocTabs activeIndex={1} />
       </Layout>
     ),
   };

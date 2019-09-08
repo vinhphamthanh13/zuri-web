@@ -1,12 +1,5 @@
 @import '../../components/variables.css';
 
-.container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  color: var(--c-brand-1);
-}
-
 hr {
   border: 1px solid var(--c-brand-4);
   margin: 0;

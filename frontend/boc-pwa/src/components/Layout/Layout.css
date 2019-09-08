@@ -45,6 +45,12 @@ body {
   background-color: var(--c-smoke);
   max-width: var(--size-pos-width);
   margin: 0 auto;
+  color: var(--c-brand-1);
+}
+
+.content {
+  overflow: auto;
+  width: 100%;
 }
 
 .unSupport {

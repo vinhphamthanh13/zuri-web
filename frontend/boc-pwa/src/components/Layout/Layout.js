@@ -1,9 +1,11 @@
 import React from 'react';
-import { node, number } from 'prop-types';
+import { node, number, objectOf, any, bool } from 'prop-types';
 import { compose } from 'redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { isIE, isEdge } from 'react-device-detect';
 import windowSize from 'react-window-size';
+import Header from 'components/Header';
+import { LAYOUT, HEADER_TABS_HEIGHT } from 'constants/common';
 import logo from 'assets/images/welcome_boc.png';
 import brand from 'assets/images/boc_greeting.png';
 import { resolveDimension } from 'utils/browser';
@@ -14,11 +16,26 @@ class Layout extends React.Component {
     children: node.isRequired,
     windowWidth: number.isRequired,
     windowHeight: number.isRequired,
+    headerProps: objectOf(any),
+    isTab: bool,
+  };
+
+  static defaultProps = {
+    headerProps: {},
+    isTab: false,
   };
 
   render() {
-    const { windowWidth, windowHeight } = this.props;
+    const { windowWidth, windowHeight, headerProps, isTab } = this.props;
     const dimension = resolveDimension(windowWidth, windowHeight);
+    const maxContentWidth =
+      windowWidth > LAYOUT.MAX_WIDTH ? LAYOUT.MAX_WIDTH : windowWidth;
+    const maxContentHeight = windowHeight - HEADER_TABS_HEIGHT;
+    const contentProps = {
+      className: s.content,
+      style: isTab ? resolveDimension(maxContentWidth, maxContentHeight) : null,
+    };
+
     return isIE || isEdge || !resolveDimension(windowWidth, windowHeight) ? (
       <div className={s.unSupport}>
         <div className={s.logo}>
@@ -36,7 +53,8 @@ class Layout extends React.Component {
       </div>
     ) : (
       <div style={dimension} className={s.layout}>
-        {this.props.children}
+        <Header {...headerProps} />
+        <div {...contentProps}>{this.props.children}</div>
       </div>
     );
   }

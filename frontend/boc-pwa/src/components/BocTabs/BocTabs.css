@@ -25,15 +25,16 @@
   background-color: var(--c-bright);
 }
 
+.toolBar .tab:last-child {
+  border-right: none;
+}
+
 .activeTab {
   background: linear-gradient(to top, var(--c-brand-1), var(--c-bright));
+  border-bottom: 1px solid var(--c-smoke);
 }
 
 .activeTab div {
   color: var(--c-text-bright);
   font-weight: var(--font-weight-500);
-}
-
-.toolBar .tab:last-child {
-  border: none;
 }
