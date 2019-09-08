@@ -11,6 +11,7 @@ import {
   creatingUserAction,
   verifyingOTPAction,
   nodeCreatingStoreApi,
+  selectedShopIdAction,
 } from 'actions/authenticationActions';
 
 export const activationProps = {
@@ -27,6 +28,7 @@ export const activationProps = {
     dispatchCreatingUser: phone => dispatch(nodeCreatingUserApi(phone)),
     dispatchCreatingStoreInfo: data => dispatch(creatingStoreInfoAction(data)),
     dispatchCreatingUserAction: value => dispatch(creatingUserAction(value)),
+    dispatchSelectedShopId: id => dispatch(selectedShopIdAction(id)),
   }),
 };
 

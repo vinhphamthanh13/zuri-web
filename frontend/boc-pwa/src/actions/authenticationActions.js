@@ -42,6 +42,7 @@ export const EXISTING_USER = 'AUTH.EXISTING_USER';
 export const CREATING_STORE = 'AUTH.CREATING_STORE';
 export const CREATING_STORE_INFO = 'AUTH.CREATING_STORE_INFO';
 export const CREATING_STORE_PROGRESS = 'AUTH.CREATING_STORE_PROGRESS';
+export const SELECTED_SHOP_ID = 'AUTH.SELECTED_SHOP_ID';
 
 // Redux action
 
@@ -75,6 +76,10 @@ export const creatingStoreAction = payload => ({
 });
 export const creatingStoreProgressAction = payload => ({
   type: CREATING_STORE_PROGRESS,
+  payload,
+});
+export const selectedShopIdAction = payload => ({
+  type: SELECTED_SHOP_ID,
   payload,
 });
 

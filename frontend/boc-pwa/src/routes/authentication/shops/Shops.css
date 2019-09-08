@@ -61,8 +61,17 @@
 .ctaText {
   margin: auto var(--size-08);
   font-size: var(--font-size-20);
+  color: var(--c-bright);
 }
 
 .ctaText:hover {
   font-weight: var(--font-weight-600);
+}
+
+.newShop {
+  position: absolute;
+  bottom: var(--size-padding);
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

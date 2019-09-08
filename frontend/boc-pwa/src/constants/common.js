@@ -2,6 +2,7 @@ import { HTTP_STATUS } from 'constants/http';
 import { BubbleChart, ShowChart, Store, TrackChanges } from 'constants/svg';
 import { tabsRoute } from 'routes';
 
+// Google
 export const G_CAPTCHA_ID = 'recaptcha-id';
 export const GOOGLE_CAPTCHA_SECRET_KEY =
   '6Lc7J7YUAAAAABG41he8PrwxewS8ZzOAMZfok9XG';
@@ -212,3 +213,6 @@ export const TABS = {
   },
 };
 export const TABICONS = [TrackChanges, ShowChart, BubbleChart, Store];
+
+// Messages
+export const EMPTY_ITEM = 'Danh sách đang còn trống';
