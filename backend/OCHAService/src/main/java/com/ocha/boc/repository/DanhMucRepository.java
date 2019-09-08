@@ -12,7 +12,7 @@ public interface DanhMucRepository extends MongoRepository<DanhMuc, String> {
 
     Optional<DanhMuc> findDanhMucByDanhMucIdAndCuaHangId(String danhMucId, String cuaHangId);
 
-    Optional<DanhMuc> findTopByOrderByDanhMucIdDesc();
+    Optional<DanhMuc> findTopByOrderByCreatedDateDesc();
 
     List<DanhMuc> findAllByCuaHangId(String cuaHangId);
 

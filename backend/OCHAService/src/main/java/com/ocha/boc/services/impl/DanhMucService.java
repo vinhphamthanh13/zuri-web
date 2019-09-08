@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,10 +42,10 @@ public class DanhMucService {
                 if (!danhMucRepository.existsByName(request.getName())) {
                     DanhMuc danhMuc = new DanhMuc();
                     //Find max DanhMucId Value
-                    Optional<DanhMuc> temp = danhMucRepository.findTopByOrderByDanhMucIdDesc();
+                    Optional<DanhMuc> temp = danhMucRepository.findTopByOrderByCreatedDateDesc();
                     if (temp.isPresent()) {
                         int danhMucIdMaxValue = Integer.parseInt(temp.get().getDanhMucId());
-                        danhMuc.setDanhMucId(Integer.toString(danhMucIdMaxValue + 1));
+                        danhMuc.setDanhMucId(Integer.toString((danhMucIdMaxValue + 1)));
                     } else {
                         //init first record in DB
                         danhMuc.setDanhMucId(NUMBER_ONE);
@@ -65,12 +68,10 @@ public class DanhMucService {
         return response;
     }
 
-    public DanhMucResponse updateDanhMuc(DanhMucUpdateRequest request) {
-        DanhMucResponse response = new DanhMucResponse();
+    @CachePut(value = "danhmuc", key = "{#request.danhMucId, #request.cuaHangId}")
+    public DanhMuc updateDanhMuc(DanhMucUpdateRequest request) {
         try {
-            response.setMessage(CommonConstants.UPDATE_DANH_MUC_FAIL);
-            response.setSuccess(Boolean.FALSE);
-            if (request != null) {
+            if (!Objects.isNull(request)) {
                 if (danhMucRepository.existsByDanhMucIdAndCuaHangId(request.getDanhMucId(), request.getCuaHangId())) {
                     Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(request.getDanhMucId(),
                             request.getCuaHangId());
@@ -85,36 +86,28 @@ public class DanhMucService {
                     }
                     optDanhMuc.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     danhMucRepository.save(optDanhMuc.get());
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new DanhMucDTO(optDanhMuc.get()));
-                } else {
-                    response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
+                    return optDanhMuc.get();
                 }
             }
         } catch (Exception e) {
             log.error("Error when updateDanhMuc: {}", e);
         }
-        return response;
+        return null;
     }
 
-    public DanhMucResponse findDanhMucByDanhMucId(String id, String cuaHangId) {
-        DanhMucResponse response = new DanhMucResponse();
+    @Cacheable(value = "danhmuc", key = "{#cuaHangId,#id}")
+    public DanhMuc findDanhMucByDanhMucId(String id, String cuaHangId) {
         try {
-            response.setMessage(CommonConstants.DANH_MUC_NAME_IS_NULL);
-            response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
                 if (danhMucRepository.existsByDanhMucIdAndCuaHangId(id, cuaHangId)) {
                     Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(id, cuaHangId);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new DanhMucDTO(optDanhMuc.get()));
+                    return optDanhMuc.get();
                 }
             }
         } catch (Exception e) {
             log.error("Error when findDanhMucById: {}", e);
         }
-        return response;
+        return null;
     }
 
     public DanhMucResponse getAllDanhMuc(String cuaHangId) {
@@ -140,6 +133,7 @@ public class DanhMucService {
         return response;
     }
 
+    @CacheEvict(value = "danhmuc", key = "{#cuaHangId,#id}")
     public AbstractResponse deleteDanhMucByDanhMucId(String id, String cuaHangId) {
         AbstractResponse response = new AbstractResponse();
         try {

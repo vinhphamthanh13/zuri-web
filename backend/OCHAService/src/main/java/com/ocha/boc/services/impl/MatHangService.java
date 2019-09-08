@@ -12,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -56,10 +59,8 @@ public class MatHangService {
         return response;
     }
 
-    public MatHangResponse updateMatHangInfor(MatHangUpdateRequest request) {
-        MatHangResponse response = new MatHangResponse();
-        response.setMessage(CommonConstants.UPDATE_MAT_HANG_FAIL);
-        response.setSuccess(Boolean.FALSE);
+    @CachePut(value = "mathang", key = "{#request.Id, #request.cuaHangId}")
+    public MatHang updateMatHangInfor(MatHangUpdateRequest request) {
         try {
             if (StringUtils.isNotEmpty(request.getId())) {
                 if (matHangRepository.existsByIdAndCuaHangId(request.getId(), request.getCuaHangId())) {
@@ -73,37 +74,29 @@ public class MatHangService {
                         optMatHang.get().setDanhMucId(request.getDanhMucId());
                     }
                     optMatHang.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setObject(new MathangDTO(optMatHang.get()));
                     matHangRepository.save(optMatHang.get());
-                } else {
-                    response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
+                    return optMatHang.get();
                 }
             }
         } catch (Exception e) {
             log.error("Error when updateMatHangInfor: {}", e);
         }
-        return response;
+        return null;
     }
 
-    public MatHangResponse findMatHangById(String cuaHangId, String id) {
-        MatHangResponse response = new MatHangResponse();
-        response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
-        response.setSuccess(Boolean.FALSE);
+    @Cacheable(value = "mathang", key = "{#cuaHangId,#id}")
+    public MatHang findMatHangById(String cuaHangId, String id) {
         try {
             if (StringUtils.isNotEmpty(id)) {
                 if (matHangRepository.existsByIdAndCuaHangId(id, cuaHangId)) {
                     Optional<MatHang> optMatHang = matHangRepository.findMatHangByIdAndCuaHangId(id, cuaHangId);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new MathangDTO(optMatHang.get()));
+                    return optMatHang.get();
                 }
             }
         } catch (Exception e) {
-            log.error("Error when findMatHangById: {}", e);
+            log.error("Error when findDanhMucById: {}", e);
         }
-        return response;
+        return null;
     }
 
     public MatHangResponse getAllMatHang(String cuaHangId) {
@@ -129,6 +122,7 @@ public class MatHangService {
         return response;
     }
 
+    @CacheEvict(value = "mathang", key = "{#cuaHangId,#id}")
     public MatHangResponse deleteMatHangById(String cuaHangId, String id) {
         MatHangResponse response = new MatHangResponse();
         response.setMessage(CommonConstants.DELETE_MAT_HANG_BY_MAT_HANG_ID_FAIL);

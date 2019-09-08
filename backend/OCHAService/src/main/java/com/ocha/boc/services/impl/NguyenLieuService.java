@@ -11,6 +11,9 @@ import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,10 +51,8 @@ public class NguyenLieuService {
         return response;
     }
 
-    public NguyenLieuResponse updateNguyenLieuInformation(NguyenLieuRequest request) {
-        NguyenLieuResponse response = new NguyenLieuResponse();
-        response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.UPDATE_NGUYEN_LIEU_FAIL);
+    @CachePut(value = "nguyenlieu", key = "#request.name")
+    public NguyenLieu updateNguyenLieuInformation(NguyenLieuRequest request) {
         try {
             if (nguyenLieuRepository.existsByName(request.getName())) {
                 Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuByName(request.getName());
@@ -62,37 +63,27 @@ public class NguyenLieuService {
                     optNguyenLieu.get().setName(request.getName());
                 }
                 optNguyenLieu.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObject(new NguyenLieuDTO(optNguyenLieu.get()));
                 nguyenLieuRepository.save(optNguyenLieu.get());
-            } else {
-                response.setMessage(CommonConstants.NGUYEN_LIEU_IS_NULL);
-                log.error("Error while updateNguyenLieuInformation: This Nguyen Lieu is not existed in the system");
             }
         } catch (Exception e) {
             log.error("Error when updateNguyenLieuInformation: ", e);
         }
-        return response;
+        return null;
     }
 
-    public NguyenLieuResponse findNguyenLieuById(String id) {
-        NguyenLieuResponse response = new NguyenLieuResponse();
-        response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.NGUYEN_LIEU_IS_NULL);
+    @Cacheable(value = "nguyenlieu", key = "#id")
+    public NguyenLieu findNguyenLieuById(String id) {
         try {
             if (StringUtils.isNotEmpty(id)) {
                 if (nguyenLieuRepository.existsById(id)) {
                     Optional<NguyenLieu> optNguyenLieu = nguyenLieuRepository.findNguyenLieuById(id);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new NguyenLieuDTO(optNguyenLieu.get()));
+                    return optNguyenLieu.get();
                 }
             }
         } catch (Exception e) {
             log.error("Error when findNguyenLieuById: ", e);
         }
-        return response;
+        return null;
     }
 
     public NguyenLieuResponse getAllNguyenLieu() {
@@ -117,6 +108,7 @@ public class NguyenLieuService {
         return response;
     }
 
+    @CacheEvict(value = "nguyenlieu", key = "#id")
     public AbstractResponse deleteNguyenLieuById(String id) {
         AbstractResponse response = new AbstractResponse();
         response.setSuccess(Boolean.FALSE);

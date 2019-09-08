@@ -21,9 +21,4 @@ public class MatHangTieuThu {
 
     private BigDecimal unitPrice;
 
-//    private String giamGiaName;
-//
-//    private BigDecimal giamGiaPercentage;
-//
-//    private BigDecimal giamGiaDiscountAmount;
 }

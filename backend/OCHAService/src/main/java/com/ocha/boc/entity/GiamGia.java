@@ -1,10 +1,10 @@
 package com.ocha.boc.entity;
 
-import com.ocha.boc.base.AbstractEntity;
 import com.ocha.boc.enums.GiamGiaType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -13,9 +13,16 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 @Document(collection = GiamGia.COLLECTION_NAME)
-public class GiamGia extends AbstractEntity {
+public class GiamGia {
 
     public static final String COLLECTION_NAME = "giamgia";
+
+    @Id
+    private String id;
+
+    private String createdDate;
+
+    private String lastModifiedDate;
 
     private String cuaHangId;
 

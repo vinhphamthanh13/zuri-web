@@ -1,12 +1,12 @@
 package com.ocha.boc.entity;
 
-import com.ocha.boc.base.AbstractEntity;
 import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -17,9 +17,16 @@ import java.util.List;
 @Setter
 @ToString
 @Document(collection = Order.COLLECTION_NAME)
-public class Order extends AbstractEntity {
+public class Order {
 
     public static final String COLLECTION_NAME = "order";
+
+    @Id
+    private String id;
+
+    private String createdDate;
+
+    private String lastModifiedDate;
 
     private String cuaHangId;
 
