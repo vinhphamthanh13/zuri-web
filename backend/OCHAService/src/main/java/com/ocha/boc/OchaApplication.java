@@ -9,25 +9,30 @@ import com.ocha.boc.entity.DanhMucSanPham;
 import com.ocha.boc.entity.MoHinhKinhDoanh;
 import com.ocha.boc.repository.DanhMucSanPhamRepository;
 import com.ocha.boc.repository.MoHinhKinhDoanhRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.util.List;
 
-/**
- * @author robert
- *
- */
-@SpringBootApplication
-public class OchaApplication extends SpringBootServletInitializer {
+
+@SpringBootApplication(
+        exclude = {RedisRepositoriesAutoConfiguration.class}
+)
+@EnableCaching
+@Slf4j
+public class OchaApplication {
 
     private static final String MO_HINH_KINH_DOANH_JSON = "/mohinhkinhdoanh.json";
 
@@ -100,7 +105,7 @@ public class OchaApplication extends SpringBootServletInitializer {
 
             }
         } catch (Exception e) {
-            logger.error("Exception while init Mo Hinh Kinh Doanh: ", e);
+            log.error("Exception while init Mo Hinh Kinh Doanh: ", e);
         }
     }
 
@@ -122,7 +127,7 @@ public class OchaApplication extends SpringBootServletInitializer {
 
             }
         } catch (Exception e) {
-            logger.error("Exception while init Danh Muc San Pham: ", e);
+            log.error("Exception while init Danh Muc San Pham: ", e);
         }
     }
 
