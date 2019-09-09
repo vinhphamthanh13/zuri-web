@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { func, objectOf, any, bool, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import Header from 'components/Header';
 import Modal from 'components/Modal';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Button from 'components/Button';

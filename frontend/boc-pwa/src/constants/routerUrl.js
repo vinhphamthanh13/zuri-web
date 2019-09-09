@@ -5,6 +5,7 @@ export const ROUTER_URL = {
     VERIFYING_OTP: '/verifyOTP',
     SHOPS: '/shops',
     CREATING_STORE: '/creatingStore',
+    GETTING_STORE: '/gettingStore',
   },
   TABS: {
     HOME: '/home',

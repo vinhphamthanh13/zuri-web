@@ -30,7 +30,9 @@ const serverVerifyOTP = data => axios.post(SERVER_SITE_URL.VERIFYING_OTP, data);
 const serverExistingUser = phone =>
   axios.get(`${SERVER_SITE_URL.CHECKING_USER}/${phone}`);
 const serverCreatingStore = (data, token) =>
-  axios.post(SERVER_SITE_URL.CREATING_STORE, data, createHeaders(token));
+  axios.post(SERVER_SITE_URL.STORE, data, createHeaders(token));
+const serverGettingStore = (id, token) =>
+  axios.get(`${SERVER_SITE_URL.STORE}/${id}`, createHeaders(token));
 
 /* Consuming actions */
 
@@ -54,12 +56,16 @@ const serverCreatingUserApi = async phone => {
   if (error) return error;
   return result;
 };
-
 const serverCreatingStoreApi = async (data, token) => {
   const [result, error] = await handleRequest(serverCreatingStore, [
     data,
     token,
   ]);
+  if (error) return error;
+  return result;
+};
+const serverGettingStoreApi = async (id, token) => {
+  const [result, error] = await handleRequest(serverGettingStore, [id, token]);
   if (error) return error;
   return result;
 };
@@ -77,7 +83,6 @@ router.post(NODE_SERVER_URL.CREATING_USER, async (request, response) => {
     handleNodeServerError(response, error);
   }
 });
-
 router.get(
   `${NODE_SERVER_URL.SENDING_OTP}${SEND_OTP_PARAMS}`,
   async (request, response) => {
@@ -96,7 +101,6 @@ router.get(
     }
   },
 );
-
 router.get(
   `${NODE_SERVER_URL.VERIFYING_OTP}${VERIFY_OTP_PARAMS}`,
   async (request, response) => {
@@ -117,7 +121,6 @@ router.get(
     }
   },
 );
-
 router.get(
   `${NODE_SERVER_URL.EXISTING_USER}/:phone`,
   async (request, response) => {
@@ -132,7 +135,6 @@ router.get(
     }
   },
 );
-
 router.post(NODE_SERVER_URL.CREATING_STORE, async (request, response) => {
   const {
     body: { data, token },
@@ -154,5 +156,19 @@ router.post(NODE_SERVER_URL.CREATING_STORE, async (request, response) => {
     handleNodeServerError(response, error);
   }
 });
+router.get(
+  `${NODE_SERVER_URL.GETTING_STORE}/:shopId/:token`,
+  async (request, response) => {
+    const {
+      params: { shopId, token },
+    } = request;
+    try {
+      const result = await serverGettingStoreApi(shopId, token);
+      handleNodeServerResponse(response, result);
+    } catch (error) {
+      handleNodeServerError(response, error);
+    }
+  },
+);
 
 export default router;

@@ -31,8 +31,10 @@ const nodeExistingUser = phone =>
   axios.get(`${PROXY_AUTH}${NODE_SERVER_URL.EXISTING_USER}/${phone}`);
 const nodeCreatingStore = (data, token) =>
   axios.post(`${PROXY_AUTH}${NODE_SERVER_URL.CREATING_STORE}`, { data, token });
-// Redux constants
+const nodeGettingStore = (id, token) =>
+  axios.get(`${NODE_SERVER_URL.GETTING_STORE}/${id}/${token}`);
 
+// Redux constants
 export const SET_USERS = 'AUTH.SET_USERS';
 export const SET_PHONE_NUMBER = 'AUTH.SET_PHONE_NUMBER';
 export const SENDING_OTP = 'AUTH.SENDING_OTP';
@@ -43,9 +45,9 @@ export const CREATING_STORE = 'AUTH.CREATING_STORE';
 export const CREATING_STORE_INFO = 'AUTH.CREATING_STORE_INFO';
 export const CREATING_STORE_PROGRESS = 'AUTH.CREATING_STORE_PROGRESS';
 export const SELECTED_SHOP_ID = 'AUTH.SELECTED_SHOP_ID';
+export const GETTING_STORE = 'AUTH.GETTING_STORE';
 
 // Redux action
-
 export const setPhoneNumberAction = payload => ({
   type: SET_PHONE_NUMBER,
   payload,
@@ -82,9 +84,12 @@ export const selectedShopIdAction = payload => ({
   type: SELECTED_SHOP_ID,
   payload,
 });
+export const gettingStoreAction = payload => ({
+  type: GETTING_STORE,
+  payload,
+});
 
 // Consuming actions
-
 export const nodeCreatingUserApi = phone => async dispatch => {
   dispatch(setLoading(LOADING.ON));
   const data = { phone };
@@ -98,7 +103,6 @@ export const nodeCreatingUserApi = phone => async dispatch => {
   dispatch(creatingUserAction(success));
   dispatch(setLoading(LOADING.OFF));
 };
-
 export const nodeSendingOTPApi = (
   countryCode,
   phoneNumber,
@@ -117,7 +121,6 @@ export const nodeSendingOTPApi = (
   }
   dispatch(setLoading(LOADING.OFF));
 };
-
 export const nodeVerifyingOTPApi = (
   countryCode,
   phoneNumber,
@@ -142,7 +145,6 @@ export const nodeVerifyingOTPApi = (
   }
   dispatch(setLoading(LOADING.OFF));
 };
-
 export const nodeExistingUserApi = phone => async dispatch => {
   dispatch(setLoading(LOADING.ON));
   const [result, error] = await handleRequest(nodeExistingUser, [phone]);
@@ -155,18 +157,29 @@ export const nodeExistingUserApi = phone => async dispatch => {
   dispatch(existingUserAction(data));
   dispatch(setLoading(LOADING.OFF));
 };
-
 export const nodeCreatingStoreApi = (data, token) => async dispatch => {
   dispatch(setLoading(LOADING.ON));
   dispatch(creatingStoreProgressAction(true));
   const [result, error] = await handleRequest(nodeCreatingStore, [data, token]);
   if (error) {
-    const message = get(error, 'data.message');
+    const message = get(error, DATA.MESSAGE);
     dispatch(setError(message));
   } else {
     const creatingStoreStatus = get(result, DATA.SUCCESS);
     const storeInfo = get(result, DATA.OBJECT);
     dispatch(creatingStoreAction({ creatingStoreStatus, storeInfo }));
+  }
+  dispatch(setLoading(LOADING.OFF));
+};
+export const nodeGettingStoreApi = (id, token) => async dispatch => {
+  dispatch(setLoading(LOADING.ON));
+  const [result, error] = await handleRequest(nodeGettingStore, [id, token]);
+  if (error) {
+    const message = get(error, DATA.MESSAGE);
+    dispatch(setError(message));
+  } else {
+    const gettingStoreInfo = get(result, DATA.OBJECT);
+    dispatch(gettingStoreAction(gettingStoreInfo));
   }
   dispatch(setLoading(LOADING.OFF));
 };
