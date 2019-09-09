@@ -20,7 +20,7 @@
 
 .notFound {
   margin: var(--size-32) auto;
-  font-size: var(--font-size-44);
+  font-size: var(--font-size-huge);
   color: var(--c-triad-08);
   font-weight: var(--font-weight-700);
   text-decoration: underline;

@@ -161,9 +161,11 @@
 
   --font-size-caption: var(--font-size-10);
   --font-size-small: var(--font-size-12);
-  --font-size-medium: var(--font-size-14);
-  --font-size: var(--font-size-16);
-  --font-size-input: var(--font-size-16);
   --font-size-label: var(--font-size-14);
+  --font-size: var(--font-size-16);
+  --font-size-input: var(--font-size);
   --font-size-header: var(--font-size-18);
+  --font-size-lg: var(--font-size-24);
+  --font-size-title: var(--font-size-28);
+  --font-size-huge: var(--font-size-44);
 }

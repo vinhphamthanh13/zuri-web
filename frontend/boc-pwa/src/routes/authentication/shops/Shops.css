@@ -1,7 +1,7 @@
 @import '../../../components/variables.css';
 
 .store {
-  border-top: var(--font-size-28) solid var(--c-brand-4);
+  border-top: var(--size-24) solid var(--c-brand-4);
   background: linear-gradient(to bottom right, var(--c-brand-4), var(--c-brand-5));
   box-shadow: var(--size-02) var(--size-04) var(--size-10) var(--c-gray);
   margin: 0 var(--size-12) var(--size-12);
@@ -17,7 +17,7 @@
 }
 
 .title {
-  font-size: var(--font-size-26);
+  font-size: var(--font-size-title);
   font-weight: var(--font-weight-600);
   margin-bottom: var(--size-08);
 }
@@ -34,7 +34,7 @@
 
 .address {
   margin: auto var(--size-06);
-  font-size: var(--font-size-18);
+  font-size: var(--font-size-header);
 }
 
 .actions {
@@ -60,7 +60,7 @@
 
 .ctaText {
   margin: auto var(--size-08);
-  font-size: var(--font-size-20);
+  font-size: var(--font-size-header);
   color: var(--c-bright);
 }
 

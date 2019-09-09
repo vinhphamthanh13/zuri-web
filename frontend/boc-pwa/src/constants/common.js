@@ -72,6 +72,11 @@ export const REGISTER = {
     VALUE: 'shopName',
     PLACEHOLDER: 'Nhập tên cửa hàng',
   },
+  SHOP_PHONE: {
+    LABEL: 'Số điện thoại cửa hàng',
+    VALUE: 'shopPhoneNumber',
+    PLACEHOLDER: 'Số điện thoại liên hệ',
+  },
   SHOP_ADDRESS: {
     LABEL: 'Địa chỉ cửa hàng',
     VALUE: 'shopAddress',

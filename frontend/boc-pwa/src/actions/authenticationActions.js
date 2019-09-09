@@ -41,6 +41,7 @@ export const SENDING_OTP = 'AUTH.SENDING_OTP';
 export const VERIFYING_OTP = 'AUTH.VERIFYING_OTP';
 export const CREATING_USER = 'AUTH.CREATING_USER';
 export const EXISTING_USER = 'AUTH.EXISTING_USER';
+export const SETTING_USER_DETAIL = 'AUTH.SETTING_USER_DETAIL';
 export const CREATING_STORE = 'AUTH.CREATING_STORE';
 export const CREATING_STORE_INFO = 'AUTH.CREATING_STORE_INFO';
 export const CREATING_STORE_PROGRESS = 'AUTH.CREATING_STORE_PROGRESS';
@@ -86,6 +87,10 @@ export const selectedShopIdAction = payload => ({
 });
 export const gettingStoreAction = payload => ({
   type: GETTING_STORE,
+  payload,
+});
+export const settingUserDetailAction = payload => ({
+  type: SETTING_USER_DETAIL,
   payload,
 });
 
@@ -139,9 +144,8 @@ export const nodeVerifyingOTPApi = (
     const verifyingOTPStatus = get(result, DATA.SUCCESS);
     const accessToken = get(result, DATA.TOKEN);
     const userDetail = get(result, DATA.OBJECT);
-    dispatch(
-      verifyingOTPAction({ verifyingOTPStatus, accessToken, userDetail }),
-    );
+    dispatch(verifyingOTPAction({ verifyingOTPStatus, accessToken }));
+    dispatch(settingUserDetailAction(userDetail));
   }
   dispatch(setLoading(LOADING.OFF));
 };

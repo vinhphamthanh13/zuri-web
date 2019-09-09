@@ -32,7 +32,7 @@
 
 .greeting {
   color: var(--c-brand-1);
-  font-size: var(--font-size-16);
+  font-size: var(--font-size);
 }
 
 .login {
@@ -49,7 +49,7 @@
 .register {
   position: absolute;
   color: var(--c-brand-2);
-  font-size: var(--font-size-14);
+  font-size: var(--font-size-label);
   bottom: var(--size-64);
 }
 
@@ -68,6 +68,6 @@
   position: absolute;
   bottom: var(--size-12);
   color: var(--c-brand-1);
-  font-size: var(--font-size-12);
+  font-size: var(--font-size-small);
   text-align: center;
 }

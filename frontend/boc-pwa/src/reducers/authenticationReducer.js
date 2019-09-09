@@ -67,7 +67,7 @@ const reducer = (state = initState, action) => {
   if (action.type === VERIFYING_OTP) {
     return {
       ...state,
-      ...action.payload, // verifyingOTPStatus, accessToken
+      ...action.payload, // verifyingOTPStatus, accessToken, userDetail
     };
   }
   if (action.type === EXISTING_USER) {

@@ -25,6 +25,11 @@ export const register = Yup.object().shape({
       message: '* Tên phải có ít nhất 2 ký tự',
     })
     .required('* Nhập tên cửa hàng'),
+  shopPhoneNumber: Yup.string()
+    .required('* Nhập số điện thoại')
+    .matches(REGEXP.PHONE_NUMBER, {
+      message: '* Số điện thoại không hợp lệ.',
+    }),
   shopAddress: Yup.string()
     .matches(/[\w\W]{10,}/, {
       message: '* Địa chỉ không hợp lệ',

@@ -13,6 +13,7 @@ import {
   nodeCreatingStoreApi,
   selectedShopIdAction,
 } from 'actions/authenticationActions';
+import { VERIFYING_OTP_STATUS } from 'constants/common';
 
 export const activationProps = {
   mapStateToProps: ({ authentication }) => ({
@@ -39,7 +40,7 @@ export const verifyCodeProps = {
   mapDispatchToProps: dispatch => ({
     clearOTPStatus: () => {
       dispatch(sendingOTPAction(false));
-      dispatch(verifyingOTPAction(false));
+      dispatch(verifyingOTPAction({ verifyingOTPStatus: null }));
     },
     dispatchVerifyOTPCode: (countryCode, phoneNumber, otpCode) =>
       dispatch(nodeVerifyingOTPApi(countryCode, phoneNumber, otpCode)),

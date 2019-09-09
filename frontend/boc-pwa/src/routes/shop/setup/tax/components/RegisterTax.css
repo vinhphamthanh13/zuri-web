@@ -27,7 +27,7 @@
 }
 
 .warning {
-  font-size: var(--font-size-medium);
+  font-size: var(--font-size-label);
   color: var(--c-gray);
   font-weight: var(--font-weight-300);
   margin: var(--size-08) auto 0;

@@ -44,6 +44,6 @@
   text-align: center;
   width: 100%;
   color: var(--c-triad-06);
-  font-size: var(--font-size-14);
+  font-size: var(--font-size-label);
   margin: var(--size-18) auto;
 }
