@@ -136,7 +136,7 @@ export const TAX = {
 export const SHOP_DETAIL = {
   CATEGORY: {
     BUSINESS: {
-      NAME: 'Cửa hàng & Loại sản phẩm',
+      NAME: 'Quy mô cửa hàng',
       MENU: [
         {
           LABEL: 'Mô hình kinh doanh',

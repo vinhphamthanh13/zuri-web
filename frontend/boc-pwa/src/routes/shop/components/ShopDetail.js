@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { func, objectOf, any } from 'prop-types';
 import { compose } from 'redux';
-import Header from 'components/Header';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { withFormik } from 'formik';
 import Input from 'components/Input';
@@ -12,18 +11,18 @@ import s from './ShopDetail.css';
 class ShopDetail extends Component {
   static propTypes = {
     onClose: func.isRequired,
+    shopDetail: objectOf(any),
   };
 
   static defaultProps = {
+    shopDetail: {},
   };
 
   state = {
     isEditable: false,
   };
 
-  handleSaveShopDetail = () => {
-
-  };
+  handleSaveShopDetail = () => {};
 
   createInfo = () => {
     const { handleChange, errors, values } = this.props;
@@ -49,16 +48,12 @@ class ShopDetail extends Component {
     ));
   };
 
+  createCta = () => {};
+
   render() {
     const { onClose, isValid } = this.props;
     return (
       <div className={s.container}>
-        <Header
-          title="Thông tin cửa hàng"
-          iconLeft
-          onClickLeft={onClose(false)}
-          gutter
-        />
         <div className={s.formInfo}>
           {this.createInfo()}
           <Button

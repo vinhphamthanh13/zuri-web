@@ -86,7 +86,12 @@ class Shop extends React.Component {
 
     return (
       <>
-        {isOpenShopDetail && <ShopDetail onClose={this.handleShowShopDetail} />}
+        {isOpenShopDetail && (
+          <ShopDetail
+            onClose={this.handleShowShopDetail}
+            shopDetail={gettingShopInfo}
+          />
+        )}
         {!isOpenShopDetail && (
           <>
             <>
