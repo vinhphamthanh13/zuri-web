@@ -1,6 +1,12 @@
-import { nodeGettingStoreApi } from 'actions/authenticationActions';
+import { nodeGettingStoreApi } from 'actions/shopsActions';
 
-export const shopProps = {
-  mapStateToProps: ({ })
-
-}
+export const shopsProps = {
+  mapStateToProps: ({ shops, authentication: { accessToken } }) => ({
+    ...shops,
+    accessToken,
+  }),
+  mapDispatchToProps: dispatch => ({
+    dispatchGettingStoreInfo: (id, token) =>
+      dispatch(nodeGettingStoreApi(id, token)),
+  }),
+};

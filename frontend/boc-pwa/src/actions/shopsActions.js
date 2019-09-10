@@ -7,14 +7,14 @@
 
 import { get } from 'lodash';
 import { LOADING, setError, setLoading } from 'actions/common';
-import { NODE_SERVER_URL } from 'actions/constants';
+import { NODE_SERVER_URL, PROXY_SHOP } from 'actions/constants';
 import { handleRequest } from 'api/utils';
 import axios from 'axios';
 import { DATA } from 'constants/common';
 
 // Action API to Node Server
 const nodeGettingStore = (id, token) =>
-  axios.get(`${NODE_SERVER_URL.GETTING_STORE}/${id}/${token}`);
+  axios.get(`${PROXY_SHOP}${NODE_SERVER_URL.GETTING_STORE}/${id}/${token}`);
 
 // Redux constants
 export const SELECTED_SHOP_ID = 'AUTH.SELECTED_SHOP_ID';
@@ -38,8 +38,8 @@ export const nodeGettingStoreApi = (id, token) => async dispatch => {
     const message = get(error, DATA.MESSAGE);
     dispatch(setError(message));
   } else {
-    const gettingStoreInfo = get(result, DATA.OBJECT);
-    dispatch(gettingStoreAction(gettingStoreInfo));
+    const gettingShopInfo = get(result, DATA.OBJECT);
+    dispatch(gettingStoreAction(gettingShopInfo));
   }
   dispatch(setLoading(LOADING.OFF));
 };

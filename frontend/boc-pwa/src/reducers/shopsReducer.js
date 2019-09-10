@@ -11,7 +11,7 @@ const persistConfig = {
 };
 
 const initState = {
-  gettingStoreInfo: null,
+  gettingShopInfo: null,
   selectedShopId: '',
 };
 
@@ -19,7 +19,7 @@ const reducer = (state = initState, action) => {
   if (action.type === GETTING_STORE) {
     return {
       ...state,
-      gettingStoreInfo: action.payload,
+      gettingShopInfo: action.payload,
     };
   }
   if (action.type === SELECTED_SHOP_ID) {

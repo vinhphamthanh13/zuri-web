@@ -1,6 +1,7 @@
 // Node Server
 
 export const PROXY_AUTH = '/auth';
+export const PROXY_SHOP = '/shop';
 export const SEND_OTP_PARAMS = '/:countryCode/:phoneNumber';
 export const VERIFY_OTP_PARAMS = `${SEND_OTP_PARAMS}/:otpCode`;
 
