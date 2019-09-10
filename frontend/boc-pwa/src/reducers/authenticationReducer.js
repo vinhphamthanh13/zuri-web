@@ -11,8 +11,7 @@ import {
   CREATING_STORE_INFO,
   CREATING_STORE,
   CREATING_STORE_PROGRESS,
-  SELECTED_SHOP_ID,
-  GETTING_STORE,
+  SETTING_USER_DETAIL,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
@@ -70,6 +69,13 @@ const reducer = (state = initState, action) => {
       ...action.payload, // verifyingOTPStatus, accessToken, userDetail
     };
   }
+  // coupling with shopsReducer
+  if (action.type === SETTING_USER_DETAIL) {
+    return {
+      ...state,
+      userDetail: action.payload,
+    };
+  }
   if (action.type === EXISTING_USER) {
     return {
       ...state,
@@ -98,18 +104,6 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       creatingStoreProgress: action.payload,
-    };
-  }
-  if (action.type === SELECTED_SHOP_ID) {
-    return {
-      ...state,
-      selectedShopId: action.payload,
-    };
-  }
-  if (action.type === GETTING_STORE) {
-    return {
-      ...state,
-      gettingStoreInfo: action.payload,
     };
   }
 

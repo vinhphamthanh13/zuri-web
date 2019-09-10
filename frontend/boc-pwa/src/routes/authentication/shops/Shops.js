@@ -10,7 +10,7 @@ import Empty from 'components/Empty';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { resolveStringLength, navigateTo } from 'utils/browser';
 import { Place, Send, Create } from 'constants/svg';
-import { activationProps } from '../commonProps';
+import { shopsProps } from '../commonProps';
 import s from './Shops.css';
 
 class Shops extends Component {
@@ -24,7 +24,7 @@ class Shops extends Component {
   };
 
   state = {
-    userDetail: {},
+    userDetail: null,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -75,13 +75,18 @@ class Shops extends Component {
     );
   };
 
-  handleEditShop = shopId => () => {
+  handleShopId = id => {
     const { dispatchSelectedShopId } = this.props;
-    dispatchSelectedShopId(shopId);
+    dispatchSelectedShopId(id);
+  };
+
+  handleEditShop = shopId => () => {
+    this.handleShopId(shopId);
     navigateTo(ROUTER_URL.TABS.SHOP, { [LS_SHOP_ID]: shopId });
   };
 
   handleStartShop = shopId => () => {
+    this.handleShopId(shopId);
     navigateTo(ROUTER_URL.TABS.HOME, { [LS_SHOP_ID]: shopId });
   };
 
@@ -106,8 +111,8 @@ class Shops extends Component {
 
 const enhancer = [
   connect(
-    activationProps.mapStateToProps,
-    activationProps.mapDispatchToProps,
+    shopsProps.mapStateToProps,
+    shopsProps.mapDispatchToProps,
   ),
   withStyles(s),
 ];

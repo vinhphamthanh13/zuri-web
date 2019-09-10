@@ -31,8 +31,6 @@ const nodeExistingUser = phone =>
   axios.get(`${PROXY_AUTH}${NODE_SERVER_URL.EXISTING_USER}/${phone}`);
 const nodeCreatingStore = (data, token) =>
   axios.post(`${PROXY_AUTH}${NODE_SERVER_URL.CREATING_STORE}`, { data, token });
-const nodeGettingStore = (id, token) =>
-  axios.get(`${NODE_SERVER_URL.GETTING_STORE}/${id}/${token}`);
 
 // Redux constants
 export const SET_USERS = 'AUTH.SET_USERS';
@@ -45,8 +43,6 @@ export const SETTING_USER_DETAIL = 'AUTH.SETTING_USER_DETAIL';
 export const CREATING_STORE = 'AUTH.CREATING_STORE';
 export const CREATING_STORE_INFO = 'AUTH.CREATING_STORE_INFO';
 export const CREATING_STORE_PROGRESS = 'AUTH.CREATING_STORE_PROGRESS';
-export const SELECTED_SHOP_ID = 'AUTH.SELECTED_SHOP_ID';
-export const GETTING_STORE = 'AUTH.GETTING_STORE';
 
 // Redux action
 export const setPhoneNumberAction = payload => ({
@@ -79,14 +75,6 @@ export const creatingStoreAction = payload => ({
 });
 export const creatingStoreProgressAction = payload => ({
   type: CREATING_STORE_PROGRESS,
-  payload,
-});
-export const selectedShopIdAction = payload => ({
-  type: SELECTED_SHOP_ID,
-  payload,
-});
-export const gettingStoreAction = payload => ({
-  type: GETTING_STORE,
   payload,
 });
 export const settingUserDetailAction = payload => ({
@@ -172,18 +160,6 @@ export const nodeCreatingStoreApi = (data, token) => async dispatch => {
     const creatingStoreStatus = get(result, DATA.SUCCESS);
     const storeInfo = get(result, DATA.OBJECT);
     dispatch(creatingStoreAction({ creatingStoreStatus, storeInfo }));
-  }
-  dispatch(setLoading(LOADING.OFF));
-};
-export const nodeGettingStoreApi = (id, token) => async dispatch => {
-  dispatch(setLoading(LOADING.ON));
-  const [result, error] = await handleRequest(nodeGettingStore, [id, token]);
-  if (error) {
-    const message = get(error, DATA.MESSAGE);
-    dispatch(setError(message));
-  } else {
-    const gettingStoreInfo = get(result, DATA.OBJECT);
-    dispatch(gettingStoreAction(gettingStoreInfo));
   }
   dispatch(setLoading(LOADING.OFF));
 };

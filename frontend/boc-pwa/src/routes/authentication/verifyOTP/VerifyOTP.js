@@ -127,6 +127,11 @@ class VerifyOTP extends React.Component {
 
   unblockNavigation = null;
 
+  handleResendOTP = () => {
+    this.unblockNavigation();
+    navigateTo(ROUTER_URL.AUTH.ACTIVATION);
+  };
+
   render() {
     const {
       values,
@@ -163,6 +168,9 @@ class VerifyOTP extends React.Component {
             />
             <Button label="Xác thực" type="submit" disabled={!isValid} />
           </form>
+          <div className={s.resendOTP} onClick={this.handleResendOTP}>
+            Gởi lại mã OTP
+          </div>
         </div>
       </>
     );

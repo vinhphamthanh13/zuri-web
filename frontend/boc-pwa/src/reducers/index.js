@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import authentication from './authenticationReducer';
 import user from './user';
 import runtime from './runtime';
 import intl from './intl';
-
 import common from './commonReducer';
+import authentication from './authenticationReducer';
+import shops from './shopsReducer';
 
 export default combineReducers({
   user,
@@ -12,4 +12,5 @@ export default combineReducers({
   intl,
   common,
   authentication,
+  shops,
 });

@@ -1,7 +1,7 @@
 import storage from 'redux-persist/lib/storage';
 import persistReducer from 'redux-persist/lib/persistReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { GETTING_STORE } from 'actions/authenticationActions';
+import { GETTING_STORE, SELECTED_SHOP_ID } from 'actions/shopsActions';
 
 const persistConfig = {
   key: 'shopInfo',
@@ -12,6 +12,7 @@ const persistConfig = {
 
 const initState = {
   gettingStoreInfo: null,
+  selectedShopId: '',
 };
 
 const reducer = (state = initState, action) => {
@@ -19,6 +20,12 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       gettingStoreInfo: action.payload,
+    };
+  }
+  if (action.type === SELECTED_SHOP_ID) {
+    return {
+      ...state,
+      selectedShopId: action.payload,
     };
   }
 

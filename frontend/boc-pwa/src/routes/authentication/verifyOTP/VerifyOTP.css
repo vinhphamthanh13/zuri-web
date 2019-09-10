@@ -28,3 +28,10 @@
   letter-spacing: var(--size-02);
   text-align: center;
 }
+
+.resendOTP {
+  color: var(--c-triad-05);
+  margin: var(--size-padding);
+  font-size: var(--font-size-label);
+  cursor: pointer;
+}

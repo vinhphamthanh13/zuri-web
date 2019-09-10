@@ -11,9 +11,8 @@ import {
   creatingUserAction,
   verifyingOTPAction,
   nodeCreatingStoreApi,
-  selectedShopIdAction,
 } from 'actions/authenticationActions';
-import { VERIFYING_OTP_STATUS } from 'constants/common';
+import { selectedShopIdAction } from 'actions/shopsActions';
 
 export const activationProps = {
   mapStateToProps: ({ authentication }) => ({
@@ -29,7 +28,6 @@ export const activationProps = {
     dispatchCreatingUser: phone => dispatch(nodeCreatingUserApi(phone)),
     dispatchCreatingStoreInfo: data => dispatch(creatingStoreInfoAction(data)),
     dispatchCreatingUserAction: value => dispatch(creatingUserAction(value)),
-    dispatchSelectedShopId: id => dispatch(selectedShopIdAction(id)),
   }),
 };
 
@@ -46,5 +44,19 @@ export const verifyCodeProps = {
       dispatch(nodeVerifyingOTPApi(countryCode, phoneNumber, otpCode)),
     dispatchCreatingStore: (data, token) =>
       dispatch(nodeCreatingStoreApi(data, token)),
+  }),
+};
+
+export const shopsProps = {
+  mapStateToProps: ({
+    shops,
+    authentication: { userDetail, accessToken },
+  }) => ({
+    accessToken,
+    userDetail,
+    ...shops,
+  }),
+  mapDispatchToProps: dispatch => ({
+    dispatchSelectedShopId: id => dispatch(selectedShopIdAction(id)),
   }),
 };
