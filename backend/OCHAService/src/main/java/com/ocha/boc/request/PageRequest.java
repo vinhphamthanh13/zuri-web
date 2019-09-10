@@ -8,7 +8,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class PageRequest {
-    private Integer page;
-    private Integer size;
-    private String sort;
+    private Integer page =0;
+    private Integer size = 1;
+    private String sort="createdDate,asc";
+    private String search;
 }

@@ -3,6 +3,7 @@ package com.ocha.boc.controllers;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.MathangDTO;
 import com.ocha.boc.entity.MatHang;
+import com.ocha.boc.request.MatHangListRequest;
 import com.ocha.boc.request.MatHangRequest;
 import com.ocha.boc.request.MatHangUpdateRequest;
 import com.ocha.boc.response.MatHangResponse;
@@ -12,9 +13,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -108,6 +112,20 @@ public class MatHangController {
         log.info("[START]: get all Mat Hang");
         MatHangResponse response = matHangService.getAllMatHang(cuaHangId);
         log.info("[END]: get all Mat Hang");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "Test API")
+    @GetMapping("/mat-hang/search")
+    public ResponseEntity<MatHangResponse> test( MatHangListRequest request){
+        MatHangResponse response = new MatHangResponse();
+        Page<MatHang> temp = matHangService.test(request);
+        List<MatHang> tempList = temp.getContent();
+        List<MathangDTO> result = new ArrayList<MathangDTO>();
+        for(MatHang matHang: tempList){
+            result.add(new MathangDTO(matHang));
+        }
+        response.setObjects(result);
         return ResponseEntity.ok(response);
     }
 

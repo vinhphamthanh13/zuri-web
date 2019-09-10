@@ -3,6 +3,7 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.dto.MathangDTO;
 import com.ocha.boc.entity.MatHang;
 import com.ocha.boc.repository.MatHangRepository;
+import com.ocha.boc.request.MatHangListRequest;
 import com.ocha.boc.request.MatHangRequest;
 import com.ocha.boc.request.MatHangUpdateRequest;
 import com.ocha.boc.response.MatHangResponse;
@@ -15,10 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -102,6 +106,23 @@ public class MatHangService {
             log.error("Error when getAllMatHang: {}", e);
         }
         return response;
+    }
+
+    public Page<MatHang> test(MatHangListRequest request){
+        String[] sortSplit = request.getSort().split(",");
+        if(!Objects.isNull(request.getSearch())){
+            return matHangRepository.query(request, new org.springframework.data.domain.PageRequest(request.getPage(),
+                    request.getSize(),
+                    (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC
+                            : Sort.Direction.DESC), sortSplit[0]));
+        }
+        else{
+            return matHangRepository.findAll(
+                    new org.springframework.data.domain.PageRequest(request.getPage(),
+                            request.getSize(),
+                            (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC
+                                    : Sort.Direction.DESC), sortSplit[0]));
+        }
     }
 
     @CacheEvict(value = "mathang", key = "{#cuaHangId,#id}")
