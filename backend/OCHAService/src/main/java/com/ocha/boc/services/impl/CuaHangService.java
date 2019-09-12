@@ -113,6 +113,9 @@ public class CuaHangService {
                         }
                         optCuaHang.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                         cuaHangRepository.save(optCuaHang.get());
+                        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                        response.setObject(new CuaHangDTO(optCuaHang.get()));
+                        response.setSuccess(Boolean.TRUE);
                     }
                 }
             }

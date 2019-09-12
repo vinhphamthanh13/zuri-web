@@ -55,10 +55,12 @@ public class DanhMucController {
         response.setSuccess(Boolean.FALSE);
         Optional<DanhMuc> danhMucOptional = Optional
                 .ofNullable(danhMucService.updateDanhMuc(request));
-        if(danhMucOptional.isPresent()){
-            response.setSuccess(Boolean.TRUE);
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setObject(new DanhMucDTO(danhMucOptional.get()));
+        if (danhMucOptional.isPresent()) {
+            if (!danhMucOptional.get().checkObjectEmptyData()) {
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObject(new DanhMucDTO(danhMucOptional.get()));
+            }
         }
         log.info("[END]: update Danh Muc");
         return ResponseEntity.ok(response);
@@ -82,9 +84,11 @@ public class DanhMucController {
         Optional<DanhMuc> danhMucOptional = Optional
                 .ofNullable(danhMucService.findDanhMucByDanhMucId(id, cuaHangId));
         if (danhMucOptional.isPresent()) {
-            response.setObject(new DanhMucDTO(danhMucOptional.get()));
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
+            if (!danhMucOptional.get().checkObjectEmptyData()) {
+                response.setObject(new DanhMucDTO(danhMucOptional.get()));
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+            }
         }
         log.info("[END]: Find Danh Muc By Id and CuaHangId");
         return ResponseEntity.ok(response);

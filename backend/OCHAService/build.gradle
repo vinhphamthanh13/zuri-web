@@ -41,8 +41,10 @@ dependencies {
     compile "org.springframework.security:spring-security-data"
     compile "org.springframework.boot:spring-boot-starter-security"
     compile "org.springframework.security:spring-security-config"
-    compile 'io.springfox:springfox-swagger2:2.3.0'
-    compile 'io.springfox:springfox-swagger-ui:2.3.0'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     compile group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.5'
     compile group: 'org.zalando', name: 'java-conventions-gradle-plugin', version: '0.6.1'

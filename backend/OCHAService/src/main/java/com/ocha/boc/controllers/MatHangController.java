@@ -3,6 +3,7 @@ package com.ocha.boc.controllers;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.MathangDTO;
 import com.ocha.boc.entity.MatHang;
+import com.ocha.boc.request.MatHangListRequest;
 import com.ocha.boc.request.MatHangRequest;
 import com.ocha.boc.request.MatHangUpdateRequest;
 import com.ocha.boc.response.MatHangResponse;
@@ -12,9 +13,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -56,11 +60,13 @@ public class MatHangController {
         Optional<MatHang> matHangOptional = Optional
                 .ofNullable(matHangService.updateMatHangInfor(request));
         if (matHangOptional.isPresent()) {
-            response.setObject(new MathangDTO(matHangOptional.get()));
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
-        } else {
-            response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
+            if (!matHangOptional.get().checkObjectEmptyData()) {
+                response.setObject(new MathangDTO(matHangOptional.get()));
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+            } else {
+                response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
+            }
         }
         log.info("[END]: update Mat Hang");
         return ResponseEntity.ok(response);
@@ -82,28 +88,44 @@ public class MatHangController {
         response.setMessage(CommonConstants.MAT_HANG_IS_NULL);
         response.setSuccess(Boolean.FALSE);
         Optional<MatHang> matHangOptional = Optional
-                .ofNullable(matHangService.findMatHangById(id, cuaHangId));
+                .ofNullable(matHangService.findMatHangById(cuaHangId, id));
         if (matHangOptional.isPresent()) {
-            response.setObject(new MathangDTO(matHangOptional.get()));
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
+            if (!matHangOptional.get().checkObjectEmptyData()) {
+                response.setObject(new MathangDTO(matHangOptional.get()));
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+            }
         }
         log.info("[END]: find Mat Hang by Id");
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Get All Mat Hang
-     *
-     * @param cuaHangId
-     * @return
-     */
+//    /**
+//     * Get All Mat Hang
+//     *
+//     * @param cuaHangId
+//     * @return
+//     */
+//    @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
+//    @GetMapping("/mat-hang")
+//    public ResponseEntity<MatHangResponse> getAllMatHang(@RequestParam String cuaHangId) {
+//        log.info("[START]: get all Mat Hang");
+//        MatHangResponse response = matHangService.getAllMatHang(cuaHangId);
+//        log.info("[END]: get all Mat Hang");
+//        return ResponseEntity.ok(response);
+//    }
+
     @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/mat-hang")
-    public ResponseEntity<MatHangResponse> getAllMatHang(@RequestParam String cuaHangId) {
-        log.info("[START]: get all Mat Hang");
-        MatHangResponse response = matHangService.getAllMatHang(cuaHangId);
-        log.info("[END]: get all Mat Hang");
+    @GetMapping("/mat-hang/search")
+    public ResponseEntity<MatHangResponse> getAllMatHang(MatHangListRequest request) {
+        MatHangResponse response = new MatHangResponse();
+        Page<MatHang> temp = matHangService.search(request);
+        List<MatHang> tempList = temp.getContent();
+        List<MathangDTO> result = new ArrayList<MathangDTO>();
+        for (MatHang matHang : tempList) {
+            result.add(new MathangDTO(matHang));
+        }
+        response.setObjects(result);
         return ResponseEntity.ok(response);
     }
 
