@@ -28,6 +28,12 @@ input::placeholder {
   font-weight: var(--font-weight-300);
 }
 
+input:disabled {
+  background: var(--c-smoke);
+  border: var(--size-01) solid var(--c-smoke);
+  opacity: 0.8;
+}
+
 .label {
   position: absolute;
   top: calc(var(--size-16) * -1.2);

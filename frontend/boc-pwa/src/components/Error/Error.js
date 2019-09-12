@@ -3,7 +3,7 @@ import { bool, string, func } from 'prop-types';
 import { connect } from 'react-redux';
 import Modal from 'components/Modal';
 import { findValueByKey } from 'utils/reduceStateProperty';
-import { resetError } from 'actions/common';
+import { resetError } from 'actions/commonActions';
 
 const Error = props => {
   const { isError, errorMessage, resetError: resetErrorAction } = props;

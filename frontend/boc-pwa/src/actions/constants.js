@@ -11,6 +11,7 @@ export const NODE_SERVER_URL = {
   VERIFYING_OTP: '/verifyingBOCOTP',
   CREATING_USER: '/creatingBOCUser',
   CREATING_STORE: '/creatingBOCStore',
-  GETTING_STORE: '/bocStore',
+  GETTING_STORE: '/gettingBOCStore',
+  UPDATING_STORE: '/updatingBOCStore',
   EXISTING_USER: '/existingBOCUser',
 };

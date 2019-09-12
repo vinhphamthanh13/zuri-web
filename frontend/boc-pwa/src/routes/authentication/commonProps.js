@@ -1,4 +1,4 @@
-import { setError } from 'actions/common';
+import { setError } from 'actions/commonActions';
 import {
   setPhoneNumberAction,
   sendingOTPAction,

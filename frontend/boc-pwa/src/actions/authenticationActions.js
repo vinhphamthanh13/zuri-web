@@ -10,7 +10,7 @@ import { get } from 'lodash';
 import { NODE_SERVER_URL, PROXY_AUTH } from 'actions/constants';
 import { DATA } from 'constants/common';
 import { handleRequest } from 'api/utils';
-import { LOADING, setLoading, setError } from 'actions/common';
+import { LOADING, setLoading, setError } from 'actions/commonActions';
 import { HTTP_STATUS } from 'constants/http';
 
 // Action API to Node Server

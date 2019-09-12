@@ -17,6 +17,7 @@ import s from './Shop.css';
 class Shop extends React.Component {
   static propTypes = {
     dispatchGettingStoreInfo: func.isRequired,
+    dispatchUpdatingStoreInfo: func.isRequired,
     accessToken: string,
   };
 
@@ -80,6 +81,7 @@ class Shop extends React.Component {
     ));
 
   render() {
+    const { dispatchUpdatingStoreInfo, accessToken } = this.props;
     const { isOpenShopDetail, gettingShopInfo } = this.state;
     const shopName = get(gettingShopInfo, 'cuaHangName');
     const phone = get(gettingShopInfo, 'phone');
@@ -90,7 +92,8 @@ class Shop extends React.Component {
         {isOpenShopDetail && (
           <ShopDetail
             onClose={this.handleShowShopDetail}
-            shopDetail={gettingShopInfo}
+            shopDetail={{ ...gettingShopInfo, accessToken }}
+            updatingStore={dispatchUpdatingStoreInfo}
           />
         )}
         {!isOpenShopDetail &&

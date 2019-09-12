@@ -224,3 +224,5 @@ export const TABICONS = [TrackChanges, ShowChart, BubbleChart, Store];
 
 // Messages
 export const EMPTY_ITEM = 'Danh sách đang còn trống';
+
+// API Backend properties

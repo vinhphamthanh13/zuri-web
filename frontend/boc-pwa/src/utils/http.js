@@ -6,7 +6,6 @@ export const generateHeaders = (token, contentType = CONTENT_TYPE.JSON) => ({
   credentials: 'include',
   Authorization: token ? `Bearer ${token}` : null,
 });
-
 export const post = (url, body, token) =>
   fetch(url, {
     method: HTTP_METHOD.POST,

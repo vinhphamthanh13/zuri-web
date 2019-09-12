@@ -38,7 +38,9 @@ class ShopDetail extends Component {
   };
 
   handleSaveShopDetail = () => {
-    this.handleEditShopDetail(false)();
+    const { handleSubmit, onClose } = this.props;
+    onClose(false)();
+    handleSubmit();
   };
 
   createInfo = () => {
@@ -106,7 +108,7 @@ class ShopDetail extends Component {
   };
 
   render() {
-    const { onClose, isValid, handleSubmit } = this.props;
+    const { onClose } = this.props;
     const { isEditable } = this.state;
     return (
       <div className={s.container}>
@@ -156,12 +158,23 @@ const enhancers = [
         businessType: moHinhKinhDoanhType,
         categoryType: danhMucMatHangType,
         shopName: cuaHangName,
-        shopPhoneNumber: phone,
+        shopPhoneNumber: managerPhone,
         shopAddress: address,
         userName: managerName,
-        phone: managerPhone,
+        phone,
         userEmail: managerEmail,
       };
+    },
+    handleSubmit: (
+      values,
+      {
+        props: {
+          updatingStore,
+          shopDetail: { id, accessToken },
+        },
+      },
+    ) => {
+      updatingStore(JSON.stringify({ ...values, id }), accessToken);
     },
   }),
   withStyles(s),
