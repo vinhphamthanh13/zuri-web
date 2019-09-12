@@ -4,7 +4,7 @@ import { ROUTER_URL } from 'constants/routerUrl';
 import { navigateTo } from 'utils/browser';
 import Setup from './Setup';
 
-const title = 'Thiết lặp cửa hàng';
+const title = 'Thiết lập cửa hàng';
 
 const onClickLeft = () => {
   navigateTo(ROUTER_URL.TABS.SHOP);

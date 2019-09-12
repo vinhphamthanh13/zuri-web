@@ -28,7 +28,7 @@
 
 .buttonDisabled,
 .buttonDisabled:hover {
-  color: var(--c-gray);
+  color: var(--c-gray) !important;
   border-color: var(--c-bg-light);
   background: var(--c-bg-light);
   cursor: not-allowed;
@@ -38,4 +38,18 @@
   width: auto;
   height: auto;
   padding: var(--size-10);
+}
+
+.buttonText {
+  background: transparent;
+  border: unset;
+  width: auto;
+  color: inherit;
+  border-radius: var(--size-radius-standard);
+}
+
+.buttonText:hover {
+  background: transparent;
+  box-shadow: 5px 5px 25px 5px var(--c-gray);
+  color: inherit;
 }

@@ -32,7 +32,10 @@ export const TABS_HEIGHT = 56;
 
 // CTA
 export const EDIT = 'Chỉnh sửa';
+export const CANCEL = 'Hủy';
+export const CLOSE = 'Đóng lại';
 export const START = 'Bắt đầu';
+export const SAVE = 'Lưu';
 
 // Processing data
 export const DATA = {
@@ -140,13 +143,13 @@ export const SHOP_DETAIL = {
       MENU: [
         {
           LABEL: 'Mô hình kinh doanh',
-          VALUE: 'businessName',
+          VALUE: 'businessType',
           PLACEHOLDER: 'Chọn mô hình kinh doanh',
           DROPDOWN: true,
         },
         {
           LABEL: 'Doanh mục sản phẩm',
-          VALUE: 'BusinessType',
+          VALUE: 'categoryType',
           PLACEHOLDER: 'Chọn sản phẩm kinh doanh',
           GUTTER: true,
         },
@@ -163,7 +166,7 @@ export const SHOP_DETAIL = {
         {
           TYPE: 'tel',
           LABEL: 'Số điện thoại',
-          VALUE: 'phoneNumber',
+          VALUE: 'shopPhoneNumber',
           PLACEHOLDER: 'Nhập số điện thoại',
         },
         {
@@ -179,19 +182,19 @@ export const SHOP_DETAIL = {
       MENU: [
         {
           LABEL: 'Tên quản lý',
-          VALUE: 'branchName',
+          VALUE: 'userName',
           PLACEHOLDER: 'Nhập tên quản lý chi nhánh',
         },
         {
           TYPE: 'tel',
           LABEL: 'Số điện thoại',
-          VALUE: 'branchPhoneNumber',
+          VALUE: 'phone',
           PLACEHOLDER: 'Nhập số điện thoại',
         },
         {
           TYPE: 'email',
           LABEL: 'Email',
-          VALUE: 'branchEmail',
+          VALUE: 'userEmail',
           PLACEHOLDER: 'Nhập địa chỉ email',
           GUTTER: true,
         },

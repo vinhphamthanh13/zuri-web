@@ -43,6 +43,39 @@ export const register = Yup.object().shape({
   policiesAndTerms: Yup.bool().oneOf([true], 'Chọn'),
 });
 
+export const editShop = Yup.object().shape({
+  businessType: Yup.string().required('* Chọn mô hình kinh doanh'),
+  categoryType: Yup.string().required('* Chọn danh mục sản phẩm'),
+  shopName: Yup.string()
+    .matches(/[\w]{2,}/, {
+      message: '* Tên phải có ít nhất 2 ký tự',
+    })
+    .required('* Nhập tên cửa hàng'),
+  shopPhoneNumber: Yup.string()
+    .required('* Nhập số điện thoại')
+    .matches(REGEXP.PHONE_NUMBER, {
+      message: '* Số điện thoại không hợp lệ.',
+    }),
+  shopAddress: Yup.string()
+    .matches(/[\w\W]{10,}/, {
+      message: '* Địa chỉ không hợp lệ',
+    })
+    .required('* Nhập địa chỉ cửa hàng'),
+  userName: Yup.string()
+    .matches(/[\w]{2,}/, {
+      message: '* Tên phải có ít nhất 2 ký tự',
+    })
+    .required('* Nhập tên người dùng'),
+  phone: Yup.string()
+    .required('* Số điện thoại quản lý')
+    .matches(REGEXP.PHONE_NUMBER, {
+      message: '* Số điện thoại không hợp lệ.',
+    }),
+  userEmail: Yup.string().matches(REGEXP.EMAIL, {
+    message: '* Địa chỉ email không hợp lệ',
+  }),
+});
+
 export const registerTax = Yup.object().shape({
   coName: Yup.string()
     .matches(/[\w]{2,}/, {

@@ -6,6 +6,7 @@ import { compose } from 'redux';
 import uuidv1 from 'uuid/v1';
 import { chunk, get } from 'lodash';
 import { SHOP } from 'constants/shop';
+import Empty from 'components/Empty';
 import { gray } from 'constants/colors';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
 import { formatStringLength } from 'utils/string';
@@ -92,28 +93,26 @@ class Shop extends React.Component {
             shopDetail={gettingShopInfo}
           />
         )}
-        {!isOpenShopDetail && (
-          <>
+        {!isOpenShopDetail &&
+          !!gettingShopInfo && (
             <>
               <div className={s.shopInfo}>
                 <div className={s.shopIcon}>
                   <Store size={72} hexColor={gray} />
                 </div>
-                {!!gettingShopInfo && (
-                  <div className={s.shopDetail}>
-                    <div className={s.title}>
-                      {formatStringLength(shopName, 20)}
-                    </div>
-                    <div className={s.detailItem}>
-                      <PhoneIphone size={20} hexColor={gray} />
-                      <span>{phone}</span>
-                    </div>
-                    <div className={s.detailItem}>
-                      <Place size={20} hexColor={gray} />
-                      <span>{formatStringLength(shopAddress, 69)}</span>
-                    </div>
+                <div className={s.shopDetail}>
+                  <div className={s.title}>
+                    {formatStringLength(shopName, 20)}
                   </div>
-                )}
+                  <div className={s.detailItem}>
+                    <PhoneIphone size={20} hexColor={gray} />
+                    <span>{phone}</span>
+                  </div>
+                  <div className={s.detailItem}>
+                    <Place size={20} hexColor={gray} />
+                    <span>{formatStringLength(shopAddress, 69)}</span>
+                  </div>
+                </div>
                 <div
                   className={s.viewDetail}
                   onClick={this.handleShowShopDetail(true)}
@@ -123,8 +122,7 @@ class Shop extends React.Component {
               </div>
               {this.createMenu()}
             </>
-          </>
-        )}
+          )}
       </>
     );
   }

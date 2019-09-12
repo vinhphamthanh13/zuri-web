@@ -13,6 +13,7 @@ class Button extends Component {
     children: node,
     type: string,
     icon: bool,
+    variant: string,
   };
 
   static defaultProps = {
@@ -23,13 +24,24 @@ class Button extends Component {
     children: null,
     type: '',
     icon: false,
+    variant: 'main',
   };
 
   render() {
-    const { label, className, onClick, disabled, type, icon } = this.props;
-    let buttonStyle = disabled
-      ? `${s.button} ${className} ${s.buttonDisabled}`
+    const {
+      label,
+      className,
+      onClick,
+      disabled,
+      type,
+      icon,
+      variant,
+    } = this.props;
+
+    let buttonStyle = /text/i.test(variant)
+      ? `${s.button} ${s.buttonText} ${className}`
       : `${s.button} ${className}`;
+    buttonStyle = disabled ? `${buttonStyle} ${s.buttonDisabled}` : buttonStyle;
     buttonStyle = icon ? `${buttonStyle} ${s.icon}` : buttonStyle;
     const props = {
       className: buttonStyle,
