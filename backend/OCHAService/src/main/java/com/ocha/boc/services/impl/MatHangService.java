@@ -108,7 +108,7 @@ public class MatHangService {
         return response;
     }
 
-    public Page<MatHang> test(MatHangListRequest request){
+    public Page<MatHang> search(MatHangListRequest request){
         String[] sortSplit = request.getSort().split(",");
         if(!Objects.isNull(request.getSearch())){
             return matHangRepository.query(request, new org.springframework.data.domain.PageRequest(request.getPage(),

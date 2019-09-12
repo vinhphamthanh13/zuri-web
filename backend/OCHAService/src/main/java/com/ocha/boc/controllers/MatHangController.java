@@ -100,29 +100,29 @@ public class MatHangController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Get All Mat Hang
-     *
-     * @param cuaHangId
-     * @return
-     */
-    @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/mat-hang")
-    public ResponseEntity<MatHangResponse> getAllMatHang(@RequestParam String cuaHangId) {
-        log.info("[START]: get all Mat Hang");
-        MatHangResponse response = matHangService.getAllMatHang(cuaHangId);
-        log.info("[END]: get all Mat Hang");
-        return ResponseEntity.ok(response);
-    }
+//    /**
+//     * Get All Mat Hang
+//     *
+//     * @param cuaHangId
+//     * @return
+//     */
+//    @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
+//    @GetMapping("/mat-hang")
+//    public ResponseEntity<MatHangResponse> getAllMatHang(@RequestParam String cuaHangId) {
+//        log.info("[START]: get all Mat Hang");
+//        MatHangResponse response = matHangService.getAllMatHang(cuaHangId);
+//        log.info("[END]: get all Mat Hang");
+//        return ResponseEntity.ok(response);
+//    }
 
-    @ApiOperation(value = "Test API")
+    @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/mat-hang/search")
-    public ResponseEntity<MatHangResponse> test( MatHangListRequest request){
+    public ResponseEntity<MatHangResponse> getAllMatHang(MatHangListRequest request) {
         MatHangResponse response = new MatHangResponse();
-        Page<MatHang> temp = matHangService.test(request);
+        Page<MatHang> temp = matHangService.search(request);
         List<MatHang> tempList = temp.getContent();
         List<MathangDTO> result = new ArrayList<MathangDTO>();
-        for(MatHang matHang: tempList){
+        for (MatHang matHang : tempList) {
             result.add(new MathangDTO(matHang));
         }
         response.setObjects(result);
