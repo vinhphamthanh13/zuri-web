@@ -87,6 +87,8 @@ public class CommonConstants {
 
     public static final String  UPDATE_CUA_HANG_ID_ON_USER_FAIL         = "Không thể cập nhật thông tin cửa hàng cho tài khoản";
 
+    public static final String  UPDATE_CUA_HANG_FAIL                    = "Lỗi trong quá trình cập nhật thông tin cửa hàng";
+
     public static final String  UPDATE_EMAIL_CUA_HANG_FAIL              = "Không có thông tin email. Không thể cập nhật thông tin email cho cửa hàng";
 
     public static final String  CUA_HANG_IS_NOT_EXISTED                 = "Không tìm thấy thông tin của cửa hàng. ";

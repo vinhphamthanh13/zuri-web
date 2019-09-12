@@ -96,7 +96,7 @@ public class CuaHangService {
     public CuaHangResponse updateEmailCuaHang(CuaHangUpdateRequest request) {
         CuaHangResponse response = new CuaHangResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.UPDATE_EMAIL_CUA_HANG_FAIL);
+        response.setMessage(CommonConstants.UPDATE_CUA_HANG_FAIL);
         try {
             if (!Objects.isNull(request)) {
                 if (StringUtils.isNotEmpty(request.getId())) {
