@@ -12,7 +12,7 @@ const Error = props => {
     <Modal
       title="Thông báo"
       message={errorMessage}
-      callback={resetErrorAction}
+      onClose={resetErrorAction}
       errorIcon
     />
   ) : null;

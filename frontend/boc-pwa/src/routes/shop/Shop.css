@@ -1,7 +1,7 @@
 @import '../../components/variables.css';
 
 .shopInfo {
-  margin: var(--size-12) auto;
+  margin: var(--size-12) auto var(--size-02);
   color: var(--c-brand-1);
   display: flex;
   align-items: center;
@@ -21,6 +21,13 @@
 
 .shopDetail {
   color: var(--c-success);
+}
+
+.changeStore {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: var(--c-triad-08);
 }
 
 .title {

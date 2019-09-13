@@ -30,11 +30,13 @@ export const HEADER_HEIGHT_GUTTER = 34;
 export const TABS_HEIGHT = 56;
 
 // CTA
+export const OK = 'Đồng ý';
 export const EDIT = 'Chỉnh sửa';
 export const CANCEL = 'Hủy';
 export const CLOSE = 'Đóng lại';
 export const START = 'Bắt đầu';
 export const SAVE = 'Lưu';
+export const CHANGE_STORE = 'Đổi cửa hàng';
 
 // Processing data
 export const DATA = {

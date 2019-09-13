@@ -14,6 +14,8 @@ class Button extends Component {
     type: string,
     icon: bool,
     variant: string,
+    gutter: bool,
+    small: bool,
   };
 
   static defaultProps = {
@@ -25,6 +27,8 @@ class Button extends Component {
     type: '',
     icon: false,
     variant: 'main',
+    gutter: false,
+    small: false,
   };
 
   render() {
@@ -36,13 +40,21 @@ class Button extends Component {
       type,
       icon,
       variant,
+      gutter,
+      small,
     } = this.props;
 
-    let buttonStyle = /text/i.test(variant)
-      ? `${s.button} ${s.buttonText} ${className}`
-      : `${s.button} ${className}`;
+    let buttonStyle = `${s.button} ${className}`;
+    if (/text/i.test(variant)) {
+      buttonStyle = `${s.button} ${s.buttonText} ${className}`;
+    } else if (/outlined/i.test(variant)) {
+      buttonStyle = `${s.button} ${s.buttonOutlined} ${className}`;
+    }
     buttonStyle = disabled ? `${buttonStyle} ${s.buttonDisabled}` : buttonStyle;
     buttonStyle = icon ? `${buttonStyle} ${s.icon}` : buttonStyle;
+    buttonStyle = gutter ? `${buttonStyle} ${s.gutter}` : buttonStyle;
+
+    const labelStyle = small ? `${s.label} ${s.labelSmall}` : s.label;
     const props = {
       className: buttonStyle,
       onClick: disabled ? noop : onClick,
@@ -52,7 +64,7 @@ class Button extends Component {
     return (
       <button {...props}>
         {this.props.children}
-        {!icon && <span className={s.label}>{label}</span>}
+        {!icon && <span className={labelStyle}>{label}</span>}
       </button>
     );
   }

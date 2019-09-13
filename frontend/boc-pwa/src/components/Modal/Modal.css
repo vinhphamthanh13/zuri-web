@@ -46,6 +46,17 @@
   color: var(--c-brand-1);
 }
 
-.cta {
+.message {
+  margin-bottom: var(--size-06);
+}
+
+.close {
   cursor: pointer;
+}
+
+.ok {
+  color: var(--c-triad-05);
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }

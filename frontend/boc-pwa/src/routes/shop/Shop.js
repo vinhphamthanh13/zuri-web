@@ -3,14 +3,18 @@ import { func, string } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { blockNavigation, navigateTo } from 'utils/browser';
 import uuidv1 from 'uuid/v1';
 import { chunk, get } from 'lodash';
 import { SHOP } from 'constants/shop';
 import Empty from 'components/Empty';
+import Button from 'components/Button';
 import { gray } from 'constants/colors';
+import Modal from 'components/Modal';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
 import { formatStringLength } from 'utils/string';
-import { ACCESS_DENIED } from 'constants/common';
+import { ACCESS_DENIED, CHANGE_STORE } from 'constants/common';
+import { ROUTER_URL } from 'constants/routerUrl';
 import ShopDetail from './components/ShopDetail';
 import { shopsProps } from './commonProps';
 import s from './Shop.css';
@@ -29,6 +33,7 @@ class Shop extends React.Component {
   state = {
     isOpenShopDetail: false,
     selectedShopId: null,
+    isChangingStore: false,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -57,6 +62,12 @@ class Shop extends React.Component {
       dispatchGettingStoreInfo(selectedShopId, accessToken);
   }
 
+  componentWillUnmount() {
+    if (this.unblockNavigation) this.unblockNavigation();
+  }
+
+  unblockNavigation = null;
+
   handleShowShopDetail = value => () => {
     this.setState({
       isOpenShopDetail: value,
@@ -82,9 +93,22 @@ class Shop extends React.Component {
       </div>
     ));
 
+  handleChangeStore = value => () => {
+    if (value) this.unblockNavigation = blockNavigation('Test change store');
+    else this.unblockNavigation();
+    this.setState({
+      isChangingStore: value,
+    });
+  };
+
+  handleConfirmChangingStore = () => {
+    this.handleChangeStore(false)();
+    navigateTo(ROUTER_URL.AUTH.SHOPS);
+  };
+
   render() {
     const { dispatchUpdatingStoreInfo, accessToken } = this.props;
-    const { isOpenShopDetail, gettingShopInfo } = this.state;
+    const { isOpenShopDetail, gettingShopInfo, isChangingStore } = this.state;
     const shopName = get(gettingShopInfo, 'cuaHangName');
     const phone = get(gettingShopInfo, 'phone');
     const shopAddress = get(gettingShopInfo, 'address');
@@ -98,6 +122,14 @@ class Shop extends React.Component {
             onClose={this.handleShowShopDetail}
             shopDetail={{ ...gettingShopInfo, accessToken }}
             updatingStore={dispatchUpdatingStoreInfo}
+          />
+        )}
+        {isChangingStore && (
+          <Modal
+            title="Thay đổi cửa hàng"
+            message="Bạn có muốn chuyển qua cửa hàng khác?"
+            onClose={this.handleChangeStore(false)}
+            onAgree={this.handleConfirmChangingStore}
           />
         )}
         {!isOpenShopDetail &&
@@ -126,6 +158,15 @@ class Shop extends React.Component {
                 >
                   <ArrowForward size={18} hexColor={gray} />
                 </div>
+              </div>
+              <div className={s.changeStore}>
+                <Button
+                  label={CHANGE_STORE}
+                  onClick={this.handleChangeStore(true)}
+                  variant="text"
+                  gutter
+                  small
+                />
               </div>
               {this.createMenu()}
             </>

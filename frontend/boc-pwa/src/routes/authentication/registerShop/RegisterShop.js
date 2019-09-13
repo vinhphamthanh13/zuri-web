@@ -123,7 +123,7 @@ class RegisterShop extends Component {
             title="Tạo tài khoản thành công!"
             message={`Bạn đã tạo tài khoản thành công trên hệ thống BOCVN với số điện thoại ${phoneNumber}. Hãy tạo cửa hàng cho bạn.`}
             successIcon
-            callback={this.handleCloseCreatingUserPopup}
+            onClose={this.handleCloseCreatingUserPopup}
           />
         )}
         <div className={s.content}>

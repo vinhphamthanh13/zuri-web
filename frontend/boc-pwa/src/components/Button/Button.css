@@ -41,15 +41,33 @@
 }
 
 .buttonText {
-  background: transparent;
   border: unset;
   width: auto;
   color: inherit;
-  border-radius: var(--size-radius-standard);
+  background: transparent !important;
+  border-radius: unset;
 }
 
+.gutter {
+  padding: 0;
+  margin: 0;
+}
+
+.labelSmall {
+  font-size: var(--font-size-label);
+}
+
+.buttonOutlined {
+  border: var(--size-01) solid inherit;
+  width: auto;
+  color: inherit;
+  background: transparent !important;
+  border-radius: unset;
+}
+
+.buttonOutlined:hover,
 .buttonText:hover {
-  background: transparent;
-  box-shadow: 5px 5px 25px 5px var(--c-gray);
+  background: transparent !important;
+  box-shadow: var(--size-01) var(--size-01) var(--size-06) var(--size-01) var(--c-gray);
   color: inherit;
 }

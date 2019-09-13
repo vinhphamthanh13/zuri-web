@@ -12,7 +12,7 @@ const Success = props => {
     <Modal
       title="Thông báo"
       message={successMessage}
-      callback={resetSuccessAction}
+      onClose={resetSuccessAction}
       successIcon
     />
   ) : null;
