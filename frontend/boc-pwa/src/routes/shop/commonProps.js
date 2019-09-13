@@ -4,9 +4,13 @@ import {
 } from 'actions/shopsActions';
 
 export const shopsProps = {
-  mapStateToProps: ({ shops, authentication: { accessToken } }) => ({
+  mapStateToProps: ({
+    shops,
+    authentication: { accessToken, userDetail },
+  }) => ({
     ...shops,
     accessToken,
+    userDetail,
   }),
   mapDispatchToProps: dispatch => ({
     dispatchGettingStoreInfo: (id, token) =>

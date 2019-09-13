@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { get } from 'lodash';
 import { withFormik } from 'formik';
-import Header from 'components/Header';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { otpCode } from 'constants/schemas';
@@ -42,6 +41,7 @@ class VerifyOTP extends React.Component {
     creatingStoreStatus: null,
     creatingStoreProgress: null,
     accessToken: null,
+    isResendingOTP: null,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -88,6 +88,7 @@ class VerifyOTP extends React.Component {
       ? BLOCKING_STORE_MESSAGE
       : BLOCKING_OTP_MESSAGE;
     this.unblockNavigation = blockNavigation(warning);
+    this.showResendOTPCta();
   }
 
   componentDidUpdate(prevProps) {
@@ -100,7 +101,7 @@ class VerifyOTP extends React.Component {
     } = this.state;
     const isCreatingStore = getLocationState(LS_CREATING_STORE);
 
-    if (accessToken) {
+    if (verifyingOTPStatus && accessToken) {
       this.unblockNavigation();
       navigateTo(ROUTER_URL.AUTH.SHOPS);
     }
@@ -121,15 +122,26 @@ class VerifyOTP extends React.Component {
 
   componentWillUnmount() {
     const { clearOTPStatus } = this.props;
+    this.otpTimeoutId = null;
     clearOTPStatus();
     this.unblockNavigation();
   }
 
   unblockNavigation = null;
+  otpTimeoutId = null;
 
   handleResendOTP = () => {
     this.unblockNavigation();
     navigateTo(ROUTER_URL.AUTH.ACTIVATION);
+  };
+
+  showResendOTPCta = () => {
+    this.otpTimeoutId = setTimeout(() =>
+      this.setState({
+        isResendingOTP: true,
+      }),
+      3000,
+    );
   };
 
   render() {
@@ -142,7 +154,7 @@ class VerifyOTP extends React.Component {
       touched,
       setFieldTouched,
     } = this.props;
-    const { encryptPhone } = this.state;
+    const { encryptPhone, isResendingOTP } = this.state;
     const submittingCode = get(values, 'verifyCode');
 
     return (
@@ -168,9 +180,11 @@ class VerifyOTP extends React.Component {
             />
             <Button label="Xác thực" type="submit" disabled={!isValid} />
           </form>
-          <div className={s.resendOTP} onClick={this.handleResendOTP}>
-            Gởi lại mã OTP
-          </div>
+          {isResendingOTP && (
+            <div className={s.resendOTP} onClick={this.handleResendOTP}>
+              Gởi lại mã OTP
+            </div>
+          )}
         </div>
       </>
     );

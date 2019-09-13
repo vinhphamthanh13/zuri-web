@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, string } from 'prop-types';
+import { func, string, objectOf, any } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -24,10 +24,12 @@ class Shop extends React.Component {
     dispatchGettingStoreInfo: func.isRequired,
     dispatchUpdatingStoreInfo: func.isRequired,
     accessToken: string,
+    userDetail: objectOf(any),
   };
 
   static defaultProps = {
     accessToken: '',
+    userDetail: {},
   };
 
   state = {
@@ -107,11 +109,13 @@ class Shop extends React.Component {
   };
 
   render() {
-    const { dispatchUpdatingStoreInfo, accessToken } = this.props;
+    const { dispatchUpdatingStoreInfo, accessToken, userDetail } = this.props;
     const { isOpenShopDetail, gettingShopInfo, isChangingStore } = this.state;
     const shopName = get(gettingShopInfo, 'cuaHangName');
     const phone = get(gettingShopInfo, 'phone');
     const shopAddress = get(gettingShopInfo, 'address');
+    const shopList = get(userDetail, 'listCuaHang') || [];
+    const shopCount = shopList.length;
 
     return !accessToken ? (
       <Empty message={ACCESS_DENIED} />
@@ -159,15 +163,17 @@ class Shop extends React.Component {
                   <ArrowForward size={18} hexColor={gray} />
                 </div>
               </div>
-              <div className={s.changeStore}>
-                <Button
-                  label={CHANGE_STORE}
-                  onClick={this.handleChangeStore(true)}
-                  variant="text"
-                  gutter
-                  small
-                />
-              </div>
+              {shopCount && (
+                <div className={s.changeStore}>
+                  <Button
+                    label={CHANGE_STORE}
+                    onClick={this.handleChangeStore(true)}
+                    variant="text"
+                    gutter
+                    small
+                  />
+                </div>
+              )}
               {this.createMenu()}
             </>
           )}

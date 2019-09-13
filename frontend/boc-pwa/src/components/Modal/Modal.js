@@ -25,9 +25,11 @@ const Modal = props => {
         </div>
         <div className={s.content}>
           <div className={s.message}>{message}</div>
-          <div className={s.ok}>
-            <Button variant="outlined" label={OK} onClick={onAgree} />
-          </div>
+          {typeof onAgree === 'function' && (
+            <div className={s.ok}>
+              <Button variant="outlined" label={OK} onClick={onAgree} />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -49,7 +51,7 @@ Modal.defaultProps = {
   title: 'title',
   message: 'message',
   onClose: noop,
-  onAgree: noop,
+  onAgree: null,
 };
 
 export default withStyles(s)(Modal);

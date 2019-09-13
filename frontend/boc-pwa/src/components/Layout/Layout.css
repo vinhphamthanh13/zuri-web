@@ -40,6 +40,10 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+input {
+  outline: none;
+}
+
 .layout {
   position: relative;
   background-color: var(--c-smoke);
