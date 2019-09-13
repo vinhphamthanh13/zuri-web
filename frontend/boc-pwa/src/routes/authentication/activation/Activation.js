@@ -21,7 +21,7 @@ import {
   GOOGLE_CAPTCHA_SITE_KEY,
   G_CAPTCHA_ID,
   INIT_USER,
-  LS_REGISTER,
+  LS_REGISTER, LS_COME_BACK,
 } from 'constants/common';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { HTTP_STATUS } from 'constants/http';
@@ -103,7 +103,10 @@ class Activation extends Component {
     const { code, success, message } = existingUser;
 
     if (isRegistering && creatingUser) {
-      navigateTo(ROUTER_URL.AUTH.CREATING_STORE);
+      navigateTo(ROUTER_URL.AUTH.CREATING_STORE, {
+        [LS_COME_BACK]: ROUTER_URL.AUTH.ACTIVATION,
+        [LS_REGISTER]: true,
+      });
     }
 
     if (isRegistering && errors[PHONE_FIELD]) {

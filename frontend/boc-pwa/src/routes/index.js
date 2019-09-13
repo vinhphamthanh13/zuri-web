@@ -65,6 +65,11 @@ const routes = {
       load: () =>
         import(/* webpackChunkName: 'shopGoods' */ './shop/setup/goods'),
     },
+    {
+      path: `${setupRoute.PRINTING}`,
+      load: () =>
+        import(/* webpackChunkName: 'printing' */ './shop/setup/printing'),
+    },
     // {
     //   path: '/shop/setup/openedOrder',
     //   load: () =>

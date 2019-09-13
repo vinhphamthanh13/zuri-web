@@ -17,5 +17,6 @@ export const ROUTER_URL = {
     SHOP: '/shop/setup',
     TAX: '/shop/tax',
     GOODS: '/shop/goods',
+    PRINTING: '/shop/printing',
   },
 };

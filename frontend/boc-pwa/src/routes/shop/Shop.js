@@ -10,6 +10,7 @@ import Empty from 'components/Empty';
 import { gray } from 'constants/colors';
 import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
 import { formatStringLength } from 'utils/string';
+import { ACCESS_DENIED } from 'constants/common';
 import ShopDetail from './components/ShopDetail';
 import { shopsProps } from './commonProps';
 import s from './Shop.css';
@@ -52,7 +53,8 @@ class Shop extends React.Component {
   componentDidMount() {
     const { dispatchGettingStoreInfo, accessToken } = this.props;
     const { selectedShopId } = this.state;
-    dispatchGettingStoreInfo(selectedShopId, accessToken);
+    if (accessToken && selectedShopId)
+      dispatchGettingStoreInfo(selectedShopId, accessToken);
   }
 
   handleShowShopDetail = value => () => {
@@ -87,7 +89,9 @@ class Shop extends React.Component {
     const phone = get(gettingShopInfo, 'phone');
     const shopAddress = get(gettingShopInfo, 'address');
 
-    return (
+    return !accessToken ? (
+      <Empty message={ACCESS_DENIED} />
+    ) : (
       <>
         {isOpenShopDetail && (
           <ShopDetail

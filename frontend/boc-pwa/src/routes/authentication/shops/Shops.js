@@ -4,7 +4,13 @@ import { get } from 'lodash';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { EDIT, START, LS_SHOP_ID } from 'constants/common';
+import {
+  EDIT,
+  START,
+  LS_SHOP_ID,
+  LS_COME_BACK,
+  ACCESS_DENIED,
+} from 'constants/common';
 import Button from 'components/Button';
 import Empty from 'components/Empty';
 import { ROUTER_URL } from 'constants/routerUrl';
@@ -90,16 +96,24 @@ class Shops extends Component {
     navigateTo(ROUTER_URL.TABS.HOME, { [LS_SHOP_ID]: shopId });
   };
 
+  handleCreatingStore = () => {
+    navigateTo(ROUTER_URL.AUTH.CREATING_STORE, {
+      [LS_COME_BACK]: ROUTER_URL.AUTH.SHOPS,
+    });
+  };
+
   render() {
     const { accessToken } = this.props;
-    return (
+    return !accessToken ? (
+      <Empty message={ACCESS_DENIED} />
+    ) : (
       <>
         {this.createShops()}
         <div className={s.newShop}>
           <Button
             label="Tạo cửa hàng mới"
             disabled={!accessToken}
-            onClick={() => {}}
+            onClick={this.handleCreatingStore}
           >
             <Create />
           </Button>

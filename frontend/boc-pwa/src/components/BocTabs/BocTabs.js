@@ -3,7 +3,7 @@ import { number, func } from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { noop } from 'lodash';
 import uuidv1 from 'uuid/v1';
-import { TABS, TABICONS } from 'constants/common';
+import { TABS, TAB_ICONS } from 'constants/common';
 import { brand01, brand04 } from 'constants/colors';
 import { navigateTo } from 'utils/browser';
 import s from './BocTabs.css';
@@ -33,7 +33,7 @@ class BocTabs extends Component {
             index === activeIndex
               ? [`${s.tab} ${s.activeTab}`, 28, brand04]
               : [s.tab, 24, brand01];
-          const Icon = TABICONS[index];
+          const Icon = TAB_ICONS[index];
           return (
             <div
               key={uuidv1()}

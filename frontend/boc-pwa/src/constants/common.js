@@ -14,10 +14,9 @@ export const GOOGLE_CAPTCHA_SCRIPT = 'https://www.google.com/recaptcha/api.js';
 export const LS_REGISTER = 'registerUser';
 export const LS_CREATING_STORE = 'creatingStore';
 export const LS_SHOP_ID = 'shopId';
-export const BLOCKING_STORE_MESSAGE =
-  'Bạn có muốn hủy đăng ký cửa hàng? Dữ liệu chưa lưu sẽ bị xóa và không thể khôi phục!';
-export const BLOCKING_OTP_MESSAGE =
-  'Bạn có muốn hủy kích hoạt OTP? Bạn sẽ cần gởi lại mã xác thực OTP mới nếu quay lại!';
+export const LS_COME_BACK = 'comeBack';
+export const BLOCKING_STORE_MESSAGE = 'Bạn có muốn hủy đăng ký cửa hàng?';
+export const BLOCKING_OTP_MESSAGE = 'Bạn có muốn hủy kích hoạt OTP?';
 export const BLOCKING_TABS_MESSAGE =
   'Bạn có muốn thoát khỏi chương trình. Bạn sẽ cần đăng nhập lại để truy cập dữ liệu hiện hành.';
 export const BLOCKING_LAYOUT_MESSAGE = 'Bạn có muốn thoát khỏi ứng dụng?';
@@ -165,7 +164,7 @@ export const SHOP_DETAIL = {
         },
         {
           TYPE: 'tel',
-          LABEL: 'Số điện thoại',
+          LABEL: 'Số điện thoại cửa hàng',
           VALUE: 'shopPhoneNumber',
           PLACEHOLDER: 'Nhập số điện thoại',
         },
@@ -187,7 +186,7 @@ export const SHOP_DETAIL = {
         },
         {
           TYPE: 'tel',
-          LABEL: 'Số điện thoại',
+          LABEL: 'Số điện thoại quản lý',
           VALUE: 'phone',
           PLACEHOLDER: 'Nhập số điện thoại',
         },
@@ -220,9 +219,10 @@ export const TABS = {
     URL: `${tabsRoute.SHOP}`,
   },
 };
-export const TABICONS = [TrackChanges, ShowChart, BubbleChart, Store];
+export const TAB_ICONS = [TrackChanges, ShowChart, BubbleChart, Store];
 
 // Messages
 export const EMPTY_ITEM = 'Danh sách đang còn trống';
+export const ACCESS_DENIED = 'Không có quyền truy cập vào trang này';
 
 // API Backend properties

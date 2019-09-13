@@ -1,13 +1,17 @@
-import { ROUTER_URL } from 'constants/routerUrl';
 import React from 'react';
 import Layout from 'components/Layout';
-import { navigateTo } from 'utils/browser';
+import { LS_COME_BACK, LS_REGISTER } from 'constants/common';
+import { navigateTo, getLocationState } from 'utils/browser';
 import RegisterShop from './RegisterShop';
 
 const action = () => {
   const title = 'Tạo cửa hàng mới';
+  const comeBack = getLocationState(LS_COME_BACK);
+  const isRegistering = getLocationState(LS_REGISTER);
   const onClickLeft = () => {
-    navigateTo(ROUTER_URL.AUTH.ACTIVATION);
+    navigateTo(comeBack, {
+      [LS_REGISTER]: isRegistering,
+    });
   };
 
   const headerProps = {
