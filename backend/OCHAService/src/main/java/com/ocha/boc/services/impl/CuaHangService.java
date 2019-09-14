@@ -12,11 +12,13 @@ import com.ocha.boc.response.CuaHangResponse;
 import com.ocha.boc.util.CommonConstants;
 import com.ocha.boc.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -63,20 +65,29 @@ public class CuaHangService {
                             userRepository.save(optOwner.get());
                             //Check manager Phone exist in the system. If existed then assign cuaHangId to the account, if not
                             //Create new account with phone of the manager.
-                            Optional<User> optManager = userRepository.findUserByPhone(request.getManagerPhone());
-                            if (!optManager.isPresent()) {
-                                User manager = new User();
-                                manager.setPhone(request.getManagerPhone());
-                                manager.setEmail(request.getManagerEmail());
-                                manager.setName(request.getManagerName());
-                                manager.setActive(Boolean.TRUE);
-                                manager.setCreatedDate(Instant.now().toString());
-                                manager.setRole(UserType.USER);
+                            if(!request.getManagerPhone().equalsIgnoreCase(request.getPhone())) {
+                                Optional<User> optManager = userRepository.findUserByPhone(request.getManagerPhone());
+                                if (!optManager.isPresent()) {
+                                    User manager = new User();
+                                    manager.setPhone(request.getManagerPhone());
+                                    manager.setEmail(request.getManagerEmail());
+                                    manager.setName(request.getManagerName());
+                                    manager.setActive(Boolean.TRUE);
+                                    manager.setCreatedDate(Instant.now().toString());
+                                    manager.setRole(UserType.USER);
+                                    manager.setListCuaHang(new ArrayList<CuaHang>());
+                                    manager.getListCuaHang().add(cuaHang);
+
+                                }else{
+                                    List<CuaHang> list = optManager.get().getListCuaHang();
+                                    list.add(cuaHang);
+                                    optManager.get().setListCuaHang(list);
+                                }
+                                userRepository.save(optManager.get());
+                                response.setSuccess(Boolean.TRUE);
+                                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                                response.setObject(new CuaHangDTO(cuaHang));
                             }
-                            List<CuaHang> list = optManager.get().getListCuaHang();
-                            list.add(cuaHang);
-                            optManager.get().setListCuaHang(list);
-                            userRepository.save(optManager.get());
                             response.setSuccess(Boolean.TRUE);
                             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                             response.setObject(new CuaHangDTO(cuaHang));
