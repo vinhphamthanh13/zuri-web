@@ -12,9 +12,14 @@ import {
   BLOCKING_OTP_MESSAGE,
   BLOCKING_STORE_MESSAGE,
   LS_CREATING_STORE,
+  LS_RESEND_OTP,
+  RESEND_OTP,
+  RESEND_OTP_TIMEOUT,
 } from 'constants/common';
+import { triad06 } from 'constants/colors';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { navigateTo, blockNavigation, getLocationState } from 'utils/browser';
+import { RestorePage } from 'constants/svg';
 import { verifyCodeProps } from '../commonProps';
 import s from './VerifyOTP.css';
 
@@ -23,6 +28,7 @@ class VerifyOTP extends React.Component {
     errors: objectOf(string),
     values: objectOf(any).isRequired,
     handleSubmit: func.isRequired,
+    dispatchReSendOTP: func.isRequired,
     handleChange: func.isRequired,
     isValid: bool.isRequired,
     touched: objectOf(bool).isRequired,
@@ -42,41 +48,47 @@ class VerifyOTP extends React.Component {
     creatingStoreProgress: null,
     accessToken: null,
     isResendingOTP: null,
+    countryCode: null,
+    phoneNumber: null,
   };
 
   static getDerivedStateFromProps(props, state) {
     const {
-      phoneNumber,
       encryptPhone,
       verifyingOTPStatus,
       creatingStoreStatus,
       creatingStoreProgress,
       accessToken,
+      phoneNumber,
+      countryCode,
     } = props;
     const {
-      phoneNumber: cachedPhoneNumber,
       verifyingOTPStatus: cachedVerifyingOTPStatus,
       encryptPhone: cachedEncryptPhone,
       creatingStoreStatus: cachedCreatingStoreStatus,
       creatingStoreProgress: cachedCreatingStoreProgress,
       accessToken: cachedAccessToken,
+      phoneNumber: cachedPhoneNumber,
+      countryCode: cachedCountryCode,
     } = state;
 
     if (
-      phoneNumber !== cachedPhoneNumber ||
       verifyingOTPStatus !== cachedVerifyingOTPStatus ||
       encryptPhone !== cachedEncryptPhone ||
       creatingStoreStatus !== cachedCreatingStoreStatus ||
       creatingStoreProgress !== cachedCreatingStoreProgress ||
-      accessToken !== cachedAccessToken
+      accessToken !== cachedAccessToken ||
+      phoneNumber !== cachedPhoneNumber ||
+      countryCode !== cachedCountryCode
     ) {
       return {
-        phoneNumber,
         verifyingOTPStatus,
         encryptPhone,
         creatingStoreStatus,
         creatingStoreProgress,
         accessToken,
+        phoneNumber,
+        countryCode,
       };
     }
 
@@ -131,16 +143,18 @@ class VerifyOTP extends React.Component {
   otpTimeoutId = null;
 
   handleResendOTP = () => {
-    this.unblockNavigation();
-    navigateTo(ROUTER_URL.AUTH.ACTIVATION);
+    const { dispatchReSendOTP } = this.props;
+    const { phoneNumber, countryCode } = this.state;
+    dispatchReSendOTP(countryCode, phoneNumber);
   };
 
   showResendOTPCta = () => {
-    this.otpTimeoutId = setTimeout(() =>
-      this.setState({
-        isResendingOTP: true,
-      }),
-      3000,
+    this.otpTimeoutId = setTimeout(
+      () =>
+        this.setState({
+          isResendingOTP: true,
+        }),
+      RESEND_OTP_TIMEOUT,
     );
   };
 
@@ -181,9 +195,15 @@ class VerifyOTP extends React.Component {
             <Button label="Xác thực" type="submit" disabled={!isValid} />
           </form>
           {isResendingOTP && (
-            <div className={s.resendOTP} onClick={this.handleResendOTP}>
-              Gởi lại mã OTP
-            </div>
+            <Button
+              variant="text"
+              className={s.resendOTP}
+              onClick={this.handleResendOTP}
+              label={RESEND_OTP}
+              small
+            >
+              <RestorePage hexColor={triad06} size={22} />
+            </Button>
           )}
         </div>
       </>

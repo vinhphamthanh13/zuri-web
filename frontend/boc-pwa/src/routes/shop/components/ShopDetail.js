@@ -158,7 +158,7 @@ const enhancers = [
         businessType: moHinhKinhDoanhType,
         categoryType: danhMucMatHangType,
         shopName: cuaHangName,
-        shopPhoneNumber: managerPhone,
+        managerPhone,
         shopAddress: address,
         userName: managerName,
         phone,

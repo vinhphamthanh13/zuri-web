@@ -15,11 +15,15 @@ export const LS_REGISTER = 'registerUser';
 export const LS_CREATING_STORE = 'creatingStore';
 export const LS_SHOP_ID = 'shopId';
 export const LS_COME_BACK = 'comeBack';
+export const LS_RESEND_OTP = 'resendOtp';
+export const CHANGE_ACTIVATION_PHONE = 'Thay đổi số điện thoại';
 export const BLOCKING_STORE_MESSAGE = 'Bạn có muốn hủy đăng ký cửa hàng?';
 export const BLOCKING_OTP_MESSAGE = 'Bạn có muốn hủy kích hoạt OTP?';
 export const BLOCKING_TABS_MESSAGE =
   'Bạn có muốn thoát khỏi chương trình. Bạn sẽ cần đăng nhập lại để truy cập dữ liệu hiện hành.';
 export const BLOCKING_LAYOUT_MESSAGE = 'Bạn có muốn thoát khỏi ứng dụng?';
+export const RESEND_OTP_MESSAGE_SECURITY =
+  'Vì lý do bảo mật. Vui lòng nhập số điện thoại';
 
 // Layout
 export const LAYOUT = {
@@ -29,7 +33,7 @@ export const HEADER_HEIGHT = 50;
 export const HEADER_HEIGHT_GUTTER = 34;
 export const TABS_HEIGHT = 56;
 
-// CTA
+// CTA label
 export const OK = 'Đồng ý';
 export const EDIT = 'Chỉnh sửa';
 export const CANCEL = 'Hủy';
@@ -37,6 +41,10 @@ export const CLOSE = 'Đóng lại';
 export const START = 'Bắt đầu';
 export const SAVE = 'Lưu';
 export const CHANGE_STORE = 'Đổi cửa hàng';
+export const RESEND_OTP = 'Gởi lại mã OTP';
+
+// CTA value
+export const RESEND_OTP_TIMEOUT = 30 * 1000;
 
 // Processing data
 export const DATA = {
@@ -78,7 +86,7 @@ export const REGISTER = {
   },
   SHOP_PHONE: {
     LABEL: 'Số điện thoại cửa hàng',
-    VALUE: 'shopPhoneNumber',
+    VALUE: 'managerPhone',
     PLACEHOLDER: 'Số điện thoại liên hệ',
   },
   SHOP_ADDRESS: {
@@ -167,7 +175,7 @@ export const SHOP_DETAIL = {
         {
           TYPE: 'tel',
           LABEL: 'Số điện thoại cửa hàng',
-          VALUE: 'shopPhoneNumber',
+          VALUE: 'managerPhone',
           PLACEHOLDER: 'Nhập số điện thoại',
         },
         {

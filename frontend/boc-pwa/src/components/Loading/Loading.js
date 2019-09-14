@@ -16,12 +16,30 @@ class Loading extends Component {
     loading: null,
   };
 
-  state = {};
+  state = {
+    timeout: false,
+  };
+
+  componentDidMount() {
+    this.loadingTimeoutId = setTimeout(() => {
+      this.setState({
+        timeout: true,
+      });
+    }, 9000);
+  }
+
+  componentWillUnmount() {
+    this.loadingTimeoutId = null;
+  }
+
+  loadingTimeoutId = null;
 
   render() {
     const { loading } = this.props;
+    const { timeout } = this.state;
     return (
-      loading && (
+      loading &&
+      !timeout && (
         <div className={s.container}>
           <PulseLoader color={brand04} size={20} sizeUnit="px" loading />
         </div>

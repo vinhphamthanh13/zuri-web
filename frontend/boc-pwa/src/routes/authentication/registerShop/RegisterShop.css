@@ -1,34 +1,38 @@
 @import '../../../components/variables.css';
 
-.content {
-  width: 100%;
+.register {
+  color: var(--c-brand-3);
+  padding: var(--size-22) var(--size-12);
+  margin: auto;
+  border: 1px solid var(--c-input-border);
+  border-radius: var(--size-08);
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-}
-
-.register {
-  color: var(--c-brand-3);
-  text-align: center;
-  border: 1px solid var(--c-input-border);
-  padding: var(--size-22) var(--size-12);
-  border-radius: var(--size-08);
-  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .greetingLogo {
   width: var(--size-64);
-  margin-bottom: var(--size-14);
+  margin: var(--size-14) auto;
+}
+
+.creatingForm {
+  width: 100%;
 }
 
 .policiesAndTerms {
   position: absolute;
-  bottom: var(--size-64);
+  bottom: var(--size-72);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .policiesAndTerms div {
   color: var(--c-triad-03);
+  width: 100%;
 }
 
 .policiesAndTerms input[type=checkbox]:checked {
@@ -37,7 +41,7 @@
 }
 
 .button {
-  margin-top: var(--size-36);
+  margin: var(--size-36) auto auto;
 }
 
 .readingPolicies {

@@ -1,8 +1,8 @@
 @import '../variables.css';
 
 .button {
-  width: var(--max-input-width);
-  padding: var(--size-12) var(--size-10);
+  max-width: var(--max-input-width);
+  padding: var(--size-08) var(--size-14);
   border: var(--size-01) solid var(--c-brand-3);
   border-radius: var(--size-28);
   display: flex;
@@ -68,6 +68,5 @@
 .buttonOutlined:hover,
 .buttonText:hover {
   background: transparent !important;
-  box-shadow: var(--size-01) var(--size-01) var(--size-06) var(--size-01) var(--c-gray);
   color: inherit;
 }

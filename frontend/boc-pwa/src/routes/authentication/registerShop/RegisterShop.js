@@ -126,21 +126,19 @@ class RegisterShop extends Component {
             onClose={this.handleCloseCreatingUserPopup}
           />
         )}
-        <div className={s.content}>
-          <div className={s.greetingLogo}>
-            <img src={BocGreet} alt="Boc Greeting" width="100%" />
-          </div>
-          <div className={s.register}>
-            <form onSubmit={handleSubmit}>
-              {this.createForm()}
-              <Button
-                type="submit"
-                label="Tiếp theo"
-                disabled={!isValid}
-                className={s.button}
-              />
-            </form>
-          </div>
+        <div className={s.greetingLogo}>
+          <img src={BocGreet} alt="Boc Greeting" width="100%" />
+        </div>
+        <div className={s.register}>
+          <form onSubmit={handleSubmit} className={s.creatingForm}>
+            {this.createForm()}
+            <Button
+              type="submit"
+              label="Tiếp theo"
+              disabled={!isValid}
+              className={s.button}
+            />
+          </form>
         </div>
         <div className={s.readingPolicies}>
           <a href="#">Chính sách và điều khoản BOCVN</a>
@@ -155,6 +153,7 @@ const enhancers = [
     mapPropsToValues: () => ({
       userName: 'BOC',
       shopName: 'BOCVN',
+      managerPhone: '0936388480',
       shopAddress: '01 đường số 34, Bình Trị Đông B, Bình Tân, TP.HCM',
       businessType: 'Quán Cao Cấp',
       categoryType: 'Coffee',

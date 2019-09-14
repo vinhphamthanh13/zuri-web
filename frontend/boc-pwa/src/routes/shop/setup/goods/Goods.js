@@ -39,20 +39,10 @@ class Goods extends React.Component {
   };
 
   render() {
-    const { windowWidth, windowHeight } = this.props;
     const { searchGood } = this.state;
-    const height = windowHeight - 124;
-    const maxWidth =
-      windowWidth > LAYOUT.MAX_WIDTH ? LAYOUT.MAX_WIDTH : windowWidth;
 
     return (
       <div className={s.container}>
-        <Header
-          title="Danh mục mặt hàng"
-          gutter
-          iconLeft
-          onClickLeft={goBack}
-        />
         <div className={s.search}>
           <Input
             name="searchGood"
@@ -60,11 +50,10 @@ class Goods extends React.Component {
             value={searchGood}
             gutter
             placeholder="Tìm kiếm mặt hàng / giảm giá"
-            className={s.input}
             search
           />
         </div>
-        <div style={resolveDimension(maxWidth, height)}>Mat hang tuy chinh</div>
+        <div>Mat hang tuy chinh</div>
         <div className={s.goodsCta}>
           <Button
             label="Thêm / Chỉnh sửa danh mục"

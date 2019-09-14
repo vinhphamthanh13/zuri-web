@@ -40,7 +40,8 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-input {
+input,
+button {
   outline: none;
 }
 

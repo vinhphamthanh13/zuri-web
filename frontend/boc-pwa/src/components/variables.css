@@ -165,7 +165,6 @@
   --font-size: var(--font-size-16);
   --font-size-input: var(--font-size);
   --font-size-header: var(--font-size-18);
-  --font-size-lg: var(--font-size-24);
-  --font-size-title: var(--font-size-28);
+  --font-size-title: var(--font-size-24);
   --font-size-huge: var(--font-size-44);
 }

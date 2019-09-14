@@ -82,29 +82,25 @@ class Input extends Component {
         <div className={s.checkBoxLabel}>{label}</div>
       </div>
     ) : (
-      <>
-        <div className={`${wrapperStyle} ${gutterStyle}`}>
-          <span className={s.label}>{label}</span>
-          <div className={s.search}>
-            {search && <Search size={24} hexColor={gray} />}
-          </div>
-          <input
-            id={name}
-            placeholder={placeholder}
-            type={type}
-            name={name}
-            value={value}
-            onChange={this.handleOnchange}
-            className={className}
-            disabled={disabled}
-          />
-          {dropDownButton}
-          {errors[name] &&
-            touched[name] && (
-              <div className={s.errorMessage}>{errors[name]}</div>
-            )}
+      <div className={`${wrapperStyle} ${gutterStyle}`}>
+        <span className={s.label}>{label}</span>
+        <div className={s.search}>
+          {search && <Search size={24} hexColor={gray} />}
         </div>
-      </>
+        <input
+          id={name}
+          placeholder={placeholder}
+          type={type}
+          name={name}
+          value={value}
+          onChange={this.handleOnchange}
+          className={className}
+          disabled={disabled}
+        />
+        {dropDownButton}
+        {errors[name] &&
+          touched[name] && <div className={s.errorMessage}>{errors[name]}</div>}
+      </div>
     );
   }
 }

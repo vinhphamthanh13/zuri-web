@@ -44,6 +44,8 @@ export const verifyCodeProps = {
       dispatch(nodeVerifyingOTPApi(countryCode, phoneNumber, otpCode)),
     dispatchCreatingStore: (data, token) =>
       dispatch(nodeCreatingStoreApi(data, token)),
+    dispatchReSendOTP: (countryCode, phoneNumber) =>
+      dispatch(nodeSendingOTPApi(countryCode, phoneNumber)),
   }),
 };
 

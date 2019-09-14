@@ -4,8 +4,10 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  margin: var(--size-10) 0;
+  margin: var(--size-10) auto;
   position: relative;
+  width: 100%;
+  max-width: var(--max-content-width);
 }
 
 .inputWrapperGutter {
@@ -14,12 +16,13 @@
 
 input {
   width: 100%;
+  max-width: var(--max-content-width);
   height: var(--size-input-height);
   border: var(--size-01) solid var(--c-input-border);
   border-radius: var(--size-radius-standard);
   font-size: var(--font-size-input);
   letter-spacing: var(--size-02);
-  padding: 0 var(--size-12);
+  padding: 0 var(--size-08);
 }
 
 input::placeholder {
@@ -30,7 +33,7 @@ input::placeholder {
 
 input:disabled {
   background: var(--c-smoke);
-  border: var(--size-01) solid var(--c-smoke);
+  border: var(--size-01) solid var(--c-gray);
   opacity: 0.8;
 }
 
@@ -60,16 +63,16 @@ input:disabled {
 }
 
 .checkBoxGroup {
-  display: flex;
   width: 100%;
+  max-width: var(--max-content-width);
+  display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: var(--size-12);
+  margin: auto;
 }
 
 .checkBox {
   width: var(--size-20);
-  border: 1px solid red;
 }
 
 .checkBoxLabel {

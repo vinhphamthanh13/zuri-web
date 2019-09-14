@@ -14,7 +14,8 @@
   color: var(--c-triad-06);
 }
 
-.verifyCodeWrapper {
+.verifyCodeWrapper,
+form {
   margin: 0 var(--size-padding);
   display: flex;
   flex-direction: column;
@@ -30,8 +31,12 @@
 }
 
 .resendOTP {
-  color: var(--c-triad-05);
+  color: var(--c-triad-06);
+  font-weight: var(--font-weight-500);
   margin: var(--size-padding);
-  font-size: var(--font-size-label);
+  font-size: var(--font-size-input);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

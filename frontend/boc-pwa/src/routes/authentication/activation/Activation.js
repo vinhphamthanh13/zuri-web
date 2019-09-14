@@ -16,13 +16,17 @@ import {
   injectGoogleCaptchaScript,
   getLocationState,
 } from 'utils/browser';
+import { Info } from 'constants/svg';
 import {
   REGEXP,
   GOOGLE_CAPTCHA_SITE_KEY,
   G_CAPTCHA_ID,
   INIT_USER,
-  LS_REGISTER, LS_COME_BACK,
+  LS_REGISTER,
+  LS_COME_BACK,
+  CHANGE_ACTIVATION_PHONE,
 } from 'constants/common';
+import { triad08 } from 'constants/colors';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { HTTP_STATUS } from 'constants/http';
 import { activationProps } from '../commonProps';
@@ -65,6 +69,7 @@ class Activation extends Component {
       existingUser: INIT_USER,
       creatingUser: null,
       gCaptchaStatus: true,
+      isChangingPhone: false,
     };
     this.recaptchaRef = React.createRef();
     injectGoogleCaptchaScript(document, 'script', G_CAPTCHA_ID);
@@ -150,17 +155,26 @@ class Activation extends Component {
   handleVerifyCaptcha = response => {
     const { dispatchExistingUser, values } = this.props;
     const phoneNumber = get(values, PHONE_FIELD);
+    this.handleChangingPhone(false)();
     this.handleCaptchaStatus(true);
     if (response) dispatchExistingUser(phoneNumber);
   };
 
   handleExpiredCaptcha = () => {
     this.handleCaptchaStatus(false);
+    this.handleChangingPhone(false)();
   };
 
   handleCaptchaStatus = value => {
     this.setState({
       gCaptchaStatus: value,
+    });
+  };
+
+  handleChangingPhone = value => () => {
+    this.handleCaptchaStatus(false);
+    this.setState({
+      isChangingPhone: value,
     });
   };
 
@@ -175,11 +189,16 @@ class Activation extends Component {
       touched,
       existingUser,
     } = this.props;
-    const { gCaptchaStatus } = this.state;
+    const { gCaptchaStatus, isChangingPhone } = this.state;
 
     const registerState = getLocationState(LS_REGISTER);
     const code = get(existingUser, 'code');
-    const isLoginValid = isValid && !registerState && existingUser.success;
+    const isLoginValid =
+      isValid &&
+      !registerState &&
+      existingUser.success &&
+      gCaptchaStatus &&
+      !isChangingPhone;
     const isRegisterValid = isValid && !existingUser.success;
     const isActivatingCode =
       code !== HTTP_STATUS.INTERNAL_ERROR &&
@@ -190,7 +209,7 @@ class Activation extends Component {
     return (
       <>
         <div className={s.container}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className={s.activeForm}>
             <div className={s.inputs}>
               <Input
                 name="countryCode"
@@ -229,6 +248,16 @@ class Activation extends Component {
                 hl="vi"
               />
             </div>
+          )}
+          {isLoginValid && (
+            <Button
+              variant="text"
+              className={s.changePhoneNumber}
+              label={CHANGE_ACTIVATION_PHONE}
+              onClick={this.handleChangingPhone(true)}
+            >
+              <Info hexColor={triad08} />
+            </Button>
           )}
         </div>
       </>

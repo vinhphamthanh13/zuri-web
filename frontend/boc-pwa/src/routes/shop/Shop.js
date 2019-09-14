@@ -130,6 +130,7 @@ class Shop extends React.Component {
         )}
         {isChangingStore && (
           <Modal
+            errorIcon
             title="Thay đổi cửa hàng"
             message="Bạn có muốn chuyển qua cửa hàng khác?"
             onClose={this.handleChangeStore(false)}
