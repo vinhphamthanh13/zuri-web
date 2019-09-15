@@ -22,4 +22,6 @@ public class CuaHangUpdateRequest implements Serializable {
     private String address;
 
     private String managerEmail;
+
+    private String managerPhone;
 }

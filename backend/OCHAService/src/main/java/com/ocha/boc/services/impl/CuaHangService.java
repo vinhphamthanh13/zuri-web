@@ -65,6 +65,7 @@ public class CuaHangService {
                             userRepository.save(optOwner.get());
                             //Check manager Phone exist in the system. If existed then assign cuaHangId to the account, if not
                             //Create new account with phone of the manager.
+                            /*
                             if(!request.getManagerPhone().equalsIgnoreCase(request.getPhone())) {
                                 Optional<User> optManager = userRepository.findUserByPhone(request.getManagerPhone());
                                 if (!optManager.isPresent()) {
@@ -88,6 +89,7 @@ public class CuaHangService {
                                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                                 response.setObject(new CuaHangDTO(cuaHang));
                             }
+                            */
                             response.setSuccess(Boolean.TRUE);
                             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                             response.setObject(new CuaHangDTO(cuaHang));
@@ -121,6 +123,9 @@ public class CuaHangService {
                         }
                         if (StringUtils.isNotEmpty(request.getMoHinhKinhDoanhType())) {
                             optCuaHang.get().setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
+                        }
+                        if(StringUtils.isNotEmpty(request.getManagerPhone())){
+                            optCuaHang.get().setManagerPhone(request.getManagerPhone());
                         }
                         optCuaHang.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                         cuaHangRepository.save(optCuaHang.get());
