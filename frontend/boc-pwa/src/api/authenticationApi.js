@@ -53,7 +53,7 @@ const serverExistingUserApi = async phone => {
   return result;
 };
 const serverUserByIdApi = async id => {
-  const [result, error] = await serverUserById(id);
+  const [result, error] = await handleRequest(serverUserById, [id]);
   if (error) return error;
   return result;
 };
