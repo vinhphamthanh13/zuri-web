@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -112,26 +113,37 @@ public class CuaHangService {
         response.setMessage(CommonConstants.UPDATE_CUA_HANG_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                if (StringUtils.isNotEmpty(request.getId())) {
-                    if (cuaHangRepository.existsById(request.getId())) {
-                        Optional<CuaHang> optCuaHang = cuaHangRepository.findCuaHangById(request.getId());
-                        if (StringUtils.isNotEmpty(request.getAddress())) {
-                            optCuaHang.get().setAddress(request.getAddress());
+                if (userRepository.existsByPhone(request.getPhone())) {
+                    Optional<User> optionalUser = userRepository.findUserByPhone(request.getPhone());
+                    if (StringUtils.isNotEmpty(request.getCuaHangId())) {
+                        if (cuaHangRepository.existsById(request.getCuaHangId())) {
+                            Optional<CuaHang> optCuaHang = cuaHangRepository.findCuaHangById(request.getCuaHangId());
+                            if (StringUtils.isNotEmpty(request.getAddress())) {
+                                optCuaHang.get().setAddress(request.getAddress());
+                            }
+                            if (StringUtils.isNotEmpty(request.getManagerEmail())) {
+                                optCuaHang.get().setManagerEmail(request.getManagerEmail());
+                            }
+                            if (StringUtils.isNotEmpty(request.getMoHinhKinhDoanhType())) {
+                                optCuaHang.get().setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
+                            }
+                            if (StringUtils.isNotEmpty(request.getManagerPhone())) {
+                                optCuaHang.get().setManagerPhone(request.getManagerPhone());
+                            }
+                            optCuaHang.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+                            cuaHangRepository.save(optCuaHang.get());
+                            List<CuaHang> lists = optionalUser.get().getListCuaHang().stream().map(cuaHang -> {
+                                if(cuaHang.getId().equalsIgnoreCase(request.getCuaHangId())){
+                                    cuaHang = optCuaHang.get();
+                                }
+                                return cuaHang;
+                            }).collect(Collectors.toList());
+                            optionalUser.get().setListCuaHang(lists);
+                            userRepository.save(optionalUser.get());
+                            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                            response.setObject(new CuaHangDTO(optCuaHang.get()));
+                            response.setSuccess(Boolean.TRUE);
                         }
-                        if (StringUtils.isNotEmpty(request.getManagerEmail())) {
-                            optCuaHang.get().setManagerEmail(request.getManagerEmail());
-                        }
-                        if (StringUtils.isNotEmpty(request.getMoHinhKinhDoanhType())) {
-                            optCuaHang.get().setMoHinhKinhDoanhType(request.getMoHinhKinhDoanhType());
-                        }
-                        if(StringUtils.isNotEmpty(request.getManagerPhone())){
-                            optCuaHang.get().setManagerPhone(request.getManagerPhone());
-                        }
-                        optCuaHang.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                        cuaHangRepository.save(optCuaHang.get());
-                        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                        response.setObject(new CuaHangDTO(optCuaHang.get()));
-                        response.setSuccess(Boolean.TRUE);
                     }
                 }
             }

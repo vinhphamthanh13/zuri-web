@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -13,7 +14,11 @@ import java.io.Serializable;
 @ToString
 public class CuaHangUpdateRequest implements Serializable {
 
-    private String id;
+    @NotNull
+    private String cuaHangId;
+
+    @NotNull
+    private String phone;
 
     private String  moHinhKinhDoanhType;
 
