@@ -15,7 +15,6 @@ export const LS_REGISTER = 'registerUser';
 export const LS_CREATING_STORE = 'creatingStore';
 export const LS_SHOP_ID = 'shopId';
 export const LS_COME_BACK = 'comeBack';
-export const LS_RESEND_OTP = 'resendOtp';
 export const CHANGE_ACTIVATION_PHONE = 'Thay đổi số điện thoại';
 export const BLOCKING_STORE_MESSAGE = 'Bạn có muốn hủy đăng ký cửa hàng?';
 export const BLOCKING_OTP_MESSAGE = 'Bạn có muốn hủy kích hoạt OTP?';
@@ -44,7 +43,7 @@ export const CHANGE_STORE = 'Đổi cửa hàng';
 export const RESEND_OTP = 'Gởi lại mã OTP';
 
 // CTA value
-export const RESEND_OTP_TIMEOUT = 30 * 1000;
+export const RESEND_OTP_TIMEOUT = 45 * 1000;
 
 // Processing data
 export const DATA = {

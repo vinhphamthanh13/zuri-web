@@ -14,4 +14,5 @@ export const NODE_SERVER_URL = {
   GETTING_STORE: '/gettingBOCStore',
   UPDATING_STORE: '/updatingBOCStore',
   EXISTING_USER: '/existingBOCUser',
+  GETTING_USER: '/isBOCUser',
 };

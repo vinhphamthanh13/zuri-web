@@ -29,6 +29,7 @@ const serverSendOTP = data => axios.post(SERVER_SITE_URL.SENDING_OTP, data);
 const serverVerifyOTP = data => axios.post(SERVER_SITE_URL.VERIFYING_OTP, data);
 const serverExistingUser = phone =>
   axios.get(`${SERVER_SITE_URL.CHECKING_USER}/${phone}`);
+const serverUserById = id => axios.get(`${SERVER_SITE_URL.USERS}/${id}`);
 const serverCreatingStore = (data, token) =>
   axios.post(SERVER_SITE_URL.STORE, data, createHeaders(token));
 const serverGettingStore = (id, token) =>
@@ -48,6 +49,11 @@ const serverVerifyOTPApi = async data => {
 };
 const serverExistingUserApi = async phone => {
   const [result, error] = await handleRequest(serverExistingUser, [phone]);
+  if (error) return error;
+  return result;
+};
+const serverUserByIdApi = async id => {
+  const [result, error] = await serverUserById(id);
   if (error) return error;
   return result;
 };
@@ -74,39 +80,39 @@ const serverGettingStoreApi = async (id, token) => {
 // PROXY ROUTING
 ***************** */
 
-router.post(NODE_SERVER_URL.CREATING_USER, async (request, response) => {
-  const { body } = request;
+router.post(NODE_SERVER_URL.CREATING_USER, async (req, res) => {
+  const { body } = req;
   try {
     const result = await serverCreatingUserApi(body);
-    handleNodeServerResponse(response, result);
+    handleNodeServerResponse(res, result);
   } catch (error) {
-    handleNodeServerError(response, error);
+    handleNodeServerError(res, error);
   }
 });
 router.get(
   `${NODE_SERVER_URL.SENDING_OTP}${SEND_OTP_PARAMS}`,
-  async (request, response) => {
+  async (req, res) => {
     const {
       params: { countryCode, phoneNumber },
-    } = request;
+    } = req;
     const body = {
       countryCode,
       phoneNumber,
     };
     try {
       const result = await serverSendOTPApi(body);
-      handleNodeServerResponse(response, result);
+      handleNodeServerResponse(res, result);
     } catch (error) {
-      handleNodeServerError(response, error);
+      handleNodeServerError(res, error);
     }
   },
 );
 router.get(
   `${NODE_SERVER_URL.VERIFYING_OTP}${VERIFY_OTP_PARAMS}`,
-  async (request, response) => {
+  async (req, res) => {
     const {
       params: { countryCode, phoneNumber, otpCode },
-    } = request;
+    } = req;
     const body = {
       countryCode,
       phoneNumber,
@@ -115,30 +121,38 @@ router.get(
 
     try {
       const result = await serverVerifyOTPApi(body);
-      handleNodeServerResponse(response, result);
+      handleNodeServerResponse(res, result);
     } catch (error) {
-      handleNodeServerError(response, error);
+      handleNodeServerError(res, error);
     }
   },
 );
-router.get(
-  `${NODE_SERVER_URL.EXISTING_USER}/:phone`,
-  async (request, response) => {
-    const {
-      params: { phone },
-    } = request;
-    try {
-      const result = await serverExistingUserApi(phone);
-      handleNodeServerResponse(response, result);
-    } catch (error) {
-      handleNodeServerError(response, error);
-    }
-  },
-);
-router.post(NODE_SERVER_URL.CREATING_STORE, async (request, response) => {
+router.get(`${NODE_SERVER_URL.EXISTING_USER}/:phone`, async (req, res) => {
+  const {
+    params: { phone },
+  } = req;
+  try {
+    const result = await serverExistingUserApi(phone);
+    handleNodeServerResponse(res, result);
+  } catch (error) {
+    handleNodeServerError(res, error);
+  }
+});
+router.get(`${NODE_SERVER_URL.GETTING_USER}/:id`, async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const result = await serverUserByIdApi(id);
+    handleNodeServerResponse(res, result);
+  } catch (error) {
+    handleNodeServerError(res, error);
+  }
+});
+router.post(NODE_SERVER_URL.CREATING_STORE, async (req, res) => {
   const {
     body: { data, token },
-  } = request;
+  } = req;
   const creatingStoreData = {
     address: data.shopAddress,
     cuaHangName: data.shopName,
@@ -151,22 +165,22 @@ router.post(NODE_SERVER_URL.CREATING_STORE, async (request, response) => {
   };
   try {
     const result = await serverCreatingStoreApi(creatingStoreData, token);
-    handleNodeServerResponse(response, result);
+    handleNodeServerResponse(res, result);
   } catch (error) {
-    handleNodeServerError(response, error);
+    handleNodeServerError(res, error);
   }
 });
 router.get(
   `${NODE_SERVER_URL.GETTING_STORE}/:shopId/:token`,
-  async (request, response) => {
+  async (req, res) => {
     const {
       params: { shopId, token },
-    } = request;
+    } = req;
     try {
       const result = await serverGettingStoreApi(shopId, token);
-      handleNodeServerResponse(response, result);
+      handleNodeServerResponse(res, result);
     } catch (error) {
-      handleNodeServerError(response, error);
+      handleNodeServerError(res, error);
     }
   },
 );

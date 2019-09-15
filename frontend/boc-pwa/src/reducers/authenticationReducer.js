@@ -12,6 +12,7 @@ import {
   CREATING_STORE,
   CREATING_STORE_PROGRESS,
   SETTING_USER_DETAIL,
+  GETTING_USER,
 } from 'actions/authenticationActions';
 
 const persistConfig = {
@@ -40,6 +41,7 @@ const initState = {
   creatingStoreProgress: null,
   storeInfo: {},
   selectedShopId: '',
+  userDetail: {},
 };
 
 const reducer = (state = initState, action) => {
@@ -71,6 +73,12 @@ const reducer = (state = initState, action) => {
   }
   // coupling with shopsReducer
   if (action.type === SETTING_USER_DETAIL) {
+    return {
+      ...state,
+      userDetail: action.payload,
+    };
+  }
+  if (action.type === GETTING_USER) {
     return {
       ...state,
       userDetail: action.payload,

@@ -12,14 +12,13 @@ import {
   BLOCKING_OTP_MESSAGE,
   BLOCKING_STORE_MESSAGE,
   LS_CREATING_STORE,
-  LS_RESEND_OTP,
   RESEND_OTP,
   RESEND_OTP_TIMEOUT,
 } from 'constants/common';
 import { triad06 } from 'constants/colors';
 import { ROUTER_URL } from 'constants/routerUrl';
 import { navigateTo, blockNavigation, getLocationState } from 'utils/browser';
-import { RestorePage } from 'constants/svg';
+import { Refresh } from 'constants/svg';
 import { verifyCodeProps } from '../commonProps';
 import s from './VerifyOTP.css';
 
@@ -146,14 +145,19 @@ class VerifyOTP extends React.Component {
     const { dispatchReSendOTP } = this.props;
     const { phoneNumber, countryCode } = this.state;
     dispatchReSendOTP(countryCode, phoneNumber);
+    this.handleResendOTPStatus(false)();
+    this.showResendOTPCta();
+  };
+
+  handleResendOTPStatus = value => () => {
+    this.setState({
+      isResendingOTP: value,
+    });
   };
 
   showResendOTPCta = () => {
     this.otpTimeoutId = setTimeout(
-      () =>
-        this.setState({
-          isResendingOTP: true,
-        }),
+      this.handleResendOTPStatus(true),
       RESEND_OTP_TIMEOUT,
     );
   };
@@ -202,7 +206,7 @@ class VerifyOTP extends React.Component {
               label={RESEND_OTP}
               small
             >
-              <RestorePage hexColor={triad06} size={22} />
+              <Refresh hexColor={triad06} size={22} />
             </Button>
           )}
         </div>

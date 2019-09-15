@@ -23,6 +23,7 @@ class Shops extends Component {
   static propTypes = {
     accessToken: string,
     dispatchSelectedShopId: func.isRequired,
+    dispatchGettingUserById: func.isRequired,
   };
 
   static defaultProps = {
@@ -43,6 +44,14 @@ class Shops extends Component {
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    const { dispatchGettingUserById } = this.props;
+    const {
+      userDetail: { id },
+    } = this.state;
+    dispatchGettingUserById(id);
   }
 
   createShops = () => {

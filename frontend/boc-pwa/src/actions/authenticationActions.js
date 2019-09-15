@@ -10,7 +10,12 @@ import { get } from 'lodash';
 import { NODE_SERVER_URL, PROXY_AUTH } from 'actions/constants';
 import { DATA } from 'constants/common';
 import { handleRequest } from 'api/utils';
-import { LOADING, setLoading, setError } from 'actions/commonActions';
+import {
+  LOADING,
+  setLoading,
+  setError,
+  setSuccess,
+} from 'actions/commonActions';
 import { HTTP_STATUS } from 'constants/http';
 
 // Action API to Node Server
@@ -29,6 +34,8 @@ const nodeCreatingUser = data =>
   axios.post(`${PROXY_AUTH}${NODE_SERVER_URL.CREATING_USER}`, data);
 const nodeExistingUser = phone =>
   axios.get(`${PROXY_AUTH}${NODE_SERVER_URL.EXISTING_USER}/${phone}`);
+const nodeUserById = id =>
+  axios.get(`${PROXY_AUTH}${NODE_SERVER_URL.GETTING_USER}/${id}`);
 const nodeCreatingStore = (data, token) =>
   axios.post(`${PROXY_AUTH}${NODE_SERVER_URL.CREATING_STORE}`, { data, token });
 
@@ -43,6 +50,7 @@ export const SETTING_USER_DETAIL = 'AUTH.SETTING_USER_DETAIL';
 export const CREATING_STORE = 'AUTH.CREATING_STORE';
 export const CREATING_STORE_INFO = 'AUTH.CREATING_STORE_INFO';
 export const CREATING_STORE_PROGRESS = 'AUTH.CREATING_STORE_PROGRESS';
+export const GETTING_USER = 'AUTH.GETTING_USER';
 
 // Redux action
 export const setPhoneNumberAction = payload => ({
@@ -63,6 +71,10 @@ export const creatingUserAction = payload => ({
 });
 export const existingUserAction = payload => ({
   type: EXISTING_USER,
+  payload,
+});
+export const gettingUserByIdAction = payload => ({
+  type: GETTING_USER,
   payload,
 });
 export const creatingStoreInfoAction = payload => ({
@@ -110,6 +122,11 @@ export const nodeSendingOTPApi = (
     dispatch(setError(message));
   } else {
     const sendOTPStatus = get(result, DATA.SUCCESS);
+    dispatch(
+      setSuccess(
+        'Mã OTP vừa được gởi đến số điện thoại đăng ký. Hãy kiểm tra tin nhắn và xác thực mã OTP!',
+      ),
+    );
     dispatch(sendingOTPAction(sendOTPStatus));
   }
   dispatch(setLoading(LOADING.OFF));
@@ -149,6 +166,20 @@ export const nodeExistingUserApi = phone => async dispatch => {
   dispatch(existingUserAction(data));
   dispatch(setLoading(LOADING.OFF));
 };
+
+export const nodeUserByIdApi = id => async dispatch => {
+  dispatch(setLoading(LOADING.ON));
+  const [result, error] = await handleRequest(nodeUserById, [id]);
+  if (error) {
+    const message = get(error, DATA.MESSAGE);
+    dispatch(setError(message));
+  } else {
+    const userDetail = get(result, DATA.OBJECT);
+    dispatch(gettingUserByIdAction(userDetail));
+  }
+  dispatch(setLoading(LOADING.OFF));
+};
+
 export const nodeCreatingStoreApi = (data, token) => async dispatch => {
   dispatch(setLoading(LOADING.ON));
   dispatch(creatingStoreProgressAction(true));

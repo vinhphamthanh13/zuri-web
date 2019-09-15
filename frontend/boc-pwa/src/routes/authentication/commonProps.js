@@ -11,6 +11,7 @@ import {
   creatingUserAction,
   verifyingOTPAction,
   nodeCreatingStoreApi,
+  nodeUserByIdApi,
 } from 'actions/authenticationActions';
 import { selectedShopIdAction } from 'actions/shopsActions';
 
@@ -60,5 +61,6 @@ export const shopsProps = {
   }),
   mapDispatchToProps: dispatch => ({
     dispatchSelectedShopId: id => dispatch(selectedShopIdAction(id)),
+    dispatchGettingUserById: id => dispatch(nodeUserByIdApi(id)),
   }),
 };
