@@ -40,6 +40,7 @@ export const CLOSE = 'Đóng lại';
 export const START = 'Bắt đầu';
 export const SAVE = 'Lưu';
 export const CHANGE_STORE = 'Đổi cửa hàng';
+export const CREATE_STORE = 'Tạo cửa hàng';
 export const RESEND_OTP = 'Gởi lại mã OTP';
 
 // CTA value

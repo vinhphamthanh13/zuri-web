@@ -9,11 +9,18 @@ import { chunk, get } from 'lodash';
 import { SHOP } from 'constants/shop';
 import Empty from 'components/Empty';
 import Button from 'components/Button';
-import { gray } from 'constants/colors';
+import { gray, triad05 } from 'constants/colors';
 import Modal from 'components/Modal';
-import { Store, PhoneIphone, Place, ArrowForward } from 'constants/svg';
+import {
+  Store,
+  PhoneIphone,
+  Place,
+  ArrowForward,
+  Sync,
+  Create,
+} from 'constants/svg';
 import { formatStringLength } from 'utils/string';
-import { ACCESS_DENIED, CHANGE_STORE } from 'constants/common';
+import { ACCESS_DENIED, CHANGE_STORE, EDIT } from 'constants/common';
 import { ROUTER_URL } from 'constants/routerUrl';
 import ShopDetail from './components/ShopDetail';
 import { shopsProps } from './commonProps';
@@ -103,6 +110,17 @@ class Shop extends React.Component {
     });
   };
 
+  handleEditingShop = value => () => {
+    this.setState({
+      isEditingShop: value,
+    });
+  };
+
+  handleDirectEdit = value => () => {
+    this.handleShowShopDetail(value)();
+    this.handleEditingShop(value)();
+  };
+
   handleConfirmChangingStore = () => {
     this.handleChangeStore(false)();
     navigateTo(ROUTER_URL.AUTH.SHOPS);
@@ -110,10 +128,15 @@ class Shop extends React.Component {
 
   render() {
     const { dispatchUpdatingStoreInfo, accessToken, userDetail } = this.props;
-    const { isOpenShopDetail, gettingShopInfo, isChangingStore } = this.state;
+    const {
+      isOpenShopDetail,
+      gettingShopInfo,
+      isChangingStore,
+      isEditingShop,
+    } = this.state;
     const shopName = get(gettingShopInfo, 'cuaHangName');
     const phoneNumber = get(gettingShopInfo, 'phone');
-    const managerPhone = get(gettingShopInfo, 'managerPhone');
+    const managerPhone = get(gettingShopInfo, 'managerPhone') || phoneNumber;
     const shopAddress = get(gettingShopInfo, 'address');
     const shopList = get(userDetail, 'listCuaHang') || [];
     const shopCount = shopList.length;
@@ -127,6 +150,8 @@ class Shop extends React.Component {
             onClose={this.handleShowShopDetail}
             shopDetail={{ ...gettingShopInfo, accessToken }}
             updatingStore={dispatchUpdatingStoreInfo}
+            isEdit={isEditingShop}
+            handleEditShop={this.handleDirectEdit}
           />
         )}
         {isChangingStore && (
@@ -168,17 +193,28 @@ class Shop extends React.Component {
                   <ArrowForward size={18} hexColor={gray} />
                 </div>
               </div>
-              {shopCount && (
-                <div className={s.changeStore}>
+              <div className={s.changeStore}>
+                <Button
+                  label={EDIT}
+                  onClick={this.handleDirectEdit(true)}
+                  variant="text"
+                  gutter
+                  small
+                >
+                  <Create size={22} hexColor={triad05} />
+                </Button>
+                {shopCount && (
                   <Button
                     label={CHANGE_STORE}
                     onClick={this.handleChangeStore(true)}
                     variant="text"
                     gutter
                     small
-                  />
-                </div>
-              )}
+                  >
+                    <Sync size={22} hexColor={triad05} />
+                  </Button>
+                )}
+              </div>
               {this.createMenu()}
             </>
           )}

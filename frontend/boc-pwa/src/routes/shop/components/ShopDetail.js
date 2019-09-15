@@ -15,15 +15,19 @@ class ShopDetail extends Component {
   static propTypes = {
     onClose: func.isRequired,
     isValid: bool.isRequired,
+    isEdit: bool,
     handleSubmit: func.isRequired,
     values: objectOf(any).isRequired,
     errors: objectOf(string).isRequired,
     touched: objectOf(bool).isRequired,
     handleChange: func.isRequired,
     setFieldTouched: func.isRequired,
+    handleEditShop: func.isRequired,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    isEdit: false,
+  };
 
   constructor(props) {
     super(props);
@@ -34,7 +38,9 @@ class ShopDetail extends Component {
   }
 
   handleEditShopDetail = value => () => {
-    this.setState({ isEditable: value });
+    const { isEdit, handleEditShop } = this.props;
+    if (isEdit) handleEditShop(value)();
+    else this.setState({ isEditable: value });
   };
 
   handleSaveShopDetail = () => {
@@ -50,10 +56,12 @@ class ShopDetail extends Component {
       values,
       touched,
       setFieldTouched,
+      isEdit,
     } = this.props;
 
     const { initValues, isEditable } = this.state;
-    const resolvedValues = isEditable ? values : initValues;
+    const fieldEnabled = isEdit || isEditable;
+    const resolvedValues = fieldEnabled ? values : initValues;
 
     return Object.keys(SHOP_DETAIL.CATEGORY).map(menu => (
       <div key={menu} className={s.menu}>
@@ -70,7 +78,7 @@ class ShopDetail extends Component {
               value={resolvedValues[input.VALUE]}
               placeholder={input.PLACEHOLDER}
               gutter={input.GUTTER || false}
-              disabled={!isEditable}
+              disabled={!fieldEnabled}
               touched={touched}
               onTouch={setFieldTouched}
             />
@@ -108,13 +116,14 @@ class ShopDetail extends Component {
   };
 
   render() {
-    const { onClose } = this.props;
+    const { onClose, isEdit } = this.props;
     const { isEditable } = this.state;
+    const resolvedEditable = isEdit || isEditable;
     return (
       <div className={s.container}>
         <div className={s.formInfo}>
           {this.createInfo()}
-          {!isEditable && (
+          {!resolvedEditable && (
             <div className={s.editableButton}>
               <Button variant="text" label={CLOSE} onClick={onClose(false)}>
                 <Clear hexColor={triad06} />
@@ -128,7 +137,7 @@ class ShopDetail extends Component {
               </Button>
             </div>
           )}
-          {isEditable && this.createCta()}
+          {resolvedEditable && this.createCta()}
         </div>
       </div>
     );

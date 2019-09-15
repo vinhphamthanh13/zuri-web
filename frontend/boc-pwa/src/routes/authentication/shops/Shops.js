@@ -11,6 +11,7 @@ import {
   LS_COME_BACK,
   ACCESS_DENIED,
   LS_CREATING_STORE,
+  CREATE_STORE,
 } from 'constants/common';
 import Button from 'components/Button';
 import Empty from 'components/Empty';
@@ -122,7 +123,7 @@ class Shops extends Component {
         {this.createShops()}
         <div className={s.newShop}>
           <Button
-            label="Tạo cửa hàng mới"
+            label={CREATE_STORE}
             disabled={!accessToken}
             onClick={this.handleCreatingStore}
           >

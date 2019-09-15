@@ -26,7 +26,7 @@
 .changeStore {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   color: var(--c-triad-08);
 }
 
