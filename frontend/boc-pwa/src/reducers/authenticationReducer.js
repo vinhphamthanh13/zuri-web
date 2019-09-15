@@ -6,10 +6,12 @@ import {
   SET_PHONE_NUMBER,
   SENDING_OTP,
   VERIFYING_OTP,
+  VERIFYING_OTP_STATUS,
   EXISTING_USER,
   CREATING_USER,
   CREATING_STORE_INFO,
   CREATING_STORE,
+  CREATING_STORE_STATUS,
   CREATING_STORE_PROGRESS,
   SETTING_USER_DETAIL,
   GETTING_USER,
@@ -19,12 +21,7 @@ const persistConfig = {
   key: 'authentication',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: [
-    'sendingOTPStatus',
-    'existingUser',
-    'checkingCount',
-    'creatingUser',
-  ],
+  blacklist: ['sendingOTPStatus', 'existingUser', 'creatingUser'],
 };
 
 const initState = {
@@ -71,6 +68,12 @@ const reducer = (state = initState, action) => {
       ...action.payload, // verifyingOTPStatus, accessToken, userDetail
     };
   }
+  if (action.type === VERIFYING_OTP_STATUS) {
+    return {
+      ...state,
+      verifyingOTPStatus: action.payload,
+    };
+  }
   // coupling with shopsReducer
   if (action.type === SETTING_USER_DETAIL) {
     return {
@@ -94,6 +97,12 @@ const reducer = (state = initState, action) => {
     return {
       ...state,
       creatingUser: action.payload,
+    };
+  }
+  if (action.type === CREATING_STORE_STATUS) {
+    return {
+      ...state,
+      creatingStoreStatus: action.payload,
     };
   }
   if (action.type === CREATING_STORE_INFO) {

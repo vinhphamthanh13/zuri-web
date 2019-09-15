@@ -10,12 +10,7 @@ import { get } from 'lodash';
 import { NODE_SERVER_URL, PROXY_AUTH } from 'actions/constants';
 import { DATA } from 'constants/common';
 import { handleRequest } from 'api/utils';
-import {
-  LOADING,
-  setLoading,
-  setError,
-  setSuccess,
-} from 'actions/commonActions';
+import { LOADING, setLoading, setError } from 'actions/commonActions';
 import { HTTP_STATUS } from 'constants/http';
 
 // Action API to Node Server
@@ -44,11 +39,13 @@ export const SET_USERS = 'AUTH.SET_USERS';
 export const SET_PHONE_NUMBER = 'AUTH.SET_PHONE_NUMBER';
 export const SENDING_OTP = 'AUTH.SENDING_OTP';
 export const VERIFYING_OTP = 'AUTH.VERIFYING_OTP';
+export const VERIFYING_OTP_STATUS = 'AUTH.VERIFYING_OTP_STATUS';
 export const CREATING_USER = 'AUTH.CREATING_USER';
 export const EXISTING_USER = 'AUTH.EXISTING_USER';
 export const SETTING_USER_DETAIL = 'AUTH.SETTING_USER_DETAIL';
 export const CREATING_STORE = 'AUTH.CREATING_STORE';
 export const CREATING_STORE_INFO = 'AUTH.CREATING_STORE_INFO';
+export const CREATING_STORE_STATUS = 'AUTH.CREATING_STORE_STATUS';
 export const CREATING_STORE_PROGRESS = 'AUTH.CREATING_STORE_PROGRESS';
 export const GETTING_USER = 'AUTH.GETTING_USER';
 
@@ -63,6 +60,10 @@ export const sendingOTPAction = payload => ({
 });
 export const verifyingOTPAction = payload => ({
   type: VERIFYING_OTP,
+  payload,
+});
+export const verifyingOTPStatusAction = payload => ({
+  type: VERIFYING_OTP_STATUS,
   payload,
 });
 export const creatingUserAction = payload => ({
@@ -83,6 +84,10 @@ export const creatingStoreInfoAction = payload => ({
 });
 export const creatingStoreAction = payload => ({
   type: CREATING_STORE,
+  payload,
+});
+export const creatingStoreStatusAction = payload => ({
+  type: CREATING_STORE_STATUS,
   payload,
 });
 export const creatingStoreProgressAction = payload => ({
@@ -122,11 +127,6 @@ export const nodeSendingOTPApi = (
     dispatch(setError(message));
   } else {
     const sendOTPStatus = get(result, DATA.SUCCESS);
-    dispatch(
-      setSuccess(
-        'Mã OTP vừa được gởi đến số điện thoại đăng ký. Hãy kiểm tra tin nhắn và xác thực mã OTP!',
-      ),
-    );
     dispatch(sendingOTPAction(sendOTPStatus));
   }
   dispatch(setLoading(LOADING.OFF));

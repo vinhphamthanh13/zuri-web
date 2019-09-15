@@ -146,23 +146,6 @@ export const TAX = {
 };
 export const SHOP_DETAIL = {
   CATEGORY: {
-    BUSINESS: {
-      NAME: 'Quy mô cửa hàng',
-      MENU: [
-        {
-          LABEL: 'Mô hình kinh doanh',
-          VALUE: 'businessType',
-          PLACEHOLDER: 'Chọn mô hình kinh doanh',
-          DROPDOWN: true,
-        },
-        {
-          LABEL: 'Doanh mục sản phẩm',
-          VALUE: 'categoryType',
-          PLACEHOLDER: 'Chọn sản phẩm kinh doanh',
-          GUTTER: true,
-        },
-      ],
-    },
     INFO: {
       NAME: 'Thông tin cửa hàng',
       MENU: [
@@ -185,6 +168,23 @@ export const SHOP_DETAIL = {
         },
       ],
     },
+    BUSINESS: {
+      NAME: 'Quy mô cửa hàng',
+      MENU: [
+        {
+          LABEL: 'Mô hình kinh doanh',
+          VALUE: 'businessType',
+          PLACEHOLDER: 'Chọn mô hình kinh doanh',
+          DROPDOWN: true,
+        },
+        {
+          LABEL: 'Doanh mục sản phẩm',
+          VALUE: 'categoryType',
+          PLACEHOLDER: 'Chọn sản phẩm kinh doanh',
+          GUTTER: true,
+        },
+      ],
+    },
     BRANCH: {
       NAME: 'Thông tin chi nhánh',
       MENU: [
@@ -196,7 +196,7 @@ export const SHOP_DETAIL = {
         {
           TYPE: 'tel',
           LABEL: 'Số điện thoại quản lý',
-          VALUE: 'phone',
+          VALUE: 'phoneNumber',
           PLACEHOLDER: 'Nhập số điện thoại',
         },
         {

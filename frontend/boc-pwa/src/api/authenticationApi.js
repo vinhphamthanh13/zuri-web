@@ -159,7 +159,7 @@ router.post(NODE_SERVER_URL.CREATING_STORE, async (req, res) => {
     danhMucMatHangType: data.categoryType,
     managerEmail: data.userEmail,
     managerName: data.userName,
-    managerPhone: data.phoneNumber,
+    managerPhone: data.managerPhone,
     moHinhKinhDoanhType: data.businessType,
     phone: data.phoneNumber,
   };

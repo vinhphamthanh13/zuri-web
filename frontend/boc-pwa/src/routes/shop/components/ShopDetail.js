@@ -161,7 +161,7 @@ const enhancers = [
         managerPhone,
         shopAddress: address,
         userName: managerName,
-        phone,
+        phoneNumber: phone,
         userEmail: managerEmail,
       };
     },

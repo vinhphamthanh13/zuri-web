@@ -8,7 +8,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { withFormik } from 'formik';
-import { register } from 'constants/schemas';
+import { creatingShop } from 'constants/schemas';
 import {
   REGISTER,
   INIT_USER,
@@ -33,6 +33,7 @@ class RegisterShop extends Component {
     creatingUser: bool,
     phoneNumber: string.isRequired,
     handleSubmit: func.isRequired,
+    dispatchCleanUpAuthentication: func.isRequired,
   };
 
   static defaultProps = {
@@ -55,7 +56,10 @@ class RegisterShop extends Component {
 
     return null;
   }
+
   componentDidMount() {
+    const { dispatchCleanUpAuthentication } = this.props;
+    dispatchCleanUpAuthentication();
     this.unblockNavigation = blockNavigation(BLOCKING_STORE_MESSAGE);
   }
 
@@ -151,17 +155,17 @@ class RegisterShop extends Component {
 const enhancers = [
   withFormik({
     mapPropsToValues: () => ({
-      userName: 'BOC',
-      shopName: 'BOCVN',
-      managerPhone: '0936388480',
+      userName: '',
+      shopName: '',
+      managerPhone: '',
       shopAddress: '01 đường số 34, Bình Trị Đông B, Bình Tân, TP.HCM',
-      businessType: 'Quán Cao Cấp',
-      categoryType: 'Coffee',
-      userEmail: 'bocvn2020@gmail.com',
+      businessType: '',
+      categoryType: '',
+      userEmail: '',
       policiesAndTerms: false,
     }),
     validateOnBlur: true,
-    validationSchema: register,
+    validationSchema: creatingShop,
     handleSubmit: (
       values,
       {

@@ -24,6 +24,7 @@ import {
   INIT_USER,
   LS_REGISTER,
   LS_COME_BACK,
+  LS_CREATING_STORE,
   CHANGE_ACTIVATION_PHONE,
 } from 'constants/common';
 import { triad08 } from 'constants/colors';
@@ -138,7 +139,10 @@ class Activation extends Component {
 
     // Redirect to verify OTP
     if (sendingOTPStatus) {
-      navigateTo(ROUTER_URL.AUTH.VERIFYING_OTP);
+      navigateTo(ROUTER_URL.AUTH.VERIFYING_OTP, {
+        [LS_CREATING_STORE]: false,
+        [LS_COME_BACK]: ROUTER_URL.AUTH.ACTIVATION,
+      });
     }
   }
 

@@ -10,7 +10,10 @@ import {
   creatingStoreInfoAction,
   creatingUserAction,
   verifyingOTPAction,
+  verifyingOTPStatusAction,
   nodeCreatingStoreApi,
+  creatingStoreStatusAction,
+  creatingStoreProgressAction,
   nodeUserByIdApi,
 } from 'actions/authenticationActions';
 import { selectedShopIdAction } from 'actions/shopsActions';
@@ -29,6 +32,11 @@ export const activationProps = {
     dispatchCreatingUser: phone => dispatch(nodeCreatingUserApi(phone)),
     dispatchCreatingStoreInfo: data => dispatch(creatingStoreInfoAction(data)),
     dispatchCreatingUserAction: value => dispatch(creatingUserAction(value)),
+    dispatchCleanUpAuthentication: () => {
+      dispatch(creatingStoreStatusAction(null));
+      dispatch(creatingStoreProgressAction(null));
+      dispatch(verifyingOTPStatusAction(null));
+    },
   }),
 };
 
@@ -47,6 +55,11 @@ export const verifyCodeProps = {
       dispatch(nodeCreatingStoreApi(data, token)),
     dispatchReSendOTP: (countryCode, phoneNumber) =>
       dispatch(nodeSendingOTPApi(countryCode, phoneNumber)),
+    dispatchCleanUpAuthentication: () => {
+      dispatch(creatingStoreStatusAction(null));
+      dispatch(creatingStoreProgressAction(null));
+      dispatch(verifyingOTPStatusAction(null));
+    },
   }),
 };
 

@@ -14,7 +14,7 @@ export const activation = Yup.object().shape({
     }),
 });
 
-export const register = Yup.object().shape({
+export const creatingShop = Yup.object().shape({
   userName: Yup.string()
     .matches(/[\w]{2,}/, {
       message: '* Tên phải có ít nhất 2 ký tự',
@@ -52,7 +52,7 @@ export const editShop = Yup.object().shape({
     })
     .required('* Nhập tên cửa hàng'),
   managerPhone: Yup.string()
-    .required('* Nhập số điện thoại')
+    .required('* Nhập số điện thoại cửa hàng')
     .matches(REGEXP.PHONE_NUMBER, {
       message: '* Số điện thoại không hợp lệ.',
     }),
@@ -65,8 +65,8 @@ export const editShop = Yup.object().shape({
     .matches(/[\w]{2,}/, {
       message: '* Tên phải có ít nhất 2 ký tự',
     })
-    .required('* Nhập tên người dùng'),
-  phone: Yup.string()
+    .required('* Nhập tên quản lý'),
+  phoneNumber: Yup.string()
     .required('* Số điện thoại quản lý')
     .matches(REGEXP.PHONE_NUMBER, {
       message: '* Số điện thoại không hợp lệ.',

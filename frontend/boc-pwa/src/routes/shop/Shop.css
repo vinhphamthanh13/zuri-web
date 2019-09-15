@@ -13,20 +13,20 @@
 
 .shopIcon {
   color: var(--c-brand-2);
-  margin: auto var(--size-14);
+  margin: auto var(--size-10);
   padding: var(--size-06);
   background: var(--c-bg-light);
   border-radius: var(--size-radius-standard);
 }
 
 .shopDetail {
-  color: var(--c-success);
+  color: inherit;
 }
 
 .changeStore {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   color: var(--c-triad-08);
 }
 

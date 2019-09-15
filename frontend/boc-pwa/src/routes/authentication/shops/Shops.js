@@ -10,6 +10,7 @@ import {
   LS_SHOP_ID,
   LS_COME_BACK,
   ACCESS_DENIED,
+  LS_CREATING_STORE,
 } from 'constants/common';
 import Button from 'components/Button';
 import Empty from 'components/Empty';
@@ -108,6 +109,7 @@ class Shops extends Component {
   handleCreatingStore = () => {
     navigateTo(ROUTER_URL.AUTH.CREATING_STORE, {
       [LS_COME_BACK]: ROUTER_URL.AUTH.SHOPS,
+      [LS_CREATING_STORE]: true,
     });
   };
 

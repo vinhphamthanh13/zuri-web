@@ -34,6 +34,7 @@ class VerifyOTP extends React.Component {
     setFieldTouched: func.isRequired,
     clearOTPStatus: func.isRequired,
     dispatchCreatingStore: func.isRequired,
+    dispatchCleanUpAuthentication: func.isRequired,
   };
 
   static defaultProps = {
@@ -103,7 +104,12 @@ class VerifyOTP extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { verifyingOTPStatus, storeInfo, dispatchCreatingStore } = prevProps;
+    const {
+      verifyingOTPStatus,
+      storeInfo,
+      dispatchCreatingStore,
+      dispatchCleanUpAuthentication,
+    } = prevProps;
     const {
       verifyingOTPStatus: cachedVerifyingOTPStatus,
       creatingStoreStatus,
@@ -112,10 +118,18 @@ class VerifyOTP extends React.Component {
     } = this.state;
     const isCreatingStore = getLocationState(LS_CREATING_STORE);
 
-    if (verifyingOTPStatus && accessToken) {
+    if (
+      accessToken &&
+      ((isCreatingStore && verifyingOTPStatus && creatingStoreStatus) ||
+        (!isCreatingStore && verifyingOTPStatus))
+    ) {
       this.unblockNavigation();
-      navigateTo(ROUTER_URL.AUTH.SHOPS);
+      navigateTo(ROUTER_URL.AUTH.SHOPS, {
+        [LS_CREATING_STORE]: false,
+      });
+      dispatchCleanUpAuthentication();
     }
+
     if (
       cachedVerifyingOTPStatus &&
       cachedVerifyingOTPStatus !== verifyingOTPStatus

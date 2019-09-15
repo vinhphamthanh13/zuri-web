@@ -21,7 +21,7 @@
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-500);
   margin-bottom: var(--size-04);
-  color: var(--c-brand-4);
+  color: var(--c-warning);
 }
 
 .items {
@@ -70,9 +70,8 @@
 }
 
 .newShop {
-  position: absolute;
-  bottom: var(--size-padding);
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: var(--size-18);
 }

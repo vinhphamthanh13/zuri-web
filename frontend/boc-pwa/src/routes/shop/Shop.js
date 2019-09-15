@@ -112,7 +112,8 @@ class Shop extends React.Component {
     const { dispatchUpdatingStoreInfo, accessToken, userDetail } = this.props;
     const { isOpenShopDetail, gettingShopInfo, isChangingStore } = this.state;
     const shopName = get(gettingShopInfo, 'cuaHangName');
-    const phone = get(gettingShopInfo, 'phone');
+    const phoneNumber = get(gettingShopInfo, 'phone');
+    const managerPhone = get(gettingShopInfo, 'managerPhone');
     const shopAddress = get(gettingShopInfo, 'address');
     const shopList = get(userDetail, 'listCuaHang') || [];
     const shopCount = shopList.length;
@@ -150,11 +151,14 @@ class Shop extends React.Component {
                   </div>
                   <div className={s.detailItem}>
                     <PhoneIphone size={20} hexColor={gray} />
-                    <span>{phone}</span>
+                    <span>&nbsp;{phoneNumber}</span>
+                    <span>&nbsp;-&nbsp;</span>
+                    <Store size={20} hexColor={gray} />
+                    <span>&nbsp;{managerPhone}</span>
                   </div>
                   <div className={s.detailItem}>
                     <Place size={20} hexColor={gray} />
-                    <span>{formatStringLength(shopAddress, 69)}</span>
+                    <span>&nbsp;{formatStringLength(shopAddress, 69)}</span>
                   </div>
                 </div>
                 <div
