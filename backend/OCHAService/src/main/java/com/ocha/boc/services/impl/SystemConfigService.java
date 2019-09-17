@@ -49,6 +49,7 @@ public class SystemConfigService {
                 systemConfig.setListGiayInConfiguration(listGiayIn);
                 SystemConfigDTO systemConfigDTO = new SystemConfigDTO(systemConfig);
                 response.setObject(systemConfigDTO);
+                response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             }
         } catch (Exception e) {
