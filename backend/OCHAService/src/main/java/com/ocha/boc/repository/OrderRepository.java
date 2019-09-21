@@ -11,17 +11,17 @@ import java.util.Optional;
 
 public interface OrderRepository extends MongoRepository<Order, String> {
 
-    Optional<Order> findOrderByIdAndCuaHangId(String orderId, String cuaHangId);
+    Optional<Order> findOrderByIdAndRestaurantId(String orderId, String restaurantId);
 
-    Optional<Order> findOrderByReceiptCodeAndCuaHangId(String receiptCode, String cuaHangId);
+    Optional<Order> findOrderByReceiptCodeAndRestaurantId(String receiptCode, String restaurantId);
 
-    Optional<Order> findOrderByTakeAWayOptionCodeAndCuaHangId(String takeAWayCode, String cuaHangId);
+    Optional<Order> findOrderByTakeAWayOptionCodeAndRestaurantId(String takeAWayCode, String restaurantId);
 
-    Page<Order> findAllByCuaHangId(Pageable pageable, String cuaHangId);
+    Page<Order> findAllByRestaurantId(Pageable pageable, String restaurantId);
 
 //    List<Order> findAllOrderByCuaHangId(String cuaHangId);
 
-    List<Order> findAllOrderByCreatedDateAndCuaHangId(String createDate, String cuaHangId);
+    List<Order> findAllOrderByCreatedDateAndRestaurantId(String createDate, String restaurantId);
 
     @Query(value = "{'cuaHangId': ?0 , 'createdDate' : {$gte: ?1, $lte: ?2}}")
     List<Order> findAllOrderByCuaHangIdCreateDateBetween(String cuaHangId ,String fromDate, String toDate);

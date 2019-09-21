@@ -79,18 +79,18 @@ public class OrderController {
     }
 
     /**
-     * Get Orders By CuaHangId
+     * Get Orders By RestaurantId
      *
      * @param pageRequest
-     * @param cuaHangId
+     * @param restaurantId
      * @return
      */
-    @ApiOperation(value = "Get Order By CuaHangId", authorizations = {@Authorization(value = "Bearer")})
-    @PostMapping("/orders/{cuaHangId}")
-    public ResponseEntity<OrderResponse> getOrdersByCuaHangId(@RequestBody PageRequest pageRequest, @PathVariable(value = "cuaHangId") String cuaHangId) {
+    @ApiOperation(value = "Get Order By RestaurantId", authorizations = {@Authorization(value = "Bearer")})
+    @PostMapping("/orders/{restaurantId}")
+    public ResponseEntity<OrderResponse> getOrdersByRestaurantId(@RequestBody PageRequest pageRequest, @PathVariable(value = "restaurantId") String restaurantId) {
         log.info("START: get orders ");
-        OrderResponse response = orderService.getOrdersByCuaHangId(pageRequest, cuaHangId);
-        log.info("END: get orders by cuaHangId");
+        OrderResponse response = orderService.getOrdersByRestaurantId(pageRequest, restaurantId);
+        log.info("END: get orders by restaurantId");
         return ResponseEntity.ok(response);
     }
 }

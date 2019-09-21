@@ -1,6 +1,6 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.entity.MatHangTieuThu;
+import com.ocha.boc.entity.ProductConsumeObject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,10 +19,10 @@ public class OrderUpdateRequest implements Serializable {
     private String orderId;
 
     @NotNull
-    private String cuaHangId;
+    private String restaurantId;
 
     @NotNull
-    private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
+    private List<ProductConsumeObject> listProductConsumeObject = new ArrayList<ProductConsumeObject>();
 
     private String orderLocation;
 }

@@ -1,6 +1,6 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.entity.MatHangTieuThu;
+import com.ocha.boc.entity.ProductConsumeObject;
 import com.ocha.boc.enums.DiscountType;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class OrderCheckoutObjectRequest implements Serializable {
     private String orderId;
 
     @NotNull
-    private String cuaHangId;
+    private String restaurantId;
 
     @NotNull
-    private List<MatHangTieuThu> listMatHangTieuThu;
+    private List<ProductConsumeObject> listProductConsumeObject;
 
     @NotNull
     private BigDecimal cash;
@@ -30,11 +30,11 @@ public class OrderCheckoutObjectRequest implements Serializable {
 
     private DiscountType discountType;
 
-    private String giamGiaName;
+    private String discountName;
 
-    private BigDecimal giamGiaPercentage;
+    private BigDecimal percentageDiscount;
 
     private BigDecimal giamGiaDiscountAmount;
 
-    private String danhMucIsDiscountedId;
+    private String categoryIsDiscountedId;
 }

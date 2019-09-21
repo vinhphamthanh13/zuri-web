@@ -1,6 +1,6 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.entity.MatHangTieuThu;
+import com.ocha.boc.entity.ProductConsumeObject;
 import com.ocha.boc.enums.OrderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +17,7 @@ import java.util.List;
 public class OrderRequest implements Serializable {
 
     @NotNull
-    private String cuaHangId;
+    private String restaurantId;
 
     @NotNull
     private String waiterName;
@@ -26,7 +26,7 @@ public class OrderRequest implements Serializable {
     private OrderType orderType;
 
     @NotNull
-    private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
+    private List<ProductConsumeObject> listProductConsumeObject = new ArrayList<ProductConsumeObject>();
 
     private String orderLocation;
 }

@@ -28,7 +28,7 @@ public class Order {
 
     private String lastModifiedDate;
 
-    private String cuaHangId;
+    private String restaurantId;
 
     /**
      * Mã Biên Lai
@@ -64,7 +64,7 @@ public class Order {
      */
     private String takeAWayOptionCode;
 
-    private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
+    private List<ProductConsumeObject> ProductConsumeList = new ArrayList<ProductConsumeObject>();
 
     private BigDecimal totalMoney;
 
@@ -95,15 +95,15 @@ public class Order {
 
     private DiscountType discountType;
 
-    private String giamGiaName;
+    private String discountName;
 
-    private BigDecimal giamGiaPercentage;
+    private BigDecimal percentageDiscount;
 
     private BigDecimal giamGiaDiscountAmount;
 
     /**
      * danhMucIsDiscountedId: danh mục được giảm giá với giảm giá type là "GIẢM GIÁ THEO DANH MỤC"
      */
-    private String danhMucIsDiscountedId;
+    private String categoryIsDiscountedId;
 
 }

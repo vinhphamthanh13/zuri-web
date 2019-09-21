@@ -1,7 +1,7 @@
 package com.ocha.boc.enums;
 
 
-public enum RevenuePercentageStatusType {
+public enum PercentageRevenueStatusType {
 
     INCREASE("INCREASE"),
 
@@ -15,7 +15,7 @@ public enum RevenuePercentageStatusType {
 
     public final String label;
 
-    private RevenuePercentageStatusType(String label){
+    private PercentageRevenueStatusType(String label){
         this.label = label;
     }
 }

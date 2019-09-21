@@ -1,8 +1,8 @@
 package com.ocha.boc.services.impl;
 
 import com.ocha.boc.dto.OrderDTO;
-import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
+import com.ocha.boc.entity.ProductConsumeObject;
 import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
@@ -42,28 +42,28 @@ public class OrderService {
         try {
             if (!Objects.isNull(request)) {
                 Order order = new Order();
-                order.setCuaHangId(request.getCuaHangId());
+                order.setRestaurantId(request.getRestaurantId());
                 order.setWaiterName(request.getWaiterName());
                 order.setOrderType(request.getOrderType());
                 order.setCreatedDate(DateUtils.getCurrentDate());
                 order.setOrderTime(Instant.now().toString());
                 order.setOrderStatus(OrderStatus.PENDING);
-                order.setListMatHangTieuThu(request.getListMatHangTieuThu());
+                order.setProductConsumeList(request.getListProductConsumeObject());
                 if (request.getOrderType().label.equalsIgnoreCase(OrderType.DÙNG_TẠI_BÀN.label)) {
                     if (StringUtils.isNotEmpty(request.getOrderLocation())) {
                         order.setOrderLocation(request.getOrderLocation());
                     }
                 } else {
-                    order.setTakeAWayOptionCode(generateTakeAWayCode(request.getCuaHangId()));
+                    order.setTakeAWayOptionCode(generateTakeAWayCode(request.getRestaurantId()));
                 }
-                order.setTotalMoney(calculateTotalMoney(request.getListMatHangTieuThu()));
+                order.setTotalMoney(calculateTotalMoney(request.getListProductConsumeObject()));
                 orderRepository.save(order);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setObject(new OrderDTO(order));
             }
         } catch (Exception e) {
-            log.error("Error when initialOrder: {}", e);
+            log.error("Error when initial Order: ", e);
         }
         return response;
     }
@@ -75,14 +75,14 @@ public class OrderService {
         response.setMessage(CommonConstants.UPDATE_ORDER_FAIL);
         try {
             if (request != null) {
-                Optional<Order> order = Optional.ofNullable(orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(),
-                        request.getCuaHangId()).map(orderDb -> {
+                Optional<Order> order = Optional.ofNullable(orderRepository.findOrderByIdAndRestaurantId(request.getOrderId(),
+                        request.getRestaurantId()).map(orderDb -> {
                     if (StringUtils.isNotEmpty(request.getOrderLocation())) {
                         orderDb.setOrderLocation(request.getOrderLocation());
                     }
-                    if (CollectionUtils.isNotEmpty(request.getListMatHangTieuThu())) {
-                        orderDb.setListMatHangTieuThu(request.getListMatHangTieuThu());
-                        orderDb.setTotalMoney(calculateTotalMoney(request.getListMatHangTieuThu()));
+                    if (CollectionUtils.isNotEmpty(request.getListProductConsumeObject())) {
+                        orderDb.setProductConsumeList(request.getListProductConsumeObject());
+                        orderDb.setTotalMoney(calculateTotalMoney(request.getListProductConsumeObject()));
                     }
                     orderDb.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     return orderRepository.save(orderDb);
@@ -92,7 +92,7 @@ public class OrderService {
                 response.setObject(new OrderDTO(order.get()));
             }
         } catch (Exception e) {
-            log.error("Error when updateOrderInformation: {}", e);
+            log.error("Error when update Order Information: ", e);
         }
         return response;
     }
@@ -103,14 +103,14 @@ public class OrderService {
         response.setMessage(CommonConstants.ORDER_CHECKOUT_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                Optional<Order> order = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
+                Optional<Order> order = orderRepository.findOrderByIdAndRestaurantId(request.getOrderId(), request.getRestaurantId());
                 if (order.isPresent()) {
                     order.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     order.get().setOrderTimeCheckOut(Instant.now().toString());
-                    BigDecimal totalMoney = calculateTotalMoney(request.getListMatHangTieuThu());
+                    BigDecimal totalMoney = calculateTotalMoney(request.getListProductConsumeObject());
                     order.get().setTotalMoney(totalMoney);
                     order.get().setRefunds(totalMoney);
-                    order.get().setReceiptCode(generateReceiptCode(request.getCuaHangId()));
+                    order.get().setReceiptCode(generateReceiptCode(request.getRestaurantId()));
                     orderRepository.save(order.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -120,7 +120,7 @@ public class OrderService {
                 }
             }
         } catch (Exception e) {
-            log.error("Error when rejectOrder: {}", e);
+            log.error("Error when reject Order: {}", e);
         }
         return response;
     }
@@ -133,35 +133,36 @@ public class OrderService {
         BigDecimal amountOfAssumption = BigDecimal.ZERO;
         try {
             if (!Objects.isNull(request)) {
-                Optional<Order> optOrder = orderRepository.findOrderByIdAndCuaHangId(request.getOrderId(), request.getCuaHangId());
+                Optional<Order> optOrder = orderRepository.findOrderByIdAndRestaurantId(request.getOrderId(), request.getRestaurantId());
                 if (optOrder.isPresent()) {
                     Order order = optOrder.get();
                     order.setOrderStatus(OrderStatus.SUCCESS);
                     order.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     order.setOrderTimeCheckOut(Instant.now().toString());
-                    order.setListMatHangTieuThu(request.getListMatHangTieuThu());
+                    order.setProductConsumeList(request.getListProductConsumeObject());
                     if (!request.getDiscountType().equals(DiscountType.NONE)) {
                         Map<String, BigDecimal> typeOrPrice = new HashMap<String, BigDecimal>();
                         if (request.getDiscountType().equals(DiscountType.GIẢM_GIÁ_THEO_DANH_MỤC)) {
-                            typeOrPrice = calculateTotalWithGiamGiaDanhMucType(request.getListMatHangTieuThu(), request.getDanhMucIsDiscountedId(), request.getGiamGiaPercentage());
-                            order.setGiamGiaPercentage(request.getGiamGiaPercentage());
+                            typeOrPrice = calculateTotalWithGiamGiaDanhMucType(request.getListProductConsumeObject(),
+                                    request.getCategoryIsDiscountedId(), request.getPercentageDiscount());
+                            order.setPercentageDiscount(request.getPercentageDiscount());
                         } else if (request.getDiscountType().equals(DiscountType.GIẢM_GIÁ_THÔNG_THƯỜNG)) {
-                            if (request.getGiamGiaPercentage() != null) {
-                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithPercentage(calculateTotalMoney(request.getListMatHangTieuThu()),
-                                        request.getGiamGiaPercentage());
-                                order.setGiamGiaPercentage(request.getGiamGiaPercentage());
+                            if (request.getPercentageDiscount() != null) {
+                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithPercentage(calculateTotalMoney(request.getListProductConsumeObject()),
+                                        request.getPercentageDiscount());
+                                order.setPercentageDiscount(request.getPercentageDiscount());
                             } else if (request.getGiamGiaDiscountAmount() != null) {
-                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithDiscountAmount(calculateTotalMoney(request.getListMatHangTieuThu()),
+                                typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithDiscountAmount(calculateTotalMoney(request.getListProductConsumeObject()),
                                         request.getGiamGiaDiscountAmount());
                                 order.setGiamGiaDiscountAmount(request.getGiamGiaDiscountAmount());
                             }
                         }
                         order.setTotalMoney(typeOrPrice.get(TOTAL_MONEY));
                         order.setDiscountMoney(typeOrPrice.get(DISCOUNT_MONEY));
-                        order.setGiamGiaName(request.getGiamGiaName());
+                        order.setDiscountName(request.getDiscountName());
                         order.setDiscountType(request.getDiscountType());
                     } else {
-                        amountOfAssumption = calculateTotalMoney(request.getListMatHangTieuThu());
+                        amountOfAssumption = calculateTotalMoney(request.getListProductConsumeObject());
                         order.setTotalMoney(amountOfAssumption);
                     }
                     order.setCash(request.getCash());
@@ -172,7 +173,7 @@ public class OrderService {
                     if (request.getTips() != null) {
                         order.setTips(request.getTips());
                     }
-                    String receiptCode = generateReceiptCode(request.getCuaHangId());
+                    String receiptCode = generateReceiptCode(request.getRestaurantId());
                     order.setReceiptCode(receiptCode);
                     orderRepository.save(order);
                     response.setSuccess(Boolean.TRUE);
@@ -183,19 +184,19 @@ public class OrderService {
                 }
             }
         } catch (Exception e) {
-            log.error("Error when checkoutOrder: {}", e);
+            log.error("Error when checkout Order: {}", e);
         }
         return response;
     }
 
-    public OrderResponse getOrdersByCuaHangId(PageRequest pageRequest, String cuaHangId) {
+    public OrderResponse getOrdersByRestaurantId(PageRequest pageRequest, String restaurantId) {
         OrderResponse response = new OrderResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_ORDERS_BY_CUAHANGID_FAIL);
+        response.setMessage(CommonConstants.GET_ORDERS_BY_RESTAURANT_ID_FAIL);
         String[] sortSplit = pageRequest.getSort().split(",");
         try {
-            Page<Order> orders = orderRepository.findAllByCuaHangId(new org.springframework.data.domain.PageRequest(pageRequest.getPage(), pageRequest.getSize(),
-                    (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC)), cuaHangId);
+            Page<Order> orders = orderRepository.findAllByRestaurantId(new org.springframework.data.domain.PageRequest(pageRequest.getPage(), pageRequest.getSize(),
+                    (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC)), restaurantId);
             List<OrderDTO> ordersResult = new ArrayList<OrderDTO>();
             for (Order order : orders) {
                 ordersResult.add(new OrderDTO(order));
@@ -205,7 +206,7 @@ public class OrderService {
             response.setObjects(ordersResult);
             response.setTotalResultCount((long) ordersResult.size());
         } catch (Exception e) {
-            log.error("Error when getOrdersByCuaHangId: {}", e);
+            log.error("Error when get order by restaurantId: {}", e);
         }
         return response;
     }
@@ -218,10 +219,10 @@ public class OrderService {
         return String.valueOf(numberRandom);
     }
 
-    private BigDecimal calculateTotalMoney(List<MatHangTieuThu> listMatHangTieuThu) {
+    private BigDecimal calculateTotalMoney(List<ProductConsumeObject> listProductConsumeObject) {
         BigDecimal total = BigDecimal.ZERO;
-        for (MatHangTieuThu matHangTieuThu : listMatHangTieuThu) {
-            total = total.add(matHangTieuThu.getUnitPrice().multiply(BigDecimal.valueOf((double) matHangTieuThu.getQuantity())));
+        for (ProductConsumeObject productConsumeObject : listProductConsumeObject) {
+            total = total.add(productConsumeObject.getUnitPrice().multiply(BigDecimal.valueOf((double) productConsumeObject.getQuantity())));
         }
         return total;
     }
@@ -243,21 +244,21 @@ public class OrderService {
         return results;
     }
 
-    private Map<String, BigDecimal> calculateTotalWithGiamGiaDanhMucType(List<MatHangTieuThu> listMatTieuThu, String danhMucIsDiscountedId, BigDecimal percentage) {
+    private Map<String, BigDecimal> calculateTotalWithGiamGiaDanhMucType(List<ProductConsumeObject> listMatTieuThu, String danhMucIsDiscountedId, BigDecimal percentage) {
         Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
         BigDecimal total = BigDecimal.ZERO;
         BigDecimal discountMoney = BigDecimal.ZERO;
-        for (MatHangTieuThu matHangTieuThu : listMatTieuThu) {
-            if (danhMucIsDiscountedId.equalsIgnoreCase(matHangTieuThu.getDanhMucId())) {
+        for (ProductConsumeObject productConsumeObject : listMatTieuThu) {
+            if (danhMucIsDiscountedId.equalsIgnoreCase(productConsumeObject.getCategoryId())) {
                 //origin price * quantity
-                BigDecimal temp = matHangTieuThu.getUnitPrice().multiply(BigDecimal.valueOf((double) matHangTieuThu.getQuantity()));
+                BigDecimal temp = productConsumeObject.getUnitPrice().multiply(BigDecimal.valueOf((double) productConsumeObject.getQuantity()));
                 //calculate discount money: discount money = discount + (temp * percent discount)
                 discountMoney = discountMoney.add(temp.multiply(percentage.divide(BigDecimal.valueOf(100))));
                 //amount of money have to pay = temp - discount money
                 BigDecimal amountOfAssumption = temp.subtract(discountMoney);
                 total = total.add(amountOfAssumption);
             } else {
-                total = total.add(matHangTieuThu.getUnitPrice().multiply(BigDecimal.valueOf((double) matHangTieuThu.getQuantity())));
+                total = total.add(productConsumeObject.getUnitPrice().multiply(BigDecimal.valueOf((double) productConsumeObject.getQuantity())));
             }
         }
         results.put(TOTAL_MONEY, total);
@@ -265,38 +266,38 @@ public class OrderService {
         return results;
     }
 
-    private boolean checkReceiptCodeIsExisted(String receiptCode, String cuaHangId) {
+    private boolean checkReceiptCodeIsExisted(String receiptCode, String restaurantId) {
         boolean isExisted = false;
-        Optional<Order> order = orderRepository.findOrderByReceiptCodeAndCuaHangId(receiptCode, cuaHangId);
+        Optional<Order> order = orderRepository.findOrderByReceiptCodeAndRestaurantId(receiptCode, restaurantId);
         if (order.isPresent()) {
             isExisted = true;
         }
         return isExisted;
     }
 
-    private boolean checkTakeAWayCodeIsExisted(String takeAWayCode, String cuaHangId) {
+    private boolean checkTakeAWayCodeIsExisted(String takeAWayCode, String restaurantId) {
         boolean isExisted = false;
-        Optional<Order> order = orderRepository.findOrderByTakeAWayOptionCodeAndCuaHangId(takeAWayCode, cuaHangId);
+        Optional<Order> order = orderRepository.findOrderByTakeAWayOptionCodeAndRestaurantId(takeAWayCode, restaurantId);
         if (order.isPresent()) {
             isExisted = true;
         }
         return isExisted;
     }
 
-    private String generateTakeAWayCode(String cuaHangId) {
+    private String generateTakeAWayCode(String restaurantId) {
         boolean isExisted = true;
         String takeAwayCode = "T" + generateRandomNumberCode();
         while (!isExisted) {
-            isExisted = checkTakeAWayCodeIsExisted(takeAwayCode, cuaHangId);
+            isExisted = checkTakeAWayCodeIsExisted(takeAwayCode, restaurantId);
         }
         return takeAwayCode;
     }
 
-    private String generateReceiptCode(String cuaHangId) {
+    private String generateReceiptCode(String restaurantId) {
         boolean isExisted = true;
         String receiptCode = generateRandomNumberCode();
         while (!isExisted) {
-            isExisted = checkReceiptCodeIsExisted(receiptCode, cuaHangId);
+            isExisted = checkReceiptCodeIsExisted(receiptCode, restaurantId);
         }
         return receiptCode;
     }

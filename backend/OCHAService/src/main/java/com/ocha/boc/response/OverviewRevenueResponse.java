@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class DoanhThuTongQuanResponse extends AbstractResponse {
+public class OverviewRevenueResponse extends AbstractResponse {
 
-    private String cuaHangId;
+    private String restaurantId;
 
     private BigDecimal total;
 

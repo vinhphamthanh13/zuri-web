@@ -1,7 +1,7 @@
 package com.ocha.boc.dto;
 
 import com.ocha.boc.base.AbstractEntity;
-import com.ocha.boc.entity.MatHangTieuThu;
+import com.ocha.boc.entity.ProductConsumeObject;
 import com.ocha.boc.entity.Order;
 import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.enums.OrderStatus;
@@ -19,7 +19,7 @@ import java.util.List;
 @ToString
 public class OrderDTO extends AbstractEntity {
 
-    private String cuaHangId;
+    private String restaurantId;
 
     /**
      * Mã Biên Lai
@@ -74,17 +74,17 @@ public class OrderDTO extends AbstractEntity {
 
     private BigDecimal refunds;
 
-    private List<MatHangTieuThu> listMatHangTieuThu = new ArrayList<MatHangTieuThu>();
+    private List<ProductConsumeObject> ProductConsumeList = new ArrayList<ProductConsumeObject>();
 
     private BigDecimal discountMoney;
 
     private DiscountType discountType;
 
-    private String giamGiaName;
+    private String discountName;
 
-    private BigDecimal giamGiaPercentage;
+    private BigDecimal percentageDiscount;
 
-    private BigDecimal giamGiaDiscountAmount;
+    private BigDecimal giamGiadiscountAmount;
 
     /**
      * danhMucIsDiscountedId: danh mục được giảm giá với giảm giá type là "GIẢM GIÁ THEO DANH MỤC"
@@ -93,7 +93,7 @@ public class OrderDTO extends AbstractEntity {
 
     public OrderDTO(Order order) {
         this.id = order.getId();
-        this.cuaHangId = order.getCuaHangId();
+        this.restaurantId = order.getRestaurantId();
         this.receiptCode = order.getReceiptCode();
         this.orderStatus = order.getOrderStatus();
         this.orderType = order.getOrderType();
@@ -109,11 +109,11 @@ public class OrderDTO extends AbstractEntity {
         this.refunds = order.getRefunds();
         this.createdDate = order.getCreatedDate();
         this.lastModifiedDate = order.getLastModifiedDate();
-        this.listMatHangTieuThu = order.getListMatHangTieuThu();
+        this.ProductConsumeList = order.getProductConsumeList();
         this.discountMoney = order.getDiscountMoney();
-        this.giamGiaName = order.getGiamGiaName();
+        this.discountName = order.getDiscountName();
         this.discountType = order.getDiscountType();
-        this.giamGiaPercentage = order.getGiamGiaPercentage();
-        this.giamGiaDiscountAmount = order.getGiamGiaDiscountAmount();
+        this.percentageDiscount = order.getPercentageDiscount();
+        this.giamGiadiscountAmount = order.getGiamGiaDiscountAmount();
     }
 }
