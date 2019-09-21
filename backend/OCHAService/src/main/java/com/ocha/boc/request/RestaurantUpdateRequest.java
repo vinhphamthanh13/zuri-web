@@ -1,7 +1,5 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.enums.DanhMucMatHangType;
-import com.ocha.boc.enums.MoHinhKinhDoanhType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,21 +10,23 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class CuaHangUpdateRequest implements Serializable {
+public class RestaurantUpdateRequest implements Serializable {
 
     @NotNull
-    private String cuaHangId;
+    private String restaurantId;
 
     @NotNull
     private String phone;
 
-    private String  moHinhKinhDoanhType;
+    private String businessModelsType; //mo hinh kinh doanh
 
-    private String  danhMucMatHangType;
+    private String businessItemsType; //danh muc mat hang type
 
     private String address;
 
     private String managerEmail;
 
     private String managerPhone;
+
+    private String managerName;
 }

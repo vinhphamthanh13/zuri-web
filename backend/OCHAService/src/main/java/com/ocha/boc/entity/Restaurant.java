@@ -1,9 +1,6 @@
 package com.ocha.boc.entity;
 
-import com.ocha.boc.enums.DanhMucMatHangType;
-import com.ocha.boc.enums.MoHinhKinhDoanhType;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,18 +8,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @ToString
-@Document(collection = CuaHang.COLLECTION_NAME)
-public class CuaHang {
+@Document(collection = Restaurant.COLLECTION_NAME)
+public class Restaurant {
 
-    public static final String COLLECTION_NAME = "cuahang";
+    public static final String COLLECTION_NAME = "restaurant";
 
     private String id;
 
-    private String moHinhKinhDoanhType;
+    private String businessModelsType; //mo hinh kinh doanh
 
-    private String danhMucMatHangType;
+    private String businessItemsType; //danh muc mat hang type
 
-    private String cuaHangName;
+    private String restaurantName;
 
     private String phone;
 
@@ -39,7 +36,6 @@ public class CuaHang {
     private String lastModifiedDate;
 
     private String userId;
-
 
 
 }

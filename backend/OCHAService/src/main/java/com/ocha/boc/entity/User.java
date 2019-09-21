@@ -34,7 +34,7 @@ public class User extends AbstractEntity {
 
     private UserType role;
 
-    private List<CuaHang> listCuaHang = new ArrayList<>();
+    private List<Restaurant> listRestaurant = new ArrayList<>();
 
     private String lastLoginTime;
 
@@ -50,6 +50,6 @@ public class User extends AbstractEntity {
         this.isActive = userDTO.isActive();
         this.role = userDTO.getRole();
         this.id = userDTO.getId();
-        this.listCuaHang = userDTO.getListCuaHang();
+        this.listRestaurant = userDTO.getListRestaurant();
     }
 }

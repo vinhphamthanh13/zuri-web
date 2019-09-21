@@ -1,7 +1,7 @@
 package com.ocha.boc.dto;
 
 import com.ocha.boc.base.AbstractEntity;
-import com.ocha.boc.entity.CuaHang;
+import com.ocha.boc.entity.Restaurant;
 import com.ocha.boc.entity.User;
 import com.ocha.boc.enums.UserType;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class UserDTO extends AbstractEntity {
 
     private UserType role;
 
-    private List<CuaHang> listCuaHang;
+    private List<Restaurant> listRestaurant;
 
     private String lastLoginTime;
 
@@ -40,7 +40,7 @@ public class UserDTO extends AbstractEntity {
         this.id = user.getId();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedDate = user.getLastModifiedDate();
-        this.listCuaHang = user.getListCuaHang();
+        this.listRestaurant = user.getListRestaurant();
         this.lastLoginTime = user.getLastLoginTime();
     }
 
