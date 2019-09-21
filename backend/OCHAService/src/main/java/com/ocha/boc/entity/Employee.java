@@ -1,6 +1,6 @@
 package com.ocha.boc.entity;
 
-import com.ocha.boc.enums.NhanVienType;
+import com.ocha.boc.enums.EmployeeRole;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,10 +12,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-@Document(collection = NhanVien.COLLECTION_NAME)
-public class NhanVien implements Serializable {
+@Document(collection = Employee.COLLECTION_NAME)
+public class Employee implements Serializable {
 
-    public static final String COLLECTION_NAME = "nhanvien";
+    public static final String COLLECTION_NAME = "employee"; //nhan vien
 
     @Id
     private String id;
@@ -24,7 +24,7 @@ public class NhanVien implements Serializable {
 
     private String lastModifiedDate;
 
-    private String cuaHangId;
+    private String restaurantId;
 
     private String username;
 
@@ -32,6 +32,6 @@ public class NhanVien implements Serializable {
 
     private String fullName;
 
-    private NhanVienType nhanVienType;
+    private EmployeeRole employeeRole;
 
 }

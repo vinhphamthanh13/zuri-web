@@ -1,8 +1,7 @@
 package com.ocha.boc.response;
 
 import com.ocha.boc.base.AbstractResponse;
-import com.ocha.boc.dto.NhanVienDTO;
-import com.ocha.boc.entity.NhanVien;
+import com.ocha.boc.dto.EmployeeDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,5 +11,5 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class NhanVienResponse extends AbstractResponse<String , NhanVienDTO> implements Serializable {
+public class EmployeeResponse extends AbstractResponse<String , EmployeeDTO> implements Serializable {
 }

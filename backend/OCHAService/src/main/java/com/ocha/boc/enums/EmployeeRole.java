@@ -1,6 +1,6 @@
 package com.ocha.boc.enums;
 
-public enum NhanVienType {
+public enum EmployeeRole {
 
     NHÂN_VIÊN("Nhân viên"),
 
@@ -10,7 +10,7 @@ public enum NhanVienType {
 
     public final String label;
 
-    private NhanVienType(String label){
+    EmployeeRole(String label) {
         this.label = label;
     }
 }
