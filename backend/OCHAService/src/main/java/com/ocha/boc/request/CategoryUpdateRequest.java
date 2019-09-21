@@ -3,20 +3,21 @@ package com.ocha.boc.request;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
 @Setter
 @ToString
-public class DanhMucRequest implements Serializable {
+public class CategoryUpdateRequest implements Serializable {
 
     private String abbreviations;
 
-    @NonNull
     private String name;
 
-    @NonNull
-    private String cuaHangId;
+    private String categoryId;
+
+    @NotNull
+    private String restaurantId;
 }

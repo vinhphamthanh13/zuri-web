@@ -14,19 +14,19 @@ public class CommonConstants {
     /**
      * Danh Mục Error:
      */
-    public static final String CREATE_NEW_DANH_MUC_FAIL                 = "Không thể tạo mới danh mục. Lỗi hệ thống !";
+    public static final String CREATE_NEW_CATEGORY_FAIL                 = "Không thể tạo mới danh mục. Lỗi hệ thống !";
 
-    public static final String UPDATE_DANH_MUC_FAIL                     = "Không thể cập nhật cho danh mục này. Lỗi hệ thống";
+    public static final String UPDATE_CATEGORY_FAIL                     = "Không thể cập nhật cho danh mục này. Lỗi hệ thống";
 
-    public static final String DANH_MUC_NAME_IS_NULL                    = "Không thể tìm thấy danh mục này.";
+    public static final String CATEGORY_NAME_IS_NULL                    = "Không thể tìm thấy danh mục này.";
 
-    public static final String GET_ALL_DANH_MUC_FAIL                    = "Không tìm thấy thông tin danh mục. Lỗi hệ thống !";
+    public static final String GET_ALL_CATEGORY_FAIL                    = "Không tìm thấy thông tin danh mục. Lỗi hệ thống !";
 
-    public static final String DELETE_DANH_MUC_BY_DANH_MUC_ID_FAIL      = "Không thể xóa danh mục này. Lỗi hệ thống !";
+    public static final String DELETE_CATEGORY_BY_CATEGORY_ID_FAIL      = "Không thể xóa danh mục này. Lỗi hệ thống !";
 
     public static final String GET_DOANH_THU_THEO_DANH_MUC_FAIL         = "Có lỗi trong quá trình xử lý doanh thu theo danh mục";
 
-    public static final String DANH_MUC_IS_EXISTED                      = "Danh mục này đã có trong hệ thống.";
+    public static final String CATEGORY_IS_EXISTED                      = "Danh mục này đã có trong hệ thống.";
 
     /**
      * Mặt hàng Error:
@@ -83,15 +83,15 @@ public class CommonConstants {
     /**
      * Cửa Hàng Error:
      */
-    public static final String  CREATE_NEW_CUA_HANG_FAIL                = "Không thể tạo mới thông tin cửa hàng này";
+    public static final String  CREATE_NEW_RESTAURANT_FAIL                = "Không thể tạo mới thông tin cửa hàng này";
 
-    public static final String  UPDATE_CUA_HANG_ID_ON_USER_FAIL         = "Không thể cập nhật thông tin cửa hàng cho tài khoản";
+    public static final String  UPDATE_RESTAURANT_ID_ON_USER_FAIL         = "Không thể cập nhật thông tin cửa hàng cho tài khoản";
 
-    public static final String  UPDATE_CUA_HANG_FAIL                    = "Lỗi trong quá trình cập nhật thông tin cửa hàng";
+    public static final String  UPDATE_RESTAURANT_FAIL                    = "Lỗi trong quá trình cập nhật thông tin cửa hàng";
 
-    public static final String  UPDATE_EMAIL_CUA_HANG_FAIL              = "Không có thông tin email. Không thể cập nhật thông tin email cho cửa hàng";
+    public static final String  UPDATE_EMAIL_RESTAURANT_FAIL              = "Không có thông tin email. Không thể cập nhật thông tin email cho cửa hàng";
 
-    public static final String  CUA_HANG_IS_NOT_EXISTED                 = "Không tìm thấy thông tin của cửa hàng. ";
+    public static final String  RESTAURANT_IS_NOT_EXISTED                 = "Không tìm thấy thông tin của cửa hàng. ";
 
     /**
      * Nhân Viên Error:

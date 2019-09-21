@@ -1,11 +1,9 @@
 package com.ocha.boc.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -13,14 +11,12 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-@Document(collection = DanhMuc.COLLECTION_NAME)
-@TypeAlias(value = "danhmuc")
-public class DanhMuc implements Serializable {
+@Document(collection = Category.COLLECTION_NAME)
+public class Category implements Serializable {
 
-    public static final String COLLECTION_NAME = "danhmuc";
+    public static final String COLLECTION_NAME = "category"; // danh muc
 
-    private static DanhMuc EMPTY = new DanhMuc();
+    private static Category EMPTY = new Category();
 
     @Id
     private String id;
@@ -33,12 +29,11 @@ public class DanhMuc implements Serializable {
 
     private String name;
 
-    private String danhMucId;
+    private String categoryId;
 
-    private String cuaHangId;
+    private String restaurantId;
 
-    public boolean checkObjectEmptyData()
-    {
+    public boolean checkObjectEmptyData() {
         return this.equals(EMPTY);
     }
 }

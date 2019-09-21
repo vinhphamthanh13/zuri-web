@@ -10,14 +10,13 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class DanhMucUpdateRequest implements Serializable {
+public class CategoryRequest implements Serializable {
 
     private String abbreviations;
 
+    @NonNull
     private String name;
 
-    private String danhMucId;
-
     @NonNull
-    private String cuaHangId;
+    private String restaurantId;
 }

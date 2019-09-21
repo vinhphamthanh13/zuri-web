@@ -4,7 +4,7 @@ import com.ocha.boc.entity.*;
 import com.ocha.boc.enums.GiamGiaType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.RevenuePercentageStatusType;
-import com.ocha.boc.repository.DanhMucRepository;
+import com.ocha.boc.repository.CategoryRepository;
 import com.ocha.boc.repository.OrderRepository;
 import com.ocha.boc.request.AbstractBaoCaoRequest;
 import com.ocha.boc.response.*;
@@ -33,7 +33,7 @@ public class BaoCaoService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private DanhMucRepository danhMucRepository;
+    private CategoryRepository categoryRepository;
 
     public DoanhThuTongQuanResponse getDoanhThuTongQuan(String cuaHangId) {
         DoanhThuTongQuanResponse response = new DoanhThuTongQuanResponse();
@@ -158,7 +158,7 @@ public class BaoCaoService {
                 List<MatHangTieuThu> listMatHangTieuThu = order.getListMatHangTieuThu();
                 for (MatHangTieuThu temp : listMatHangTieuThu) {
                     String matHangName = temp.getMatHangName() + " (" + temp.getBangGiaName() + ") ";
-                    Optional<DanhMuc> optDanhMuc = danhMucRepository.findDanhMucByDanhMucIdAndCuaHangId(temp.getDanhMucId(), order.getCuaHangId());
+                    Optional<Category> optDanhMuc = categoryRepository.findCategoryByCategoryIdAndRestaurantId(temp.getDanhMucId(), order.getCuaHangId());
                     if (optDanhMuc.isPresent()) {
                         //Check danh muc existed List<DanhMucBanChay>
                         if (!checkDanhMucExistInListDanhMucBanChay(listDanhMucBanChay, optDanhMuc.get())) {
@@ -206,9 +206,9 @@ public class BaoCaoService {
         return listDanhMucBanChay;
     }
 
-    private boolean checkDanhMucExistInListDanhMucBanChay(List<DanhMucBanChay> listDanhMucBanChay, DanhMuc danhMuc) {
+    private boolean checkDanhMucExistInListDanhMucBanChay(List<DanhMucBanChay> listDanhMucBanChay, Category category) {
         boolean isExisted = false;
-        if (listDanhMucBanChay.stream().anyMatch(tmp -> tmp.getDanhMucName().equalsIgnoreCase(danhMuc.getName()))) {
+        if (listDanhMucBanChay.stream().anyMatch(tmp -> tmp.getDanhMucName().equalsIgnoreCase(category.getName()))) {
             isExisted = true;
         }
         return isExisted;
