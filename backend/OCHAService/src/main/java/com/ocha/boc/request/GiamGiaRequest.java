@@ -1,6 +1,5 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.entity.DanhMuc;
 import com.ocha.boc.enums.GiamGiaType;
 import lombok.Getter;
 import lombok.Setter;
