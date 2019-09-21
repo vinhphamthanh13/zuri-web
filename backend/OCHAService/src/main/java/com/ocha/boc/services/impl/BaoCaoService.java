@@ -1,7 +1,7 @@
 package com.ocha.boc.services.impl;
 
 import com.ocha.boc.entity.*;
-import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.RevenuePercentageStatusType;
 import com.ocha.boc.repository.CategoryRepository;
@@ -510,13 +510,13 @@ public class BaoCaoService {
         for (Order order : orders) {
             if (order.getOrderStatus().equals(OrderStatus.SUCCESS)) {
                 BaoCaoGiamGia baoCaoGiamGia = new BaoCaoGiamGia();
-                if (!order.getGiamGiaType().equals(GiamGiaType.NONE)) {
+                if (!order.getDiscountType().equals(DiscountType.NONE)) {
                     String giamGiaName = order.getGiamGiaName();
                     String baoCaoGiamGiaName = "";
-                    if (order.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
+                    if (order.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
                         String percent = order.getGiamGiaPercentage() + "%";
                         baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
-                    } else if (order.getGiamGiaType().label.equalsIgnoreCase(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
+                    } else if (order.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
                         if (order.getGiamGiaDiscountAmount() != null) {
                             String discountAmount = order.getGiamGiaDiscountAmount() + "đ";
                             baoCaoGiamGiaName = giamGiaName + " (-" + discountAmount + ")";

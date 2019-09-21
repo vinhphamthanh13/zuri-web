@@ -1,6 +1,6 @@
 package com.ocha.boc.entity;
 
-import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
 import lombok.Getter;
@@ -93,7 +93,7 @@ public class Order {
      */
     private BigDecimal discountMoney;
 
-    private GiamGiaType giamGiaType;
+    private DiscountType discountType;
 
     private String giamGiaName;
 

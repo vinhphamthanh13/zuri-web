@@ -1,8 +1,7 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
-import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.DiscountType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,7 +28,7 @@ public class OrderCheckoutObjectRequest implements Serializable {
 
     private BigDecimal tips;
 
-    private GiamGiaType giamGiaType;
+    private DiscountType discountType;
 
     private String giamGiaName;
 

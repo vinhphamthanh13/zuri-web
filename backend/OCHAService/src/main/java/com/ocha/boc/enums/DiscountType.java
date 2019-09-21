@@ -1,6 +1,6 @@
 package com.ocha.boc.enums;
 
-public enum GiamGiaType {
+public enum DiscountType {
 
     NONE("NONE"),
 
@@ -10,7 +10,7 @@ public enum GiamGiaType {
 
     public final String label;
 
-    private GiamGiaType(String label){
+    private DiscountType(String label){
         this.label = label;
     }
 }

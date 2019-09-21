@@ -1,10 +1,9 @@
 package com.ocha.boc.dto;
 
 import com.ocha.boc.base.AbstractEntity;
-import com.ocha.boc.entity.GiamGia;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
-import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
 import lombok.Getter;
@@ -79,7 +78,7 @@ public class OrderDTO extends AbstractEntity {
 
     private BigDecimal discountMoney;
 
-    private GiamGiaType giamGiaType;
+    private DiscountType discountType;
 
     private String giamGiaName;
 
@@ -113,7 +112,7 @@ public class OrderDTO extends AbstractEntity {
         this.listMatHangTieuThu = order.getListMatHangTieuThu();
         this.discountMoney = order.getDiscountMoney();
         this.giamGiaName = order.getGiamGiaName();
-        this.giamGiaType = order.getGiamGiaType();
+        this.discountType = order.getDiscountType();
         this.giamGiaPercentage = order.getGiamGiaPercentage();
         this.giamGiaDiscountAmount = order.getGiamGiaDiscountAmount();
     }

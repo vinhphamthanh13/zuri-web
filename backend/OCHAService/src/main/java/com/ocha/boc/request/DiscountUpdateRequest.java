@@ -1,6 +1,6 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.DiscountType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,15 +11,15 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class GiamGiaUpdateRequest {
+public class DiscountUpdateRequest {
 
     @NotNull
-    private String giamGiaId;
+    private String discountId;
 
     @NotNull
-    private String cuaHangId;
+    private String restaurantId;
 
-    private GiamGiaType giamGiaType;
+    private DiscountType discountType;
 
     private String name;
 
@@ -27,5 +27,5 @@ public class GiamGiaUpdateRequest {
 
     private BigDecimal discountAmount;
 
-    private String danhMucId;
+    private String categoryId;
 }

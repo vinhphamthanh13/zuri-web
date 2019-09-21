@@ -3,7 +3,7 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.dto.OrderDTO;
 import com.ocha.boc.entity.MatHangTieuThu;
 import com.ocha.boc.entity.Order;
-import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.enums.OrderStatus;
 import com.ocha.boc.enums.OrderType;
 import com.ocha.boc.error.ResourceNotFoundException;
@@ -140,12 +140,12 @@ public class OrderService {
                     order.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                     order.setOrderTimeCheckOut(Instant.now().toString());
                     order.setListMatHangTieuThu(request.getListMatHangTieuThu());
-                    if (!request.getGiamGiaType().equals(GiamGiaType.NONE)) {
+                    if (!request.getDiscountType().equals(DiscountType.NONE)) {
                         Map<String, BigDecimal> typeOrPrice = new HashMap<String, BigDecimal>();
-                        if (request.getGiamGiaType().equals(GiamGiaType.GIẢM_GIÁ_THEO_DANH_MỤC)) {
+                        if (request.getDiscountType().equals(DiscountType.GIẢM_GIÁ_THEO_DANH_MỤC)) {
                             typeOrPrice = calculateTotalWithGiamGiaDanhMucType(request.getListMatHangTieuThu(), request.getDanhMucIsDiscountedId(), request.getGiamGiaPercentage());
                             order.setGiamGiaPercentage(request.getGiamGiaPercentage());
-                        } else if (request.getGiamGiaType().equals(GiamGiaType.GIẢM_GIÁ_THÔNG_THƯỜNG)) {
+                        } else if (request.getDiscountType().equals(DiscountType.GIẢM_GIÁ_THÔNG_THƯỜNG)) {
                             if (request.getGiamGiaPercentage() != null) {
                                 typeOrPrice = calculateTotalWithGiamGiaThongThuongTypeWithPercentage(calculateTotalMoney(request.getListMatHangTieuThu()),
                                         request.getGiamGiaPercentage());
@@ -159,7 +159,7 @@ public class OrderService {
                         order.setTotalMoney(typeOrPrice.get(TOTAL_MONEY));
                         order.setDiscountMoney(typeOrPrice.get(DISCOUNT_MONEY));
                         order.setGiamGiaName(request.getGiamGiaName());
-                        order.setGiamGiaType(request.getGiamGiaType());
+                        order.setDiscountType(request.getDiscountType());
                     } else {
                         amountOfAssumption = calculateTotalMoney(request.getListMatHangTieuThu());
                         order.setTotalMoney(amountOfAssumption);

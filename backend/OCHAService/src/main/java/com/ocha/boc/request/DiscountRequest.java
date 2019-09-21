@@ -1,6 +1,6 @@
 package com.ocha.boc.request;
 
-import com.ocha.boc.enums.GiamGiaType;
+import com.ocha.boc.enums.DiscountType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class GiamGiaRequest implements Serializable {
+public class DiscountRequest implements Serializable {
 
     @NonNull
-    private String cuaHangId;
+    private String restaurantId;
 
     @NonNull
-    private GiamGiaType giamGiaType;
+    private DiscountType discountType;
 
     @NonNull
     private String name;
@@ -27,5 +27,5 @@ public class GiamGiaRequest implements Serializable {
 
     private BigDecimal discountAmount;
 
-    private String  danhMucId;
+    private String  categoryId;
 }
