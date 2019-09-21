@@ -111,11 +111,11 @@ public class CommonConstants {
     /**
      * Giảm Giá Error:
      */
-    public static final String CREATE_NEW_GIAM_GIA_FAIL                 = "Lỗi trong quá trình tạo mới mã giảm giá.";
+    public static final String CREATE_NEW_DISCOUNT_FAIL                 = "Lỗi trong quá trình tạo mới mã giảm giá.";
 
-    public static final String DELETE_GIAM_GIA_BY_ID_FAIL               = "Lỗi trong quá trình xóa mã giảm giá.";
+    public static final String DELETE_DISCOUNT_BY_ID_FAIL               = "Lỗi trong quá trình xóa mã giảm giá.";
 
-    public static final String UPDATE_GIAM_GIA_FAIL                     = "Lỗi trong quá trình cập nhật mã giảm giá";
+    public static final String UPDATE_DISCOUNT_FAIL                     = "Lỗi trong quá trình cập nhật mã giảm giá";
 
     /**
      * Order Error:
