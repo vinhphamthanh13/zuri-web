@@ -1,7 +1,7 @@
 package com.ocha.boc.response;
 
 import com.ocha.boc.base.AbstractResponse;
-import com.ocha.boc.entity.MatHangBanChay;
+import com.ocha.boc.entity.HotDealsProduct;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,5 +15,5 @@ public class MatHangBanChayResponse extends AbstractResponse {
 
     private String cuaHangId;
 
-    List<MatHangBanChay> matHangBanChayList;
+    List<HotDealsProduct> hotDealsProductList;
 }

@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
-public class AbstractBaoCaoRequest {
+public class AbstractReportRequest {
 
     @NotNull
-    private String cuaHangId;
+    private String restaurantId;
 
     private String fromDate;
 

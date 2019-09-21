@@ -9,13 +9,13 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class MatHangTieuThu {
+public class ProductConsumeObject {
 
-    private String matHangName;
+    private String productName;
 
-    private String danhMucId;
+    private String categoryId;
 
-    private String bangGiaName;
+    private String priceName;
 
     private int quantity;
 

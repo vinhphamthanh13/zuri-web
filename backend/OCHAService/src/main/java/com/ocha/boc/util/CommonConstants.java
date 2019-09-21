@@ -128,16 +128,16 @@ public class CommonConstants {
 
     public static final String ORDER_CHECKOUT_FAIL                      = "Lỗi trong quá trình thanh toán đơn hàng.";
 
-    public static final String GET_ORDERS_BY_CUAHANGID_FAIL             = "Lỗi trong quá trình truy xuất thông tin đơn hàng";
+    public static final String GET_ORDERS_BY_RESTAURANT_ID_FAIL             = "Lỗi trong quá trình truy xuất thông tin đơn hàng";
 
     /**
      * Báo cáo
      */
-    public static final String GET_DOANH_THU_TONG_QUAN_FAIL             = "Lỗi trong quá trình xử lý doanh thu tổng quản.";
+    public static final String GET_OVERVIEW_REVENUE_FAIL             = "Lỗi trong quá trình xử lý doanh thu tổng quản.";
 
-    public static final String GET_DOANH_THU_TONG_QUAN_IN_RANGE_DATE_FAIL= "Không có thông tin về doanh thu.";
+    public static final String GET_OVERVIEW_REVENUE_IN_RANGE_DATE_FAIL= "Không có thông tin về doanh thu.";
 
-    public static final String GET_BAO_CAO_DOANH_THU_THEO_DANH_MUC_FAIL  = "Lỗi trong quá trình lấy thông tin doanh thu theo danh mục";
+    public static final String GET_REVENUE_CATEGORY_REPORT_FAIL  = "Lỗi trong quá trình lấy thông tin doanh thu theo danh mục";
 
     public static final String GET_MAT_HANG_BAN_CHAY_FAIL                = "Lỗi trong quá trình lấy thông tin mặt hàng bán chạy";
 
