@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class BangGia implements Serializable {
+public class Price implements Serializable {
 
     private String name;
 
-    private LoaiGia loaiGia;
+    private PriceType priceType;
 }

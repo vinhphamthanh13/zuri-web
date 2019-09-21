@@ -7,9 +7,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MatHangListRequest extends PageRequest {
+public class ProductListRequest extends PageRequest {
 
-    private String cuaHangId;
+    private String restaurantId;
 
     private String name;
 }

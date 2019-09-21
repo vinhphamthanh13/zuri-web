@@ -1,5 +1,6 @@
 package com.ocha.boc.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,24 +9,20 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-/**
- * MatHang Object means "Mặt hàng"
- */
+
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-@Document(collection = MatHang.COLLECTION_NAME)
-public class MatHang implements Serializable {
+@Document(collection = Product.COLLECTION_NAME)
+public class Product implements Serializable {
 
-    public static final String COLLECTION_NAME = "mathang";
+    public static final String COLLECTION_NAME = "product"; //mat hang
 
-    private static MatHang EMPTY = new MatHang();
+    private static Product EMPTY = new Product();
 
     @Id
     private String id;
@@ -34,13 +31,14 @@ public class MatHang implements Serializable {
 
     private String lastModifiedDate;
 
-    private String cuaHangId;
+    private String restaurantId;
 
     private String name;
 
-    private String danhMucId;
+    private String categoryId;
 
-    private List<BangGia> listBangGia = new ArrayList<BangGia>();
+    @JsonProperty("priceList")
+    private List<Price> prices = new ArrayList<Price>();
 
     public boolean checkObjectEmptyData()
     {

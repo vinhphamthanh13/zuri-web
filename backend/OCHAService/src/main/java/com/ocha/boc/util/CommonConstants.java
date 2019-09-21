@@ -12,7 +12,7 @@ public class CommonConstants {
     public static final String STR_SUCCESS_STATUS = "SUCCESS";
 
     /**
-     * Danh Mục Error:
+     * Category Error:
      */
     public static final String CREATE_NEW_CATEGORY_FAIL                 = "Không thể tạo mới danh mục. Lỗi hệ thống !";
 
@@ -29,19 +29,19 @@ public class CommonConstants {
     public static final String CATEGORY_IS_EXISTED                      = "Danh mục này đã có trong hệ thống.";
 
     /**
-     * Mặt hàng Error:
+     * PRODUCT Error:
      */
-    public static final String CREATE_NEW_MAT_HANG_FAIL                 = "Không thể tạo mới mặt hàng. Lỗi hệ thống !";
+    public static final String CREATE_NEW_PRODUCT_FAIL                 = "Không thể tạo mới mặt hàng. Lỗi hệ thống !";
 
-    public static final String UPDATE_MAT_HANG_FAIL                     = "Không thể cập nhật thông tin cho mặt hàng này. Lỗi hệ thống !";
+    public static final String UPDATE_PRODUCT_FAIL                     = "Không thể cập nhật thông tin cho mặt hàng này. Lỗi hệ thống !";
 
-    public static final String MAT_HANG_IS_NULL                         = "Không thể tìm thấy mặt hàng này.";
+    public static final String PRODUCT_IS_NULL                         = "Không thể tìm thấy mặt hàng này.";
 
-    public static final String GET_ALL_MAT_HANG_FAIL                    = "Không tìm thấy thông tin mặt hàng. Lỗi hệ thống!";
+    public static final String GET_ALL_PRODUCT_FAIL                    = "Không tìm thấy thông tin mặt hàng. Lỗi hệ thống!";
 
-    public static final String DELETE_MAT_HANG_BY_MAT_HANG_ID_FAIL      = "Không thể xóa thông tin mặt hàng này. Lỗi hệ thống!";
+    public static final String DELETE_PRODUCT_BY_PRODUCT_ID_FAIL      = "Không thể xóa thông tin mặt hàng này. Lỗi hệ thống!";
 
-    public static final String MAT_HANG_IS_EXISTED                      = "Mặt hàng này đã có trong hệ thống.";
+    public static final String PRODUCT_IS_EXISTED                      = "Mặt hàng này đã có trong hệ thống.";
     /**
      * Nguyên liệu Error:
      */
@@ -81,7 +81,7 @@ public class CommonConstants {
     public static final String ACCOUNT_IS_NOT_ACTIVE                    = "Tài khoản chưa được kích hoạt. Không thể đăng nhập";
 
     /**
-     * Cửa Hàng Error:
+     * Restaurant Error:
      */
     public static final String  CREATE_NEW_RESTAURANT_FAIL                = "Không thể tạo mới thông tin cửa hàng này";
 

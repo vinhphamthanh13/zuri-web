@@ -1,6 +1,6 @@
 package com.ocha.boc.enums;
 
-public enum LoaiGiaType {
+public enum EPriceType {
 
     GIÁ_THƯỜNG("Giá thường"),
 
@@ -8,7 +8,7 @@ public enum LoaiGiaType {
 
     public final String label;
 
-    private LoaiGiaType(String label){
+    private EPriceType(String label){
         this.label = label;
     }
 }
