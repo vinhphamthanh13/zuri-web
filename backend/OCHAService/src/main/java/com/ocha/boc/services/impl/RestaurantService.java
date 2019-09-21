@@ -33,7 +33,7 @@ public class RestaurantService {
 
     public RestaurantResponse createRestaurants(RestaurantRequest request) {
         RestaurantResponse response = new RestaurantResponse();
-        response.setMessage(CommonConstants.CREATE_NEW_CUA_HANG_FAIL);
+        response.setMessage(CommonConstants.CREATE_NEW_RESTAURANT_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
             if (!Objects.isNull(request)) {
@@ -93,7 +93,7 @@ public class RestaurantService {
                             response.setObject(new RestaurantDTO(restaurant));
                         } else {
                             log.debug("Cannot find user by owner phone: ", request.getPhone());
-                            response.setMessage(CommonConstants.UPDATE_CUA_HANG_ID_ON_USER_FAIL);
+                            response.setMessage(CommonConstants.UPDATE_RESTAURANT_ID_ON_USER_FAIL);
                         }
                     }
                 }
@@ -107,7 +107,7 @@ public class RestaurantService {
     public RestaurantResponse updateEmailRestaurants(RestaurantUpdateRequest request) {
         RestaurantResponse response = new RestaurantResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.UPDATE_CUA_HANG_FAIL);
+        response.setMessage(CommonConstants.UPDATE_RESTAURANT_FAIL);
         try {
             if (!Objects.isNull(request)) {
                 if (userRepository.existsByPhone(request.getPhone())) {
@@ -164,7 +164,7 @@ public class RestaurantService {
     public RestaurantResponse findCuaHangByRestaurantId(String cuaHangId) {
         RestaurantResponse response = new RestaurantResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.CUA_HANG_IS_NOT_EXISTED);
+        response.setMessage(CommonConstants.RESTAURANT_IS_NOT_EXISTED);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
                 if (restaurantRepository.existsById(cuaHangId)) {
