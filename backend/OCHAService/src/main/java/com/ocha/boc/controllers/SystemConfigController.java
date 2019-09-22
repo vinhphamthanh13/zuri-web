@@ -46,21 +46,21 @@ public class SystemConfigController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Get all information about Danh Muc San Pham", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/system/danh-muc-san-pham")
-    public ResponseEntity<AbstractResponse> getAllInformationAboutDanhMucSanPham() {
-        log.info("START: Get all information about Danh Muc San Pham");
-        AbstractResponse response = systemConfigService.getAllInformationAboutDanhMucSanPham();
-        log.info("END: get all information about Danh Muc San Pham");
+    @ApiOperation(value = "Get all information about Product Portfolio", authorizations = {@Authorization(value = "Bearer")})
+    @GetMapping("/system/productPortfolio")
+    public ResponseEntity<AbstractResponse> getAllInformationAboutProductPortfolio() {
+        log.info("START: Get all information about Product Portfolio");
+        AbstractResponse response = systemConfigService.getAllInformationAboutProductPortfolio();
+        log.info("END: get all information about Product Portfolio");
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Get all information about Mo Hinh Kinh Doanh", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/system/mo-hinh-kinh-doanh")
-    public ResponseEntity<AbstractResponse> getAllInformationAboutMoHinhKinhDoanh() {
-        log.info("START: Get all information about Mo Hinh Kinh Doanh");
-        AbstractResponse response = systemConfigService.getAllInformationAboutMoHinhKinhDoanh();
-        log.info("END: Get all information about Mo Hinh Kinh Doanh");
+    @ApiOperation(value = "Get all information about Business Models Type", authorizations = {@Authorization(value = "Bearer")})
+    @GetMapping("/system/businessModelsType")
+    public ResponseEntity<AbstractResponse> getAllInformationAboutBusinessModelsType() {
+        log.info("START: Get all information about Business Models Type");
+        AbstractResponse response = systemConfigService.getAllInformationAboutBusinessModelsType();
+        log.info("END: Get all information about Business Models Type");
         return ResponseEntity.ok(response);
     }
 

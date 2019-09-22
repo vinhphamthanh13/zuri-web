@@ -1,6 +1,6 @@
 package com.ocha.boc.enums;
 
-public enum DanhMucMatHangType {
+public enum EProductPortfolioType {
 
     MÓN_ĂN_THÁI("Món ăn Thái"),
 
@@ -28,7 +28,7 @@ public enum DanhMucMatHangType {
 
     public final String label;
 
-    private DanhMucMatHangType(String label){
+    private EProductPortfolioType(String label) {
         this.label = label;
     }
 }

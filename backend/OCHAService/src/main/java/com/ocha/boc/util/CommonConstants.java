@@ -154,13 +154,13 @@ public class CommonConstants {
 
     public static final String DELETE_GIAY_IN_BY_TITLE_FAIL               = "Lỗi trong quá trình xóa thông tin giấy in trong hệ thống.";
 
-    public static final String GET_ALL_DANH_MUC_SAN_PHAM_FAIL             = "Lỗi trong quá trình lấy thông tin danh mục sản phẩm.";
+    public static final String GET_ALL_PRODUCT_PORTFOLIO_FAIL = "Lỗi trong quá trình lấy thông tin danh mục sản phẩm.";
 
-    public static final String GET_ALL_DANH_MUC_SAN_PHAM_DOESNT_EXISTED   = "Không có thông tin danh mục sản phẩm trong hệ thống.";
+    public static final String GET_ALL_PRODUCT_PORTFOLIO_DOESNT_EXISTED = "Không có thông tin danh mục sản phẩm trong hệ thống.";
 
-    public static final String GET_ALL_MO_HINH_KINH_DOANH_FAIL            = "Lỗi trong quá trình lấy thông tin mô hình kinh doanh";
+    public static final String GET_ALL_BUSINESS_MODELS_TYPE_FAIL = "Lỗi trong quá trình lấy thông tin mô hình kinh doanh";
 
-    public static final String GET_ALL_MO_HINH_KINH_DOANH_DOESNT_EXISTED  = "Không có thông tin mô hình kinh doanh trong hệ thống";
+    public static final String GET_ALL_BUSINESS_MODELS_TYPE_DOESNT_EXISTED = "Không có thông tin mô hình kinh doanh trong hệ thống";
 
 
 }

@@ -3,6 +3,8 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.dto.RestaurantDTO;
 import com.ocha.boc.entity.Restaurant;
 import com.ocha.boc.entity.User;
+import com.ocha.boc.enums.EBusinessModelsType;
+import com.ocha.boc.enums.EProductPortfolioType;
 import com.ocha.boc.enums.UserType;
 import com.ocha.boc.repository.RestaurantRepository;
 import com.ocha.boc.repository.UserRepository;
@@ -45,8 +47,8 @@ public class RestaurantService {
                             restaurant.setRestaurantName(request.getRestaurantName());
                             restaurant.setPhone(request.getPhone());
                             restaurant.setManagerName(request.getManagerName());
-                            restaurant.setBusinessModelsType(request.getBusinessModelsType());
-                            restaurant.setBusinessItemsType(request.getBusinessItemsType());
+                            restaurant.setBusinessModelsType(EBusinessModelsType.valueOf(request.getBusinessModelsType()).label);
+                            restaurant.setBusinessItemsType(EProductPortfolioType.valueOf(request.getBusinessItemsType()).label);
                             restaurant.setManagerPhone(request.getManagerPhone());
                             restaurant.setCreatedDate(DateUtils.getCurrentDateAndTime());
                             restaurant.setAddress(request.getAddress());
@@ -122,10 +124,10 @@ public class RestaurantService {
                                 optRestaurant.get().setManagerEmail(request.getManagerEmail());
                             }
                             if (StringUtils.isNotEmpty(request.getBusinessModelsType())) {
-                                optRestaurant.get().setBusinessModelsType(request.getBusinessModelsType());
+                                optRestaurant.get().setBusinessModelsType(EBusinessModelsType.valueOf(request.getBusinessModelsType()).label);
                             }
                             if(StringUtils.isNotEmpty(request.getBusinessItemsType())){
-                                optRestaurant.get().setBusinessItemsType(request.getBusinessItemsType());
+                                optRestaurant.get().setBusinessItemsType(EProductPortfolioType.valueOf(request.getBusinessItemsType()).label);
                             }
                             if (StringUtils.isNotEmpty(request.getManagerPhone())) {
                                 optRestaurant.get().setManagerPhone(request.getManagerPhone());

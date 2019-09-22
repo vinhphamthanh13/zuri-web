@@ -1,6 +1,6 @@
 package com.ocha.boc.enums;
 
-public enum MoHinhKinhDoanhType {
+public enum EBusinessModelsType {
     QUÁN_CAO_CẤP("Quán cao cấp"),
 
     QUÁN_BÌNH_DÂN("Quán bình dân"),
@@ -17,7 +17,7 @@ public enum MoHinhKinhDoanhType {
 
     public final String label;
 
-    private MoHinhKinhDoanhType(String label){
+    private EBusinessModelsType(String label) {
         this.label = label;
     }
 }

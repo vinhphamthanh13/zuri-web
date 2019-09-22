@@ -6,6 +6,7 @@ import com.ocha.boc.response.RestaurantResponse;
 import com.ocha.boc.services.impl.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,11 @@ public class RestaurantController {
      */
     @ApiOperation(value = "Create New Restaurants", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/restaurants")
-    public ResponseEntity<RestaurantResponse> createRestaurants(@RequestBody @Valid RestaurantRequest request) {
+    public ResponseEntity<RestaurantResponse> createRestaurants(
+            @ApiParam(value = "The 'businessModelsType' and 'businessItemsType' in request body" +
+                    " must be the value in the " +
+                    "response data from API: /api/system/productPortfolio & /api/system/businessModelsType", required = true)
+            @RequestBody @Valid RestaurantRequest request) {
         log.info("START: create new Restaurants");
         RestaurantResponse response = restaurantService.createRestaurants(request);
         log.info("END: create new Restaurants");

@@ -1,15 +1,15 @@
 package com.ocha.boc.services.impl;
 
 import com.ocha.boc.base.AbstractResponse;
-import com.ocha.boc.dto.DanhMucSanPhamDTO;
-import com.ocha.boc.dto.MoHinhKinhDoanhDTO;
+import com.ocha.boc.dto.BusinessModelsTypeDTO;
+import com.ocha.boc.dto.ProductPortfolioDTO;
 import com.ocha.boc.dto.SystemConfigDTO;
-import com.ocha.boc.entity.DanhMucSanPham;
+import com.ocha.boc.entity.BusinessModelsType;
 import com.ocha.boc.entity.GiayIn;
-import com.ocha.boc.entity.MoHinhKinhDoanh;
+import com.ocha.boc.entity.ProductPortfolio;
 import com.ocha.boc.entity.SystemConfig;
-import com.ocha.boc.repository.DanhMucSanPhamRepository;
-import com.ocha.boc.repository.MoHinhKinhDoanhRepository;
+import com.ocha.boc.repository.BusinessModelsTypeRepository;
+import com.ocha.boc.repository.ProductPortfolioRepository;
 import com.ocha.boc.repository.SystemConfigRepository;
 import com.ocha.boc.request.GiayInRequest;
 import com.ocha.boc.response.SystemConfigurationResponse;
@@ -33,10 +33,10 @@ public class SystemConfigService {
     private SystemConfigRepository systemConfigRepository;
 
     @Autowired
-    private DanhMucSanPhamRepository danhMucSanPhamRepository;
+    private ProductPortfolioRepository productPortfolioRepository;
 
     @Autowired
-    private MoHinhKinhDoanhRepository moHinhKinhDoanhRepository;
+    private BusinessModelsTypeRepository businessModelsTypeRepository;
 
     public SystemConfigurationResponse getAllInformationAboutGiayIn() {
         SystemConfigurationResponse response = new SystemConfigurationResponse();
@@ -119,54 +119,54 @@ public class SystemConfigService {
         return index;
     }
 
-    public AbstractResponse getAllInformationAboutDanhMucSanPham() {
+    public AbstractResponse getAllInformationAboutProductPortfolio() {
         AbstractResponse response = new AbstractResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_ALL_DANH_MUC_SAN_PHAM_FAIL);
+        response.setMessage(CommonConstants.GET_ALL_PRODUCT_PORTFOLIO_FAIL);
         try {
-            List<DanhMucSanPham> results = danhMucSanPhamRepository.findAll();
+            List<ProductPortfolio> results = productPortfolioRepository.findAll();
             if (CollectionUtils.isEmpty(results)) {
                 response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.GET_ALL_DANH_MUC_SAN_PHAM_DOESNT_EXISTED);
+                response.setMessage(CommonConstants.GET_ALL_PRODUCT_PORTFOLIO_DOESNT_EXISTED);
                 return response;
             }
-            List<DanhMucSanPhamDTO> danhMucSanPhamDTOList = new ArrayList<DanhMucSanPhamDTO>();
-            for (DanhMucSanPham danhMucSanPham : results) {
-                DanhMucSanPhamDTO temp = new DanhMucSanPhamDTO(danhMucSanPham);
-                danhMucSanPhamDTOList.add(temp);
+            List<ProductPortfolioDTO> productPortfolioDTOList = new ArrayList<ProductPortfolioDTO>();
+            for (ProductPortfolio productPortfolio : results) {
+                ProductPortfolioDTO temp = new ProductPortfolioDTO(productPortfolio);
+                productPortfolioDTOList.add(temp);
             }
-            response.setObjects(danhMucSanPhamDTOList);
-            response.setTotalResultCount((long) danhMucSanPhamDTOList.size());
+            response.setObjects(productPortfolioDTOList);
+            response.setTotalResultCount((long) productPortfolioDTOList.size());
             response.setSuccess(Boolean.TRUE);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
         } catch (Exception e) {
-            log.error("Exception while get all information about danh muc san pham: ", e);
+            log.error("Exception while get all information about Product Portfolio: ", e);
         }
         return response;
     }
 
 
-    public AbstractResponse getAllInformationAboutMoHinhKinhDoanh() {
+    public AbstractResponse getAllInformationAboutBusinessModelsType() {
         AbstractResponse response = new AbstractResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_ALL_MO_HINH_KINH_DOANH_FAIL);
+        response.setMessage(CommonConstants.GET_ALL_BUSINESS_MODELS_TYPE_FAIL);
         try {
-            List<MoHinhKinhDoanh> results = moHinhKinhDoanhRepository.findAll();
-            if(CollectionUtils.isEmpty(results)){
+            List<BusinessModelsType> results = businessModelsTypeRepository.findAll();
+            if (CollectionUtils.isEmpty(results)) {
                 response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.GET_ALL_MO_HINH_KINH_DOANH_DOESNT_EXISTED);
+                response.setMessage(CommonConstants.GET_ALL_BUSINESS_MODELS_TYPE_DOESNT_EXISTED);
             }
-            List<MoHinhKinhDoanhDTO> moHinhKinhDoanhDTOList = new ArrayList<MoHinhKinhDoanhDTO>();
-            for(MoHinhKinhDoanh moHinhKinhDoanh: results){
-                MoHinhKinhDoanhDTO temp = new MoHinhKinhDoanhDTO(moHinhKinhDoanh);
-                moHinhKinhDoanhDTOList.add(temp);
+            List<BusinessModelsTypeDTO> businessModelsTypeDTOList = new ArrayList<BusinessModelsTypeDTO>();
+            for (BusinessModelsType businessModelsType : results) {
+                BusinessModelsTypeDTO temp = new BusinessModelsTypeDTO(businessModelsType);
+                businessModelsTypeDTOList.add(temp);
             }
-            response.setObjects(moHinhKinhDoanhDTOList);
-            response.setTotalResultCount((long)moHinhKinhDoanhDTOList.size());
+            response.setObjects(businessModelsTypeDTOList);
+            response.setTotalResultCount((long) businessModelsTypeDTOList.size());
             response.setSuccess(Boolean.TRUE);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
         } catch (Exception e) {
-            log.error("Exception while get all information about mo hinh kinh doanh: ", e);
+            log.error("Exception while get all information about Business Models Type: ", e);
         }
         return response;
     }

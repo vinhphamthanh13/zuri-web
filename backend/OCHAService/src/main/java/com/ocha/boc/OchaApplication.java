@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.ocha.boc.entity.DanhMucSanPham;
-import com.ocha.boc.entity.MoHinhKinhDoanh;
-import com.ocha.boc.repository.DanhMucSanPhamRepository;
-import com.ocha.boc.repository.MoHinhKinhDoanhRepository;
+import com.ocha.boc.entity.BusinessModelsType;
+import com.ocha.boc.entity.ProductPortfolio;
+import com.ocha.boc.repository.BusinessModelsTypeRepository;
+import com.ocha.boc.repository.ProductPortfolioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,21 +32,21 @@ import java.util.List;
 @Slf4j
 public class OchaApplication {
 
-    private static final String MO_HINH_KINH_DOANH_JSON = "/mohinhkinhdoanh.json";
+    private static final String BUSINESS_MODELS_TYPE = "/businessModelsType.json";
 
-    private static final String DANH_MUC_SAN_PHAM_JSON = "/danhmucsanpham.json";
-
-    @Autowired
-    private MoHinhKinhDoanhRepository moHinhKinhDoanhRepository;
+    private static final String PRODUCT_PORTFOLIO = "/productPortfolio.json";
 
     @Autowired
-    private DanhMucSanPhamRepository danhMucSanPhamRepository;
+    private BusinessModelsTypeRepository businessModelsTypeRepository;
 
-    @Value(value = "${boc.table.danhmucsanpham}")
-    private String danhMucSanPhamTableName;
+    @Autowired
+    private ProductPortfolioRepository productPortfolioRepository;
 
-    @Value(value = "${boc.table.mohinhkinhdoanh}")
-    private String moHinhKinhDoanhTableName;
+    @Value(value = "${boc.table.product.portfolio}")
+    private String productPortfolioTableName;
+
+    @Value(value = "${boc.table.business.models.type}")
+    private String businessModelsTypeTableName;
 
     @Value(value = "${spring.data.mongodb.host}")
     private String mongoDBHostName;
@@ -76,8 +76,8 @@ public class OchaApplication {
     public void migrateData() {
         MongoClient mongo = connectMongoDB();
         MongoDatabase db = mongo.getDatabase(databaseName);
-        initMoHinhKinhDoanh(db);
-        initDanhMucSanPham(db);
+        initBusinessModels(db);
+        initProductPortfolio(db);
     }
 
     private MongoClient connectMongoDB() {
@@ -85,47 +85,47 @@ public class OchaApplication {
         return mongo;
     }
 
-    private void initMoHinhKinhDoanh(MongoDatabase db) {
+    private void initBusinessModels(MongoDatabase db) {
         try {
-            boolean isExisted = checkExistsCollectionName(db, moHinhKinhDoanhTableName);
+            boolean isExisted = checkExistsCollectionName(db, businessModelsTypeTableName);
             if (!isExisted) {
-                List<MoHinhKinhDoanh> moHinhKinhDoanhList;
+                List<BusinessModelsType> businessModelsTypeList;
 
-                InputStream stream = OchaApplication.class.getResourceAsStream(MO_HINH_KINH_DOANH_JSON);
+                InputStream stream = OchaApplication.class.getResourceAsStream(BUSINESS_MODELS_TYPE);
                 ObjectMapper mapper = new ObjectMapper();
-                moHinhKinhDoanhList = mapper.readValue(stream, new TypeReference<List<MoHinhKinhDoanh>>() {
+                businessModelsTypeList = mapper.readValue(stream, new TypeReference<List<BusinessModelsType>>() {
 
                 });
-                if (moHinhKinhDoanhList != null && !moHinhKinhDoanhList.isEmpty()) {
-                    moHinhKinhDoanhRepository.deleteAll();
-                    moHinhKinhDoanhRepository.saveAll(moHinhKinhDoanhList);
+                if (businessModelsTypeList != null && !businessModelsTypeList.isEmpty()) {
+                    businessModelsTypeRepository.deleteAll();
+                    businessModelsTypeRepository.saveAll(businessModelsTypeList);
                 }
 
             }
         } catch (Exception e) {
-            log.error("Exception while init Mo Hinh Kinh Doanh: ", e);
+            log.error("Exception while init Business Models: ", e);
         }
     }
 
-    private void initDanhMucSanPham(MongoDatabase db) {
+    private void initProductPortfolio(MongoDatabase db) {
         try {
-            boolean isExisted = checkExistsCollectionName(db, danhMucSanPhamTableName);
+            boolean isExisted = checkExistsCollectionName(db, productPortfolioTableName);
             if (!isExisted) {
-                List<DanhMucSanPham> danhMucSanPhamList;
+                List<ProductPortfolio> productPortfolioList;
 
-                InputStream stream = OchaApplication.class.getResourceAsStream(DANH_MUC_SAN_PHAM_JSON);
+                InputStream stream = OchaApplication.class.getResourceAsStream(PRODUCT_PORTFOLIO);
                 ObjectMapper mapper = new ObjectMapper();
-                danhMucSanPhamList = mapper.readValue(stream, new TypeReference<List<DanhMucSanPham>>() {
+                productPortfolioList = mapper.readValue(stream, new TypeReference<List<ProductPortfolio>>() {
 
                 });
-                if (danhMucSanPhamList != null && !danhMucSanPhamList.isEmpty()) {
-                    danhMucSanPhamRepository.deleteAll();
-                    danhMucSanPhamRepository.saveAll(danhMucSanPhamList);
+                if (productPortfolioList != null && !productPortfolioList.isEmpty()) {
+                    productPortfolioRepository.deleteAll();
+                    productPortfolioRepository.saveAll(productPortfolioList);
                 }
 
             }
         } catch (Exception e) {
-            log.error("Exception while init Danh Muc San Pham: ", e);
+            log.error("Exception while init Product Portfolio: ", e);
         }
     }
 
