@@ -35,6 +35,12 @@ public class ReportService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    /**
+     * Get Overview Revenue: Doanh Thu Tổng Quan
+     *
+     * @param restaurantId
+     * @return
+     */
     public OverviewRevenueResponse getOverviewRevenue(String restaurantId) {
         OverviewRevenueResponse response = new OverviewRevenueResponse();
         response.setSuccess(Boolean.FALSE);
@@ -54,6 +60,13 @@ public class ReportService {
         return response;
     }
 
+    /**
+     * Get Overview Revenue in period time
+     * Given 2 date, retrieve the revenue report
+     *
+     * @param request
+     * @return
+     */
     public OverviewRevenueResponse getOverviewRevenueInRangeDate(AbstractReportRequest request) {
         OverviewRevenueResponse response = new OverviewRevenueResponse();
         response.setSuccess(Boolean.FALSE);
@@ -61,7 +74,7 @@ public class ReportService {
         try {
             if (!Objects.isNull(request)) {
                 List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getRestaurantId(),
-                                                                            request.getFromDate(), request.getToDate());
+                        request.getFromDate(), request.getToDate());
                 if (CollectionUtils.isNotEmpty(orders)) {
                     response.setRestaurantId(request.getRestaurantId());
                     analysisOverviewRevenue(orders, response);
@@ -101,6 +114,13 @@ public class ReportService {
         response.setSuccess(Boolean.TRUE);
     }
 
+    /**
+     * Get Revenue Category: Doanh thu theo Danh Mục
+     *
+     * @param restaurantId
+     * @param currentDate
+     * @return
+     */
     public RevenueCategoryResponse getRevenueCategory(String restaurantId, String currentDate) {
         RevenueCategoryResponse response = new RevenueCategoryResponse();
         response.setSuccess(Boolean.FALSE);
@@ -110,15 +130,15 @@ public class ReportService {
                 String theDayBefore = DateUtils.getDayBeforeTheGivenDay(currentDate);
                 List<Order> listOrdersCurrentDay = orderRepository.findAllOrderByCreatedDateAndRestaurantId(currentDate, restaurantId);
                 List<Order> listOrdersTheDayBefore = orderRepository.findAllOrderByCreatedDateAndRestaurantId(theDayBefore, restaurantId);
-                List<HotDealsCategory> listHotDealsCategoryCurrentDay = new ArrayList<HotDealsCategory>();
+                List<HotDealsCategory> listHotDealsCategoryCurrentDate = new ArrayList<HotDealsCategory>();
                 List<HotDealsCategory> listHotDealsCategoryTheDayBefore = new ArrayList<HotDealsCategory>();
                 if (CollectionUtils.isNotEmpty(listOrdersCurrentDay)) {
-                    listHotDealsCategoryCurrentDay = analysisRevenueCategory(listOrdersCurrentDay);
+                    listHotDealsCategoryCurrentDate = analysisRevenueCategory(listOrdersCurrentDay);
                 }
                 if (CollectionUtils.isNotEmpty(listOrdersTheDayBefore)) {
                     listHotDealsCategoryTheDayBefore = analysisRevenueCategory(listOrdersTheDayBefore);
                 }
-                List<HotDealsCategory> result = calculateRevenuePercentageOfRevenuceCategory(listHotDealsCategoryCurrentDay,
+                List<HotDealsCategory> result = calculateRevenuePercentageOfRevenueCategory(listHotDealsCategoryCurrentDate,
                         listHotDealsCategoryTheDayBefore);
                 if (!result.isEmpty()) {
                     response.setCuaHangId(restaurantId);
@@ -133,6 +153,12 @@ public class ReportService {
         return response;
     }
 
+    /**
+     * Given the period time, analysis the revenue category
+     *
+     * @param request
+     * @return
+     */
     public RevenueCategoryResponse getRevenueCategoryInRangeDate(AbstractReportRequest request) {
         RevenueCategoryResponse response = new RevenueCategoryResponse();
         response.setSuccess(Boolean.FALSE);
@@ -229,20 +255,20 @@ public class ReportService {
         return result;
     }
 
-    private List<HotDealsCategory> calculateRevenuePercentageOfRevenuceCategory(List<HotDealsCategory> ordersCurrentDay,
-                                                                                List<HotDealsCategory> ordersTheDayBefore) {
+    private List<HotDealsCategory> calculateRevenuePercentageOfRevenueCategory(List<HotDealsCategory> ordersCurrentDay,
+                                                                               List<HotDealsCategory> ordersTheDayBefore) {
         List<HotDealsCategory> result = new ArrayList<HotDealsCategory>();
         if (ordersCurrentDay.size() > 0 && ordersTheDayBefore.size() > 0) {
-            for (HotDealsCategory hotDealsCategoryCurrenDay : ordersCurrentDay) {
+            for (HotDealsCategory hotDealsCategoryCurrentDate : ordersCurrentDay) {
                 boolean isFounded = false;
                 for (HotDealsCategory hotDealsCategoryTheDayBefore : ordersTheDayBefore) {
-                    if (hotDealsCategoryTheDayBefore.getCategoryName().equalsIgnoreCase(hotDealsCategoryCurrenDay.getCategoryName())) {
+                    if (hotDealsCategoryTheDayBefore.getCategoryName().equalsIgnoreCase(hotDealsCategoryCurrentDate.getCategoryName())) {
                         isFounded = true;
                         HotDealsCategory temp = new HotDealsCategory();
-                        temp.setCategoryName(hotDealsCategoryCurrenDay.getCategoryName());
-                        temp.setTotalQuantity(hotDealsCategoryCurrenDay.getTotalQuantity());
-                        temp.setTotalPrice(hotDealsCategoryCurrenDay.getTotalPrice());
-                        BigDecimal revenuePercentage = ((hotDealsCategoryCurrenDay.getTotalPrice().
+                        temp.setCategoryName(hotDealsCategoryCurrentDate.getCategoryName());
+                        temp.setTotalQuantity(hotDealsCategoryCurrentDate.getTotalQuantity());
+                        temp.setTotalPrice(hotDealsCategoryCurrentDate.getTotalPrice());
+                        BigDecimal revenuePercentage = ((hotDealsCategoryCurrentDate.getTotalPrice().
                                 subtract(hotDealsCategoryTheDayBefore.getTotalPrice())).
                                 multiply(BigDecimal.valueOf(100))).divide(hotDealsCategoryTheDayBefore.getTotalPrice(),
                                 2, RoundingMode.HALF_UP);
@@ -252,7 +278,7 @@ public class ReportService {
                         } else {
                             temp.setStatus(PercentageRevenueStatusType.DECREASE);
                         }
-                        List<HotDealsProduct> listHotDealsProduct = calculateRevenuePercentageOfHotSellingProduct(hotDealsCategoryCurrenDay.getHotDealsProducts(),
+                        List<HotDealsProduct> listHotDealsProduct = calculateRevenuePercentageOfHotDealsProducts(hotDealsCategoryCurrentDate.getHotDealsProducts(),
                                 hotDealsCategoryTheDayBefore.getHotDealsProducts());
                         temp.setHotDealsProducts(listHotDealsProduct);
                         result.add(temp);
@@ -261,14 +287,14 @@ public class ReportService {
                 }
                 if (!isFounded) {
                     HotDealsCategory temp = new HotDealsCategory();
-                    temp.setCategoryName(hotDealsCategoryCurrenDay.getCategoryName());
-                    temp.setTotalQuantity(hotDealsCategoryCurrenDay.getTotalQuantity());
+                    temp.setCategoryName(hotDealsCategoryCurrentDate.getCategoryName());
+                    temp.setTotalQuantity(hotDealsCategoryCurrentDate.getTotalQuantity());
                     temp.setStatus(PercentageRevenueStatusType.INCREASE_INFINITY);
-                    temp.setTotalPrice(hotDealsCategoryCurrenDay.getTotalPrice());
-                    for (HotDealsProduct hotDealsProduct : hotDealsCategoryCurrenDay.getHotDealsProducts()) {
+                    temp.setTotalPrice(hotDealsCategoryCurrentDate.getTotalPrice());
+                    for (HotDealsProduct hotDealsProduct : hotDealsCategoryCurrentDate.getHotDealsProducts()) {
                         hotDealsProduct.setStatus(PercentageRevenueStatusType.INCREASE_INFINITY);
                     }
-                    temp.setHotDealsProducts(hotDealsCategoryCurrenDay.getHotDealsProducts());
+                    temp.setHotDealsProducts(hotDealsCategoryCurrentDate.getHotDealsProducts());
                     result.add(temp);
                 }
             }
@@ -308,61 +334,74 @@ public class ReportService {
         return result;
     }
 
-    public MatHangBanChayResponse getMatHangBanChay(String cuaHangId, String currentDate) {
-        MatHangBanChayResponse response = new MatHangBanChayResponse();
+    /**
+     * Hot Deals Products Report: Báo Cáo Mặt Hàng Bán Chạy
+     *
+     * @param cuaHangId
+     * @param currentDate
+     * @return
+     */
+    public HotDealsProductsResponse getHotDealsProducts(String cuaHangId, String currentDate) {
+        HotDealsProductsResponse response = new HotDealsProductsResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_MAT_HANG_BAN_CHAY_FAIL);
+        response.setMessage(CommonConstants.GET_HOT_DEALS_PRODUCTS_FAIL);
         try {
             if (StringUtils.isNotEmpty(cuaHangId)) {
                 String theDayBefore = DateUtils.getDayBeforeTheGivenDay(currentDate);
-                List<Order> listOrdersCurrentDay = orderRepository.findAllOrderByCreatedDateAndRestaurantId(currentDate, cuaHangId);
+                List<Order> listOrdersCurrentDate = orderRepository.findAllOrderByCreatedDateAndRestaurantId(currentDate, cuaHangId);
                 List<Order> listOrdersTheDayBefore = orderRepository.findAllOrderByCreatedDateAndRestaurantId(theDayBefore, cuaHangId);
                 List<HotDealsProduct> listHotDealsProductCurrentDay = new ArrayList<HotDealsProduct>();
                 List<HotDealsProduct> listHotDealsProductTheDayBefore = new ArrayList<HotDealsProduct>();
-                if (CollectionUtils.isNotEmpty(listOrdersCurrentDay)) {
-                    listHotDealsProductCurrentDay = analysisMatHangBanChay(listOrdersCurrentDay);
+                if (CollectionUtils.isNotEmpty(listOrdersCurrentDate)) {
+                    listHotDealsProductCurrentDay = analysisHotDealsProducts(listOrdersCurrentDate);
                 }
                 if (CollectionUtils.isNotEmpty(listOrdersTheDayBefore)) {
-                    listHotDealsProductTheDayBefore = analysisMatHangBanChay(listOrdersTheDayBefore);
+                    listHotDealsProductTheDayBefore = analysisHotDealsProducts(listOrdersTheDayBefore);
                 }
-                List<HotDealsProduct> result = calculateRevenuePercentageOfHotSellingProduct(listHotDealsProductCurrentDay, listHotDealsProductTheDayBefore);
+                List<HotDealsProduct> result = calculateRevenuePercentageOfHotDealsProducts(listHotDealsProductCurrentDay, listHotDealsProductTheDayBefore);
                 if (!result.isEmpty()) {
-                    response.setCuaHangId(cuaHangId);
+                    response.setRestaurantId(cuaHangId);
                     response.setHotDealsProductList(result);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 }
             }
         } catch (Exception e) {
-            log.error("Error when getMatHangBanChay: {}", e);
+            log.error("Error when get hot deals products: {}", e);
         }
         return response;
     }
 
-    public MatHangBanChayResponse getMatHangBanChayInRangeDate(AbstractReportRequest request) {
-        MatHangBanChayResponse response = new MatHangBanChayResponse();
+    /**
+     * Given the period time, analysis the hot deals products report
+     *
+     * @param request
+     * @return
+     */
+    public HotDealsProductsResponse getHotDealsProductsInRangeDate(AbstractReportRequest request) {
+        HotDealsProductsResponse response = new HotDealsProductsResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_MAT_HANG_BAN_CHAY_FAIL);
+        response.setMessage(CommonConstants.GET_HOT_DEALS_PRODUCTS_FAIL);
         try {
             if (request != null) {
                 String fromDate = request.getFromDate();
                 String toDate = request.getToDate();
                 List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getRestaurantId(), fromDate, toDate);
                 if (CollectionUtils.isNotEmpty(orders)) {
-                    response.setCuaHangId(request.getRestaurantId());
-                    List<HotDealsProduct> hotDealsProductList = analysisMatHangBanChay(orders);
+                    response.setRestaurantId(request.getRestaurantId());
+                    List<HotDealsProduct> hotDealsProductList = analysisHotDealsProducts(orders);
                     response.setHotDealsProductList(hotDealsProductList);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 }
             }
         } catch (Exception e) {
-            log.error("Error when getMatHangBanChayInRangeDate: {}", e);
+            log.error("Error when get hot deals products in the period time: {}", e);
         }
         return response;
     }
 
-    private List<HotDealsProduct> analysisMatHangBanChay(List<Order> orders) {
+    private List<HotDealsProduct> analysisHotDealsProducts(List<Order> orders) {
         List<HotDealsProduct> listHotDealsProduct = new ArrayList<HotDealsProduct>();
         for (Order order : orders) {
             if (order.getOrderStatus().equals(OrderStatus.SUCCESS)) {
@@ -370,19 +409,19 @@ public class ReportService {
                 for (ProductConsumeObject productConsumeObject : productConsumeObjectList) {
                     int quantity = productConsumeObject.getQuantity();
                     BigDecimal price = productConsumeObject.getUnitPrice().multiply(BigDecimal.valueOf((double) productConsumeObject.getQuantity()));
-                    String matHangName = productConsumeObject.getProductName() + " (" + productConsumeObject.getPriceName() + ") ";
-                    if (checkHotDealsProductExist(listHotDealsProduct, matHangName)) {
-                        int indexMatHang = IntStream.range(0, listHotDealsProduct.size()).filter(i ->
-                                matHangName.equalsIgnoreCase(listHotDealsProduct.get(i).getName())).findFirst().getAsInt();
-                        int originalQuantity = listHotDealsProduct.get(indexMatHang).getQuantity();
-                        listHotDealsProduct.get(indexMatHang).setQuantity(quantity + originalQuantity);
-                        BigDecimal originalPrice = listHotDealsProduct.get(indexMatHang).getTotalPrice();
-                        listHotDealsProduct.get(indexMatHang).setTotalPrice(price.add(originalPrice));
+                    String productName = productConsumeObject.getProductName() + " (" + productConsumeObject.getPriceName() + ") ";
+                    if (checkHotDealsProductExist(listHotDealsProduct, productName)) {
+                        int productIndex = IntStream.range(0, listHotDealsProduct.size()).filter(i ->
+                                productName.equalsIgnoreCase(listHotDealsProduct.get(i).getName())).findFirst().getAsInt();
+                        int originalQuantity = listHotDealsProduct.get(productIndex).getQuantity();
+                        listHotDealsProduct.get(productIndex).setQuantity(quantity + originalQuantity);
+                        BigDecimal originalPrice = listHotDealsProduct.get(productIndex).getTotalPrice();
+                        listHotDealsProduct.get(productIndex).setTotalPrice(price.add(originalPrice));
                     } else {
                         HotDealsProduct hotDealsProduct = new HotDealsProduct();
                         hotDealsProduct.setQuantity(quantity);
                         hotDealsProduct.setTotalPrice(price);
-                        hotDealsProduct.setName(matHangName);
+                        hotDealsProduct.setName(productName);
                         listHotDealsProduct.add(hotDealsProduct);
                     }
                 }
@@ -399,7 +438,7 @@ public class ReportService {
         return isExisted;
     }
 
-    private List<HotDealsProduct> calculateRevenuePercentageOfHotSellingProduct(List<HotDealsProduct> listCurrentDay, List<HotDealsProduct> listTheDayBefore) {
+    private List<HotDealsProduct> calculateRevenuePercentageOfHotDealsProducts(List<HotDealsProduct> listCurrentDay, List<HotDealsProduct> listTheDayBefore) {
         List<HotDealsProduct> result = new ArrayList<HotDealsProduct>();
         if (listCurrentDay.size() > 0 && listTheDayBefore.size() > 0) {
             for (HotDealsProduct hotDealsProductCurrentDay : listCurrentDay) {
@@ -468,17 +507,24 @@ public class ReportService {
         return result;
     }
 
-    public BaoCaoGiamGiaResponse getBaoCaoGiamGia(String cuaHangId, String currentDate) {
-        BaoCaoGiamGiaResponse response = new BaoCaoGiamGiaResponse();
+    /**
+     * Discount Report: Báo Cáo Giảm Giá
+     *
+     * @param restaurantId
+     * @param currentDate
+     * @return
+     */
+    public DiscountReportResponse getDiscountReport(String restaurantId, String currentDate) {
+        DiscountReportResponse response = new DiscountReportResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_BAO_CAO_GIAM_GIA_FAIL);
+        response.setMessage(CommonConstants.GET_DISCOUNT_REPORT_FAIL);
         try {
-            if (StringUtils.isNotEmpty(cuaHangId)) {
-                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndRestaurantId(currentDate, cuaHangId);
+            if (StringUtils.isNotEmpty(restaurantId)) {
+                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndRestaurantId(currentDate, restaurantId);
                 if (CollectionUtils.isNotEmpty(orders)) {
-                    response.setCuaHangId(cuaHangId);
-                    List<BaoCaoGiamGia> baoCaoGiamGiaList = analysisBaoCaoGiamGia(orders);
-                    response.setListGiamGiaReport(baoCaoGiamGiaList);
+                    response.setRestaurantId(restaurantId);
+                    List<DiscountReport> discountReportList = analysisDiscountReport(orders);
+                    response.setDiscountReportList(discountReportList);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
                 }
@@ -489,19 +535,26 @@ public class ReportService {
         return response;
     }
 
-    public BaoCaoGiamGiaResponse getBaoCaoGiamGiaInRangeDate(AbstractReportRequest request) {
-        BaoCaoGiamGiaResponse response = new BaoCaoGiamGiaResponse();
+    /**
+     * Given the period time, analysis the discount report
+     *
+     * @param request
+     * @return
+     */
+    public DiscountReportResponse getDiscountReportInRangeDate(AbstractReportRequest request) {
+        DiscountReportResponse response = new DiscountReportResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_BAO_CAO_GIAM_GIA_FAIL);
+        response.setMessage(CommonConstants.GET_DISCOUNT_REPORT_FAIL);
         try {
             if (request != null) {
                 String fromDate = request.getFromDate();
                 String toDate = request.getToDate();
-                List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getRestaurantId(), fromDate, toDate);
+                List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getRestaurantId(),
+                        fromDate, toDate);
                 if (CollectionUtils.isNotEmpty(orders)) {
-                    response.setCuaHangId(request.getRestaurantId());
-                    List<BaoCaoGiamGia> baoCaoGiamGiaList = analysisBaoCaoGiamGia(orders);
-                    response.setListGiamGiaReport(baoCaoGiamGiaList);
+                    response.setRestaurantId(request.getRestaurantId());
+                    List<DiscountReport> discountReportList = analysisDiscountReport(orders);
+                    response.setDiscountReportList(discountReportList);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
                 }
@@ -512,63 +565,63 @@ public class ReportService {
         return response;
     }
 
-    private List<BaoCaoGiamGia> analysisBaoCaoGiamGia(List<Order> orders) {
-        List<BaoCaoGiamGia> listBaoCaoGiamGia = new ArrayList<BaoCaoGiamGia>();
+    private List<DiscountReport> analysisDiscountReport(List<Order> orders) {
+        List<DiscountReport> listDiscountReport = new ArrayList<DiscountReport>();
         for (Order order : orders) {
             if (order.getOrderStatus().equals(OrderStatus.SUCCESS)) {
-                BaoCaoGiamGia baoCaoGiamGia = new BaoCaoGiamGia();
+                DiscountReport discountReport = new DiscountReport();
                 if (!order.getDiscountType().equals(DiscountType.NONE)) {
-                    String giamGiaName = order.getDiscountName();
-                    String baoCaoGiamGiaName = "";
+                    String discountName = order.getDiscountName();
+                    String discountReportName = "";
                     if (order.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
                         String percent = order.getPercentageDiscount() + "%";
-                        baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
+                        discountReportName = discountName + " (-" + percent + ")";
                     } else if (order.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
                         if (order.getGiamGiaDiscountAmount() != null) {
                             String discountAmount = order.getGiamGiaDiscountAmount() + "đ";
-                            baoCaoGiamGiaName = giamGiaName + " (-" + discountAmount + ")";
+                            discountReportName = discountName + " (-" + discountAmount + ")";
                         } else if (order.getPercentageDiscount() != null) {
                             String percent = order.getPercentageDiscount() + "%";
-                            baoCaoGiamGiaName = giamGiaName + " (-" + percent + ")";
+                            discountReportName = discountName + " (-" + percent + ")";
                         }
                     }
-                    if (checkBaoCaoGiamGiaExist(listBaoCaoGiamGia, baoCaoGiamGiaName)) {
-                        String finalBaoCaoGiamGiaName = baoCaoGiamGiaName;
-                        int index = IntStream.range(0, listBaoCaoGiamGia.size()).filter(i ->
-                                finalBaoCaoGiamGiaName.equalsIgnoreCase(listBaoCaoGiamGia.get(i).getName())).findFirst().getAsInt();
-                        listBaoCaoGiamGia.get(index).setTotalQuantity(listBaoCaoGiamGia.get(index).getTotalQuantity() + 1);
-                        List<BaoCaoGiamGiaDetail> giamGiaDetails = listBaoCaoGiamGia.get(index).getListDiscountInvoice();
+                    if (checkDiscountReportNameExist(listDiscountReport, discountReportName)) {
+                        String finalDiscountReportNameName = discountReportName;
+                        int index = IntStream.range(0, listDiscountReport.size()).filter(i ->
+                                finalDiscountReportNameName.equalsIgnoreCase(listDiscountReport.get(i).getName())).findFirst().getAsInt();
+                        listDiscountReport.get(index).setTotalQuantity(listDiscountReport.get(index).getTotalQuantity() + 1);
+                        List<BaoCaoGiamGiaDetail> giamGiaDetails = listDiscountReport.get(index).getListDiscountInvoice();
                         BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
                         temp.setDiscountPrice(order.getDiscountMoney());
                         temp.setReceiptCode(order.getReceiptCode());
                         temp.setTime(order.getOrderTimeCheckOut());
                         giamGiaDetails.add(temp);
-                        listBaoCaoGiamGia.get(index).setListDiscountInvoice(giamGiaDetails);
+                        listDiscountReport.get(index).setListDiscountInvoice(giamGiaDetails);
                         BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
-                        listBaoCaoGiamGia.get(index).setTotalDiscount(totalDiscount);
+                        listDiscountReport.get(index).setTotalDiscount(totalDiscount);
                     } else {
-                        baoCaoGiamGia.setTotalQuantity(1);
-                        baoCaoGiamGia.setName(baoCaoGiamGiaName);
+                        discountReport.setTotalQuantity(1);
+                        discountReport.setName(discountReportName);
                         List<BaoCaoGiamGiaDetail> giamGiaDetails = new ArrayList<BaoCaoGiamGiaDetail>();
                         BaoCaoGiamGiaDetail temp = new BaoCaoGiamGiaDetail();
                         temp.setDiscountPrice(order.getDiscountMoney());
                         temp.setReceiptCode(order.getReceiptCode());
                         temp.setTime(order.getOrderTimeCheckOut());
                         giamGiaDetails.add(temp);
-                        baoCaoGiamGia.setListDiscountInvoice(giamGiaDetails);
-                        listBaoCaoGiamGia.add(baoCaoGiamGia);
+                        discountReport.setListDiscountInvoice(giamGiaDetails);
+                        listDiscountReport.add(discountReport);
                         BigDecimal totalDiscount = calculateDiscountMoney(giamGiaDetails);
-                        baoCaoGiamGia.setTotalDiscount(totalDiscount);
+                        discountReport.setTotalDiscount(totalDiscount);
                     }
                 }
             }
         }
-        return listBaoCaoGiamGia;
+        return listDiscountReport;
     }
 
-    private boolean checkBaoCaoGiamGiaExist(List<BaoCaoGiamGia> listBaoCaoGiamGia, String baoCaoGiamGiaName) {
+    private boolean checkDiscountReportNameExist(List<DiscountReport> listDiscountReport, String discountReportName) {
         boolean isExisted = false;
-        if (listBaoCaoGiamGia.stream().anyMatch(tmp -> tmp.getName().equalsIgnoreCase(baoCaoGiamGiaName))) {
+        if (listDiscountReport.stream().anyMatch(tmp -> tmp.getName().equalsIgnoreCase(discountReportName))) {
             isExisted = true;
         }
         return isExisted;
@@ -582,95 +635,108 @@ public class ReportService {
         return totalDiscount;
     }
 
-    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVien(String cuaHangId, String currentDate) {
-        DoanhThuTheoNhanVienResponse response = new DoanhThuTheoNhanVienResponse();
+    /**
+     * Get the employees revenue report
+     *
+     * @param restaurantId
+     * @param currentDate
+     * @return
+     */
+    public EmployeesRevenueResponse getEmployeesRevenueReport(String restaurantId, String currentDate) {
+        EmployeesRevenueResponse response = new EmployeesRevenueResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL);
+        response.setMessage(CommonConstants.GET_EMPLOYEES_REVENUE_REPORT_FAIL);
         try {
-            if (StringUtils.isNotEmpty(cuaHangId)) {
-                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndRestaurantId(currentDate, cuaHangId);
+            if (StringUtils.isNotEmpty(restaurantId)) {
+                List<Order> orders = orderRepository.findAllOrderByCreatedDateAndRestaurantId(currentDate, restaurantId);
                 if (CollectionUtils.isNotEmpty(orders)) {
-                    response.setCuaHangId(cuaHangId);
-                    List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = analysisDoanhThuTheoNhanVien(orders);
-                    response.setListEmployeeSRevenue(listDoanhThuTheoNhanVien);
+                    response.setRestaurantId(restaurantId);
+                    List<EmployeesRevenue> listEmployeesRevenue = analysisEmployeesRevenue(orders);
+                    response.setListEmployeeSRevenue(listEmployeesRevenue);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
                 }
             }
         } catch (Exception e) {
-            log.error("Error when getBaoCaoDoanhThuTheoNhanVien: {}", e);
+            log.error("Error when get the employees revenue report: ", e);
         }
         return response;
     }
 
-    public DoanhThuTheoNhanVienResponse getBaoCaoDoanhThuTheoNhanVienInRangeDate(AbstractReportRequest request) {
-        DoanhThuTheoNhanVienResponse response = new DoanhThuTheoNhanVienResponse();
+    /**
+     * Given the period time, analysis the employees revenue report
+     *
+     * @param request
+     * @return
+     */
+    public EmployeesRevenueResponse getEmployeesRevenueReportInRangeDate(AbstractReportRequest request) {
+        EmployeesRevenueResponse response = new EmployeesRevenueResponse();
         response.setSuccess(Boolean.FALSE);
-        response.setMessage(CommonConstants.GET_BAO_CAO_DOANH_THU_THEO_NHAN_VIEN_FAIL);
+        response.setMessage(CommonConstants.GET_EMPLOYEES_REVENUE_REPORT_FAIL);
         try {
             if (request != null) {
                 String fromDate = request.getFromDate();
                 String toDate = request.getToDate();
                 List<Order> orders = orderRepository.findAllOrderByCuaHangIdCreateDateBetween(request.getRestaurantId(), fromDate, toDate);
                 if (CollectionUtils.isNotEmpty(orders)) {
-                    response.setCuaHangId(request.getRestaurantId());
-                    List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = analysisDoanhThuTheoNhanVien(orders);
-                    response.setListEmployeeSRevenue(listDoanhThuTheoNhanVien);
+                    response.setRestaurantId(request.getRestaurantId());
+                    List<EmployeesRevenue> listEmployeesRevenue = analysisEmployeesRevenue(orders);
+                    response.setListEmployeeSRevenue(listEmployeesRevenue);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setSuccess(Boolean.TRUE);
                 }
             }
         } catch (Exception e) {
-            log.error("Error when getBaoCaoDoanhThuTheoNhanVienInRangeDate: {}", e);
+            log.error("Error when get the employees revenue report in the period time: ", e);
         }
         return response;
     }
 
-    private List<DoanhThuTheoNhanVien> analysisDoanhThuTheoNhanVien(List<Order> orders) {
-        List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien = new ArrayList<DoanhThuTheoNhanVien>();
+    private List<EmployeesRevenue> analysisEmployeesRevenue(List<Order> orders) {
+        List<EmployeesRevenue> listEmployeesRevenue = new ArrayList<EmployeesRevenue>();
         for (Order order : orders) {
             if (order.getOrderStatus().toString().equalsIgnoreCase(OrderStatus.SUCCESS.toString())) {
-                if (checkWaiterNameIsExisted(listDoanhThuTheoNhanVien, order.getWaiterName())) {
-                    int index = IntStream.range(0, listDoanhThuTheoNhanVien.size()).filter(i ->
-                            order.getWaiterName().equalsIgnoreCase(listDoanhThuTheoNhanVien.get(i).getEmployeeName())).findFirst().getAsInt();
+                if (checkWaiterNameIsExisted(listEmployeesRevenue, order.getWaiterName())) {
+                    int index = IntStream.range(0, listEmployeesRevenue.size()).filter(i ->
+                            order.getWaiterName().equalsIgnoreCase(listEmployeesRevenue.get(i).getEmployeeName())).findFirst().getAsInt();
                     OrdersWerePaidInformation orderPaidInformation = new OrdersWerePaidInformation();
                     orderPaidInformation.setReceiptCode(order.getReceiptCode());
                     orderPaidInformation.setTime(order.getOrderTimeCheckOut());
                     orderPaidInformation.setTotalPrice(order.getTotalMoney());
-                    listDoanhThuTheoNhanVien.get(index).getListOrdersWerePaidInfor().add(orderPaidInformation);
-                    Map<String, BigDecimal> totalPriceAndQuantity = calculateDoanhThuTheoNhanVienTotalPrice(listDoanhThuTheoNhanVien.get(index).getListOrdersWerePaidInfor());
-                    listDoanhThuTheoNhanVien.get(index).setTotalPrice(totalPriceAndQuantity.get(TOTAL_PRICE));
-                    listDoanhThuTheoNhanVien.get(index).setTotalOrderSuccess(totalPriceAndQuantity.get(QUANTITY).intValue());
+                    listEmployeesRevenue.get(index).getListOrdersWerePaidInfor().add(orderPaidInformation);
+                    Map<String, BigDecimal> totalPriceAndQuantity = calculateEmployeesRevenueTotalPrice(listEmployeesRevenue.get(index).getListOrdersWerePaidInfor());
+                    listEmployeesRevenue.get(index).setTotalPrice(totalPriceAndQuantity.get(TOTAL_PRICE));
+                    listEmployeesRevenue.get(index).setTotalOrderSuccess(totalPriceAndQuantity.get(QUANTITY).intValue());
                 } else {
-                    DoanhThuTheoNhanVien doanhThuTheoNhanVien = new DoanhThuTheoNhanVien();
-                    doanhThuTheoNhanVien.setEmployeeName(order.getWaiterName());
+                    EmployeesRevenue employeesRevenue = new EmployeesRevenue();
+                    employeesRevenue.setEmployeeName(order.getWaiterName());
                     List<OrdersWerePaidInformation> listOrdersWerePaidInformations = new ArrayList<OrdersWerePaidInformation>();
                     OrdersWerePaidInformation orderPaidInformation = new OrdersWerePaidInformation();
                     orderPaidInformation.setReceiptCode(order.getReceiptCode());
                     orderPaidInformation.setTime(order.getOrderTimeCheckOut());
                     orderPaidInformation.setTotalPrice(order.getTotalMoney());
                     listOrdersWerePaidInformations.add(orderPaidInformation);
-                    doanhThuTheoNhanVien.setListOrdersWerePaidInfor(listOrdersWerePaidInformations);
-                    Map<String, BigDecimal> totalPriceAndQuantity = calculateDoanhThuTheoNhanVienTotalPrice(listOrdersWerePaidInformations);
-                    doanhThuTheoNhanVien.setTotalPrice(totalPriceAndQuantity.get(TOTAL_PRICE));
-                    doanhThuTheoNhanVien.setTotalOrderSuccess(totalPriceAndQuantity.get(QUANTITY).intValue());
-                    listDoanhThuTheoNhanVien.add(doanhThuTheoNhanVien);
+                    employeesRevenue.setListOrdersWerePaidInfor(listOrdersWerePaidInformations);
+                    Map<String, BigDecimal> totalPriceAndQuantity = calculateEmployeesRevenueTotalPrice(listOrdersWerePaidInformations);
+                    employeesRevenue.setTotalPrice(totalPriceAndQuantity.get(TOTAL_PRICE));
+                    employeesRevenue.setTotalOrderSuccess(totalPriceAndQuantity.get(QUANTITY).intValue());
+                    listEmployeesRevenue.add(employeesRevenue);
                 }
 
             }
         }
-        return listDoanhThuTheoNhanVien;
+        return listEmployeesRevenue;
     }
 
-    private boolean checkWaiterNameIsExisted(List<DoanhThuTheoNhanVien> listDoanhThuTheoNhanVien, String waiterName) {
+    private boolean checkWaiterNameIsExisted(List<EmployeesRevenue> listEmployeesRevenue, String waiterName) {
         boolean isExisted = false;
-        if (listDoanhThuTheoNhanVien.stream().anyMatch(tmp -> tmp.getEmployeeName().equalsIgnoreCase(waiterName))) {
+        if (listEmployeesRevenue.stream().anyMatch(tmp -> tmp.getEmployeeName().equalsIgnoreCase(waiterName))) {
             isExisted = true;
         }
         return isExisted;
     }
 
-    private Map<String, BigDecimal> calculateDoanhThuTheoNhanVienTotalPrice(List<OrdersWerePaidInformation> listOrdersWerePaidInformations) {
+    private Map<String, BigDecimal> calculateEmployeesRevenueTotalPrice(List<OrdersWerePaidInformation> listOrdersWerePaidInformations) {
         Map<String, BigDecimal> result = new HashMap<String, BigDecimal>();
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (OrdersWerePaidInformation temp : listOrdersWerePaidInformations) {

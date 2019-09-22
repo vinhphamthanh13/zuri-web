@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class DoanhThuTheoNhanVien {
+public class EmployeesRevenue {
 
     private String employeeName;
 

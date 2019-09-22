@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class MatHangBanChayResponse extends AbstractResponse {
+public class HotDealsProductsResponse extends AbstractResponse {
 
-    private String cuaHangId;
+    private String restaurantId;
 
     List<HotDealsProduct> hotDealsProductList;
 }

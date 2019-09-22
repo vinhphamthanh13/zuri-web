@@ -86,105 +86,105 @@ public class ReportController {
     }
 
     /**
-     * Report current Mat Hang Ban Chay
+     * Hot Deals Products Report: Mat hang ban chay
      *
-     * @param cuaHangId
+     * @param restaurantId
      * @param currentDate
      * @return
      */
-    @ApiOperation(value = "Mặt Hàng Bán Chạy", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/mat-hang-ban-chay")
+    @ApiOperation(value = "Hot Deals Products Report", authorizations = {@Authorization(value = "Bearer")})
+    @GetMapping("/hotDealsProducts")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<MatHangBanChayResponse> getMatHangBanChay(@RequestParam(value = "cuaHangId") String cuaHangId,
+    public ResponseEntity<HotDealsProductsResponse> getHotDealsProducts(@RequestParam(value = "restaurantId") String restaurantId,
+                                                                        @RequestParam(value = "currentDate") String currentDate) {
+        log.info("START: get current hot deals products");
+        HotDealsProductsResponse response = reportService.getHotDealsProducts(restaurantId, currentDate);
+        log.info("END: get current hot deals products");
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Hot Deals Products Report between two days
+     *
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "Hot Deals Products Report In Range Date", authorizations = {@Authorization(value = "Bearer")})
+    @PostMapping("/hotDealsProducts")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<HotDealsProductsResponse> getHotDealsProductsInRangeDate(@RequestBody AbstractReportRequest request) {
+        log.info("START: get hot deals products from: " + request.getFromDate() + " to: " + request.getToDate());
+        HotDealsProductsResponse response = reportService.getHotDealsProductsInRangeDate(request);
+        log.info("END: get hot deals products in range date");
+        return ResponseEntity.ok(response);
+    }
+
+
+    /**
+     * Discount Report: Báo Cáo Giảm Giá
+     *
+     * @param restaurantId
+     * @param currentDate
+     * @return
+     */
+    @ApiOperation(value = "Discount Report", authorizations = {@Authorization(value = "Bearer")})
+    @GetMapping("/discountReport")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<DiscountReportResponse> getDiscountReport(@RequestParam(value = "restaurantId") String restaurantId,
                                                                     @RequestParam(value = "currentDate") String currentDate) {
-        log.info("START: get current mat hang ban chay");
-        MatHangBanChayResponse response = reportService.getMatHangBanChay(cuaHangId, currentDate);
-        log.info("END: get current mat hang ban chay");
+        log.info("START: get current Discount Report");
+        DiscountReportResponse response = reportService.getDiscountReport(restaurantId, currentDate);
+        log.info("END: get current Discount Report");
         return ResponseEntity.ok(response);
     }
 
     /**
-     * Report Mat Hang Ban Chay between two days
+     * Discount Report between two days
      *
      * @param request
      * @return
      */
-    @ApiOperation(value = "Mặt Hàng Bán Chạy In Range Date", authorizations = {@Authorization(value = "Bearer")})
-    @PostMapping("/mat-hang-ban-chay")
+    @ApiOperation(value = "Discount Report In Range Date", authorizations = {@Authorization(value = "Bearer")})
+    @PostMapping("/discountReport")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<MatHangBanChayResponse> getMatHangBanChayInRangeDate(@RequestBody AbstractReportRequest request) {
-        log.info("START: get mat hang ban chay from: " + request.getFromDate() + " to: " + request.getToDate());
-        MatHangBanChayResponse response = reportService.getMatHangBanChayInRangeDate(request);
-        log.info("END: get mat hang ban chay in range date");
+    public ResponseEntity<DiscountReportResponse> getDiscountReportInRangeDate(@RequestBody AbstractReportRequest request) {
+        log.info("START: get Discount Report from: " + request.getFromDate() + " to: " + request.getToDate());
+        DiscountReportResponse response = reportService.getDiscountReportInRangeDate(request);
+        log.info("END: get Discount Report in range date");
         return ResponseEntity.ok(response);
     }
 
-
     /**
-     * Report current Giam Gia
+     * Employees Revenue Report: Doanh thu theo nhân viên
      *
-     * @param cuaHangId
+     * @param restaurantId
      * @param currentDate
      * @return
      */
-    @ApiOperation(value = "Báo Cáo Giảm Giá", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/bao-cao-giam-gia")
+    @ApiOperation(value = "Employees Revenue Report", authorizations = {@Authorization(value = "Bearer")})
+    @GetMapping("/employeesRevenue")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGia(@RequestParam(value = "cuaHangId") String cuaHangId,
-                                                                  @RequestParam(value = "currentDate") String currentDate) {
-        log.info("START: get current bao cao giam gia");
-        BaoCaoGiamGiaResponse response = reportService.getBaoCaoGiamGia(cuaHangId, currentDate);
-        log.info("END: get current bao cao giam gia");
+    public ResponseEntity<EmployeesRevenueResponse> getEmployeesRevenueReport(@RequestParam(value = "restaurantId") String restaurantId,
+                                                                              @RequestParam(value = "currentDate") String currentDate) {
+        log.info("START: get current Employees Revenue Report");
+        EmployeesRevenueResponse response = reportService.getEmployeesRevenueReport(restaurantId, currentDate);
+        log.info("END: get current Employees Revenue Report");
         return ResponseEntity.ok(response);
     }
 
     /**
-     * Report Giam Gia between two days
+     * Employees Revenue Report between two days
      *
      * @param request
      * @return
      */
-    @ApiOperation(value = "Báo Cáo Giảm Giá In Range Date", authorizations = {@Authorization(value = "Bearer")})
-    @PostMapping("/bao-cao-giam-gia")
+    @ApiOperation(value = "Employees Revenue Report In Range Date", authorizations = {@Authorization(value = "Bearer")})
+    @PostMapping("/employeesRevenue")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<BaoCaoGiamGiaResponse> getBaoCaoGiamGiaInRangeDate(@RequestBody AbstractReportRequest request) {
-        log.info("START: get bao cao giam gia from: " + request.getFromDate() + " to: " + request.getToDate());
-        BaoCaoGiamGiaResponse response = reportService.getBaoCaoGiamGiaInRangeDate(request);
-        log.info("END: get bao cao giam gia in range date");
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * Report Doanh Thu Theo Nhan Vien
-     *
-     * @param cuaHangId
-     * @param currentDate
-     * @return
-     */
-    @ApiOperation(value = "Báo Cáo Doanh Thu Theo Nhân Viên", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/doanh-thu-theo-nhan-vien")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<DoanhThuTheoNhanVienResponse> getBaoCaoDoanhThuTheoNhanVien(@RequestParam(value = "cuaHangId") String cuaHangId,
-                                                                                      @RequestParam(value = "currentDate") String currentDate) {
-        log.info("START: get current bao cao doanh thu theo nhan vien");
-        DoanhThuTheoNhanVienResponse response = reportService.getBaoCaoDoanhThuTheoNhanVien(cuaHangId, currentDate);
-        log.info("END: get current bao cao doanh thu theo nhan vien");
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * Report Doanh Thu Theo Nhan Viet between two days
-     *
-     * @param request
-     * @return
-     */
-    @ApiOperation(value = "Báo Cáo Doanh Thu Theo Nhân Viên In Range Date", authorizations = {@Authorization(value = "Bearer")})
-    @PostMapping("/doanh-thu-theo-nhan-vien")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<DoanhThuTheoNhanVienResponse> getBaoCaoDoanhThuTheoNhanVienInRangeDate(@RequestBody AbstractReportRequest request) {
-        log.info("START: get doanh thu theo nhan vien from: " + request.getFromDate() + " to: " + request.getToDate());
-        DoanhThuTheoNhanVienResponse response = reportService.getBaoCaoDoanhThuTheoNhanVienInRangeDate(request);
-        log.info("END: get doanh thu theo nhan vien in range date");
+    public ResponseEntity<EmployeesRevenueResponse> getEmployeesRevenueReportInRangeDate(@RequestBody AbstractReportRequest request) {
+        log.info("START: get Employees Revenue Report from: " + request.getFromDate() + " to: " + request.getToDate());
+        EmployeesRevenueResponse response = reportService.getEmployeesRevenueReportInRangeDate(request);
+        log.info("END: get Employees Revenue Report in range date");
         return ResponseEntity.ok(response);
     }
 }

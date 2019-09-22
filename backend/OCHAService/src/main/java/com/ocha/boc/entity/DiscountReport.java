@@ -10,9 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class BaoCaoGiamGia {
-
-
+public class DiscountReport {
 
     private String name;
 
