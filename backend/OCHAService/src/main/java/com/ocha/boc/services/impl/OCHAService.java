@@ -58,10 +58,11 @@ public class OCHAService {
                 CopyPrinter copyPrinter = CopyPrinter.builder()
                         .description(request.getDescription())
                         .price(request.getPrice())
-                        .region(Region.valueOf(request.getRegion().label))
+                        .region(Region.valueOf(request.getRegion()).toString())
                         .title(request.getTitle())
                         .build();
                 copyPrinter.setCreatedDate(Date.from(Instant.now()).toString());
+                copyPrinterRepository.save(copyPrinter);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
                 response.setObject(new CopyPrinterDTO(copyPrinter));

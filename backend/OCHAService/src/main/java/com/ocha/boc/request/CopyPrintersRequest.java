@@ -1,7 +1,6 @@
 package com.ocha.boc.request;
 
 
-import com.ocha.boc.enums.Region;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,5 +19,5 @@ public class CopyPrintersRequest implements Serializable {
 
     private BigDecimal price;
 
-    private Region region;
+    private String region;
 }

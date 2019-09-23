@@ -1,7 +1,6 @@
 package com.ocha.boc.entity;
 
 import com.ocha.boc.base.AbstractEntity;
-import com.ocha.boc.enums.Region;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +22,6 @@ public class CopyPrinter extends AbstractEntity {
 
     private BigDecimal price;
 
-    private Region region;
+    private String region;
 
 }
