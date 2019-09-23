@@ -148,11 +148,11 @@ public class CommonConstants {
     /**
      * System Configuration
      */
-    public static final String GET_ALL_GIAY_IN_SYSTEM_CONFIGURATION_FAIL  = "Lỗi trong quá trình lấy thông tin thiết lập giấy in của hệ thống.";
+    public static final String GET_ALL_COPY_PRINTER_SYSTEM_CONFIGURATION_FAIL = "Lỗi trong quá trình lấy thông tin thiết lập giấy in của hệ thống.";
 
-    public static final String CREATE_NEW_GIAY_IN_INFORMATION_FAIL        = "Lỗi trong quá trình tạo mới giấy in hệ thống.";
+    public static final String CREATE_NEW_COPY_PRINTER_INFORMATION_FAIL = "Lỗi trong quá trình tạo mới giấy in hệ thống.";
 
-    public static final String DELETE_GIAY_IN_BY_TITLE_FAIL               = "Lỗi trong quá trình xóa thông tin giấy in trong hệ thống.";
+    public static final String DELETE_COPY_PRINTER_BY_TITLE_FAIL = "Lỗi trong quá trình xóa thông tin giấy in trong hệ thống.";
 
     public static final String GET_ALL_PRODUCT_PORTFOLIO_FAIL = "Lỗi trong quá trình lấy thông tin danh mục sản phẩm.";
 

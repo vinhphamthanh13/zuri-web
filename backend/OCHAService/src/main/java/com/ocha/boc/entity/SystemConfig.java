@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +15,6 @@ public class SystemConfig extends AbstractEntity {
 
     public static final String COLLECTION_NAME = "systemconfig";
 
-    public List<GiayIn> listGiayInConfiguration;
 
 
 }

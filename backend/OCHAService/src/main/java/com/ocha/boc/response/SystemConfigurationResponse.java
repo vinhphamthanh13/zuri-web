@@ -11,5 +11,5 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class SystemConfigurationResponse extends AbstractResponse<String , SystemConfigDTO> implements Serializable {
+public class SystemConfigurationResponse extends AbstractResponse<String, SystemConfigDTO> implements Serializable {
 }
