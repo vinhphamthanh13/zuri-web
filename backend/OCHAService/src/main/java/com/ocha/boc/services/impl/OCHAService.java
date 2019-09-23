@@ -4,7 +4,7 @@ import com.ocha.boc.dto.CopyPrinterDTO;
 import com.ocha.boc.entity.CopyPrinter;
 import com.ocha.boc.enums.Region;
 import com.ocha.boc.repository.CopyPrinterRepository;
-import com.ocha.boc.request.GiayInRequest;
+import com.ocha.boc.request.CopyPrintersRequest;
 import com.ocha.boc.response.CopyPrinterResponse;
 import com.ocha.boc.util.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class OCHAService {
     }
 
 
-    public CopyPrinterResponse createNewCopyPrinterInformation(GiayInRequest request) {
+    public CopyPrinterResponse createNewCopyPrinterInformation(CopyPrintersRequest request) {
         CopyPrinterResponse response = new CopyPrinterResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_COPY_PRINTER_INFORMATION_FAIL);

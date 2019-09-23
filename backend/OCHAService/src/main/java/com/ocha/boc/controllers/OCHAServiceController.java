@@ -1,6 +1,6 @@
 package com.ocha.boc.controllers;
 
-import com.ocha.boc.request.GiayInRequest;
+import com.ocha.boc.request.CopyPrintersRequest;
 import com.ocha.boc.response.CopyPrinterResponse;
 import com.ocha.boc.services.impl.OCHAService;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +19,7 @@ public class OCHAServiceController {
     private OCHAService ochaService;
 
     @ApiOperation(value = "Get all information about Copy Printer in the system", authorizations = {@Authorization(value = "Bearer")})
-    @GetMapping("/system/information")
+    @GetMapping("/system/copyPrinters")
     public ResponseEntity<CopyPrinterResponse> getAllCopyPrinters() {
         log.info("START: Get all information about Copy Printer in the System");
         CopyPrinterResponse response = ochaService.getAllCopyPrinters();
@@ -28,8 +28,8 @@ public class OCHAServiceController {
     }
 
     @ApiOperation(value = "Create new Copy Printer Information in the system", authorizations = {@Authorization(value = "Bearer")})
-    @PostMapping("/system/giay-in")
-    public ResponseEntity<CopyPrinterResponse> createNewCopyPrinterInformation(@RequestBody GiayInRequest request) {
+    @PostMapping("/system/copyPrinters")
+    public ResponseEntity<CopyPrinterResponse> createNewCopyPrinterInformation(@RequestBody CopyPrintersRequest request) {
         log.info("START: create new Copy Printer information in the system");
         CopyPrinterResponse response = ochaService.createNewCopyPrinterInformation(request);
         log.info("END: create new Copy Printer information in the system");
@@ -37,7 +37,7 @@ public class OCHAServiceController {
     }
 
     @ApiOperation(value = "Delete Copy Printer Information By Title", authorizations = {@Authorization(value = "Bearer")})
-    @DeleteMapping("/system/giay-in/{title}")
+    @DeleteMapping("/system/copyPrinters/{title}")
     public ResponseEntity<CopyPrinterResponse> deleteCopyPrinterInforByTitle(@PathVariable(value = "title") String title) {
         log.info("START: Delete Copy Printer Information with title name: " + title);
         CopyPrinterResponse response = ochaService.deleteCopyPrinterInforByTitle(title);

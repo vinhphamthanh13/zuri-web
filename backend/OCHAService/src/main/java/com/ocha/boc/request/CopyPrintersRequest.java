@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class GiayInRequest implements Serializable {
+public class CopyPrintersRequest implements Serializable {
 
     private String title;
 
