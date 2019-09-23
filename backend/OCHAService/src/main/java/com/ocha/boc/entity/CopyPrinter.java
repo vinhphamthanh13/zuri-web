@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 @Builder
+@Document(collection = CopyPrinter.COLLECTION_NAME)
 public class CopyPrinter extends AbstractEntity {
 
     public static final String COLLECTION_NAME = "copyprinter";
