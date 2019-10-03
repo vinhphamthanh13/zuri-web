@@ -47,8 +47,10 @@ public class RestaurantService {
                             restaurant.setRestaurantName(request.getRestaurantName());
                             restaurant.setPhone(request.getPhone());
                             restaurant.setManagerName(request.getManagerName());
-                            restaurant.setBusinessModelsType(EBusinessModelsType.valueOf(request.getBusinessModelsType()).label);
-                            restaurant.setBusinessItemsType(EProductPortfolioType.valueOf(request.getBusinessItemsType()).label);
+//                            restaurant.setBusinessModelsType(EBusinessModelsType.valueOf(request.getBusinessModelsType()).label);
+//                            restaurant.setBusinessItemsType(EProductPortfolioType.valueOf(request.getBusinessItemsType()).label);
+                            restaurant.setBusinessItemsType(request.getBusinessModelsType());
+                            restaurant.setBusinessItemsType(request.getBusinessItemsType());
                             restaurant.setManagerPhone(request.getManagerPhone());
                             restaurant.setCreatedDate(DateUtils.getCurrentDateAndTime());
                             restaurant.setAddress(request.getAddress());
