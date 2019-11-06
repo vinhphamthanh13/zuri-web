@@ -50,23 +50,22 @@ public class AuthService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.CREATE_NEW_USER_FAIL);
         try {
-            if(StringUtils.isNotEmpty(request.getPhone())){
-                Optional<User> optUser = userRepository.findUserByPhone(request.getPhone());
-                if (!optUser.isPresent()) {
-                    User user = new User();
-                    user.setPhone(request.getPhone());
-                    user.setActive(Boolean.FALSE);
-                    user.setCreatedDate(DateUtils.getCurrentDateAndTime());
-                    user.setRole(UserType.USER);
-                    userRepository.save(user);
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObjectId(user.getId());
-                    UserDTO userDTO = new UserDTO(user);
-                    response.setObject(userDTO);
-                } else {
+            if (StringUtils.isNotEmpty(request.getPhone())) {
+                if (userRepository.existsByPhone(request.getPhone())) {
                     response.setMessage(CommonConstants.USER_EXISTED);
+                    return response;
                 }
+                User user = User.builder()
+                        .phone(request.getPhone())
+                        .isActive(Boolean.FALSE)
+                        .role(UserType.USER)
+                        .build();
+                user.setCreatedDate(DateUtils.getCurrentDateAndTime());
+                userRepository.save(user);
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObjectId(user.getId());
+                response.setObject(new UserDTO(user));
             }
         } catch (Exception e) {
             log.error("Exception while register new user account: ", e);
@@ -80,24 +79,26 @@ public class AuthService {
         response.setMessage(CommonConstants.LOGIN_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                if (StringUtils.isNotEmpty(request.getCountryCode()) && StringUtils.isNotEmpty(request.getOtpCode()) && StringUtils.isNotEmpty(request.getPhoneNumber())) {
-                    if (checkVerificationCode(request.getOtpCode(), request.getCountryCode(), request.getPhoneNumber())) {
-                        String jwt = tokenProvider.generateToken(request.getPhoneNumber());
-                        Optional<User> optUser = userRepository.findUserByPhoneAndIsActive(request.getPhoneNumber(), true);
-                        if (optUser.isPresent()) {
-                            if (optUser.get().isActive() == true) {
-                                optUser.get().setLastLoginTime(DateUtils.getCurrentDateAndTime());
-                                userRepository.save(optUser.get());
-                                response.setSuccess(Boolean.TRUE);
-                                response.setAccessToken(jwt);
-                                response.setObject(new UserDTO(optUser.get()));
-                                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                            } else {
-                                response.setMessage(CommonConstants.ACCOUNT_IS_NOT_ACTIVE);
-                            }
-                        }
-                    }
+                Optional<User> optUser = userRepository.findUserByPhoneAndIsActive(request.getPhoneNumber(), true);
+                if (!optUser.isPresent()) {
+                    response.setMessage(CommonConstants.ACCOUNT_IS_NOT_ACTIVE);
+                    return response;
                 }
+                if (!checkVerificationCode(request.getOtpCode(), request.getCountryCode(), request.getPhoneNumber())) {
+                    response.setMessage(CommonConstants.WRONG_OTP_CODE);
+                    return response;
+                }
+                String jwt = StringUtils.EMPTY;
+                jwt = tokenProvider.generateToken(request.getPhoneNumber());
+                if (StringUtils.isEmpty(jwt)) {
+                    log.error("Cannot generate token");
+                }
+                optUser.get().setLastLoginTime(DateUtils.getCurrentDateAndTime());
+                userRepository.save(optUser.get());
+                response.setSuccess(Boolean.TRUE);
+                response.setAccessToken(jwt);
+                response.setObject(new UserDTO(optUser.get()));
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             }
         } catch (Exception e) {
             log.error("Exception while login into the system: ", e);
@@ -111,11 +112,9 @@ public class AuthService {
         response.setMessage(CommonConstants.SEND_VERIFICATION_CODE_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                if (StringUtils.isNotEmpty(request.getCountryCode()) && StringUtils.isNotEmpty(request.getPhoneNumber())) {
-                    if (handlingSendVerificationCode(request.getPhoneNumber(), request.getCountryCode())) {
-                        response.setSuccess(Boolean.TRUE);
-                        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    }
+                if (handlingSendVerificationCode(request.getPhoneNumber(), request.getCountryCode())) {
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 }
             }
         } catch (Exception e) {
@@ -130,20 +129,18 @@ public class AuthService {
         response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                if (StringUtils.isNotEmpty(request.getCountryCode()) && StringUtils.isNotEmpty(request.getOtpCode()) && StringUtils.isNotEmpty(request.getPhoneNumber())) {
-                    if (checkVerificationCode(request.getOtpCode(), request.getCountryCode(), request.getPhoneNumber())) {
-                        Optional<User> optUser = userRepository.findUserByPhone(request.getPhoneNumber());
-                        if (optUser.isPresent()) {
-                            String jwt = tokenProvider.generateToken(request.getPhoneNumber());
-                            userRepository.findUserByPhone(request.getPhoneNumber()).map(user -> {
-                                user.setActive(Boolean.TRUE);
-                                return userRepository.save(user);
-                            });
-                            response.setObject(new UserDTO(optUser.get()));
-                            response.setAccessToken(jwt);
-                            response.setSuccess(Boolean.TRUE);
-                            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                        }
+                if (checkVerificationCode(request.getOtpCode(), request.getCountryCode(), request.getPhoneNumber())) {
+                    Optional<User> optUser = userRepository.findUserByPhone(request.getPhoneNumber());
+                    if (optUser.isPresent()) {
+                        String jwt = tokenProvider.generateToken(request.getPhoneNumber());
+                        userRepository.findUserByPhone(request.getPhoneNumber()).map(user -> {
+                            user.setActive(Boolean.TRUE);
+                            return userRepository.save(user);
+                        });
+                        response.setObject(new UserDTO(optUser.get()));
+                        response.setAccessToken(jwt);
+                        response.setSuccess(Boolean.TRUE);
+                        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     }
                 }
             }

@@ -3,8 +3,8 @@ package com.ocha.boc.entity;
 import com.ocha.boc.base.AbstractEntity;
 import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.enums.UserType;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * Entity Object presents for User
  */
-@Getter
-@Setter
+@Data
+@Builder
 @Document(collection = User.COLLECTION_NAME)
 public class User extends AbstractEntity {
 

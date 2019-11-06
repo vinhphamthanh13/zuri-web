@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -34,7 +36,7 @@ public class AuthenController {
      */
     @ApiOperation(value = "register new user account")
     @PostMapping("/users")
-    public ResponseEntity<UserResponse> register(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserLoginRequest request) {
         log.info("START: register new user account");
         UserResponse response = authService.register(request);
         log.info("END: register new user account");
@@ -49,7 +51,7 @@ public class AuthenController {
      */
     @ApiOperation(value = "login")
     @PostMapping("/users/login")
-    public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody OTPRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> login(@Valid @RequestBody OTPRequest request) {
         log.info("START: login API");
         JwtAuthenticationResponse response = authService.login(request);
         log.info("END: login API");
@@ -64,7 +66,7 @@ public class AuthenController {
      */
     @ApiOperation(value = "Send OTP")
     @PostMapping("/users/sendOTP")
-    public ResponseEntity<AbstractResponse> sendOTP(@RequestBody SendOTPRequest request) {
+    public ResponseEntity<AbstractResponse> sendOTP(@Valid @RequestBody SendOTPRequest request) {
         log.info("START: Sending OTP to phone number: " + request.getPhoneNumber());
         AbstractResponse response = authService.sendOTP(request);
         log.info("END: Sending OTP to phone number");

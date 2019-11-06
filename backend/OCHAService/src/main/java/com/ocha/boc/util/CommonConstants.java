@@ -80,6 +80,8 @@ public class CommonConstants {
 
     public static final String ACCOUNT_IS_NOT_ACTIVE                    = "Tài khoản chưa được kích hoạt. Không thể đăng nhập";
 
+    public static final String WRONG_OTP_CODE = "Mã xác thực không chính xác";
+
     /**
      * Restaurant Error:
      */

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -11,9 +12,12 @@ import java.io.Serializable;
 @ToString
 public class OTPRequest implements Serializable {
 
+    @NotNull
     private String phoneNumber;
 
+    @NotNull
     private String otpCode;
 
+    @NotNull
     private String countryCode;
 }

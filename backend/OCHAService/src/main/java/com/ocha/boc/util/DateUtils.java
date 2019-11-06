@@ -14,6 +14,9 @@ public class DateUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+
     public static Long getCurrentTimeMillis() {
         return System.currentTimeMillis();
     }
@@ -79,7 +82,7 @@ public class DateUtils {
 
     public static String unixEpochTimeToStrDate(Long unixSeconds) {
         Date date = new Date(unixSeconds * 1000L);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
         String formattedDate = sdf.format(date);
         logger.debug("formattedDate {}", formattedDate);
         return formattedDate;
@@ -87,7 +90,7 @@ public class DateUtils {
 
     public static String unixEpochTimeToStrDate(Long unixSeconds, String timezone) {
         Date date = new Date(unixSeconds * 1000L);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
         sdf.setTimeZone(TimeZone.getTimeZone(timezone));
         String formattedDate = sdf.format(date);
         return formattedDate;
@@ -134,7 +137,7 @@ public class DateUtils {
             if (timezone == null) {
                 timezone = "UTC";
             }
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat(DATE_TIME_FORMAT);
             df.setTimeZone(TimeZone.getTimeZone(timezone));
             Date date = df.parse(str);
             long epoch = date.getTime() / 1000;
@@ -148,7 +151,7 @@ public class DateUtils {
 
     private static Date unixEpochTimeToShortDate(Long unixSeconds, String timezone) throws ParseException {
         Date date = new Date(unixSeconds * 1000L);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         String strTargetDate = dateFormat.format(date);
         Date targetDate = dateFormat.parse(strTargetDate);
         logger.debug("targetDate: {}", targetDate.toString());
@@ -157,7 +160,7 @@ public class DateUtils {
 
     public static Date unixEpochTimeToDate(Long unixSeconds, String timezone) throws ParseException {
         Date date = new Date(unixSeconds * 1000L);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
         sdf.setTimeZone(TimeZone.getTimeZone(timezone));
         String formattedDate = sdf.format(date);
         Date targetDate = sdf.parse(formattedDate);
@@ -251,13 +254,13 @@ public class DateUtils {
     }
 
     public static String getCurrentDate() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_FORMAT);
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
 
     public static String getDayBeforeTheGivenDay(String currentDayString) throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         Date currentDay = dateFormat.parse(currentDayString);
         Date oneDayBefore = new Date(currentDay.getTime() - 2);
         String result = dateFormat.format(oneDayBefore);
@@ -265,9 +268,8 @@ public class DateUtils {
     }
 
     public static String getCurrentDateAndTime(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        return dateFormat.format(date).toString();
+        DateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
+        return dateFormat.format(new Date());
     }
 
     public static void main(String[] args) throws Exception {

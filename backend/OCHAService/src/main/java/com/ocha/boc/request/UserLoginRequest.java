@@ -4,8 +4,8 @@ package com.ocha.boc.request;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -13,6 +13,6 @@ import java.io.Serializable;
 @ToString
 public class UserLoginRequest implements Serializable {
 
-    @NonNull
+    @NotNull
     private String phone;
 }
