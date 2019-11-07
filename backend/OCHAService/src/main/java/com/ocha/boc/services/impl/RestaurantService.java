@@ -3,9 +3,7 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.dto.RestaurantDTO;
 import com.ocha.boc.entity.Restaurant;
 import com.ocha.boc.entity.User;
-import com.ocha.boc.enums.EBusinessModelsType;
 import com.ocha.boc.enums.EProductPortfolioType;
-import com.ocha.boc.enums.UserType;
 import com.ocha.boc.repository.RestaurantRepository;
 import com.ocha.boc.repository.UserRepository;
 import com.ocha.boc.request.RestaurantRequest;
@@ -39,67 +37,35 @@ public class RestaurantService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (!Objects.isNull(request)) {
-                if (StringUtils.isNotEmpty(request.getAddress()) && StringUtils.isNotEmpty(request.getRestaurantName())) {
-                    if (!checkInforCuaHangIsExisted(request.getAddress(), request.getRestaurantName())) {
-                        Optional<User> optOwner = userRepository.findUserByPhone(request.getPhone());
-                        if (optOwner.isPresent()) {
-                            Restaurant restaurant = new Restaurant();
-                            restaurant.setRestaurantName(request.getRestaurantName());
-                            restaurant.setPhone(request.getPhone());
-                            restaurant.setManagerName(request.getManagerName());
-//                            restaurant.setBusinessModelsType(EBusinessModelsType.valueOf(request.getBusinessModelsType()).label);
-//                            restaurant.setBusinessItemsType(EProductPortfolioType.valueOf(request.getBusinessItemsType()).label);
-                            restaurant.setBusinessItemsType(request.getBusinessModelsType());
-                            restaurant.setBusinessItemsType(request.getBusinessItemsType());
-                            restaurant.setManagerPhone(request.getManagerPhone());
-                            restaurant.setCreatedDate(DateUtils.getCurrentDateAndTime());
-                            restaurant.setAddress(request.getAddress());
-                            if (StringUtils.isNotEmpty(request.getManagerEmail())) {
-                                restaurant.setManagerEmail(request.getManagerEmail());
-                            }
-                            restaurantRepository.save(restaurant);
-                            //Update cua hang id on table user
-                            restaurant = restaurantRepository.findTopByOrderByCreatedDateDesc();
-                            List<Restaurant> listRestaurant = optOwner.get().getListRestaurant();
-                            listRestaurant.add(restaurant);
-                            optOwner.get().setListRestaurant(listRestaurant);
-                            optOwner.get().setRole(UserType.ADMIN);
-                            userRepository.save(optOwner.get());
-                            //Check manager Phone exist in the system. If existed then assign cuaHangId to the account, if not
-                            //Create new account with phone of the manager.
-                            /*
-                            if(!request.getManagerPhone().equalsIgnoreCase(request.getPhone())) {
-                                Optional<User> optManager = userRepository.findUserByPhone(request.getManagerPhone());
-                                if (!optManager.isPresent()) {
-                                    User manager = new User();
-                                    manager.setPhone(request.getManagerPhone());
-                                    manager.setEmail(request.getManagerEmail());
-                                    manager.setName(request.getManagerName());
-                                    manager.setActive(Boolean.TRUE);
-                                    manager.setCreatedDate(Instant.now().toString());
-                                    manager.setRole(UserType.USER);
-                                    manager.setListRestaurant(new ArrayList<Restaurant>());
-                                    manager.getListRestaurant().add(restaurant);
-
-                                }else{
-                                    List<Restaurant> list = optManager.get().getListRestaurant();
-                                    list.add(restaurant);
-                                    optManager.get().setListRestaurant(list);
-                                }
-                                userRepository.save(optManager.get());
-                                response.setSuccess(Boolean.TRUE);
-                                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                                response.setObject(new RestaurantDTO(restaurant));
-                            }
-                            */
-                            response.setSuccess(Boolean.TRUE);
-                            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                            response.setObject(new RestaurantDTO(restaurant));
-                        } else {
-                            log.debug("Cannot find user by owner phone: ", request.getPhone());
-                            response.setMessage(CommonConstants.UPDATE_RESTAURANT_ID_ON_USER_FAIL);
-                        }
+                if (!checkInforCuaHangIsExisted(request.getAddress(), request.getRestaurantName())) {
+                    if (!userRepository.existsByPhone(request.getPhone())) {
+                        log.debug("Cannot find user by owner phone: ", request.getPhone());
+                        response.setMessage(CommonConstants.UPDATE_RESTAURANT_ID_ON_USER_FAIL);
+                        return response;
                     }
+                    Restaurant restaurant = Restaurant.builder()
+                            .restaurantName(request.getRestaurantName())
+                            .phone(request.getPhone())
+                            .managerName(request.getManagerName())
+                            .businessItemsType(request.getBusinessItemsType())
+                            .businessModelsType(request.getBusinessModelsType())
+                            .address(request.getAddress())
+                            .createdDate(DateUtils.getCurrentDateAndTime())
+                            .managerPhone(request.getManagerPhone())
+                            .build();
+                    if (StringUtils.isNotEmpty(request.getManagerEmail())) {
+                        restaurant.setManagerEmail(request.getManagerEmail());
+                    }
+                    Restaurant newRestaurant = restaurantRepository.save(restaurant);
+                    //Update cua hang id on table user
+                    Optional<User> optOwner = userRepository.findUserByPhone(request.getPhone());
+                    List<Restaurant> ownerRestaurantList = optOwner.get().getListRestaurant();
+                    ownerRestaurantList.add(newRestaurant);
+                    optOwner.get().setListRestaurant(ownerRestaurantList);
+                    userRepository.save(optOwner.get());
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObject(new RestaurantDTO(newRestaurant));
                 }
             }
         } catch (Exception e) {
@@ -115,42 +81,41 @@ public class RestaurantService {
         try {
             if (!Objects.isNull(request)) {
                 if (userRepository.existsByPhone(request.getPhone())) {
-                    Optional<User> optionalUser = userRepository.findUserByPhone(request.getPhone());
-                    if (StringUtils.isNotEmpty(request.getRestaurantId())) {
-                        if (restaurantRepository.existsById(request.getRestaurantId())) {
-                            Optional<Restaurant> optRestaurant = restaurantRepository.findRestaurantById(request.getRestaurantId());
+                    if (restaurantRepository.existsById(request.getRestaurantId())) {
+                        Optional<Restaurant> optRestaurant = restaurantRepository.findRestaurantById(request.getRestaurantId()).map(restaurant -> {
                             if (StringUtils.isNotEmpty(request.getAddress())) {
-                                optRestaurant.get().setAddress(request.getAddress());
+                                restaurant.setAddress(request.getAddress());
                             }
                             if (StringUtils.isNotEmpty(request.getManagerEmail())) {
-                                optRestaurant.get().setManagerEmail(request.getManagerEmail());
+                                restaurant.setManagerEmail(request.getManagerEmail());
                             }
                             if (StringUtils.isNotEmpty(request.getBusinessModelsType())) {
-                                optRestaurant.get().setBusinessModelsType(EBusinessModelsType.valueOf(request.getBusinessModelsType()).label);
+                                restaurant.setBusinessModelsType(request.getBusinessModelsType());
                             }
-                            if(StringUtils.isNotEmpty(request.getBusinessItemsType())){
-                                optRestaurant.get().setBusinessItemsType(EProductPortfolioType.valueOf(request.getBusinessItemsType()).label);
+                            if (StringUtils.isNotEmpty(request.getBusinessItemsType())) {
+                                restaurant.setBusinessItemsType(EProductPortfolioType.valueOf(request.getBusinessItemsType()).label);
                             }
                             if (StringUtils.isNotEmpty(request.getManagerPhone())) {
-                                optRestaurant.get().setManagerPhone(request.getManagerPhone());
+                                restaurant.setManagerPhone(request.getManagerPhone());
                             }
                             if (StringUtils.isNotEmpty(request.getManagerName())) {
-                                optRestaurant.get().setManagerName(request.getManagerName());
+                                restaurant.setManagerName(request.getManagerName());
                             }
-                            optRestaurant.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                            restaurantRepository.save(optRestaurant.get());
-                            List<Restaurant> lists = optionalUser.get().getListRestaurant().stream().map(restaurant -> {
-                                if (restaurant.getId().equalsIgnoreCase(request.getRestaurantId())) {
-                                    restaurant = optRestaurant.get();
-                                }
-                                return restaurant;
-                            }).collect(Collectors.toList());
-                            optionalUser.get().setListRestaurant(lists);
-                            userRepository.save(optionalUser.get());
-                            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                            response.setObject(new RestaurantDTO(optRestaurant.get()));
-                            response.setSuccess(Boolean.TRUE);
-                        }
+                            restaurant.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+                            return restaurantRepository.save(restaurant);
+                        });
+                        Optional<User> optionalUser = userRepository.findUserByPhone(request.getPhone());
+                        List<Restaurant> lists = optionalUser.get().getListRestaurant().stream().map(restaurant -> {
+                            if (restaurant.getId().equalsIgnoreCase(request.getRestaurantId())) {
+                                restaurant = optRestaurant.get();
+                            }
+                            return restaurant;
+                        }).collect(Collectors.toList());
+                        optionalUser.get().setListRestaurant(lists);
+                        userRepository.save(optionalUser.get());
+                        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                        response.setObject(new RestaurantDTO(optRestaurant.get()));
+                        response.setSuccess(Boolean.TRUE);
                     }
                 }
             }

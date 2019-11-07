@@ -1,13 +1,11 @@
 package com.ocha.boc.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @Document(collection = Restaurant.COLLECTION_NAME)
 public class Restaurant {
 
