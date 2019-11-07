@@ -4,9 +4,9 @@ import com.ocha.boc.enums.UserType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -14,11 +14,11 @@ import java.io.Serializable;
 @ToString
 public class UserUpdateRequest implements Serializable {
 
-    @NonNull
+    @NotNull
     private String userId;
 
     @Email
-    @NonNull
+    @NotNull
     private String email;
 
     private String photo;
@@ -27,13 +27,13 @@ public class UserUpdateRequest implements Serializable {
 
     private UserType role;
 
-    @NonNull
+    @NotNull
     private String verificationCode;
 
-    @NonNull
+    @NotNull
     private String countryCode;
 
-    @NonNull
+    @NotNull
     private String phoneNumber;
 
 }

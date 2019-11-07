@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -42,31 +42,31 @@ public class UserService {
             boolean isVerificationCodeSuccess = checkVerificationCode(request.getVerificationCode(), request.getCountryCode(), request.getPhoneNumber());
             if (!isVerificationCodeSuccess) {
                 response.setMessage(CommonConstants.VERIFICATION_CODE_FAIL);
-            } else {
-                if (checkUserExisted(request.getUserId())) {
-                    Optional<User> user = userRepository.findUserById(request.getUserId());
-                    if (StringUtils.isNotEmpty(request.getEmail())) {
-                        user.get().setEmail(request.getEmail());
-                    }
-                    if (StringUtils.isNotEmpty(request.getName())) {
-                        user.get().setName(request.getName());
-                    }
-                    if (StringUtils.isNotEmpty(request.getPhoto())) {
-                        user.get().setPhoto(request.getPhoto());
-                    }
-                    if (StringUtils.isNotEmpty(request.getRole().toString())) {
-                        user.get().setRole(request.getRole());
-                    }
-                    user.get().setLastModifiedDate(Instant.now().toString());
-                    userRepository.save(user.get());
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObject(new UserDTO(user.get()));
-                } else {
-                    response.setMessage(CommonConstants.USER_IS_NULL);
-                }
+                return response;
             }
-
+            if (!checkUserExisted(request.getUserId())) {
+                response.setMessage(CommonConstants.USER_IS_NULL);
+                return response;
+            }
+            userRepository.findUserById(request.getUserId()).map(user -> {
+                if (StringUtils.isNotEmpty(request.getEmail())) {
+                    user.setEmail(request.getEmail());
+                }
+                if (StringUtils.isNotEmpty(request.getName())) {
+                    user.setName(request.getName());
+                }
+                if (StringUtils.isNotEmpty(request.getPhoto())) {
+                    user.setPhoto(request.getPhoto());
+                }
+                if (StringUtils.isNotEmpty(request.getRole().toString())) {
+                    user.setRole(request.getRole());
+                }
+                user.setLastModifiedDate(Instant.now().toString());
+                response.setObject(new UserDTO(user));
+                return userRepository.save(user);
+            });
+            response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
         } catch (Exception e) {
             log.error("Error when updateUserInformation: ", e);
         }
@@ -80,14 +80,15 @@ public class UserService {
         try {
             List<User> users = userRepository.getListUserActiveIsTrue();
             if (CollectionUtils.isNotEmpty(users)) {
-                List<UserDTO> listUserDTO = new ArrayList<UserDTO>();
-                for (User user : users) {
-                    listUserDTO.add(new UserDTO(user));
-                }
+//                List<UserDTO> listUserDTO = new ArrayList<UserDTO>();
+//                for (User user : users) {
+//                    listUserDTO.add(new UserDTO(user));
+//                }
+                List<UserDTO> result = users.stream().map(UserDTO::new).collect(Collectors.toList());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObjects(listUserDTO);
-                response.setTotalResultCount((long) listUserDTO.size());
+                response.setTotalResultCount((long) result.size());
+                response.setObjects(result);
             }
         } catch (Exception e) {
             log.error("Error when getAllUser: ", e);
@@ -101,8 +102,8 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(userId)) {
-                Optional<User> user = userRepository.findUserById(userId);
-                if (user.isPresent()) {
+                if (userRepository.existsById(userId)) {
+                    Optional<User> user = userRepository.findUserById(userId);
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new UserDTO(user.get()));
@@ -120,13 +121,14 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (StringUtils.isNotEmpty(userId)) {
-                Optional<User> user = userRepository.findUserById(userId);
-                if (user.isPresent()) {
+                if (userRepository.existsById(userId)) {
+                    Optional<User> user = userRepository.findUserById(userId);
                     user.get().setLastModifiedDate(Instant.now().toString());
                     user.get().setActive(Boolean.FALSE);
                     userRepository.save(user.get());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObject(new UserDTO(user.get()));
                 }
             }
         } catch (Exception e) {
@@ -144,14 +146,16 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.USER_IS_NULL);
         try {
-            Optional<User> user = userRepository.findUserById(userId);
-            if (user.isPresent()) {
-                user.get().setLastModifiedDate(Instant.now().toString());
-                user.get().setActive(Boolean.TRUE);
-                userRepository.save(user.get());
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObject(new UserDTO(user.get()));
+            if (StringUtils.isNotEmpty(userId)) {
+                if (userRepository.existsById(userId)) {
+                    Optional<User> user = userRepository.findUserById(userId);
+                    user.get().setLastModifiedDate(Instant.now().toString());
+                    user.get().setActive(Boolean.TRUE);
+                    userRepository.save(user.get());
+                    response.setSuccess(Boolean.TRUE);
+                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                    response.setObject(new UserDTO(user.get()));
+                }
             }
         } catch (Exception e) {
             log.error("Error when activeUser: ", e);
@@ -160,16 +164,14 @@ public class UserService {
     }
 
     private boolean checkVerificationCode(String token, String countryCode, String phoneNumber) throws Exception {
-        boolean isSuccess = false;
         Verification verification = authyApiClient
                 .getPhoneVerification()
                 .check(phoneNumber, countryCode, token);
-        if (verification.isOk()) {
-            isSuccess = true;
-        } else {
+        if (!verification.isOk()) {
             logAndThrow("Error verifying token. " + verification.getMessage());
+            return false;
         }
-        return isSuccess;
+        return true;
     }
 
     private void logAndThrow(String message) throws Exception {
@@ -182,10 +184,11 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.USER_NOT_EXISTED);
         try {
-            Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
-            if (optUser.isPresent()) {
+            if (userRepository.existsByPhone(phoneNumber)) {
+                Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
+                response.setObject(new UserDTO(optUser.get()));
             }
         } catch (Exception e) {
             log.error("Exception while find user by phone number");
@@ -198,8 +201,8 @@ public class UserService {
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.USER_NOT_EXISTED);
         try {
-            Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
-            if (optUser.isPresent()) {
+            if (userRepository.existsByPhone(phoneNumber)) {
+                Optional<User> optUser = userRepository.findUserByPhone(phoneNumber);
                 userRepository.delete(optUser.get());
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);

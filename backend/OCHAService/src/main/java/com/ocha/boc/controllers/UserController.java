@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @Slf4j
 public class UserController {
@@ -25,7 +27,7 @@ public class UserController {
      */
     @ApiOperation(value = "Update User")
     @PutMapping("/users")
-    public ResponseEntity<UserResponse> updateUserInformation(@RequestBody UserUpdateRequest request) {
+    public ResponseEntity<UserResponse> updateUserInformation(@Valid @RequestBody UserUpdateRequest request) {
         UserResponse response = userService.updateUserInformation(request);
         return ResponseEntity.ok(response);
     }
