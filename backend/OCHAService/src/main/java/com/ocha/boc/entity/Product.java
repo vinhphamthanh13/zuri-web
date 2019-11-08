@@ -1,6 +1,8 @@
 package com.ocha.boc.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,16 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
+@Builder
 @Document(collection = Product.COLLECTION_NAME)
 public class Product implements Serializable {
 
     public static final String COLLECTION_NAME = "product"; //mat hang
 
-    private static Product EMPTY = new Product();
 
     @Id
     private String id;
@@ -40,9 +39,6 @@ public class Product implements Serializable {
     @JsonProperty("priceList")
     private List<Price> prices = new ArrayList<Price>();
 
-    public boolean checkObjectEmptyData()
-    {
-        return this.equals(EMPTY);
-    }
+
 
 }

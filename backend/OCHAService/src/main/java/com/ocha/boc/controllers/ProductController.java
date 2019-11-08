@@ -11,6 +11,7 @@ import com.ocha.boc.services.impl.ProductService;
 import com.ocha.boc.util.CommonConstants;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,15 +60,13 @@ public class ProductController {
         response.setSuccess(Boolean.FALSE);
         Optional<Product> optProduct = Optional
                 .ofNullable(productService.updateProductInfor(request));
-        if (optProduct.isPresent()) {
-            if (!optProduct.get().checkObjectEmptyData()) {
-                response.setObject(new ProductDTO(optProduct.get()));
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setSuccess(Boolean.TRUE);
-            } else {
-                response.setMessage(CommonConstants.PRODUCT_IS_NULL);
-            }
+        if (!optProduct.isPresent()) {
+            response.setMessage(CommonConstants.PRODUCT_IS_NULL);
+            return ResponseEntity.ok(response);
         }
+        response.setObject(new ProductDTO(optProduct.get()));
+        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+        response.setSuccess(Boolean.TRUE);
         log.info("[END]: update Mat Hang");
         return ResponseEntity.ok(response);
     }
@@ -90,41 +89,21 @@ public class ProductController {
         Optional<Product> matHangOptional = Optional
                 .ofNullable(productService.findProductById(restaurantId, id));
         if (matHangOptional.isPresent()) {
-            if (!matHangOptional.get().checkObjectEmptyData()) {
                 response.setObject(new ProductDTO(matHangOptional.get()));
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
-            }
         }
         log.info("[END]: find products by Id");
         return ResponseEntity.ok(response);
     }
 
-//    /**
-//     * Get All Products
-//     *
-//     * @param cuaHangId
-//     * @return
-//     */
-//    @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
-//    @GetMapping("/mat-hang")
-//    public ResponseEntity<ProductResponse> getAllMatHang(@RequestParam String cuaHangId) {
-//        log.info("[START]: get all Mat Hang");
-//        ProductResponse response = productService.getAllMatHang(cuaHangId);
-//        log.info("[END]: get all Mat Hang");
-//        return ResponseEntity.ok(response);
-//    }
 
     @ApiOperation(value = "Get All Products", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/products/search")
     public ResponseEntity<ProductResponse> getAllProducts(ProductListRequest request) {
         ProductResponse response = new ProductResponse();
         Page<Product> temp = productService.search(request);
-        List<Product> tempList = temp.getContent();
-        List<ProductDTO> result = new ArrayList<ProductDTO>();
-        for (Product product : tempList) {
-            result.add(new ProductDTO(product));
-        }
+        List<ProductDTO> result = temp.getContent().stream().map(ProductDTO::new).collect(Collectors.toList());
         response.setObjects(result);
         response.setSuccess(Boolean.TRUE);
         response.setTotalResultCount((long) result.size());
