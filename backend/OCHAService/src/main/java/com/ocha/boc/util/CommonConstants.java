@@ -42,6 +42,8 @@ public class CommonConstants {
     public static final String DELETE_PRODUCT_BY_PRODUCT_ID_FAIL      = "Không thể xóa thông tin mặt hàng này. Lỗi hệ thống!";
 
     public static final String PRODUCT_IS_EXISTED                      = "Mặt hàng này đã có trong hệ thống.";
+
+    public static final String PRODUCTS_ARE_EMPTY                      = "Hệ thống không có thông tin của mặt hàng nào";
     /**
      * Nguyên liệu Error:
      */

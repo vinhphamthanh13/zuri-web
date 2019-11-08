@@ -17,9 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -37,7 +39,7 @@ public class ProductController {
      */
     @ApiOperation(value = "Create new Product", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/products")
-    public ResponseEntity<ProductResponse> createNewProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<ProductResponse> createNewProduct(@Valid @RequestBody ProductRequest request) {
         log.info("[START]: create new Product");
         ProductResponse response = productService.createNewProduct(request);
         log.info("[END]: create new Product");
@@ -52,22 +54,20 @@ public class ProductController {
      */
     @ApiOperation(value = "Update Product", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/products")
-    public ResponseEntity<ProductResponse> updateProductInfor(@RequestBody ProductUpdateRequest request) {
+    public ResponseEntity<ProductResponse> updateProductInfor(@NotNull @RequestBody ProductUpdateRequest request) {
         log.info("[START]: update Product");
         ProductResponse response = new ProductResponse();
         response.setMessage(CommonConstants.UPDATE_PRODUCT_FAIL);
         response.setSuccess(Boolean.FALSE);
         Optional<Product> optProduct = Optional
                 .ofNullable(productService.updateProductInfor(request));
-        if (optProduct.isPresent()) {
-            if (!optProduct.get().checkObjectEmptyData()) {
-                response.setObject(new ProductDTO(optProduct.get()));
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setSuccess(Boolean.TRUE);
-            } else {
-                response.setMessage(CommonConstants.PRODUCT_IS_NULL);
-            }
+        if (!optProduct.isPresent()) {
+            response.setMessage(CommonConstants.PRODUCT_IS_NULL);
+            return ResponseEntity.ok(response);
         }
+        response.setObject(new ProductDTO(optProduct.get()));
+        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+        response.setSuccess(Boolean.TRUE);
         log.info("[END]: update Mat Hang");
         return ResponseEntity.ok(response);
     }
@@ -87,47 +87,28 @@ public class ProductController {
         ProductResponse response = new ProductResponse();
         response.setMessage(CommonConstants.PRODUCT_IS_NULL);
         response.setSuccess(Boolean.FALSE);
-        Optional<Product> matHangOptional = Optional
+        Optional<Product> optProduct = Optional
                 .ofNullable(productService.findProductById(restaurantId, id));
-        if (matHangOptional.isPresent()) {
-            if (!matHangOptional.get().checkObjectEmptyData()) {
-                response.setObject(new ProductDTO(matHangOptional.get()));
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setSuccess(Boolean.TRUE);
-            }
+        if (optProduct.isPresent()) {
+            response.setObject(new ProductDTO(optProduct.get()));
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setSuccess(Boolean.TRUE);
         }
         log.info("[END]: find products by Id");
         return ResponseEntity.ok(response);
     }
 
-//    /**
-//     * Get All Products
-//     *
-//     * @param cuaHangId
-//     * @return
-//     */
-//    @ApiOperation(value = "Get All Mat Hang", authorizations = {@Authorization(value = "Bearer")})
-//    @GetMapping("/mat-hang")
-//    public ResponseEntity<ProductResponse> getAllMatHang(@RequestParam String cuaHangId) {
-//        log.info("[START]: get all Mat Hang");
-//        ProductResponse response = productService.getAllMatHang(cuaHangId);
-//        log.info("[END]: get all Mat Hang");
-//        return ResponseEntity.ok(response);
-//    }
-
     @ApiOperation(value = "Get All Products", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/products/search")
     public ResponseEntity<ProductResponse> getAllProducts(ProductListRequest request) {
+        log.info("[START]: get all products");
         ProductResponse response = new ProductResponse();
-        Page<Product> temp = productService.search(request);
-        List<Product> tempList = temp.getContent();
-        List<ProductDTO> result = new ArrayList<ProductDTO>();
-        for (Product product : tempList) {
-            result.add(new ProductDTO(product));
-        }
+        Page<Product> productsPage = productService.search(request);
+        List<ProductDTO> result = productsPage.getContent().stream().map(ProductDTO::new).collect(Collectors.toList());
         response.setObjects(result);
         response.setSuccess(Boolean.TRUE);
         response.setTotalResultCount((long) result.size());
+        log.info("[END]: get all products");
         return ResponseEntity.ok(response);
     }
 
