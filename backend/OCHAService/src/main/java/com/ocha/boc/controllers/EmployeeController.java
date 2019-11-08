@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 @Slf4j
@@ -27,7 +29,7 @@ public class EmployeeController {
      */
     @ApiOperation(value = "Create new Employee", authorizations = {@Authorization(value = "Bearer")})
     @PostMapping("/employees")
-    public ResponseEntity<EmployeeResponse> createNewEmployee(@RequestBody EmployeeRequest request) {
+    public ResponseEntity<EmployeeResponse> createNewEmployee(@Valid @RequestBody EmployeeRequest request) {
         log.info("START: create new Employee");
         EmployeeResponse response = employeeService.createNewEmployee(request);
         log.info("END: create new Employee");
