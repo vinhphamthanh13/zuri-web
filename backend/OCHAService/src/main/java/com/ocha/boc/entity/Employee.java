@@ -1,17 +1,15 @@
 package com.ocha.boc.entity;
 
 import com.ocha.boc.enums.EmployeeRole;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @Document(collection = Employee.COLLECTION_NAME)
 public class Employee implements Serializable {
 

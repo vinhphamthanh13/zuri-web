@@ -12,11 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,6 +26,9 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public EmployeeResponse createNewEmployee(EmployeeRequest request) {
         EmployeeResponse response = new EmployeeResponse();
         response.setSuccess(Boolean.FALSE);
@@ -32,19 +36,20 @@ public class EmployeeService {
         try {
             if (employeeRepository.existsByUsername(request.getUsername())) {
                 response.setMessage(CommonConstants.USERNAME_EXISTED);
-            } else {
-                Employee employee = new Employee();
-                employee.setRestaurantId(request.getRestaurantId());
-                employee.setFullName(request.getFullName());
-                employee.setEmployeeRole(request.getEmployeeRole());
-                employee.setPassword(request.getPassword());
-                employee.setUsername(request.getUsername());
-                employee.setCreatedDate(DateUtils.getCurrentDateAndTime());
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObject(new EmployeeDTO(employee));
-                employeeRepository.save(employee);
+                return response;
             }
+            Employee employee = Employee.builder()
+                    .restaurantId(request.getRestaurantId())
+                    .fullName(request.getFullName())
+                    .employeeRole(request.getEmployeeRole())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .username(request.getUsername())
+                    .createdDate(DateUtils.getCurrentDateAndTime())
+                    .build();
+            response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setObject(new EmployeeDTO(employee));
+            employeeRepository.save(employee);
         } catch (Exception e) {
             log.error("Error when create new employee: {}", e);
         }
@@ -57,20 +62,16 @@ public class EmployeeService {
         response.setMessage(CommonConstants.GET_LIST_EMPLOYEE_BY_RESTAURANT_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(restaurantId)) {
-                List<Employee> temp = employeeRepository.findAllByRestaurantId(restaurantId);
-                if (CollectionUtils.isNotEmpty(temp)) {
-                    List<EmployeeDTO> result = new ArrayList<EmployeeDTO>();
-                    for (Employee employee : temp) {
-                        result.add(new EmployeeDTO(employee));
-                    }
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                    response.setObjects(result);
-                    response.setTotalResultCount((long) result.size());
-                } else {
+                List<Employee> employees = employeeRepository.findAllByRestaurantId(restaurantId);
+                if (!CollectionUtils.isNotEmpty(employees)) {
                     response.setMessage(CommonConstants.NOT_EXISTED_ANY_EMPLOYEE);
+                    return response;
                 }
-
+                List<EmployeeDTO> result = employees.stream().map(EmployeeDTO::new).collect(Collectors.toList());
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObjects(result);
+                response.setTotalResultCount((long) result.size());
             }
         } catch (Exception e) {
             log.error("Error when get list employees: {}", e);
@@ -84,14 +85,14 @@ public class EmployeeService {
         response.setMessage(CommonConstants.DELETE_EMPLOYEE_BY_EMPLOYEE_ID_FAIL);
         try {
             if (StringUtils.isNotEmpty(employeeId)) {
-                if (employeeRepository.existsById(employeeId)) {
-                    Optional<Employee> optEmployee = employeeRepository.findEmployeeById(employeeId);
-                    employeeRepository.delete(optEmployee.get());
-                    response.setSuccess(Boolean.TRUE);
-                    response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                } else {
+                if (!employeeRepository.existsById(employeeId)) {
                     response.setMessage(CommonConstants.EMPLOYEE_IS_NOT_EXISTED);
+                    return response;
                 }
+                Optional<Employee> optEmployee = employeeRepository.findEmployeeById(employeeId);
+                employeeRepository.delete(optEmployee.get());
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             }
         } catch (Exception e) {
             log.error("Error when delete employee: ", e);
