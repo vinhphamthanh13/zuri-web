@@ -34,9 +34,7 @@ public class OCHAService {
         try {
             List<CopyPrinter> listCopyPrinter = copyPrinterRepository.findAll();
             if (CollectionUtils.isNotEmpty(listCopyPrinter)) {
-                List<CopyPrinterDTO> result = listCopyPrinter.stream().map(copyPrinter -> {
-                    return new CopyPrinterDTO(copyPrinter);
-                }).collect(Collectors.toList());
+                List<CopyPrinterDTO> result = listCopyPrinter.stream().map(CopyPrinterDTO::new).collect(Collectors.toList());
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                 response.setSuccess(Boolean.TRUE);
                 response.setObjects(result);
