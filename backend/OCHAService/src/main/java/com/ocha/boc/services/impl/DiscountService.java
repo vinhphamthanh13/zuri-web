@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -31,20 +32,14 @@ public class DiscountService {
         response.setMessage(CommonConstants.CREATE_NEW_DISCOUNT_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                Discount discount = new Discount();
-                discount.setRestaurantId(request.getRestaurantId());
-                discount.setName(request.getName());
-                if (StringUtils.isNotEmpty(request.getCategoryId())) {
-                    discount.setCategoryId(request.getCategoryId());
-                }
-                if (request.getDiscountAmount() != null) {
-                    discount.setDiscountAmount(request.getDiscountAmount());
-                }
-                if (request.getPercentage() != null) {
-                    discount.setPercentage(request.getPercentage());
-                }
-                discount.setCreatedDate(DateUtils.getCurrentDateAndTime());
-                discount.setDiscountType(request.getDiscountType());
+                Discount discount = Discount.builder()
+                        .restaurantId(request.getRestaurantId())
+                        .categoryId(StringUtils.isNotEmpty(request.getCategoryId()) ? request.getCategoryId() : StringUtils.EMPTY)
+                        .discountAmount(!Objects.isNull(request.getDiscountAmount()) ? request.getDiscountAmount() : BigDecimal.ZERO)
+                        .percentage(!Objects.isNull(request.getPercentage()) ? request.getPercentage() : BigDecimal.ZERO)
+                        .createdDate(DateUtils.getCurrentDateAndTime())
+                        .discountType(request.getDiscountType())
+                        .build();
                 discountRepository.save(discount);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -75,6 +70,7 @@ public class DiscountService {
         return response;
     }
 
+    //TODO: refactor code - apply new way to solve the multiple cases discount type
     public DiscountResponse updateDiscount(DiscountUpdateRequest request) {
         DiscountResponse response = new DiscountResponse();
         response.setSuccess(Boolean.FALSE);
