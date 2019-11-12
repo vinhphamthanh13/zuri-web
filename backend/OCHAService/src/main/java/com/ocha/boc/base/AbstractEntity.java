@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
-public class AbstractEntity {
+public abstract class AbstractEntity {
     @Id
     protected String id;
     protected String createdDate;

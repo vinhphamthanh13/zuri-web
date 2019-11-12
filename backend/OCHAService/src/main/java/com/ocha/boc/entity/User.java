@@ -38,18 +38,4 @@ public class User extends AbstractEntity {
 
     private String lastLoginTime;
 
-    public User() {
-
-    }
-
-    public User(UserDTO userDTO) {
-        this.phone = userDTO.getPhone();
-        this.email = userDTO.getEmail();
-        this.phone = userDTO.getPhoto();
-        this.name = userDTO.getName();
-        this.isActive = userDTO.isActive();
-        this.role = userDTO.getRole();
-        this.id = userDTO.getId();
-        this.listRestaurant = userDTO.getListRestaurant();
-    }
 }
