@@ -64,7 +64,6 @@ public class AuthService {
                 userRepository.save(user);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObjectId(user.getId());
                 response.setObject(new UserDTO(user));
             }
         } catch (Exception e) {
@@ -88,8 +87,7 @@ public class AuthService {
                     response.setMessage(CommonConstants.WRONG_OTP_CODE);
                     return response;
                 }
-                String jwt = StringUtils.EMPTY;
-                jwt = tokenProvider.generateToken(request.getPhoneNumber());
+                String jwt = tokenProvider.generateToken(request.getPhoneNumber());
                 if (StringUtils.isEmpty(jwt)) {
                     log.error("Cannot generate token");
                 }
@@ -151,7 +149,6 @@ public class AuthService {
     }
 
     private boolean handlingSendVerificationCode(String phoneNumber, String countryCode) throws Exception {
-        boolean isSuccess = false;
         String via = "sms";
         Params params = new Params();
         params.setAttribute("locale", "vi");
@@ -160,10 +157,9 @@ public class AuthService {
         if (!verification.isOk()) {
             logAndThrow("Error requesting phone verification. " +
                     verification.getMessage());
-        } else {
-            isSuccess = true;
+            return false;
         }
-        return isSuccess;
+        return true;
     }
 
     private void logAndThrow(String message) throws Exception {
@@ -172,13 +168,9 @@ public class AuthService {
     }
 
     private boolean checkVerificationCode(String token, String countryCode, String phoneNumber) throws Exception {
-        boolean isSuccess = false;
         Verification verification = authyApiClient
                 .getPhoneVerification()
                 .check(phoneNumber, countryCode, token);
-        if (verification.isOk()) {
-            isSuccess = true;
-        }
-        return isSuccess;
+        return verification.isOk();
     }
 }
