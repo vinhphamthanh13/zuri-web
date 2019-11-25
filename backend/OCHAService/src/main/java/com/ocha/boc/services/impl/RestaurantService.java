@@ -37,7 +37,7 @@ public class RestaurantService {
         response.setSuccess(Boolean.FALSE);
         try {
             if (!Objects.isNull(request)) {
-                if (!checkInforCuaHangIsExisted(request.getAddress(), request.getRestaurantName())) {
+                if (!checkRestaurantIsExisted(request.getAddress(), request.getRestaurantName())) {
                     if (!userRepository.existsByPhone(request.getPhone())) {
                         log.debug("Cannot find user by owner phone: ", request.getPhone());
                         response.setMessage(CommonConstants.UPDATE_RESTAURANT_ID_ON_USER_FAIL);
@@ -126,11 +126,11 @@ public class RestaurantService {
     }
 
 
-    private boolean checkInforCuaHangIsExisted(String location, String restaurantName) {
+    private boolean checkRestaurantIsExisted(String location, String restaurantName) {
         return restaurantRepository.existsByAddressAndRestaurantName(location, restaurantName);
     }
 
-    public RestaurantResponse findCuaHangByRestaurantId(String cuaHangId) {
+    public RestaurantResponse findRestaurantById(String cuaHangId) {
         RestaurantResponse response = new RestaurantResponse();
         response.setSuccess(Boolean.FALSE);
         response.setMessage(CommonConstants.RESTAURANT_IS_NOT_EXISTED);

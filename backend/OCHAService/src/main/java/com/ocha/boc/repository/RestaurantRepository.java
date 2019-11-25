@@ -11,7 +11,6 @@ public interface RestaurantRepository extends MongoRepository<Restaurant, String
 
     Optional<Restaurant> findRestaurantById(String id);
 
-    Restaurant findTopByOrderByCreatedDateDesc();
 
     Optional<Restaurant> findRestaurantByAddressAndRestaurantName(String address, String cuaHangName);
 

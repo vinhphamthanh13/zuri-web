@@ -60,7 +60,7 @@ public class ProductService {
     }
 
     //@CachePut(value = "mathang", key = "{#request.cuaHangId, #request.Id}")
-    public Product updateProductInfor(ProductUpdateRequest request) {
+    public Product updateProduct(ProductUpdateRequest request) {
         return productRepository.findProductByIdAndRestaurantId(request.getId(),
                 request.getRestaurantId()).map(product -> {
             if (StringUtils.isNotEmpty(request.getName())) {
@@ -130,8 +130,8 @@ public class ProductService {
                     response.setMessage(CommonConstants.PRODUCT_IS_NULL);
                     return response;
                 }
-                Optional<Product> optMatHang = productRepository.findProductByIdAndRestaurantId(id, restaurantId);
-                productRepository.delete(optMatHang.get());
+                Optional<Product> optProduct = productRepository.findProductByIdAndRestaurantId(id, restaurantId);
+                productRepository.delete(optProduct.get());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             }

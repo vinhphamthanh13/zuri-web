@@ -10,8 +10,6 @@ import java.util.Optional;
 public interface ProductRepository extends MongoRepository<Product, String>,
         PagingAndSortingRepository<Product, String>, ProductRepositoryCustom {
 
-    Optional<Product> findProductByNameAndRestaurantId(String name, String restaurantId);
-
     Optional<Product> findProductByIdAndRestaurantId(String id, String restaurantId);
 
     List<Product> findAllByRestaurantId(String restaurantId);

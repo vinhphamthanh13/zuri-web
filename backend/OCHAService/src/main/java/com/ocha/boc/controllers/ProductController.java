@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,13 +53,13 @@ public class ProductController {
      */
     @ApiOperation(value = "Update Product", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/products")
-    public ResponseEntity<ProductResponse> updateProductInfor(@NotNull @RequestBody ProductUpdateRequest request) {
+    public ResponseEntity<ProductResponse> updateProduct(@Valid @RequestBody ProductUpdateRequest request) {
         log.info("[START]: update Product");
         ProductResponse response = new ProductResponse();
         response.setMessage(CommonConstants.UPDATE_PRODUCT_FAIL);
         response.setSuccess(Boolean.FALSE);
         Optional<Product> optProduct = Optional
-                .ofNullable(productService.updateProductInfor(request));
+                .ofNullable(productService.updateProduct(request));
         if (!optProduct.isPresent()) {
             response.setMessage(CommonConstants.PRODUCT_IS_NULL);
             return ResponseEntity.ok(response);
