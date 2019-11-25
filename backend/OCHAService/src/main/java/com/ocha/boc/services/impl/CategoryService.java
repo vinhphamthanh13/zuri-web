@@ -62,29 +62,29 @@ public class CategoryService {
     //@CachePut(value = "danhmuc", key = "{#request.cuaHangId, #request.danhMucId}")
     public Category updateCategory(CategoryUpdateRequest request) {
         return categoryRepository.findCategoryByCategoryIdAndRestaurantId(request.getCategoryId(),
-                request.getRestaurantId()).map(danhMuc -> {
+                request.getRestaurantId()).map(category -> {
             if (StringUtils.isNotEmpty(request.getAbbreviations())) {
-                danhMuc.setAbbreviations(request.getAbbreviations());
+                category.setAbbreviations(request.getAbbreviations());
             }
             if (StringUtils.isNotEmpty(request.getName())) {
-                danhMuc.setName(request.getName());
+                category.setName(request.getName());
             }
-            danhMuc.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-            return categoryRepository.save(danhMuc);
+            category.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+            return categoryRepository.save(category);
         }).orElse(null);
     }
 
     //@Cacheable(value = "danhmuc", key = "{#cuaHangId,#id}")
-    public Category findCategoryByCategoryId(String id, String cuaHangId) {
-        return categoryRepository.findCategoryByCategoryIdAndRestaurantId(id, cuaHangId).orElse(null);
+    public Category findCategoryByCategoryId(String id, String restaurantId) {
+        return categoryRepository.findCategoryByCategoryIdAndRestaurantId(id, restaurantId).orElse(null);
     }
 
-    public CategoryResponse getAllCategory(String cuaHangId) {
+    public CategoryResponse getAllCategory(String restaurantId) {
         CategoryResponse response = new CategoryResponse();
+        response.setMessage(CommonConstants.GET_ALL_CATEGORY_FAIL);
+        response.setSuccess(Boolean.FALSE);
         try {
-            response.setMessage(CommonConstants.GET_ALL_CATEGORY_FAIL);
-            response.setSuccess(Boolean.FALSE);
-            List<Category> categories = categoryRepository.findAllByRestaurantId(cuaHangId);
+            List<Category> categories = categoryRepository.findAllByRestaurantId(restaurantId);
             if (CollectionUtils.isNotEmpty(categories)) {
                 List<CategoryDTO> result = categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
                 response.setSuccess(Boolean.TRUE);
@@ -99,17 +99,17 @@ public class CategoryService {
     }
 
     //@CacheEvict(value = "danhmuc", key = "{#cuaHangId,#id}")
-    public AbstractResponse deleteCategoryByCategoryId(String id, String cuaHangId) {
+    public AbstractResponse deleteCategoryByCategoryId(String id, String restaurantId) {
         AbstractResponse response = new AbstractResponse();
         try {
             response.setMessage(CommonConstants.DELETE_CATEGORY_BY_CATEGORY_ID_FAIL);
             response.setSuccess(Boolean.FALSE);
             if (StringUtils.isNotEmpty(id)) {
-                if (!categoryRepository.existsByCategoryIdAndRestaurantId(id, cuaHangId)) {
+                if (!categoryRepository.existsByCategoryIdAndRestaurantId(id, restaurantId)) {
                     response.setMessage(CommonConstants.CATEGORY_NAME_IS_NULL);
                     return response;
                 }
-                Optional<Category> optCategory = categoryRepository.findCategoryByCategoryIdAndRestaurantId(id, cuaHangId);
+                Optional<Category> optCategory = categoryRepository.findCategoryByCategoryIdAndRestaurantId(id, restaurantId);
                 categoryRepository.delete(optCategory.get());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);

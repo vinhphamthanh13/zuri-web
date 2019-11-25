@@ -38,28 +38,28 @@ public class DiscountController {
     }
 
     /**
-     * delete Giam Gia By Id
+     * delete Discount By Id
      *
-     * @param giamGiaId
+     * @param discountsId
      * @return
      */
     @ApiOperation(value = "Delete Discount By DiscountId", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/discounts/{discountsId}")
-    public ResponseEntity<AbstractResponse> deleteDiscountByDiscountId(@PathVariable(value = "giamGiaId") String giamGiaId) {
-        log.info("START: delete Discount by id: " + giamGiaId);
-        AbstractResponse response = discountService.deleteDiscountByDiscountId(giamGiaId);
+    public ResponseEntity<AbstractResponse> deleteDiscountByDiscountId(@PathVariable(value = "discountsId") String discountsId) {
+        log.info("START: delete Discount by id: " + discountsId);
+        AbstractResponse response = discountService.deleteDiscountByDiscountId(discountsId);
         log.info("END: delete Discount by id");
         return ResponseEntity.ok(response);
     }
 
     /**
-     * Update Giam Gia Information
+     * Update Discounts Information
      *
      * @param request
      * @return
      */
     @ApiOperation(value = "Update Discount", authorizations = {@Authorization(value = "Bearer")})
-    @PutMapping("/giam-gia")
+    @PutMapping("/discounts")
     public ResponseEntity<DiscountResponse> updateDiscountByDiscountId(@RequestBody DiscountUpdateRequest request) {
         log.info("START: update Discount");
         DiscountResponse response = discountService.updateDiscount(request);

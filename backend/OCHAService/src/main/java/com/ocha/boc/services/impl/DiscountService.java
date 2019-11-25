@@ -3,7 +3,6 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.DiscountDTO;
 import com.ocha.boc.entity.Discount;
-import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.repository.DiscountRepository;
 import com.ocha.boc.request.DiscountRequest;
 import com.ocha.boc.request.DiscountUpdateRequest;
@@ -70,7 +69,6 @@ public class DiscountService {
         return response;
     }
 
-    //TODO: refactor code - apply new way to solve the multiple cases discount type
     public DiscountResponse updateDiscount(DiscountUpdateRequest request) {
         DiscountResponse response = new DiscountResponse();
         response.setSuccess(Boolean.FALSE);
@@ -82,24 +80,30 @@ public class DiscountService {
                         Optional<Discount> optDiscount = discountRepository.findDiscountById(request.getDiscountId());
                         optDiscount.get().setName(request.getName());
                         optDiscount.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                        if (request.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
-                            if (request.getPercentage() != null) {
-                                optDiscount.get().setPercentage(request.getPercentage());
-                            }
-                            if (StringUtils.isNotEmpty(request.getCategoryId())) {
-                                optDiscount.get().setCategoryId(request.getCategoryId());
-                            }
-                        } else if (request.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
-                            if (request.getPercentage() != null) {
-                                optDiscount.get().setPercentage(request.getPercentage());
-                                optDiscount.get().setDiscountAmount(null);
-                            }
-                            if (request.getDiscountAmount() != null) {
-                                optDiscount.get().setDiscountAmount(request.getDiscountAmount());
-                                optDiscount.get().setPercentage(null);
-                            }
-                        }
                         optDiscount.get().setDiscountType(request.getDiscountType());
+                        switch (request.getDiscountType()) {
+                            case GIẢM_GIÁ_THÔNG_THƯỜNG:
+                                optDiscount.get().setCategoryId(StringUtils.EMPTY);
+                                if (!Objects.isNull(request.getPercentage())) {
+                                    optDiscount.get().setPercentage(request.getPercentage());
+                                    optDiscount.get().setDiscountAmount(null);
+                                }
+                                if (Objects.isNull(request.getDiscountAmount())) {
+                                    optDiscount.get().setDiscountAmount(request.getDiscountAmount());
+                                    optDiscount.get().setPercentage(null);
+                                }
+                                break;
+                            case GIẢM_GIÁ_THEO_DANH_MỤC:
+                                if (Objects.isNull(request.getPercentage())) {
+                                    optDiscount.get().setPercentage(request.getPercentage());
+                                }
+                                if (StringUtils.isNotEmpty(request.getCategoryId())) {
+                                    optDiscount.get().setCategoryId(request.getCategoryId());
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                         response.setSuccess(Boolean.TRUE);
                         response.setObject(new DiscountDTO(optDiscount.get()));

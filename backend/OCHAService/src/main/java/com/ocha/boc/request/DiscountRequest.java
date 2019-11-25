@@ -4,8 +4,8 @@ import com.ocha.boc.enums.DiscountType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -14,18 +14,18 @@ import java.math.BigDecimal;
 @ToString
 public class DiscountRequest implements Serializable {
 
-    @NonNull
+    @NotNull
     private String restaurantId;
 
-    @NonNull
+    @NotNull
     private DiscountType discountType;
 
-    @NonNull
+    @NotNull
     private String name;
 
     private BigDecimal percentage;
 
     private BigDecimal discountAmount;
 
-    private String  categoryId;
+    private String categoryId;
 }
