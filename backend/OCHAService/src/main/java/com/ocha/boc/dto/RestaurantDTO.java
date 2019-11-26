@@ -17,7 +17,7 @@ public class RestaurantDTO {
 
     private String restaurantName;
 
-    private String phone;
+    private String restaurantPhone;
 
     private String address;
 
@@ -36,7 +36,7 @@ public class RestaurantDTO {
         this.businessModelsType = restaurant.getBusinessModelsType();
         this.businessItemsType = restaurant.getBusinessItemsType();
         this.restaurantName = restaurant.getRestaurantName();
-        this.phone = restaurant.getPhone();
+        this.restaurantPhone = restaurant.getRestaurantPhone();
         this.address = restaurant.getAddress();
         this.managerName = restaurant.getManagerName();
         this.managerPhone = restaurant.getManagerPhone();

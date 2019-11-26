@@ -15,8 +15,8 @@ public class RestaurantUpdateRequest implements Serializable {
     @NotNull
     private String restaurantId;
 
-    @NotNull
-    private String phone;
+
+    private String restaurantPhone;
 
     private String businessModelsType; //mo hinh kinh doanh
 
@@ -26,6 +26,7 @@ public class RestaurantUpdateRequest implements Serializable {
 
     private String managerEmail;
 
+    @NotNull
     private String managerPhone;
 
     private String managerName;

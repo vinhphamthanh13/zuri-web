@@ -66,7 +66,7 @@ public class RestaurantController {
      * @param restaurantId
      * @return
      */
-    @ApiOperation(value = "Find Restaurant Information by restaurantId", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Find Restaurant by Id", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/restaurants/{restaurantId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RestaurantResponse> findRestaurantById(@PathVariable(value = "restaurantId") String restaurantId) {

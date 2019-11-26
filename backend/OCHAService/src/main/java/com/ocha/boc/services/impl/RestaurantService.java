@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -45,7 +44,7 @@ public class RestaurantService {
                     }
                     Restaurant restaurant = Restaurant.builder()
                             .restaurantName(request.getRestaurantName())
-                            .phone(request.getPhone())
+                            .restaurantPhone(request.getPhone())
                             .managerName(request.getManagerName())
                             .businessItemsType(request.getBusinessItemsType())
                             .businessModelsType(request.getBusinessModelsType())
@@ -57,10 +56,10 @@ public class RestaurantService {
                         restaurant.setManagerEmail(request.getManagerEmail());
                     }
                     Restaurant newRestaurant = restaurantRepository.save(restaurant);
-                    //Update cua hang id on table user
+                    //Update restaurant id on table user
                     Optional<User> optOwner = userRepository.findUserByPhone(request.getPhone());
-                    List<Restaurant> ownerRestaurantList = optOwner.get().getListRestaurant();
-                    ownerRestaurantList.add(newRestaurant);
+                    List<String> ownerRestaurantList = optOwner.get().getListRestaurant();
+                    ownerRestaurantList.add(newRestaurant.getId());
                     optOwner.get().setListRestaurant(ownerRestaurantList);
                     userRepository.save(optOwner.get());
                     response.setSuccess(Boolean.TRUE);
@@ -80,7 +79,7 @@ public class RestaurantService {
         response.setMessage(CommonConstants.UPDATE_RESTAURANT_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                if (userRepository.existsByPhone(request.getPhone())) {
+                if (userRepository.existsByPhone(request.getManagerPhone())) {
                     if (restaurantRepository.existsById(request.getRestaurantId())) {
                         Optional<Restaurant> optRestaurant = restaurantRepository.findRestaurantById(request.getRestaurantId()).map(restaurant -> {
                             if (StringUtils.isNotEmpty(request.getAddress())) {
@@ -101,18 +100,12 @@ public class RestaurantService {
                             if (StringUtils.isNotEmpty(request.getManagerName())) {
                                 restaurant.setManagerName(request.getManagerName());
                             }
+                            if (StringUtils.isNotEmpty(request.getRestaurantPhone())) {
+                                restaurant.setRestaurantPhone(request.getRestaurantPhone());
+                            }
                             restaurant.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
                             return restaurantRepository.save(restaurant);
                         });
-                        Optional<User> optionalUser = userRepository.findUserByPhone(request.getPhone());
-                        List<Restaurant> lists = optionalUser.get().getListRestaurant().stream().map(restaurant -> {
-                            if (restaurant.getId().equalsIgnoreCase(request.getRestaurantId())) {
-                                restaurant = optRestaurant.get();
-                            }
-                            return restaurant;
-                        }).collect(Collectors.toList());
-                        optionalUser.get().setListRestaurant(lists);
-                        userRepository.save(optionalUser.get());
                         response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                         response.setObject(new RestaurantDTO(optRestaurant.get()));
                         response.setSuccess(Boolean.TRUE);

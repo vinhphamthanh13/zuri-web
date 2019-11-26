@@ -13,8 +13,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -39,13 +39,9 @@ public class SystemConfigService {
                 response.setMessage(CommonConstants.GET_ALL_PRODUCT_PORTFOLIO_DOESNT_EXISTED);
                 return response;
             }
-            List<ProductPortfolioDTO> productPortfolioDTOList = new ArrayList<ProductPortfolioDTO>();
-            for (ProductPortfolio productPortfolio : results) {
-                ProductPortfolioDTO temp = new ProductPortfolioDTO(productPortfolio);
-                productPortfolioDTOList.add(temp);
-            }
-            response.setObjects(productPortfolioDTOList);
-            response.setTotalResultCount((long) productPortfolioDTOList.size());
+            List<ProductPortfolioDTO> lists = results.stream().map(ProductPortfolioDTO::new).collect(Collectors.toList());
+            response.setObjects(lists);
+            response.setTotalResultCount((long) lists.size());
             response.setSuccess(Boolean.TRUE);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
         } catch (Exception e) {
@@ -65,13 +61,9 @@ public class SystemConfigService {
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.GET_ALL_BUSINESS_MODELS_TYPE_DOESNT_EXISTED);
             }
-            List<BusinessModelsTypeDTO> businessModelsTypeDTOList = new ArrayList<BusinessModelsTypeDTO>();
-            for (BusinessModelsType businessModelsType : results) {
-                BusinessModelsTypeDTO temp = new BusinessModelsTypeDTO(businessModelsType);
-                businessModelsTypeDTOList.add(temp);
-            }
-            response.setObjects(businessModelsTypeDTOList);
-            response.setTotalResultCount((long) businessModelsTypeDTOList.size());
+            List<BusinessModelsTypeDTO> lists = results.stream().map(BusinessModelsTypeDTO::new).collect(Collectors.toList());
+            response.setObjects(lists);
+            response.setTotalResultCount((long) lists.size());
             response.setSuccess(Boolean.TRUE);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
         } catch (Exception e) {

@@ -1,7 +1,6 @@
 package com.ocha.boc.entity;
 
 import com.ocha.boc.base.AbstractEntity;
-import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.enums.UserType;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +33,7 @@ public class User extends AbstractEntity {
 
     private UserType role;
 
-    private List<Restaurant> listRestaurant = new ArrayList<>();
+    private List<String> listRestaurant = new ArrayList<>();
 
     private String lastLoginTime;
 
