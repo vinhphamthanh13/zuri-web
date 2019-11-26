@@ -9,7 +9,6 @@ import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public class User extends AbstractEntity {
 
     private UserType role;
 
-    private List<String> listRestaurant = new ArrayList<>();
+    private List<String> listRestaurant;
 
     private String lastLoginTime;
 

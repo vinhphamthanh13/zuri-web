@@ -7,7 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,7 +31,7 @@ public class Product implements Serializable {
     private String categoryId;
 
     @JsonProperty("priceList")
-    private List<Price> prices = new ArrayList<Price>();
+    private List<Price> prices;
 
 
 }
