@@ -114,7 +114,7 @@ public class CategoryController {
      * @return
      */
     @ApiOperation(value = "Delete Category By CategoryId", authorizations = {@Authorization(value = "Bearer")})
-    @DeleteMapping("/categories/{restaurant}/{id}")
+    @DeleteMapping("/categories/{restaurantId}/{id}")
     public ResponseEntity<AbstractResponse> deleteCategoryById(@PathVariable("restaurantId") String restaurantId, @PathVariable("id") String id) {
         log.info("[START]: delete Category");
         AbstractResponse response = categoryService.deleteCategoryByCategoryId(id, restaurantId);
