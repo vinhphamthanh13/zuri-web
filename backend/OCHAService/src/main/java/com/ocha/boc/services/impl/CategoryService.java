@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CategoryService {
 
-    private static final String NUMBER_ONE = "1";
-
     @Autowired
     private CategoryRepository categoryRepository;
 
