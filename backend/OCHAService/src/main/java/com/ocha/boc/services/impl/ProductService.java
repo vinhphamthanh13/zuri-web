@@ -2,6 +2,8 @@ package com.ocha.boc.services.impl;
 
 import com.ocha.boc.dto.ProductDTO;
 import com.ocha.boc.entity.Product;
+import com.ocha.boc.enums.EntityType;
+import com.ocha.boc.error.ResourceNotFoundException;
 import com.ocha.boc.repository.ProductRepository;
 import com.ocha.boc.request.ProductListRequest;
 import com.ocha.boc.request.ProductRequest;
@@ -45,8 +47,8 @@ public class ProductService {
                             .name(request.getName())
                             .categoryId(request.getCategoryId())
                             .prices(request.getPrices())
-                            .createdDate(DateUtils.getCurrentDateAndTime())
                             .build();
+                    product.setCreatedDate(DateUtils.getCurrentDateAndTime());
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new ProductDTO(product));
@@ -59,67 +61,84 @@ public class ProductService {
         return response;
     }
 
-    //@CachePut(value = "mathang", key = "{#request.cuaHangId, #request.Id}")
-    public Product updateProduct(ProductUpdateRequest request) {
-        return productRepository.findProductByIdAndRestaurantId(request.getId(),
-                request.getRestaurantId()).map(product -> {
-            if (StringUtils.isNotEmpty(request.getName())) {
-                product.setName(request.getName());
-            }
-            if (CollectionUtils.isNotEmpty(request.getPrices())) {
-                product.setPrices(request.getPrices());
-            }
-            if (StringUtils.isNotEmpty(request.getCategoryId())) {
-                product.setCategoryId(request.getCategoryId());
-            }
-            product.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-            return productRepository.save(product);
-        }).orElse(null);
-    }
-
-    //@Cacheable(value = "mathang", key = "{#cuaHangId,#id}")
-    public Product findProductById(String restaurantId, String id) {
-        return productRepository.findProductByIdAndRestaurantId(id, restaurantId).orElse(null);
-    }
-
-    public ProductResponse getAllProduct(String restaurantId) {
+    public ProductResponse updateProduct(ProductUpdateRequest request) {
         ProductResponse response = new ProductResponse();
-        response.setMessage(CommonConstants.GET_ALL_PRODUCT_FAIL);
+        response.setMessage(CommonConstants.UPDATE_PRODUCT_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            List<Product> products = productRepository.findAllByRestaurantId(restaurantId);
-            if (CollectionUtils.isEmpty(products)) {
-                response.setMessage(CommonConstants.PRODUCTS_ARE_EMPTY);
-                return response;
-            }
-            List<ProductDTO> result = products.stream().map(ProductDTO::new).collect(Collectors.toList());
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
-            response.setTotalResultCount((long) result.size());
-            response.setObjects(result);
+            productRepository.findProductByIdAndRestaurantId(request.getId(),
+                    request.getRestaurantId()).map(product -> {
+                if (StringUtils.isNotEmpty(request.getName())) {
+                    product.setName(request.getName());
+                }
+                if (CollectionUtils.isNotEmpty(request.getPrices())) {
+                    product.setPrices(request.getPrices());
+                }
+                if (StringUtils.isNotEmpty(request.getCategoryId())) {
+                    product.setCategoryId(request.getCategoryId());
+                }
+                product.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setSuccess(Boolean.TRUE);
+                return productRepository.save(product);
+            }).orElseThrow(() -> new ResourceNotFoundException(EntityType.PRODUCT.toString(), request.getId() +
+                    " - " + request.getRestaurantId(), request));
         } catch (Exception e) {
-            log.error("Error when get all products: ", e);
+            log.error("Exception while updating product: ", e);
         }
         return response;
     }
 
-    public Page<Product> search(ProductListRequest request) {
-        String[] sortSplit = request.getSort().split(",");
-        if (!Objects.isNull(request.getSearch())) {
-            return productRepository.query(request, new org.springframework.data.domain.PageRequest(request.getPage(),
-                    request.getSize(),
-                    (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC
-                            : Sort.Direction.DESC), sortSplit[0]));
-        } else {
-            return productRepository.findAll(
-                    new org.springframework.data.domain.PageRequest(request.getPage(),
-                            request.getSize(),
-                            (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC
-                                    : Sort.Direction.DESC), sortSplit[0]));
+    public ProductResponse findProductById(String restaurantId, String id) {
+        ProductResponse response = new ProductResponse();
+        response.setMessage(CommonConstants.PRODUCT_IS_NULL);
+        response.setSuccess(Boolean.FALSE);
+        try {
+            Optional<Product> optProduct = productRepository.findProductByIdAndRestaurantId(id, restaurantId);
+            if (optProduct.isPresent()) {
+                response.setSuccess(Boolean.TRUE);
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+                response.setObject(new ProductDTO(optProduct.get()));
+            }
+        } catch (Exception e) {
+            log.error("Exception while finding product by id: ", e);
         }
+        return response;
     }
 
-    //@CacheEvict(value = "mathang", key = "{#cuaHangId,#id}")
+
+    public ProductResponse search(ProductListRequest request) {
+        ProductResponse response = new ProductResponse();
+        response.setSuccess(Boolean.FALSE);
+        response.setMessage(CommonConstants.NO_RESULT_PRODUCT_SEARCHING);
+        try {
+            String[] sortSplit = request.getSort().split(",");
+            Page<Product> result = null;
+            if (!Objects.isNull(request.getSearch())) {
+                result = productRepository.query(request, new org.springframework.data.domain.PageRequest(request.getPage(),
+                        request.getSize(),
+                        (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC
+                                : Sort.Direction.DESC), sortSplit[0]));
+            } else {
+                result = productRepository.findAll(
+                        new org.springframework.data.domain.PageRequest(request.getPage(),
+                                request.getSize(),
+                                (sortSplit[1].toUpperCase().equals("ASC") ? Sort.Direction.ASC
+                                        : Sort.Direction.DESC), sortSplit[0]));
+            }
+            if (CollectionUtils.isNotEmpty(result.getContent())) {
+                List<ProductDTO> lists = result.getContent().stream().map(ProductDTO::new).collect(Collectors.toList());
+                response.setObjects(lists);
+                response.setSuccess(Boolean.TRUE);
+                response.setTotalResultCount((long) lists.size());
+                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            }
+        } catch (Exception e) {
+            log.error("Exception while full text searching product: ", e);
+        }
+        return response;
+    }
+
     public ProductResponse deleteProductById(String restaurantId, String id) {
         ProductResponse response = new ProductResponse();
         response.setMessage(CommonConstants.DELETE_PRODUCT_BY_PRODUCT_ID_FAIL);

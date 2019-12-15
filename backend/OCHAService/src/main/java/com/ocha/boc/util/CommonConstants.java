@@ -35,25 +35,27 @@ public class CommonConstants {
 
     public static final String UPDATE_PRODUCT_FAIL                     = "Không thể cập nhật thông tin cho mặt hàng này. Lỗi hệ thống !";
 
-    public static final String PRODUCT_IS_NULL                         = "Không thể tìm thấy mặt hàng này.";
+    public static final String PRODUCT_IS_NULL = "Không thể tìm thấy mặt hàng này.";
 
-    public static final String GET_ALL_PRODUCT_FAIL                    = "Không tìm thấy thông tin mặt hàng. Lỗi hệ thống!";
+    public static final String GET_ALL_PRODUCT_FAIL = "Không tìm thấy thông tin mặt hàng. Lỗi hệ thống!";
 
-    public static final String DELETE_PRODUCT_BY_PRODUCT_ID_FAIL      = "Không thể xóa thông tin mặt hàng này. Lỗi hệ thống!";
+    public static final String DELETE_PRODUCT_BY_PRODUCT_ID_FAIL = "Không thể xóa thông tin mặt hàng này. Lỗi hệ thống!";
 
-    public static final String PRODUCT_IS_EXISTED                      = "Mặt hàng này đã có trong hệ thống.";
+    public static final String PRODUCT_IS_EXISTED = "Mặt hàng này đã có trong hệ thống.";
 
-    public static final String PRODUCTS_ARE_EMPTY                      = "Hệ thống không có thông tin của mặt hàng nào";
+    public static final String PRODUCTS_ARE_EMPTY = "Hệ thống không có thông tin của mặt hàng nào";
+
+    public static final String NO_RESULT_PRODUCT_SEARCHING = "Không có kết quả tìm kiếm !";
     /**
      * Nguyên liệu Error:
      */
-    public static final String CREATE_NEW_NGUYEN_LIEU_FAIL              = "Không thể tạo mới nguyên liệu. Lỗi hệ thống!";
+    public static final String CREATE_NEW_NGUYEN_LIEU_FAIL = "Không thể tạo mới nguyên liệu. Lỗi hệ thống!";
 
-    public static final String UPDATE_NGUYEN_LIEU_FAIL                  = "Không thể cập nhật thông tin cho nguyên liệu này. Lỗi hệ thống!";
+    public static final String UPDATE_NGUYEN_LIEU_FAIL = "Không thể cập nhật thông tin cho nguyên liệu này. Lỗi hệ thống!";
 
-    public static final String NGUYEN_LIEU_IS_NULL                      = "Không thể tìm thấy nguyên liệu này.";
+    public static final String NGUYEN_LIEU_IS_NULL = "Không thể tìm thấy nguyên liệu này.";
 
-    public static final String GET_ALL_NGUYEN_LIEU_FAIL                 = "Không tìm thấy thông tin nguyên liệu. Lỗi hệ thống!";
+    public static final String GET_ALL_NGUYEN_LIEU_FAIL = "Không tìm thấy thông tin nguyên liệu. Lỗi hệ thống!";
 
     public static final String DELETE_NGUYEN_LIEU_BY_NGUYEN_LIEU_ID_FAIL= "Không thể xóa thông tin nguyên liệu này. Lỗi hệ thống!";
 

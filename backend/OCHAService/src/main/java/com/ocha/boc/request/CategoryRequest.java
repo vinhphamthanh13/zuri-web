@@ -3,8 +3,8 @@ package com.ocha.boc.request;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -14,9 +14,9 @@ public class CategoryRequest implements Serializable {
 
     private String abbreviations;
 
-    @NonNull
+    @NotNull
     private String name;
 
-    @NonNull
+    @NotNull
     private String restaurantId;
 }
