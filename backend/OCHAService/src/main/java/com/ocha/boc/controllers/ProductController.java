@@ -1,26 +1,19 @@
 package com.ocha.boc.controllers;
 
 import com.ocha.boc.base.AbstractResponse;
-import com.ocha.boc.dto.ProductDTO;
-import com.ocha.boc.entity.Product;
 import com.ocha.boc.request.ProductListRequest;
 import com.ocha.boc.request.ProductRequest;
 import com.ocha.boc.request.ProductUpdateRequest;
 import com.ocha.boc.response.ProductResponse;
 import com.ocha.boc.services.impl.ProductService;
-import com.ocha.boc.util.CommonConstants;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -55,18 +48,7 @@ public class ProductController {
     @PutMapping("/products")
     public ResponseEntity<ProductResponse> updateProduct(@Valid @RequestBody ProductUpdateRequest request) {
         log.info("[START]: update Product");
-        ProductResponse response = new ProductResponse();
-        response.setMessage(CommonConstants.UPDATE_PRODUCT_FAIL);
-        response.setSuccess(Boolean.FALSE);
-        Optional<Product> optProduct = Optional
-                .ofNullable(productService.updateProduct(request));
-        if (!optProduct.isPresent()) {
-            response.setMessage(CommonConstants.PRODUCT_IS_NULL);
-            return ResponseEntity.ok(response);
-        }
-        response.setObject(new ProductDTO(optProduct.get()));
-        response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-        response.setSuccess(Boolean.TRUE);
+        ProductResponse response = productService.updateProduct(request);
         log.info("[END]: update Mat Hang");
         return ResponseEntity.ok(response);
     }
@@ -83,30 +65,16 @@ public class ProductController {
     public ResponseEntity<ProductResponse> findProductById(@PathVariable("restaurantId") String restaurantId,
                                                            @PathVariable("id") String id) {
         log.info("[START]: find products by Id: " + id + " - restaurantId: " + restaurantId);
-        ProductResponse response = new ProductResponse();
-        response.setMessage(CommonConstants.PRODUCT_IS_NULL);
-        response.setSuccess(Boolean.FALSE);
-        Optional<Product> optProduct = Optional
-                .ofNullable(productService.findProductById(restaurantId, id));
-        if (optProduct.isPresent()) {
-            response.setObject(new ProductDTO(optProduct.get()));
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
-        }
+        ProductResponse response = productService.findProductById(restaurantId, id);
         log.info("[END]: find products by Id");
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "Get All Products", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Product Full Text Search", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/products/search")
-    public ResponseEntity<ProductResponse> getAllProducts(ProductListRequest request) {
+    public ResponseEntity<ProductResponse> search(ProductListRequest request) {
         log.info("[START]: get all products");
-        ProductResponse response = new ProductResponse();
-        Page<Product> productsPage = productService.search(request);
-        List<ProductDTO> result = productsPage.getContent().stream().map(ProductDTO::new).collect(Collectors.toList());
-        response.setObjects(result);
-        response.setSuccess(Boolean.TRUE);
-        response.setTotalResultCount((long) result.size());
+        ProductResponse response = productService.search(request);
         log.info("[END]: get all products");
         return ResponseEntity.ok(response);
     }
