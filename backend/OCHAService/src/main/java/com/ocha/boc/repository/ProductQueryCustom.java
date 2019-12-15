@@ -14,13 +14,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ProductRepositoryImpl implements ProductRepositoryCustom {
+public class ProductQueryCustom implements RepositoryCustom<ProductListRequest, Product> {
 
     @Autowired
     private final MongoTemplate mongoTemplate;
 
-    public ProductRepositoryImpl(MongoTemplate mongoTemplate) {
+    public ProductQueryCustom(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -41,6 +40,4 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 mongoTemplate.find(query, Product.class).size());
         return result;
     }
-
-
 }
