@@ -36,9 +36,9 @@ public class DiscountService {
                         .categoryId(StringUtils.isNotEmpty(request.getCategoryId()) ? request.getCategoryId() : StringUtils.EMPTY)
                         .discountAmount(!Objects.isNull(request.getDiscountAmount()) ? request.getDiscountAmount() : BigDecimal.ZERO)
                         .percentage(!Objects.isNull(request.getPercentage()) ? request.getPercentage() : BigDecimal.ZERO)
-                        .createdDate(DateUtils.getCurrentDateAndTime())
                         .discountType(request.getDiscountType())
                         .build();
+                discount.setCreatedDate(DateUtils.getCurrentDateAndTime());
                 discountRepository.save(discount);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
