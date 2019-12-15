@@ -1,13 +1,10 @@
 package com.ocha.boc.controllers;
 
 import com.ocha.boc.base.AbstractResponse;
-import com.ocha.boc.dto.CategoryDTO;
-import com.ocha.boc.entity.Category;
 import com.ocha.boc.request.CategoryRequest;
 import com.ocha.boc.request.CategoryUpdateRequest;
 import com.ocha.boc.response.CategoryResponse;
 import com.ocha.boc.services.impl.CategoryService;
-import com.ocha.boc.util.CommonConstants;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -51,16 +47,7 @@ public class CategoryController {
     @PutMapping("/categories")
     public ResponseEntity<CategoryResponse> updateCategory(@RequestBody @Valid CategoryUpdateRequest request) {
         log.info("[START]: update Category");
-        CategoryResponse response = new CategoryResponse();
-        response.setMessage(CommonConstants.UPDATE_CATEGORY_FAIL);
-        response.setSuccess(Boolean.FALSE);
-        Optional<Category> optCategory = Optional
-                .ofNullable(categoryService.updateCategory(request));
-        if (optCategory.isPresent()) {
-            response.setSuccess(Boolean.TRUE);
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setObject(new CategoryDTO(optCategory.get()));
-        }
+        CategoryResponse response = categoryService.updateCategory(request);
         log.info("[END]: update Category");
         return ResponseEntity.ok(response);
     }
@@ -77,16 +64,7 @@ public class CategoryController {
     public ResponseEntity<CategoryResponse> findCategoryById(@PathVariable("restaurantId") String restaurantId,
                                                              @PathVariable("id") String id) {
         log.info("[START]: Find Category By Id: " + id + " restaurantId: " + restaurantId);
-        CategoryResponse response = new CategoryResponse();
-        response.setMessage(CommonConstants.CATEGORY_NAME_IS_NULL);
-        response.setSuccess(Boolean.FALSE);
-        Optional<Category> optCategory = Optional
-                .ofNullable(categoryService.findCategoryByCategoryId(id, restaurantId));
-        if (optCategory.isPresent()) {
-            response.setObject(new CategoryDTO(optCategory.get()));
-            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-            response.setSuccess(Boolean.TRUE);
-        }
+        CategoryResponse response = categoryService.findCategoryById(id, restaurantId);
         log.info("[END]: Find Category By Id and restaurantId");
         return ResponseEntity.ok(response);
     }
