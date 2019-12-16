@@ -196,7 +196,7 @@ public class ReportService {
                             HotDealsProduct hotDealsProduct = new HotDealsProduct();
                             hotDealsProduct.setName(productName);
                             hotDealsProduct.setQuantity(temp.getQuantity());
-                            hotDealsProduct.setTotalPrice(temp.getUnitPrice().multiply(BigDecimal.valueOf((long) temp.getQuantity())));
+                            hotDealsProduct.setTotalPrice(temp.getUnitPrice().multiply(BigDecimal.valueOf(temp.getQuantity())));
                             hotDealsProductList.add(hotDealsProduct);
                             Map<String, BigDecimal> totalPriceAndQuantity = calculateTotalPriceAndQuantityListHotDealsProduct(hotDealsProductList);
                             hotDealsCategory.setTotalPrice(totalPriceAndQuantity.get(TOTAL_PRICE));
@@ -743,7 +743,7 @@ public class ReportService {
             totalPrice = totalPrice.add(temp.getTotalPrice());
         }
         result.put(TOTAL_PRICE, totalPrice);
-        result.put(QUANTITY, BigDecimal.valueOf((long) listOrdersWerePaidInformations.size()));
+        result.put(QUANTITY, BigDecimal.valueOf(listOrdersWerePaidInformations.size()));
         return result;
     }
 }

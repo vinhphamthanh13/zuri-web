@@ -57,11 +57,9 @@ public class CategoryController {
         Optional<Category> optCategory = Optional
                 .ofNullable(categoryService.updateCategory(request));
         if (optCategory.isPresent()) {
-            if (!optCategory.get().checkObjectEmptyData()) {
-                response.setSuccess(Boolean.TRUE);
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setObject(new CategoryDTO(optCategory.get()));
-            }
+            response.setSuccess(Boolean.TRUE);
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setObject(new CategoryDTO(optCategory.get()));
         }
         log.info("[END]: update Category");
         return ResponseEntity.ok(response);
@@ -77,7 +75,7 @@ public class CategoryController {
     @ApiOperation(value = "Find Category By CategoryId", authorizations = {@Authorization(value = "Bearer")})
     @GetMapping("/categories/{restaurantId}/{id}")
     public ResponseEntity<CategoryResponse> findCategoryById(@PathVariable("restaurantId") String restaurantId,
-                                                            @PathVariable("id") String id) {
+                                                             @PathVariable("id") String id) {
         log.info("[START]: Find Category By Id: " + id + " restaurantId: " + restaurantId);
         CategoryResponse response = new CategoryResponse();
         response.setMessage(CommonConstants.CATEGORY_NAME_IS_NULL);
@@ -85,11 +83,9 @@ public class CategoryController {
         Optional<Category> optCategory = Optional
                 .ofNullable(categoryService.findCategoryByCategoryId(id, restaurantId));
         if (optCategory.isPresent()) {
-            if (!optCategory.get().checkObjectEmptyData()) {
-                response.setObject(new CategoryDTO(optCategory.get()));
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setSuccess(Boolean.TRUE);
-            }
+            response.setObject(new CategoryDTO(optCategory.get()));
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setSuccess(Boolean.TRUE);
         }
         log.info("[END]: Find Category By Id and restaurantId");
         return ResponseEntity.ok(response);
@@ -118,7 +114,7 @@ public class CategoryController {
      * @return
      */
     @ApiOperation(value = "Delete Category By CategoryId", authorizations = {@Authorization(value = "Bearer")})
-    @DeleteMapping("/categories/{restaurant}/{id}")
+    @DeleteMapping("/categories/{restaurantId}/{id}")
     public ResponseEntity<AbstractResponse> deleteCategoryById(@PathVariable("restaurantId") String restaurantId, @PathVariable("id") String id) {
         log.info("[START]: delete Category");
         AbstractResponse response = categoryService.deleteCategoryByCategoryId(id, restaurantId);

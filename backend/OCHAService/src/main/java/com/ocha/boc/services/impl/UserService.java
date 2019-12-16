@@ -80,10 +80,6 @@ public class UserService {
         try {
             List<User> users = userRepository.getListUserActiveIsTrue();
             if (CollectionUtils.isNotEmpty(users)) {
-//                List<UserDTO> listUserDTO = new ArrayList<UserDTO>();
-//                for (User user : users) {
-//                    listUserDTO.add(new UserDTO(user));
-//                }
                 List<UserDTO> result = users.stream().map(UserDTO::new).collect(Collectors.toList());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);

@@ -3,7 +3,6 @@ package com.ocha.boc.services.impl;
 import com.ocha.boc.base.AbstractResponse;
 import com.ocha.boc.dto.DiscountDTO;
 import com.ocha.boc.entity.Discount;
-import com.ocha.boc.enums.DiscountType;
 import com.ocha.boc.repository.DiscountRepository;
 import com.ocha.boc.request.DiscountRequest;
 import com.ocha.boc.request.DiscountUpdateRequest;
@@ -15,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -31,20 +31,14 @@ public class DiscountService {
         response.setMessage(CommonConstants.CREATE_NEW_DISCOUNT_FAIL);
         try {
             if (!Objects.isNull(request)) {
-                Discount discount = new Discount();
-                discount.setRestaurantId(request.getRestaurantId());
-                discount.setName(request.getName());
-                if (StringUtils.isNotEmpty(request.getCategoryId())) {
-                    discount.setCategoryId(request.getCategoryId());
-                }
-                if (request.getDiscountAmount() != null) {
-                    discount.setDiscountAmount(request.getDiscountAmount());
-                }
-                if (request.getPercentage() != null) {
-                    discount.setPercentage(request.getPercentage());
-                }
-                discount.setCreatedDate(DateUtils.getCurrentDateAndTime());
-                discount.setDiscountType(request.getDiscountType());
+                Discount discount = Discount.builder()
+                        .restaurantId(request.getRestaurantId())
+                        .categoryId(StringUtils.isNotEmpty(request.getCategoryId()) ? request.getCategoryId() : StringUtils.EMPTY)
+                        .discountAmount(!Objects.isNull(request.getDiscountAmount()) ? request.getDiscountAmount() : BigDecimal.ZERO)
+                        .percentage(!Objects.isNull(request.getPercentage()) ? request.getPercentage() : BigDecimal.ZERO)
+                        .createdDate(DateUtils.getCurrentDateAndTime())
+                        .discountType(request.getDiscountType())
+                        .build();
                 discountRepository.save(discount);
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
@@ -86,24 +80,30 @@ public class DiscountService {
                         Optional<Discount> optDiscount = discountRepository.findDiscountById(request.getDiscountId());
                         optDiscount.get().setName(request.getName());
                         optDiscount.get().setLastModifiedDate(DateUtils.getCurrentDateAndTime());
-                        if (request.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THEO_DANH_MỤC.label)) {
-                            if (request.getPercentage() != null) {
-                                optDiscount.get().setPercentage(request.getPercentage());
-                            }
-                            if (StringUtils.isNotEmpty(request.getCategoryId())) {
-                                optDiscount.get().setCategoryId(request.getCategoryId());
-                            }
-                        } else if (request.getDiscountType().label.equalsIgnoreCase(DiscountType.GIẢM_GIÁ_THÔNG_THƯỜNG.label)) {
-                            if (request.getPercentage() != null) {
-                                optDiscount.get().setPercentage(request.getPercentage());
-                                optDiscount.get().setDiscountAmount(null);
-                            }
-                            if (request.getDiscountAmount() != null) {
-                                optDiscount.get().setDiscountAmount(request.getDiscountAmount());
-                                optDiscount.get().setPercentage(null);
-                            }
-                        }
                         optDiscount.get().setDiscountType(request.getDiscountType());
+                        switch (request.getDiscountType()) {
+                            case GIẢM_GIÁ_THÔNG_THƯỜNG:
+                                optDiscount.get().setCategoryId(StringUtils.EMPTY);
+                                if (!Objects.isNull(request.getPercentage())) {
+                                    optDiscount.get().setPercentage(request.getPercentage());
+                                    optDiscount.get().setDiscountAmount(null);
+                                }
+                                if (Objects.isNull(request.getDiscountAmount())) {
+                                    optDiscount.get().setDiscountAmount(request.getDiscountAmount());
+                                    optDiscount.get().setPercentage(null);
+                                }
+                                break;
+                            case GIẢM_GIÁ_THEO_DANH_MỤC:
+                                if (Objects.isNull(request.getPercentage())) {
+                                    optDiscount.get().setPercentage(request.getPercentage());
+                                }
+                                if (StringUtils.isNotEmpty(request.getCategoryId())) {
+                                    optDiscount.get().setCategoryId(request.getCategoryId());
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                         response.setSuccess(Boolean.TRUE);
                         response.setObject(new DiscountDTO(optDiscount.get()));

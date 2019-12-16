@@ -1,18 +1,15 @@
 package com.ocha.boc.entity;
 
 import com.ocha.boc.enums.DiscountType;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @Document(collection = Discount.COLLECTION_NAME)
 public class Discount {
 

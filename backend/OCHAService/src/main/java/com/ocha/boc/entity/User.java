@@ -1,20 +1,22 @@
 package com.ocha.boc.entity;
 
 import com.ocha.boc.base.AbstractEntity;
-import com.ocha.boc.dto.UserDTO;
 import com.ocha.boc.enums.UserType;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Entity Object presents for User
  */
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @Document(collection = User.COLLECTION_NAME)
 public class User extends AbstractEntity {
@@ -34,22 +36,8 @@ public class User extends AbstractEntity {
 
     private UserType role;
 
-    private List<Restaurant> listRestaurant = new ArrayList<>();
+    private List<String> listRestaurant;
 
     private String lastLoginTime;
 
-    public User() {
-
-    }
-
-    public User(UserDTO userDTO) {
-        this.phone = userDTO.getPhone();
-        this.email = userDTO.getEmail();
-        this.phone = userDTO.getPhoto();
-        this.name = userDTO.getName();
-        this.isActive = userDTO.isActive();
-        this.role = userDTO.getRole();
-        this.id = userDTO.getId();
-        this.listRestaurant = userDTO.getListRestaurant();
-    }
 }

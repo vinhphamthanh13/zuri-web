@@ -9,7 +9,6 @@ import com.ocha.boc.request.ProductUpdateRequest;
 import com.ocha.boc.response.ProductResponse;
 import com.ocha.boc.util.CommonConstants;
 import com.ocha.boc.util.DateUtils;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,19 +34,19 @@ public class ProductService {
         response.setMessage(CommonConstants.CREATE_NEW_PRODUCT_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            if (!Objects.isNull(request)) {
+            if (request != null) {
                 if (StringUtils.isNotEmpty(request.getName())) {
                     if (checkProductExisted(request.getName(), request.getRestaurantId())) {
                         response.setMessage(CommonConstants.PRODUCT_IS_EXISTED);
                         return response;
                     }
                     Product product = Product.builder()
-                        .restaurantId(request.getRestaurantId())
-                        .name(request.getName())
-                        .categoryId(request.getCategoryId())
-                        .prices(request.getPrices())
-                        .createdDate(DateUtils.getCurrentDateAndTime())
-                        .build();
+                            .restaurantId(request.getRestaurantId())
+                            .name(request.getName())
+                            .categoryId(request.getCategoryId())
+                            .prices(request.getPrices())
+                            .createdDate(DateUtils.getCurrentDateAndTime())
+                            .build();
                     response.setSuccess(Boolean.TRUE);
                     response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
                     response.setObject(new ProductDTO(product));
@@ -61,7 +60,7 @@ public class ProductService {
     }
 
     //@CachePut(value = "mathang", key = "{#request.cuaHangId, #request.Id}")
-    public Product updateProductInfor(ProductUpdateRequest request) {
+    public Product updateProduct(ProductUpdateRequest request) {
         return productRepository.findProductByIdAndRestaurantId(request.getId(),
                 request.getRestaurantId()).map(product -> {
             if (StringUtils.isNotEmpty(request.getName())) {
@@ -75,12 +74,12 @@ public class ProductService {
             }
             product.setLastModifiedDate(DateUtils.getCurrentDateAndTime());
             return productRepository.save(product);
-        }).get();
+        }).orElse(null);
     }
 
     //@Cacheable(value = "mathang", key = "{#cuaHangId,#id}")
     public Product findProductById(String restaurantId, String id) {
-        return productRepository.findProductByIdAndRestaurantId(id, restaurantId).get();
+        return productRepository.findProductByIdAndRestaurantId(id, restaurantId).orElse(null);
     }
 
     public ProductResponse getAllProduct(String restaurantId) {
@@ -88,20 +87,16 @@ public class ProductService {
         response.setMessage(CommonConstants.GET_ALL_PRODUCT_FAIL);
         response.setSuccess(Boolean.FALSE);
         try {
-            List<Product> productList = productRepository.findAllByRestaurantId(restaurantId);
-            if (CollectionUtils.isNotEmpty(productList)) {
-//                List<ProductDTO> productDTOList = new ArrayList<>();
-//                for (Product product : productList) {
-//                    ProductDTO temp = new ProductDTO(product);
-//                    productDTOList.add(temp);
-//                }
-                List<ProductDTO> result = productList.stream().map(ProductDTO::new).collect(
-                    Collectors.toList());
-                response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
-                response.setSuccess(Boolean.TRUE);
-                response.setTotalResultCount((long) productList.size());
-                response.setObjects(result);
+            List<Product> products = productRepository.findAllByRestaurantId(restaurantId);
+            if (CollectionUtils.isEmpty(products)) {
+                response.setMessage(CommonConstants.PRODUCTS_ARE_EMPTY);
+                return response;
             }
+            List<ProductDTO> result = products.stream().map(ProductDTO::new).collect(Collectors.toList());
+            response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
+            response.setSuccess(Boolean.TRUE);
+            response.setTotalResultCount((long) result.size());
+            response.setObjects(result);
         } catch (Exception e) {
             log.error("Error when get all products: ", e);
         }
@@ -135,8 +130,8 @@ public class ProductService {
                     response.setMessage(CommonConstants.PRODUCT_IS_NULL);
                     return response;
                 }
-                Optional<Product> optMatHang = productRepository.findProductByIdAndRestaurantId(id, restaurantId);
-                productRepository.delete(optMatHang.get());
+                Optional<Product> optProduct = productRepository.findProductByIdAndRestaurantId(id, restaurantId);
+                productRepository.delete(optProduct.get());
                 response.setSuccess(Boolean.TRUE);
                 response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             }
