@@ -1,7 +1,8 @@
 package com.ocha.boc.entity;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
+import com.ocha.boc.base.AbstractEntity;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -9,18 +10,9 @@ import java.io.Serializable;
 @Data
 @Builder
 @Document(collection = Category.COLLECTION_NAME)
-public class Category implements Serializable {
+public class Category extends AbstractEntity implements Serializable {
 
     public static final String COLLECTION_NAME = "category"; // danh muc
-
-
-
-    @Id
-    private String id;
-
-    private String createdDate;
-
-    private String lastModifiedDate;
 
     private String abbreviations;
 

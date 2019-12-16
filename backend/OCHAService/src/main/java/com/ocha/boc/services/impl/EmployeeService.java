@@ -44,8 +44,8 @@ public class EmployeeService {
                     .employeeRole(request.getEmployeeRole())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .username(request.getUsername())
-                    .createdDate(DateUtils.getCurrentDateAndTime())
                     .build();
+            employee.setCreatedDate(DateUtils.getCurrentDateAndTime());
             response.setSuccess(Boolean.TRUE);
             response.setMessage(CommonConstants.STR_SUCCESS_STATUS);
             response.setObject(new EmployeeDTO(employee));
