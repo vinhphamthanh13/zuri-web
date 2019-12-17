@@ -45,9 +45,9 @@ public class DiscountController {
      */
     @ApiOperation(value = "Delete Discount By DiscountId", authorizations = {@Authorization(value = "Bearer")})
     @DeleteMapping("/discounts/{discountsId}")
-    public ResponseEntity<AbstractResponse> deleteDiscountByDiscountId(@PathVariable(value = "discountsId") String discountsId) {
+    public ResponseEntity<AbstractResponse> deleteById(@PathVariable(value = "discountsId") String discountsId) {
         log.info("START: delete Discount by id: " + discountsId);
-        AbstractResponse response = discountService.deleteDiscountByDiscountId(discountsId);
+        AbstractResponse response = discountService.deleteById(discountsId);
         log.info("END: delete Discount by id");
         return ResponseEntity.ok(response);
     }
@@ -60,10 +60,22 @@ public class DiscountController {
      */
     @ApiOperation(value = "Update Discount", authorizations = {@Authorization(value = "Bearer")})
     @PutMapping("/discounts")
-    public ResponseEntity<DiscountResponse> updateDiscountByDiscountId(@RequestBody DiscountUpdateRequest request) {
+    public ResponseEntity<DiscountResponse> updateById(@RequestBody DiscountUpdateRequest request) {
         log.info("START: update Discount");
         DiscountResponse response = discountService.updateDiscount(request);
         log.info("END: update Discount");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/discounts/test")
+    public ResponseEntity<AbstractResponse> test(@Valid @RequestBody DiscountRequest request) {
+        AbstractResponse response = discountService.test(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/discounts/test")
+    public ResponseEntity<AbstractResponse> testUpdate(@Valid @RequestBody DiscountUpdateRequest request) {
+        AbstractResponse response = discountService.testUpdate(request);
         return ResponseEntity.ok(response);
     }
 

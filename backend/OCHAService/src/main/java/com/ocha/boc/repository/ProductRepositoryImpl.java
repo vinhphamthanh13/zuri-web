@@ -14,12 +14,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductQueryCustom implements RepositoryCustom<ProductListRequest, Product> {
+public class ProductRepositoryImpl implements RepositoryCustom<ProductListRequest, Product> {
 
     @Autowired
     private final MongoTemplate mongoTemplate;
 
-    public ProductQueryCustom(MongoTemplate mongoTemplate) {
+    public ProductRepositoryImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
