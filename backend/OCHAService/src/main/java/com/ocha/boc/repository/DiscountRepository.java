@@ -1,5 +1,6 @@
 package com.ocha.boc.repository;
 
+
 import com.ocha.boc.entity.Discount;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
